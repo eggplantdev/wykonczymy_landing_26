@@ -33,7 +33,8 @@ is an explicit non-goal.
    (attachments — see below).
 4. **Routine plumbing gets one line, not a three-option essay.** The owner will say when a detail
    deserves a real discussion.
-5. **Commit only your own work, by explicit path.** Multiple agents run against these trees.
+5. **This is not a client handover.** The business belongs to the developer's brother; the developer keeps full control of the site indefinitely and is always reachable. Do not propose, justify, or preserve anything on the grounds that a client would otherwise have to pay a developer — that situation does not exist. It cuts scope: no handover-proofing, and no CMS collection for content that only *might* change.
+6. **Commit only your own work, by explicit path.** Multiple agents run against these trees.
 
 ## Decisions taken
 
@@ -66,13 +67,6 @@ Mirrors Chaos Kitchen. Port 5436 — see `tech-stack.md`.
 ### All project docs live under `context/`
 
 No root `docs/`. The live-site scrape sits at `context/foundation/live-site-snapshot/`.
-
-### `wykonczymy_front_26` is dead
-
-An abandoned spike the owner is deleting. Its code had no value: 11 route files rendering `<h1>`,
-and 152 components that were Shadcn primitives plus another project's forms. Its **one** salvaged
-asset — a real 419-line content scrape plus 6 screenshots — is already at
-`context/foundation/live-site-snapshot/`. Do not cite the repo as a reference.
 
 ## The two things most likely to bite
 
@@ -118,6 +112,6 @@ Git: `main`, one commit. **No code has been written and nothing has been install
 
 ## Open questions
 
-Seven, recorded in `prd.md` under `## Open Questions`. Only one blocks cutover: **where quote
+Eleven, recorded in `prd.md` under `## Open Questions`. Only one blocks cutover: **where quote
 requests actually land today** must be confirmed, since preserving lead delivery is a guardrail and
 the current behaviour is the thing being preserved. None block building.

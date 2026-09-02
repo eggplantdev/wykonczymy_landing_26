@@ -21,7 +21,7 @@ timeline_budget:
 
 ## Current System Overview
 
-**Purpose.** wykonczymy.com.pl is the marketing and lead-generation site for a renovation and interior-finishing contractor in Warsaw (ul. Terespolska 2, 03-813). Its job is to turn a search visitor into a free-quote request.
+**Purpose.** wykonczymy.com.pl is the marketing and lead-generation site for a renovation and interior-finishing contractor in Warsaw (ul. Terespolska 2, 03-813). Its job is to turn a search visitor into a **quote form submission** — the site's single conversion event, triggered by the "Umów się na darmową wycenę" call to action. Throughout this document "quote form submission" means exactly that: one visitor filling in and sending that form. It is not a stage, a pipeline, or a record type.
 
 **Architecture.** A server-rendered WordPress monolith built on a purchased agency theme. Not headless, though its REST API is reachable.
 
@@ -48,13 +48,19 @@ This project is a **replatform plus a new layout**: move onto a foundation the o
 
 The motivation is ownership, not a measured failure. Nothing in the current site's conversion, speed, or credibility has been identified as broken. That distinction is load-bearing for how success is judged: **parity plus control**, not a lift in a metric the current site is failing. It also sets the risk posture — a replatform that changes everything at once while fixing nothing measurable has no upside to offset a regression, so preservation matters more here than improvement.
 
-One capability gap does exist. The current form cannot accept files, and the owner wants the quote request to carry photos of the space. That is the single genuinely new capability in this project.
+One capability gap does exist. The current form cannot accept files, and the owner wants the submission to carry photos of the space. That is the single genuinely new capability in this project.
 
 ## User & Persona
 
-**Primary persona — a Warsaw homeowner renovating a single flat.** A private, one-off client. Price-sensitive, comparing three or four contractors before making contact. Arrives from a local search for renovation or finishing work. Before picking up the phone they need two things: proof the work is good, and a sense of what it costs. The moment that matters is the gap between "this looks credible" and "I'll request the free quote".
+**The business serves four segments. The site converts one of them.** Private homeowners, housing co-ops and property managers (`klatki schodowe`, common areas), offices and commercial units, and developers or general contractors subcontracting finishing work — all four are real revenue, and the current site's own offer copy names them. The other three arrive predominantly by phone, referral and tender, not through a web form. **This is a scoping statement, not a ranking of the business.** The site is optimised for the segment it can actually convert; it must not read as homeowner-only to the other three, who do check it before calling.
+
+**Primary persona — a Warsaw homeowner renovating a flat or house.** A private client, typically one-off. Price-sensitive, comparing three or four contractors before making contact. Arrives from a local search for renovation or finishing work. Before picking up the phone they need two things: proof the work is good, and a sense of what it costs. The moment that matters is the gap between "this looks credible" and "I'll request the free quote". Every conversion decision in this document is made for this persona.
+
+**The B2B segments — co-ops, commercial, developers.** Not the form's target and not the layout's. What they need from the site is narrower: evidence the company handles work at their scale and type, and a way to reach a human. A design that reads as consumer-only, or a portfolio showing nothing but private flats, costs real revenue without any form ever being involved.
 
 **Secondary — the business's own content editor.** Whoever adds completed projects and adjusts page copy. Today they must go through the agency. After this change they edit directly, which is one of the project's reasons for existing.
+
+**The operating model — this is not a client handover.** The business belongs to the developer's brother, and the developer retains full control of the site indefinitely. There is no moment where the code is handed over and the developer becomes unreachable, and no billing relationship that makes "ask the developer" an expensive outcome. **Build for that, not for a handover.** Two consequences follow, and they cut scope rather than add it: machinery whose only purpose is protecting a site from its owner earns nothing here, and content that changes rarely does not have to be editable just because it *might* change one day — a code edit is always available. Anything justified by "otherwise the client would have to pay a developer" is justified by a situation that does not exist in this project.
 
 **Unchanged.** No visitor ever authenticates, before or after. The site is anonymous to the public.
 
@@ -62,9 +68,9 @@ One capability gap does exist. The current form cannot accept files, and the own
 
 ### Primary
 - Every page on the current site has a working equivalent on the new site, and at cutover no existing address is left dead — each one either resolves or sends the visitor to a deliberate replacement.
-- A real quote request submitted through the new site arrives complete in the contractor's lead system, verified end to end before the new site goes live.
+- **An actual submission through the live form is proven to reach the leads app before cutover** — a human fills in the real form on the new site, sends it, and the complete request is confirmed present in the leads app. Not a mock, not a unit test, not a staging stub. This is the gate against the silent-failure defect described under Constraints.
 - The business can add a completed project and edit page copy directly, in both languages, without touching code or asking a developer.
-- A quote request can carry the homeowner's photos, and those photos are visible to the contractor alongside the rest of the request.
+- A submission can carry the requester's photos, and those photos are visible to the contractor alongside the rest of the request.
 
 ### Secondary
 - The new layout reads as a portfolio piece for a finishing contractor rather than as a stock theme.
@@ -73,7 +79,7 @@ One capability gap does exist. The current form cannot accept files, and the own
 
 ### Guardrails
 - **Search positions do not drop.** Local renovation queries that rank today still rank after cutover.
-- **No lead is lost.** Not during the transition, and not afterwards. A homeowner is never shown a success message for a request that did not arrive.
+- **No lead is lost.** Not during the transition, and not afterwards. A visitor is never shown a success message for a request that did not arrive.
 - **Both languages ship together.** An English-incomplete launch is a regression; the current site has both.
 - **A verified replacement map gates the cutover.** Every live address is enumerated and checked against the new site before it becomes the live one.
 - **Existing project photos and testimonials survive** the move intact.
@@ -128,7 +134,7 @@ Requirement ids are carried from the shaping notes so the two documents stay cro
 - FR-019: An editor cannot alter the content model, site structure, or configuration.
 - FR-020: An administrator can change the content model, site configuration, and how the site is released.
 - FR-021: An administrator can create, suspend, and remove editor accounts.
-- FR-031: A visitor can attach one or more files to a quote request — photos of the space, plans, inspiration images.
+- FR-031: A visitor can attach one or more files to the submission — photos of the space, plans, inspiration images.
 - FR-032: A visitor can see what happens to their data before submitting, and give explicit consent to being contacted.
 - FR-034: A visitor whose request cannot be delivered is told so plainly and given the phone number.
 - FR-035: A visitor is prevented from submitting a file that is too large or of an unaccepted type, and is told why before the upload.
@@ -171,7 +177,7 @@ These are not assumptions. Each is a requirement whose breakage is a defect.
 
 ## Constraints & Compatibility
 
-**Cutover is all-at-once.** Every page is rebuilt and the switch happens in one move. There is no phase where the old and new sites both serve live traffic. This is a deliberate choice — at six pages, running two systems in parallel costs more than it protects. The consequence is that every preservation risk lands at the same moment, which is why the verified replacement map is a guardrail rather than a task.
+**Cutover is all-at-once.** Every page is rebuilt and the switch happens in one move. There is no phase where the old and new sites both serve live traffic. This is a deliberate choice — at this size, running two systems in parallel costs more than it protects. The consequence is that every preservation risk lands at the same moment, which is why the verified replacement map is a guardrail rather than a task.
 
 **Addresses must survive.** Twelve addresses are indexed today. English uses translated slugs rather than a locale prefix, so preserving them requires per-language address mapping, not a simple language prefix. Every address either survives or gets a deliberate replacement; none may be left to fail.
 
@@ -224,10 +230,14 @@ Each entry traces to something the owner stated explicitly.
 
 ## Open Questions
 
-1. **What exactly does the form ask?** — The scope is settled: more questions than today plus file inputs, with no estimate returned. The specific question list is not. A content decision, not an architectural one. Owner: user. Block: no.
+1. **What exactly does the form ask?** — The scope is settled: more questions than today plus file inputs, with no estimate returned. The specific question list is not. A content decision, not an architectural one. Note it is shaped for the homeowner persona; a stairwell tender or an office fit-out does not fit "square footage of my flat", and those segments are expected to phone instead. Owner: user. Block: no.
 2. **What are the file limits?** — Accepted types, maximum size, maximum count per request. Needed to deliver FR-035, and needed by the receiving application too. Owner: user. Block: no.
 3. **Where do the two retired pricing addresses lead** once Cennik is gone? — Candidates are the services page, the contact page, or the home page. Determines whether high-intent pricing traffic is retained or discarded. Owner: user. Block: no; required before cutover.
 4. **Is Cennik's removal final?** — Recorded as the owner's stated intention, expressed as probable rather than settled. Two success criteria and one preservation guardrail change if it stays. Owner: user. Block: no.
-5. **Where do quote requests actually land today?** — Believed to be the business e-mail address plus the separate lead application, but the current site may also record them elsewhere. Must be confirmed before cutover, since lead delivery is a guardrail and the current behaviour is the thing being preserved. Owner: user. Block: yes, before cutover.
+5. **Where do form submissions actually land today?** — Believed to be the business e-mail address plus the separate lead application, but the current site may also record them elsewhere. Must be confirmed before cutover, since lead delivery is a guardrail and the current behaviour is the thing being preserved. Owner: user. Block: yes, before cutover.
 6. **How do attachments reach and persist in the receiving application?** — A new or extended intake plus somewhere to hold the files is required. Routine to build; the one judgement worth carrying is that the receiving application should own the stored files, so a request's photos do not depend on the marketing site's storage outliving it. Owner: user. Block: no; sequenced with the other application.
 7. **What is the retention period for submitted photographs and contact details?** — Personal data with no stated retention window. Not currently recorded anywhere. Owner: user. Block: no.
+8. **What is the new site's page set?** — The six pages listed under Current State describe the *old* site and are not a plan for the new one; the document already departs from them (Cennik retired, project pages added). Pages may be split, merged, added, or dropped. The constraint is on **addresses, not pages** — every one of the twelve indexed URLs either survives or gets a deliberate replacement, which a restructure satisfies the same way Cennik's removal does. Owner: user. Block: no; required before the route tree is laid down.
+9. **Is the editor/administrator split worth building?** — FR-019/020/021 and the access model exist to stop a client breaking a site they own. The operating model has no such client: the developer is family and permanently available. Options are keeping the split as cheap insurance against an accident, or collapsing to a single admin account and deleting FR-021's account lifecycle entirely. Owner: user. Block: no; decide before the Payload access config is written.
+10. **How much content is CMS-editable versus hardcoded?** — Under the real operating model a code edit is always available, so "might change one day" is not sufficient reason for a collection. Candidates for staying in code: the services list, the twelve interior styles, the "Wykonujemy także" list. Candidates that clearly stay editable: completed projects, testimonials, page copy. Each collection avoided is one less thing to model, translate and administer. Owner: user. Block: no; decide before the content model is built.
+11. **Do existing gallery photos get retrofitted with individual project pages?** — FR-009 currently says no: pages exist for new projects only. Reversing it is content labour (a description per old project), not engineering. Owner: user. Block: no.
