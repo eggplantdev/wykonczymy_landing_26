@@ -7,6 +7,9 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
+  // Every indexed address ends in a slash; Next strips it by default, which
+  // would break all twelve at once. See context/foundation/url-map.md.
+  trailingSlash: true,
   images: {
     localPatterns: [
       {
