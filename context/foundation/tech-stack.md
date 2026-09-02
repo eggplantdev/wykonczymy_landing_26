@@ -21,19 +21,24 @@ package_manager: npm
 
 ## Layers
 
+**Install latest at scaffold time.** Where a major version appears below it is a *decision* (Payload
+3's `src/` ownership, Tailwind 4's CSS config, React 19). Everything else takes whatever is current
+when it is installed — do not copy version numbers out of the reference repos, they are only a
+snapshot of what those projects happened to have.
+
 | Layer | Choice | Notes |
 |---|---|---|
-| Framework | Next.js 16, App Router | React 19 |
-| CMS / backend | Payload 3 (`@payloadcms/next`) | Mounted at `src/app/(payload)`; Payload owns the `src/` layout |
-| Database | Postgres 17 | `@payloadcms/db-vercel-postgres` |
-| — local dev | Docker, `postgres:17-alpine` | **Port 5436** — see collision note below |
+| Framework | Next.js, App Router | Latest. React 19+ |
+| CMS / backend | Payload (`@payloadcms/next`) | Latest. Mounted at `src/app/(payload)`; Payload owns the `src/` layout |
+| Database | Postgres | `@payloadcms/db-vercel-postgres` |
+| — local dev | Docker, `postgres:17-alpine` | Pinned deliberately — dev/prod parity. **Port 5436**, see below |
 | — production | Neon, via Vercel | |
 | Media storage | Vercel Blob | `@payloadcms/storage-vercel-blob` |
 | Email | Nodemailer via Payload adapter | `@payloadcms/email-nodemailer` + SMTP |
 | Rich text | Lexical | `@payloadcms/richtext-lexical` |
-| Forms | **TanStack Form + Zod** | `@tanstack/react-form` ^1.29, `zod` ^4 — Chaos Kitchen's pattern |
-| Styling | **Tailwind 4** | `@tailwindcss/postcss` — CSS-based config, not `tailwind.config.js` |
-| Animation | GSAP ^3.15 | Also `framer-motion` ^12 available |
+| Forms | **TanStack Form + Zod** | `@tanstack/react-form` + `zod` — Chaos Kitchen's pattern |
+| Styling | **Tailwind 4+** | `@tailwindcss/postcss` — CSS-based config, not `tailwind.config.js`. Major version is the decision; take the latest within it |
+| Animation | GSAP | `framer-motion` also an option |
 | E2E tests | Playwright | Plus `@playwright/mcp` wired via `.mcp.json` |
 | Unit tests | `node --import tsx --test` | Node's built-in runner, no Vitest/Jest |
 | Package manager | npm | |
@@ -74,7 +79,8 @@ Scaffolds to a temp dir because `landing_26` is non-empty (the generator refuses
    the WordPress image shape. Each one must be retyped on the way in. Unavoidable in any approach —
    it is the same work whether files are copied or edited in place.
 
-GSAP is the good news: tdg is on 3.12, Chaos Kitchen on 3.15. Animation logic ports directly.
+GSAP is the good news: tdg already uses it and so does Chaos Kitchen, so animation logic ports
+directly.
 
 ## Undecided — the one real gap
 
