@@ -1,0 +1,2 @@
+# Pre-commit template. pnpm is replaced with the detected package manager.
+pnpm exec lint-staged

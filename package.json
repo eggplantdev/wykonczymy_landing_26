@@ -22,7 +22,8 @@
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
     "db:dump": "set -a && source .env && set +a && mkdir -p dumps && docker exec -i \"$DOCKER_CONTAINER\" pg_dump --clean --no-owner --no-acl \"$PROD_POSTGRES_URL\" > dumps/dump-latest.sql && cp dumps/dump-latest.sql \"dumps/dump-$(date +%Y-%m-%d_%H-%M).sql\"",
-    "db:import": "set -a && source .env && set +a && docker exec -i \"$DOCKER_CONTAINER\" psql -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" < ${DUMP_FILE:-dumps/dump-latest.sql}"
+    "db:import": "set -a && source .env && set +a && docker exec -i \"$DOCKER_CONTAINER\" psql -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" < ${DUMP_FILE:-dumps/dump-latest.sql}",
+    "prepare": "husky"
   },
   "dependencies": {
     "@payloadcms/db-vercel-postgres": "3.88.0",
@@ -55,7 +56,9 @@
     "@vitejs/plugin-react": "4.5.2",
     "eslint": "^9.16.0",
     "eslint-config-next": "16.3.3",
+    "husky": "^9.1.7",
     "jsdom": "28.0.0",
+    "lint-staged": "^17.4.1",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4.0.0",
@@ -67,5 +70,13 @@
   "engines": {
     "node": "^18.20.2 || >=20.9.0",
     "pnpm": "^9 || ^10 || ^11"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix"
+    ],
+    "*.{ts,tsx,js,jsx,json,md}": [
+      "prettier --write"
+    ]
   }
 }
