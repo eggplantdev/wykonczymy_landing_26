@@ -4,9 +4,9 @@
 lead-generation site for a Warsaw renovation contractor, from WordPress to Payload + Next on Vercel.
 Canonical, cross-tool agent onboarding file.
 
-> **This repo has no application code yet.** Docs only — see **Where things stand** at the bottom.
-> Conventions (structure, testing, commands) get written here *after* the scaffold lands, not
-> invented in advance.
+> **The scaffold is in and production is live**; there are no page components yet. See **Where
+> things stand** at the bottom. Conventions (structure, testing, commands) get written here once
+> there is real application code to describe, not invented in advance.
 
 ## STOP if you can't run what this file references
 
@@ -20,11 +20,11 @@ Named throughout this file. **Nothing outside `landing_26` is ever edited** — 
 read there, write here. Roles and the rules for copying from each →
 `@context/foundation/references.md`.
 
-| Name | Path | What it is |
-|---|---|---|
-| **Chaos Kitchen** | `/workspace/nomad_chef` | Live site on this exact stack — the default answer to "how do we do X here" |
-| **tdg** | `/workspace/_old_repos/tdg` | The agency's WordPress template — the only real built markup for this site |
-| **leads app** | `/workspace/yolo/wykonczymy` | Where quote requests land — a separate product with its own roadmap |
+| Name              | Path                         | What it is                                                                  |
+| ----------------- | ---------------------------- | --------------------------------------------------------------------------- |
+| **Chaos Kitchen** | `/workspace/nomad_chef`      | Live site on this exact stack — the default answer to "how do we do X here" |
+| **tdg**           | `/workspace/_old_repos/tdg`  | The agency's WordPress template — the only real built markup for this site  |
+| **leads app**     | `/workspace/yolo/wykonczymy` | Where quote requests land — a separate product with its own roadmap         |
 
 ## Hard rules (read first)
 
@@ -35,7 +35,7 @@ read there, write here. Roles and the rules for copying from each →
   `git add -A` sweeps up another agent's in-flight work.
 - **Use** `pnpm` — not npm, not yarn. Chaos Kitchen is on npm, so its `db:*` scripts need their
   `npm run` calls swapped on the way in.
-- **Install latest *mature*.** Do **not** copy version numbers out of the reference repos; they are
+- **Install latest _mature_.** Do **not** copy version numbers out of the reference repos; they are
   a snapshot of what those projects happened to have. But "latest" is not "published this morning":
   `minimumReleaseAge: 1440` in `pnpm-workspace.yaml` makes Vercel refuse a lockfile containing
   anything under a day old, and `pnpm add` pins today's version by default — widen the range so a
@@ -83,6 +83,11 @@ site.
   problems. Use the `vercel:*` skills to talk to Vercel rather than guessing its API.
 - `create-payload-app` **needs a TTY and cannot be run by an agent.** The owner runs it; the exact
   command is in `tech-stack.md`.
+- **`build` never migrates the database.** `POSTGRES_URL` on Vercel points at production for every
+  deployment, previews included. Schema is applied by hand with `pnpm db:migrate:prod` — **a human
+  runs it, never an agent** — and it goes up _before_ the code that needs it.
+- **Read env through `src/lib/env.ts` / `env.server.ts`, never raw `process.env`** — ESLint rejects
+  it in `src/**`. `payload.config.ts` is the one exception, and parses `serverSchema` itself.
 
 ## Claude Code workflow
 
@@ -92,7 +97,7 @@ site.
 > **Workflow = 10x, not superpowers** — use the `/10x-*` skills for research/plan/implement/review.
 
 Close out **every change that has its own** `context/changes/<id>/` **folder** by running the
-`slice-review-gate` skill; having a change folder *is* the trigger. Only trivial folder-less edits
+`slice-review-gate` skill; having a change folder _is_ the trigger. Only trivial folder-less edits
 skip it.
 
 ## Where things stand

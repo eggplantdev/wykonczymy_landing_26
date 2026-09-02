@@ -10,10 +10,10 @@ package_manager: pnpm
 
 **The stack was not chosen by a selection process.** The owner had already decided on Payload + Next
 before this project started. What follows is that decision written down, plus the layer choices
-derived from it — so treat a row as a *recorded decision of varying confidence*, not an evaluated
+derived from it — so treat a row as a _recorded decision of varying confidence_, not an evaluated
 trade-off. A row with no rationale attached has not been argued; say so rather than inheriting it.
 
-**The reference repos are precedent, not a bill of materials.** Chaos Kitchen shows *how* things are
+**The reference repos are precedent, not a bill of materials.** Chaos Kitchen shows _how_ things are
 done on this stack; tdg holds markup. Neither one's `package.json` is a shopping list. **No
 dependency is installed until a requirement in the PRD needs it** — "the reference repo has it" is
 not a reason, and neither is "the component we're lifting used it".
@@ -23,7 +23,7 @@ not a reason, and neither is "the component we're lifting used it".
 
 ## Layers
 
-**Install latest *mature*.** Where a major version appears below it is a *decision* (Payload 3's
+**Install latest _mature_.** Where a major version appears below it is a _decision_ (Payload 3's
 `src/` ownership, Tailwind 4's CSS config, React 19). Everything else takes whatever is current when
 it is installed — do not copy version numbers out of the reference repos, they are only a snapshot
 of what those projects happened to have.
@@ -34,36 +34,37 @@ deploy died on `ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION` because `pnpm add` had p
 hours-old versions with no older fallback in range. Widen the ranges `pnpm add` writes. Full account
 in `stack-template.md`.
 
-| Layer | Choice | Notes |
-|---|---|---|
-| Framework | Next.js, App Router | Latest. React 19+ |
-| CMS / backend | Payload (`@payloadcms/next`) | Latest. Mounted at `src/app/(payload)`; Payload owns the `src/` layout |
-| Database | Postgres | `@payloadcms/db-vercel-postgres` |
-| — local dev | Docker, `postgres:17-alpine` | Pinned deliberately — dev/prod parity. **Port 5436**, see below |
-| — production | Neon, via Vercel | |
-| Media storage | Vercel Blob | `@payloadcms/storage-vercel-blob` |
-| Email | Nodemailer via Payload adapter | `@payloadcms/email-nodemailer` + SMTP. Attached only when `SMTP_HOST` is set — otherwise Payload logs to console and local builds stay quiet |
-| Rich text | Lexical | `@payloadcms/richtext-lexical` |
-| Forms | **TanStack Form + Zod** | `@tanstack/react-form` + `zod`. Chaos Kitchen uses the same, so its form code ports |
-| Styling | **Tailwind 4+** | `@tailwindcss/postcss` — CSS-based config, not `tailwind.config.js`. Major version is the decision; take the latest within it |
-| Animation | GSAP | `framer-motion` also an option |
-| E2E tests | Playwright | Plus `@playwright/mcp` wired via `.mcp.json` |
-| Unit / integration tests | **Vitest** | `vitest` + `jsdom` + `@testing-library/react`, as `create-payload-app` ships it. Chaos Kitchen's `node --import tsx --test` is precedent, not a requirement |
-| Package manager | **pnpm** | Matches the leads app. Chaos Kitchen is on npm — its `db:*` scripts need `npm run` → `pnpm` on the way in |
-| Hosting | Vercel | Same account as the leads app — deliberate |
-| SEO metadata | `@payloadcms/plugin-seo` | Per-page title / description / image, for FR-014 |
-| Tooling | ESLint, Prettier | `husky` not installed — add it if a hook is actually wanted |
+| Layer                    | Choice                         | Notes                                                                                                                                                       |
+| ------------------------ | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework                | Next.js, App Router            | Latest. React 19+                                                                                                                                           |
+| CMS / backend            | Payload (`@payloadcms/next`)   | Latest. Mounted at `src/app/(payload)`; Payload owns the `src/` layout                                                                                      |
+| Database                 | Postgres                       | `@payloadcms/db-vercel-postgres`                                                                                                                            |
+| — local dev              | Docker, `postgres:17-alpine`   | Pinned deliberately — dev/prod parity. **Port 5436**, see below                                                                                             |
+| — production             | Neon, via Vercel               |                                                                                                                                                             |
+| Media storage            | Vercel Blob                    | `@payloadcms/storage-vercel-blob`                                                                                                                           |
+| Email                    | Nodemailer via Payload adapter | `@payloadcms/email-nodemailer` + SMTP. Attached only when `SMTP_HOST` is set — otherwise Payload logs to console and local builds stay quiet                |
+| Rich text                | Lexical                        | `@payloadcms/richtext-lexical`                                                                                                                              |
+| Forms                    | **TanStack Form + Zod**        | `@tanstack/react-form` + `zod`. Chaos Kitchen uses the same, so its form code ports                                                                         |
+| Styling                  | **Tailwind 4+**                | `@tailwindcss/postcss` — CSS-based config, not `tailwind.config.js`. Major version is the decision; take the latest within it                               |
+| Animation                | GSAP                           | `framer-motion` also an option                                                                                                                              |
+| E2E tests                | Playwright                     | Plus `@playwright/mcp` wired via `.mcp.json`                                                                                                                |
+| Unit / integration tests | **Vitest**                     | `vitest` + `jsdom` + `@testing-library/react`, as `create-payload-app` ships it. Chaos Kitchen's `node --import tsx --test` is precedent, not a requirement |
+| Package manager          | **pnpm**                       | Matches the leads app. Chaos Kitchen is on npm — its `db:*` scripts need `npm run` → `pnpm` on the way in                                                   |
+| Hosting                  | Vercel                         | Same account as the leads app — deliberate                                                                                                                  |
+| SEO metadata             | `@payloadcms/plugin-seo`       | Per-page title / description / image, for FR-014                                                                                                            |
+| Env validation           | **Zod**                        | `src/lib/env-schema.ts` + `env.ts` + `env.server.ts`; raw `process.env` is banned in `src/**` by ESLint                                                     |
+| Tooling                  | ESLint, Prettier, husky        | `pre-commit` runs lint-staged; `pre-push` runs the migration gate, typecheck, vitest, and a Vercel deploy watcher                                           |
 
 ## Local database port
 
 `5436`. The three lower ports are already taken on this machine:
 
-| Port | Container |
-|---|---|
-| 5433 | `wykonczymy` — leads app |
-| 5434 | `chef-cms` — Chaos Kitchen |
-| 5435 | `wykonczymy-test` — leads app test db |
-| **5436** | **`landing26-cms` — this project** |
+| Port     | Container                             |
+| -------- | ------------------------------------- |
+| 5433     | `wykonczymy` — leads app              |
+| 5434     | `chef-cms` — Chaos Kitchen            |
+| 5435     | `wykonczymy-test` — leads app test db |
+| **5436** | **`landing26-cms` — this project**    |
 
 Committed in `docker-compose.yml` and `.env.example`.
 
@@ -72,8 +73,9 @@ flag despite being absent from the CLI README — it installed Payload's skill a
 `.claude/skills/payload/`.
 
 The connection string is **`POSTGRES_URL`**, which is both what `payload.config.ts` reads and what
-Vercel's Neon integration injects, so production needs no extra wiring. `PROD_POSTGRES_URL` exists
-only for `db:dump` pulling production data down to the local container.
+Vercel's Neon integration injects, so production needs no extra wiring. `PROD_POSTGRES_URL` carries the
+production credential for the two commands that must target prod explicitly — `db:dump` and
+`db:migrate:prod`. It is currently unset.
 
 ## Scaffold command
 
@@ -103,11 +105,11 @@ directly.
 
 Three separate problems, previously collapsed into one. Payload only solves the first.
 
-| # | Problem | Owner |
-|---|---|---|
-| 1 | Content in two languages | Payload `localization` + `localized: true` fields |
-| 2 | Which URL loads which document | **Payload localized `slug` field**, resolved in the App Router |
-| 3 | UI chrome — nav labels, buttons, validation messages | A small typed `pl`/`en` dictionary in code |
+| #   | Problem                                              | Owner                                                          |
+| --- | ---------------------------------------------------- | -------------------------------------------------------------- |
+| 1   | Content in two languages                             | Payload `localization` + `localized: true` fields              |
+| 2   | Which URL loads which document                       | **Payload localized `slug` field**, resolved in the App Router |
+| 3   | UI chrome — nav labels, buttons, validation messages | A small typed `pl`/`en` dictionary in code                     |
 
 **Paths live in the CMS.** One Pages document carries `slug: 'oferta'` for `pl` and `slug: 'offer'`
 for `en`; the route resolves `[locale]/[slug]` against it. Payload's `slug` field type is native and
@@ -143,7 +145,7 @@ every indexed address ends in a slash and Next strips it by default. See `url-ma
 ## Content model — fixed structures, no block builder
 
 **All content data lives in the CMS.** Copy, images, prices, list items — every one is a Payload
-field, nothing is hardcoded in a component. What is fixed is the *structure*: page layout and
+field, nothing is hardcoded in a component. What is fixed is the _structure_: page layout and
 components are code, and **Payload's blocks / layout-builder machinery is not used** — not for
 editors, not for the developer. Each page is a fixed layout whose data comes from named, typed
 fields; the admin fills slots, it never arranges them.

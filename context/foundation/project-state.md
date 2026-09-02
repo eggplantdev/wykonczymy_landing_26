@@ -1,7 +1,7 @@
 ---
 project: wykonczymy-www
 updated: 2026-09-02
-phase: pre-scaffold
+phase: foundations
 ---
 
 # Project state — read this first
@@ -17,7 +17,7 @@ interior-finishing contractor in Warsaw. WordPress today, built and held by an o
 Moving to Payload + Next, rebuilt layout, full cutover in one DNS switch.
 
 **The driver is ownership, not a measured failure.** Nothing about the current site's conversion,
-speed or credibility has been identified as broken. Success is *parity plus control*, which is why
+speed or credibility has been identified as broken. Success is _parity plus control_, which is why
 the guardrails weight preservation over improvement. Do not propose conversion-optimisation work; it
 is an explicit non-goal.
 
@@ -33,7 +33,7 @@ is an explicit non-goal.
    (attachments — see below).
 4. **Routine plumbing gets one line, not a three-option essay.** The owner will say when a detail
    deserves a real discussion.
-5. **This is not a client handover.** The business belongs to the developer's brother; the developer keeps full control of the site indefinitely and is always reachable. Do not propose, justify, or preserve anything on the grounds that a client would otherwise have to pay a developer — that situation does not exist. It cuts scope on **access-control machinery only** — no handover-proofing. It is *not* an argument for hardcoding content: an admin panel beats a source file as an editing surface for the developer too, so **all content data belongs in the CMS** — copy, images, prices, list items — regardless of who edits them.
+5. **This is not a client handover.** The business belongs to the developer's brother; the developer keeps full control of the site indefinitely and is always reachable. Do not propose, justify, or preserve anything on the grounds that a client would otherwise have to pay a developer — that situation does not exist. It cuts scope on **access-control machinery only** — no handover-proofing. It is _not_ an argument for hardcoding content: an admin panel beats a source file as an editing surface for the developer too, so **all content data belongs in the CMS** — copy, images, prices, list items — regardless of who edits them.
 6. **Code owns structure; the CMS owns data.** Layout, navigation, design and the components are code. **Payload's blocks / layout-builder machinery is not used** — no page builder, no drag-and-drop section composition, for editors or for the developer. Each page is a fixed structure whose named, typed fields the admin fills; a new section means a new field and a deploy.
 7. **Commit only your own work, by explicit path.** Multiple agents run against these trees.
 
@@ -51,7 +51,7 @@ Rejected: rebuilding inside `tdg`. Reasons, in weight order:
 - 37 of tdg's 206 source files consume WordPress GraphQL. The data layer is deleted wholesale.
 - tdg has two commits, one being "import template". There is no history to preserve.
 - Config inheritance: staying in tdg keeps the agency's Prettier, ESLint, Dockerfile, a Bitbucket
-  pipeline pointed at *their* server, and `remotePatterns: { hostname: '**' }` — unless each is
+  pipeline pointed at _their_ server, and `remotePatterns: { hostname: '**' }` — unless each is
   actively removed. A fresh repo makes all of that opt-in.
 - It also makes constraint #1 structurally impossible to violate: in a new repo nothing is deleted,
   only copied in.
@@ -79,46 +79,54 @@ depends on `url-map.md` being tested against, not trusted.
 
 **2. Photo attachments cannot use the existing lead intake.** The leads app's current intake accepts
 a flat set of text answers and has nowhere to put a file. This is a fact about the existing
-contract, not a preference — delivering the file-upload requirement (FR-031) requires work *in the
-leads app*. It is sequenced against this project but not owned by it.
+contract, not a preference — delivering the file-upload requirement (FR-031) requires work _in the
+leads app_. It is sequenced against this project but not owned by it.
 
 ## Current state
 
+**F1 (scaffold) is done and production is live** at `wykonczymylanding26.vercel.app` — `/` returns
+200, `/admin` 308s to `/admin/`. Deploys run from GitHub `main`; Neon holds the schema, Vercel Blob
+the media. Zero content: the site is Payload's stock starter page and **the first admin user has not
+been created** (Payload has no CLI path for it — open `/admin` and register).
+
 ```
-context/foundation/
-  prd.md                  11-section brownfield PRD, 9 open questions
-  roadmap.md              2 foundations + 8 vertical slices, dependency-ordered
-  shape-notes.md          discovery, 28 FRs, template inventory (allocation undecided)
-  tech-stack.md           layer choices, ports, scaffold command, known frictions
-  references.md           the three read-only reference repos + the live-site snapshot
-  project-state.md        this file
-  url-map.md              the twelve indexed addresses, verified 2026-09-02 — the cutover spec
-  live-site-snapshot/     scraped-content.md (2026-03-04) + 6 screenshots
+src/
+  payload.config.ts       Users + Media, localization pl/en, seo plugin, blob storage
+  collections/            Users.ts, Media.ts
+  lib/                    env-schema.ts + env.ts + env.server.ts — the only readers of process.env
+  migrations/             20260902_120907_initial
+  app/(frontend)/         stock starter page
+  app/(payload)/          admin + api, generated
+tests/                    int + e2e specs as create-payload-app ships them
+scripts/watch-deploy.sh   tails the Vercel build a push triggers
+.husky/                   pre-commit (lint-staged), pre-push (migration gate → typecheck → vitest → watcher)
+context/foundation/       + stack-template.md, the reusable setup runbook
 context/changes/          empty — no change started
-context/archive/          empty
-docker-compose.yml        postgres:17-alpine, port 5436
-.env.example
 ```
+
+**Two planes, deliberately separated.** Vercel deploys code; `payload migrate` owns schema. `build`
+does **not** migrate — on Vercel `POSTGRES_URL` points at production for every deployment, previews
+included, so a build that migrates would let a throwaway branch rewrite prod. Schema goes up first,
+by hand: `pnpm db:migrate:prod`, run by a human, never an agent.
+
+**`PROD_POSTGRES_URL` is empty**, so `db:dump` — and therefore `db:migrate:prod`, which dumps before
+it migrates — currently fails. Prod is empty so the first migration was harmless; fill the var
+before any migration that touches real data.
 
 Also at the root: `AGENTS.md` (canonical agent onboarding) and `CLAUDE.md` (a thin importer of it).
 
-Git: `main`. **No code has been written and nothing has been installed.**
-
-**Documentation is complete as of 2026-09-02.** Every foundation document exists, the two gating
-decisions (i18n routing, the editor/admin split) are made, and `roadmap.md` sequences the work.
-Nothing further is owed on the docs before code starts.
+**Documentation is complete as of 2026-09-02.** Every foundation document exists, the three gating
+decisions (i18n routing, the editor/admin split, no i18n library) are made, and `roadmap.md`
+sequences the work.
 
 ## Next steps
 
-1. Owner runs `create-payload-app` (needs a TTY — command in `tech-stack.md`). Merge the temp
-   scaffold into `landing_26`.
-2. `/10x-plan f1-scaffold` — the rest of Foundations F1: swap in `db-vercel-postgres`, add
-   `storage-vercel-blob` and the nodemailer adapter, `.mcp.json` for Playwright, and the `db:up` /
-   `db:dump` / `db:import` scripts modelled on Chaos Kitchen.
-3. Then `f2-i18n-spine`, then `s1-first-page`. After S1, four slices open in parallel — see
+1. Create the first admin user at `/admin` on the deployed site.
+2. Set `PROD_POSTGRES_URL` in `.env` from Neon, so the backup-first migrate path works.
+3. `/10x-plan f2-i18n-spine`, then `s1-first-page`. After S1, four slices open in parallel — see
    `roadmap.md` `## At a glance`.
-4. `AGENTS.md` gains its conventions section (structure, testing, commands) once F1 lands and there
-   is real code to describe.
+4. `AGENTS.md` gains its conventions section (structure, testing, commands) once there is real
+   application code to describe.
 
 ## Open questions
 
