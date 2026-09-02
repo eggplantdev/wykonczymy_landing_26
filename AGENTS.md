@@ -35,9 +35,13 @@ read there, write here. Roles and the rules for copying from each →
   `git add -A` sweeps up another agent's in-flight work.
 - **Use** `pnpm` — not npm, not yarn. Chaos Kitchen is on npm, so its `db:*` scripts need their
   `npm run` calls swapped on the way in.
-- **Install latest at scaffold time.** Do **not** copy version numbers out of the reference repos;
-  they are a snapshot of what those projects happened to have. The only pinned majors are decisions:
-  Payload 3, React 19, Tailwind 4, `postgres:17-alpine`.
+- **Install latest *mature*.** Do **not** copy version numbers out of the reference repos; they are
+  a snapshot of what those projects happened to have. But "latest" is not "published this morning":
+  `minimumReleaseAge: 1440` in `pnpm-workspace.yaml` makes Vercel refuse a lockfile containing
+  anything under a day old, and `pnpm add` pins today's version by default — widen the range so a
+  mature fallback exists. This cost a failed production deploy; see
+  `@context/foundation/stack-template.md`. The only pinned majors are decisions: Payload 3,
+  React 19, Tailwind 4, `postgres:17-alpine`.
 - **Payload owns the** `src/` **layout** — `src/app/(payload)/{admin,api}`, `payload.config.ts`,
   `withPayload()` wrapping the Next config. App Router only.
 - **Never write to** `context/archive/` — archived changes are immutable. All project docs live
@@ -67,6 +71,11 @@ read there, write here. Roles and the rules for copying from each →
 
 Layer table, rationale, and the two tdg migration frictions (Tailwind 3→4 class migration;
 `WpImageT` → Payload media retyping) → `@context/foundation/tech-stack.md`.
+
+**Before touching scaffold, deploy or environment config, read
+`@context/foundation/stack-template.md`** — the scaffold-to-first-deploy runbook, written from what
+actually broke here. It is also the seed for a reusable starter, so keep it free of anything
+specific to this site.
 
 - Local Postgres runs in Docker on **port 5436** — 5433/5434/5435 are taken by other projects on this
   machine. Wired in `@docker-compose.yml` / `@.env.example`.

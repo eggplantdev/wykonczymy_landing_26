@@ -23,10 +23,16 @@ not a reason, and neither is "the component we're lifting used it".
 
 ## Layers
 
-**Install latest at scaffold time.** Where a major version appears below it is a *decision* (Payload
-3's `src/` ownership, Tailwind 4's CSS config, React 19). Everything else takes whatever is current
-when it is installed — do not copy version numbers out of the reference repos, they are only a
-snapshot of what those projects happened to have.
+**Install latest *mature*.** Where a major version appears below it is a *decision* (Payload 3's
+`src/` ownership, Tailwind 4's CSS config, React 19). Everything else takes whatever is current when
+it is installed — do not copy version numbers out of the reference repos, they are only a snapshot
+of what those projects happened to have.
+
+**"Current" excludes packages published in the last 24 hours.** `pnpm-workspace.yaml` sets
+`minimumReleaseAge: 1440`, and Vercel's pnpm enforces it against the lockfile — the first production
+deploy died on `ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION` because `pnpm add` had pinned five
+hours-old versions with no older fallback in range. Widen the ranges `pnpm add` writes. Full account
+in `stack-template.md`.
 
 | Layer | Choice | Notes |
 |---|---|---|
