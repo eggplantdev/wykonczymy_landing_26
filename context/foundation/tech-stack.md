@@ -84,18 +84,49 @@ Scaffolds to a temp dir because `landing_26` is non-empty (the generator refuses
 GSAP is the good news: tdg already uses it and so does Chaos Kitchen, so animation logic ports
 directly.
 
-## Undecided — the one real gap
+## i18n — decided 2026-09-02
 
-**PL/EN with translated pathnames has no pattern to inherit.** Chaos Kitchen declares
-`localization: { locales: ['pl','en'] }` in `payload.config.ts` but its frontend is Polish-only — no
-locale segment, no middleware, no `en` in frontend code. So the CMS layer is configured and the
-rendering layer does not exist.
+Three separate problems, previously collapsed into one. Payload only solves the first.
 
-This project needs the harder version: `/en/offer/`, not `/en/oferta/` — translated slugs, because
-those are the twelve indexed URLs and URL preservation is a PRD guardrail (FR-011, FR-012, FR-014).
+| # | Problem | Owner |
+|---|---|---|
+| 1 | Content in two languages | Payload `localization` + `localized: true` fields |
+| 2 | Which URL loads which document | **Payload localized `slug` field**, resolved in the App Router |
+| 3 | UI chrome — nav labels, buttons, validation messages | A small typed `pl`/`en` dictionary in code |
 
-**Decide this before the route tree is laid down.** Retrofitting locale routing after the fact is the
-expensive order.
+**Paths live in the CMS.** One Pages document carries `slug: 'oferta'` for `pl` and `slug: 'offer'`
+for `en`; the route resolves `[locale]/[slug]` against it. Payload's `slug` field type is native and
+can be `localized`, so this needs no invention. Rejected: a static path table in code (loses the
+ability to add a page without a deploy) and next-intl owning routing (a second source of path truth
+that has to stay in sync with Payload's content).
+
+Chaos Kitchen configures problem 1 and never built 2 or 3 — that is the whole of its "gap", not an
+incompatibility.
+
+**Two costs this choice buys, both of which need handling:**
+
+1. **Cutover-critical URLs become editable in the admin.** The twelve indexed addresses are a
+   preservation guardrail, and a slug is now a text field someone can change. Mitigate deliberately
+   — the `slug` field should be admin-only or read-only for editors (ties to PRD Open Question 9),
+   and `url-map.md` is the spec to test against, not a historical note.
+2. **Route resolution hits the database.** Acceptable only because pages are statically generated —
+   `generateStaticParams` resolves the slugs at build time, so there is no per-request lookup. If a
+   route ever becomes dynamic, this decision needs revisiting.
+
+**Still to decide before the route tree:** `trailingSlash: true` is required in the Next config —
+every indexed address ends in a slash and Next strips it by default. See `url-map.md`.
+
+## Content model — fixed structures, no block builder
+
+**All content data lives in the CMS.** Copy, images, prices, list items — every one is a Payload
+field, nothing is hardcoded in a component. What is fixed is the *structure*: page layout and
+components are code, and **Payload's blocks / layout-builder machinery is not used** — not for
+editors, not for the developer. Each page is a fixed layout whose data comes from named, typed
+fields; the admin fills slots, it never arranges them.
+
+Consequences for the content model: no `blocks` field for page composition, no visual page builder,
+and every content field carries a concrete type rather than an open-ended array of variants. A page
+that needs a new section gets a new field and a deploy — that is the intended cost.
 
 ## Not installed
 

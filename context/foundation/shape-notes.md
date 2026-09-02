@@ -128,6 +128,11 @@ Direction stated so far, and nothing beyond it: reuse the existing template and 
 
 The role split is a deliberate addition, not parity. Its purpose is to let the business add projects and edit copy without being able to break the content model.
 
+> **Superseded 2026-09-02.** The role split was **not** adopted — see `prd.md` Open Question 9 and
+> `## Access Control Changes`. One admin account, no editor role. Structure is unreachable from the
+> admin panel for everyone because it lives in code, and the slug guardrail is a test (FR-037), not
+> a permission.
+
 ## Success Criteria
 
 ### Primary
@@ -184,7 +189,7 @@ No blog. No per-project detail pages — Realizacje is a single gallery. `/en/` 
 - **Restructured:** Realizacje becomes a Payload collection with per-project detail pages. Existing project photos migrate as a flat gallery without detail pages; projects added after launch get full entries. This creates new indexable URLs that do not exist today.
 - **Rebuilt at parity:** Home, Oferta, Wykończenia, Kontakt — same URLs, new layout, content moved into Payload.
 - **Reworked:** the free-quote flow. Scope not yet captured; the owner has indicated it is substantially more than a rebuilt contact form. **This is the likely home of the product's domain rule** and is the last unresolved piece of discovery.
-- **Added:** admin/editor role split; owner-controlled codebase and deploy pipeline.
+- **Added:** owner-controlled codebase and deploy pipeline. (The admin/editor role split proposed here was later dropped — see above.)
 
 ## Lead destination (existing system, out of scope)
 

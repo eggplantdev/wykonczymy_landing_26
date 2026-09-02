@@ -1,0 +1,13 @@
+# env — real secrets, never committed. .env.example is the tracked template.
+.env
+.env.*
+!.env.example
+
+node_modules/
+.next/
+build/
+dist/
+
+.vercel
+.DS_Store
+*.log

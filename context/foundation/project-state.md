@@ -33,8 +33,9 @@ is an explicit non-goal.
    (attachments — see below).
 4. **Routine plumbing gets one line, not a three-option essay.** The owner will say when a detail
    deserves a real discussion.
-5. **This is not a client handover.** The business belongs to the developer's brother; the developer keeps full control of the site indefinitely and is always reachable. Do not propose, justify, or preserve anything on the grounds that a client would otherwise have to pay a developer — that situation does not exist. It cuts scope: no handover-proofing, and no CMS collection for content that only *might* change.
-6. **Commit only your own work, by explicit path.** Multiple agents run against these trees.
+5. **This is not a client handover.** The business belongs to the developer's brother; the developer keeps full control of the site indefinitely and is always reachable. Do not propose, justify, or preserve anything on the grounds that a client would otherwise have to pay a developer — that situation does not exist. It cuts scope on **access-control machinery only** — no handover-proofing. It is *not* an argument for hardcoding content: an admin panel beats a source file as an editing surface for the developer too, so **all content data belongs in the CMS** — copy, images, prices, list items — regardless of who edits them.
+6. **Code owns structure; the CMS owns data.** Layout, navigation, design and the components are code. **Payload's blocks / layout-builder machinery is not used** — no page builder, no drag-and-drop section composition, for editors or for the developer. Each page is a fixed structure whose named, typed fields the admin fills; a new section means a new field and a deploy.
+7. **Commit only your own work, by explicit path.** Multiple agents run against these trees.
 
 ## Decisions taken
 
@@ -70,10 +71,11 @@ No root `docs/`. The live-site scrape sits at `context/foundation/live-site-snap
 
 ## The two things most likely to bite
 
-**1. PL/EN translated pathnames.** No reference repo solves this. Chaos Kitchen configures both
-locales in Payload and renders only Polish. This project needs `/en/offer/` (not `/en/oferta/`)
-because those are the indexed URLs. **Decide before laying down the route tree.** Detail in
-`tech-stack.md`.
+**1. URL preservation.** Decided 2026-09-02 — paths live as a localized Payload `slug` field; see
+`tech-stack.md` `## i18n`. What remains is mechanical and easy to get wrong: the canonical host is
+`www.`, every address carries a trailing slash (`trailingSlash: true` required), and the twelve are
+enumerated in `url-map.md`. Because slugs now live in the CMS, they are editable — the guardrail
+depends on `url-map.md` being tested against, not trusted.
 
 **2. Photo attachments cannot use the existing lead intake.** The leads app's current intake accepts
 a flat set of text answers and has nowhere to put a file. This is a fact about the existing
@@ -84,11 +86,13 @@ leads app*. It is sequenced against this project but not owned by it.
 
 ```
 context/foundation/
-  prd.md                  11-section brownfield PRD, 7 open questions
+  prd.md                  11-section brownfield PRD, 9 open questions
+  roadmap.md              2 foundations + 8 vertical slices, dependency-ordered
   shape-notes.md          discovery, 28 FRs, template inventory (allocation undecided)
   tech-stack.md           layer choices, ports, scaffold command, known frictions
-  references.md           the three live reference repos + the retired spike
+  references.md           the three read-only reference repos + the live-site snapshot
   project-state.md        this file
+  url-map.md              the twelve indexed addresses, verified 2026-09-02 — the cutover spec
   live-site-snapshot/     scraped-content.md (2026-03-04) + 6 screenshots
 context/changes/          empty — no change started
 context/archive/          empty
@@ -96,19 +100,25 @@ docker-compose.yml        postgres:17-alpine, port 5436
 .env.example
 ```
 
-Git: `main`, one commit. **No code has been written and nothing has been installed.**
+Also at the root: `AGENTS.md` (canonical agent onboarding) and `CLAUDE.md` (a thin importer of it).
+
+Git: `main`. **No code has been written and nothing has been installed.**
+
+**Documentation is complete as of 2026-09-02.** Every foundation document exists, the two gating
+decisions (i18n routing, the editor/admin split) are made, and `roadmap.md` sequences the work.
+Nothing further is owed on the docs before code starts.
 
 ## Next steps
 
 1. Owner runs `create-payload-app` (needs a TTY — command in `tech-stack.md`). Merge the temp
    scaffold into `landing_26`.
-2. Swap the generic adapter for `db-vercel-postgres`, add `storage-vercel-blob` and the nodemailer
-   adapter. Add `.mcp.json` for Playwright and the `db:up` / `db:dump` / `db:import` scripts,
-   modelled on Chaos Kitchen.
-3. Decide the i18n routing approach. Blocks the route tree.
-4. `/10x-roadmap` — produces the ordered slice plan from the PRD. It can run at any point; it is
-   stack-agnostic and reads `tech-stack.md` only to enrich its Foundations section.
-5. `AGENTS.md` — write once there is real code to describe conventions for.
+2. `/10x-plan f1-scaffold` — the rest of Foundations F1: swap in `db-vercel-postgres`, add
+   `storage-vercel-blob` and the nodemailer adapter, `.mcp.json` for Playwright, and the `db:up` /
+   `db:dump` / `db:import` scripts modelled on Chaos Kitchen.
+3. Then `f2-i18n-spine`, then `s1-first-page`. After S1, four slices open in parallel — see
+   `roadmap.md` `## At a glance`.
+4. `AGENTS.md` gains its conventions section (structure, testing, commands) once F1 lands and there
+   is real code to describe.
 
 ## Open questions
 

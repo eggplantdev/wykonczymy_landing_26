@@ -45,16 +45,19 @@ read there, write here. Roles and the rules for copying from each →
 - **Timeline is not a project constraint.** Do not raise it, estimate it, or ask about it.
 - **This is not a client handover.** The business belongs to the developer's brother and the developer
   keeps control indefinitely. Never justify scope with "otherwise the client would have to pay a
-  developer" — there is no such client. Handover-proofing and speculative CMS-editability are cuts,
-  not features.
+  developer" — there is no such client, so handover-proofing is a cut. This is **not** a licence to
+  hardcode content: **all content data lives in the CMS** — copy, images, prices, list items are
+  Payload fields, whoever edits them. What code owns is **structure**: layout, navigation, design,
+  and the components themselves. **No block builder** — Payload's blocks / layout-builder machinery
+  is not used; a page is a fixed layout whose typed fields the admin fills, never rearranges.
 
 ## The two landmines
 
-- **PL/EN translated pathnames are UNDECIDED and block the route tree.** The site needs `/en/offer/`,
-  not `/en/oferta/`, because those are the indexed URLs and URL preservation is a PRD guardrail
-  (FR-011/012/014). **No reference repo solves this** — Chaos Kitchen configures both locales in
-  Payload and renders Polish only, so the CMS layer exists and the rendering layer does not. Decide
-  before laying down routes; retrofitting locale routing is the expensive order.
+- **The twelve indexed addresses are a guardrail, and three things about them are easy to break.**
+  The canonical host is `www.`; every address ends in a **trailing slash**, so `trailingSlash: true`
+  is required in the Next config or all twelve break at once; and PL/EN use translated slugs
+  (`/oferta/` ↔ `/en/offer/`), held as a localized Payload `slug` field. The enumerated map is
+  `@context/foundation/url-map.md` — it is the spec to test against, not a historical note.
 - **Photo attachments (FR-031) cannot use the existing lead intake.** The leads app
   (`/workspace/yolo/wykonczymy`) accepts a flat set of text answers with nowhere to put a file. That
   is a fact about the existing contract, not a preference — delivering the requirement needs work
@@ -89,6 +92,10 @@ skip it.
 parity with the current site plus editorial control, not a lift in a metric; nothing about the
 current site's conversion, speed or credibility has been identified as broken. Rationale →
 `@context/foundation/prd.md` (`## Problem`).
+
+**The work is sequenced in `@context/foundation/roadmap.md`** — two Foundations slices then eight
+vertical ones, in dependency order, with what blocks each. Pick an item and run `/10x-plan <id>`.
+Nothing is owed on the documentation; it was completed 2026-09-02.
 
 Read `@context/foundation/project-state.md` first — decisions taken, what was rejected and why, and
 the ordered next steps. Then `@context/foundation/prd.md` (11-section brownfield PRD; its

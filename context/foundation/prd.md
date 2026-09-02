@@ -60,7 +60,15 @@ One capability gap does exist. The current form cannot accept files, and the own
 
 **Secondary — the business's own content editor.** Whoever adds completed projects and adjusts page copy. Today they must go through the agency. After this change they edit directly, which is one of the project's reasons for existing.
 
-**The operating model — this is not a client handover.** The business belongs to the developer's brother, and the developer retains full control of the site indefinitely. There is no moment where the code is handed over and the developer becomes unreachable, and no billing relationship that makes "ask the developer" an expensive outcome. **Build for that, not for a handover.** Two consequences follow, and they cut scope rather than add it: machinery whose only purpose is protecting a site from its owner earns nothing here, and content that changes rarely does not have to be editable just because it *might* change one day — a code edit is always available. Anything justified by "otherwise the client would have to pay a developer" is justified by a situation that does not exist in this project.
+**The operating model — this is not a client handover.** The business belongs to the developer's brother, and the developer retains full control of the site indefinitely. There is no moment where the code is handed over and the developer becomes unreachable, and no billing relationship that makes "ask the developer" an expensive outcome. **Build for that, not for a handover.** The consequence is narrow and it cuts scope: machinery whose only purpose is protecting a site from its owner earns nothing here. Anything justified by "otherwise the client would have to pay a developer" is justified by a situation that does not exist in this project.
+
+**All content data lives in the CMS — what is fixed is the structure.** Every piece of copy, every
+image, every price, every list item is a Payload field. What does *not* live in the admin panel is
+the arrangement: components, page structure and layout are code. Payload's block / layout-builder
+machinery is not used. Each page is a fixed structure whose data comes from named, typed fields —
+the admin fills slots, it never arranges them.
+
+**This does not argue for hardcoding content.** An admin panel is a better editing surface than a source file for *anyone*, the developer included — it gives a preview, both languages side by side, and no commit or deploy to reword a sentence. The rule is that **words and images that appear on a page are content and belong in the CMS**, regardless of who edits them. What stays in code is structure: layout, navigation shape, and the design.
 
 **Unchanged.** No visitor ever authenticates, before or after. The site is anonymous to the public.
 
@@ -131,9 +139,10 @@ Requirement ids are carried from the shaping notes so the two documents stay cro
 
 - FR-008: A visitor can open an individual completed project and see its photos and description at its own address.
 - FR-016: An editor can create a project entry with photos, a description, and its own address, in both languages.
-- FR-019: An editor cannot alter the content model, site structure, or configuration.
-- FR-020: An administrator can change the content model, site configuration, and how the site is released.
-- FR-021: An administrator can create, suspend, and remove editor accounts.
+- FR-019: ~~An editor cannot alter the content model, site structure, or configuration.~~ **Dropped** — see Open Question 9. The content model and structure live in code, so they are not reachable from the admin panel by anyone.
+- FR-020: ~~An administrator can change the content model, site configuration, and how the site is released.~~ **Dropped** — that is a code change, not an admin-panel capability.
+- FR-021: ~~An administrator can create, suspend, and remove editor accounts.~~ **Dropped** — one account, created by hand.
+- FR-037: Every address in `url-map.md` resolves on the new site, asserted by an automated test. Replaces the access-control machinery above as the protection for the twelve indexed addresses.
 - FR-031: A visitor can attach one or more files to the submission — photos of the space, plans, inspiration images.
 - FR-032: A visitor can see what happens to their data before submitting, and give explicit consent to being contacted.
 - FR-034: A visitor whose request cannot be delivered is told so plainly and given the phone number.
@@ -179,7 +188,7 @@ These are not assumptions. Each is a requirement whose breakage is a defect.
 
 **Cutover is all-at-once.** Every page is rebuilt and the switch happens in one move. There is no phase where the old and new sites both serve live traffic. This is a deliberate choice — at this size, running two systems in parallel costs more than it protects. The consequence is that every preservation risk lands at the same moment, which is why the verified replacement map is a guardrail rather than a task.
 
-**Addresses must survive.** Twelve addresses are indexed today. English uses translated slugs rather than a locale prefix, so preserving them requires per-language address mapping, not a simple language prefix. Every address either survives or gets a deliberate replacement; none may be left to fail.
+**Addresses must survive.** Twelve addresses are indexed today — **enumerated and verified 2026-09-02 in `context/foundation/url-map.md`**, which is the replacement map the guardrail requires. Three constraints came out of that verification and are not obvious from the prose: the canonical host is `www.`, every address carries a trailing slash (so `trailingSlash: true` is required in the Next config or all twelve break), and two existing redirects (apex → `www`, `/en/` → `/en/home/`) must keep working. English uses translated slugs rather than a locale prefix, so preserving them requires per-language address mapping, not a simple language prefix. Every address either survives or gets a deliberate replacement; none may be left to fail.
 
 **Content must survive.** Existing project photos and client testimonials move across intact. Nothing is re-shot or re-collected.
 
@@ -208,12 +217,11 @@ This is a marketing and lead-capture product, not an application. Its domain val
 
 **Unchanged for the public.** No visitor ever authenticates. There are no accounts, no gated pages, and no login on any public route — before or after.
 
-**Changed for staff.** Content is edited today through an administration area whose credentials are effectively held by the agency. That is part of the ownership problem this project exists to solve. After the change, the same function is owner-controlled and gains a role split it does not have today:
+**Changed for staff.** Content is edited today through an administration area whose credentials are effectively held by the agency. That is part of the ownership problem this project exists to solve. After the change, the same function is owner-controlled — and that is the whole of the change. **No role split** (Open Question 9): a single admin account, created by hand. With two family members touching the CMS, a permission system would exist to protect the site from the people who own it.
 
-- **Administrator** — full access: the content model, site configuration, releases, and account management.
-- **Editor** — content only: add and edit completed projects, adjust page copy, manage both language versions. Cannot alter the content model or the structure of the site.
+Structure is out of reach of the admin panel for everyone, not by permission but by construction: page layout and components are code, so there is no structure-editing capability for a role to withhold. What the admin panel offers is content data — copy, images, prices, list items — in fixed, typed fields.
 
-The split is an addition, not parity. Its purpose is to let the business publish work and fix copy without being able to break the structure underneath — which is also why a visual page-builder is not required (see Non-Goals).
+The one thing a role split would have protected, the twelve indexed slugs, is protected by a test instead (FR-037). A permission would have stopped the editor mistyping a slug but not the developer; the test catches both, and has to exist for the cutover guardrail regardless.
 
 ## Non-Goals
 
@@ -226,7 +234,7 @@ Each entry traces to something the owner stated explicitly.
 - **No conversion-optimisation programme.** This project is driven by ownership, not by a measured funnel failure. Improvements are welcome but are not success criteria, and no conversion target gates the work.
 - **The lead dashboard is not rebuilt.** Lead management already exists in a separate application and is not this project's work.
 - **No blog.** The current site has none and none is introduced.
-- **No page-builder for editors.** Editors change content within fixed page structures. Consistent with the access model: if editors cannot alter structure, structure-editing machinery serves nobody.
+- **No page-builder, and no block-based content.** Page structure and components are code; Payload's blocks / layout-builder machinery is not used, for anyone. The admin panel fills named, typed fields in a fixed layout — it never arranges sections. A new section is a new field and a deploy, which is the accepted cost of the site staying designed rather than assembled. This is a choice about where structure lives, not a consequence of the access model.
 
 ## Open Questions
 
@@ -237,7 +245,7 @@ Each entry traces to something the owner stated explicitly.
 5. **Where do form submissions actually land today?** — Believed to be the business e-mail address plus the separate lead application, but the current site may also record them elsewhere. Must be confirmed before cutover, since lead delivery is a guardrail and the current behaviour is the thing being preserved. Owner: user. Block: yes, before cutover.
 6. **How do attachments reach and persist in the receiving application?** — A new or extended intake plus somewhere to hold the files is required. Routine to build; the one judgement worth carrying is that the receiving application should own the stored files, so a request's photos do not depend on the marketing site's storage outliving it. Owner: user. Block: no; sequenced with the other application.
 7. **What is the retention period for submitted photographs and contact details?** — Personal data with no stated retention window. Not currently recorded anywhere. Owner: user. Block: no.
-8. **What is the new site's page set?** — The six pages listed under Current State describe the *old* site and are not a plan for the new one; the document already departs from them (Cennik retired, project pages added). Pages may be split, merged, added, or dropped. The constraint is on **addresses, not pages** — every one of the twelve indexed URLs either survives or gets a deliberate replacement, which a restructure satisfies the same way Cennik's removal does. Owner: user. Block: no; required before the route tree is laid down.
-9. **Is the editor/administrator split worth building?** — FR-019/020/021 and the access model exist to stop a client breaking a site they own. The operating model has no such client: the developer is family and permanently available. Options are keeping the split as cheap insurance against an accident, or collapsing to a single admin account and deleting FR-021's account lifecycle entirely. Owner: user. Block: no; decide before the Payload access config is written.
-10. **How much content is CMS-editable versus hardcoded?** — Under the real operating model a code edit is always available, so "might change one day" is not sufficient reason for a collection. Candidates for staying in code: the services list, the twelve interior styles, the "Wykonujemy także" list. Candidates that clearly stay editable: completed projects, testimonials, page copy. Each collection avoided is one less thing to model, translate and administer. Owner: user. Block: no; decide before the content model is built.
+8. **New site's page set — RESOLVED 2026-09-02.** Five pages carried across — Start, Oferta, Realizacje, Wykończenia, Kontakt — with Cennik retired, plus individual project pages (FR-008/FR-016). Every surviving address maps 1:1, so `url-map.md`'s target column fills in directly; only Cennik's two addresses need deliberate replacements (Open Question 3). The constraint was always on **addresses, not pages**, and this choice keeps them aligned.
+9. **Editor/administrator split — RESOLVED 2026-09-02: not built.** A single admin account. With two family members touching the CMS, a permission system exists to protect the site from the people who own it. FR-019/020/021 collapse; the one account is created by hand, so FR-021's lifecycle is dropped. **The slug guardrail moves from permissions to a test** — a role split would stop the editor mistyping a slug but not the developer, whereas a test asserting the twelve addresses in `url-map.md` still resolve catches both, and has to exist for the cutover guardrail regardless.
+10. **What is the collection list?** — Settled in principle: page copy, completed projects, testimonials, the services list, the twelve interior styles and the "Wykonujemy także" list are all content and all belong in the CMS. Structure stays in code. What remains is the modelling detail — which of these are collections versus globals, and which fields are localized. Owner: user with the developer. Block: no; resolved while the content model is built.
 11. **Do existing gallery photos get retrofitted with individual project pages?** — FR-009 currently says no: pages exist for new projects only. Reversing it is content labour (a description per old project), not engineering. Owner: user. Block: no.
