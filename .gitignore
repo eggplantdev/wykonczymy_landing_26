@@ -11,3 +11,14 @@ dist/
 .vercel
 .DS_Store
 *.log
+
+# next / payload
+next-env.d.ts
+*.tsbuildinfo
+/media
+
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
