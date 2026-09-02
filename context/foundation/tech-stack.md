@@ -109,6 +109,15 @@ can be `localized`, so this needs no invention. Rejected: a static path table in
 ability to add a page without a deploy) and next-intl owning routing (a second source of path truth
 that has to stay in sync with Payload's content).
 
+**Problem 3 — decided 2026-09-02: a hand-rolled typed dictionary, no i18n library.** The surface
+is a couple of dozen strings (nav labels, buttons, form validation), all authored by the developer,
+in exactly two locales that are known at build time. `next-intl` in messages-only mode would buy
+ICU plurals, message extraction and a locale negotiator — none of which this site needs — in
+exchange for a dependency and a second place a translator has to look. A `Record<Locale, ...>`
+object gives full type-checking of every key with no runtime. Revisit if a third locale lands or if
+non-developers start editing chrome strings; at that point the strings become content and belong in
+Payload, not in a library.
+
 Chaos Kitchen configures problem 1 and never built 2 or 3 — that is the whole of its "gap", not an
 incompatibility.
 
