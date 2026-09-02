@@ -42,7 +42,7 @@ snapshot of what those projects happened to have.
 | Styling | **Tailwind 4+** | `@tailwindcss/postcss` — CSS-based config, not `tailwind.config.js`. Major version is the decision; take the latest within it |
 | Animation | GSAP | `framer-motion` also an option |
 | E2E tests | Playwright | Plus `@playwright/mcp` wired via `.mcp.json` |
-| Unit / integration tests | **Vitest** | `vitest` + `jsdom` + `@testing-library/react`, as `create-payload-app` ships it. Supersedes an earlier "Node's built-in runner, no Vitest" line that carried no rationale — ripping out a working, wired setup bought nothing. Chaos Kitchen uses the Node runner; that is precedent, not a requirement |
+| Unit / integration tests | **Vitest** | `vitest` + `jsdom` + `@testing-library/react`, as `create-payload-app` ships it. Chaos Kitchen's `node --import tsx --test` is precedent, not a requirement |
 | Package manager | **pnpm** | Matches the leads app. Chaos Kitchen is on npm — its `db:*` scripts need `npm run` → `pnpm` on the way in |
 | Hosting | Vercel | Same account as the leads app — deliberate |
 | SEO metadata | `@payloadcms/plugin-seo` | Per-page title / description / image, for FR-014 |
