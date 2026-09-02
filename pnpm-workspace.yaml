@@ -1,5 +1,19 @@
+# Vercel's pnpm 11 defaults this to 1440 and refuses a lockfile containing
+# anything newer; pnpm 10 defaults to 0. Setting it explicitly makes local
+# resolution and the Vercel build agree regardless of which pnpm runs.
+minimumReleaseAge: 1440
+
 allowBuilds:
   esbuild: true
   sharp: true
   unrs-resolver: true
   workerd: true
+
+# vitest declares happy-dom as an optional peer with range "*", so pnpm resolves
+# it to whatever published last — routinely inside the cooldown. Excluding it is
+# safe rather than lax: we run jsdom (vitest.config.mts) so happy-dom is never
+# imported, and it is absent from allowBuilds so it cannot run install scripts.
+# Disabling autoInstallPeers instead is not an option — vitest's `vite` peer is
+# non-optional and unlisted.
+minimumReleaseAgeExclude:
+  - happy-dom
