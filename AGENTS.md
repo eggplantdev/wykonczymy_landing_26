@@ -73,9 +73,9 @@ Layer table, rationale, and the two tdg migration frictions (Tailwind 3→4 clas
 `WpImageT` → Payload media retyping) → `@context/foundation/tech-stack.md`.
 
 **Before touching scaffold, deploy or environment config, read
-`@context/foundation/stack-template.md`** — the scaffold-to-first-deploy runbook, written from what
-actually broke here. It is also the seed for a reusable starter, so keep it free of anything
-specific to this site.
+`@context/foundation/stack-template.md`** — a follow-top-to-bottom runbook for standing this stack
+up on Vercel. It is the seed for a reusable starter, so keep it free of anything specific to this
+site.
 
 - Local Postgres runs in Docker on **port 5436** — 5433/5434/5435 are taken by other projects on this
   machine. Wired in `@docker-compose.yml` / `@.env.example`.
