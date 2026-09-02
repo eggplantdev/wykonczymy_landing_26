@@ -3,21 +3,23 @@ project: wykonczymy-www
 status: decided
 decided_on: 2026-09-02
 deployment_target: vercel
-package_manager: npm
+package_manager: pnpm
 ---
 
 # Tech stack
 
-> **Note on format.** This does not conform to `/10x-tech-stack-selector`'s hand-off schema, on
-> purpose. That schema requires a `starter_id` from its 35-entry starter registry, and the registry
-> has no Payload entry — a conformant file would need an invented key that a downstream validator
-> would reject. It also caps the body at one paragraph, which would drop every decision below.
-> `/10x-roadmap` reads this file only to derive its `## Foundations` section and to skip probing
-> layers already declared, and the layer table below serves that fine.
->
-> The stack was **not chosen by a selection process.** The owner had already decided on Payload +
-> Next before this project started. What follows is that decision written down, plus the layer
-> choices derived from it.
+**The stack was not chosen by a selection process.** The owner had already decided on Payload + Next
+before this project started. What follows is that decision written down, plus the layer choices
+derived from it — so treat a row as a *recorded decision of varying confidence*, not an evaluated
+trade-off. A row with no rationale attached has not been argued; say so rather than inheriting it.
+
+**The reference repos are precedent, not a bill of materials.** Chaos Kitchen shows *how* things are
+done on this stack; tdg holds markup. Neither one's `package.json` is a shopping list. **No
+dependency is installed until a requirement in the PRD needs it** — "the reference repo has it" is
+not a reason, and neither is "the component we're lifting used it".
+
+> Deliberately not conforming to `/10x-tech-stack-selector`'s hand-off schema — its registry has no
+> Payload entry, so a conformant file would need an invented `starter_id`. Don't "fix" it.
 
 ## Layers
 
@@ -36,12 +38,12 @@ snapshot of what those projects happened to have.
 | Media storage | Vercel Blob | `@payloadcms/storage-vercel-blob` |
 | Email | Nodemailer via Payload adapter | `@payloadcms/email-nodemailer` + SMTP |
 | Rich text | Lexical | `@payloadcms/richtext-lexical` |
-| Forms | **TanStack Form + Zod** | `@tanstack/react-form` + `zod` — Chaos Kitchen's pattern |
+| Forms | **TanStack Form + Zod** | `@tanstack/react-form` + `zod`. Chaos Kitchen uses the same, so its form code ports |
 | Styling | **Tailwind 4+** | `@tailwindcss/postcss` — CSS-based config, not `tailwind.config.js`. Major version is the decision; take the latest within it |
 | Animation | GSAP | `framer-motion` also an option |
 | E2E tests | Playwright | Plus `@playwright/mcp` wired via `.mcp.json` |
 | Unit tests | `node --import tsx --test` | Node's built-in runner, no Vitest/Jest |
-| Package manager | npm | |
+| Package manager | **pnpm** | Matches the leads app. Chaos Kitchen is on npm — its `db:*` scripts need `npm run` → `pnpm` on the way in |
 | Hosting | Vercel | Same account as the leads app — deliberate |
 | Tooling | ESLint, Prettier, husky | |
 
@@ -64,7 +66,7 @@ Committed in `docker-compose.yml` and `.env.example`.
 
 ```
 cd /Users/konradantonik/workspace/yolo
-npx create-payload-app@latest -n _payload_scaffold -t blank --use-npm -a claude
+npx create-payload-app@latest -n _payload_scaffold -t blank --use-pnpm -a claude
 ```
 
 Choose **Postgres**. Connection string: `postgres://landing26:landing26@localhost:5436/landing26`.
@@ -95,5 +97,9 @@ those are the twelve indexed URLs and URL preservation is a PRD guardrail (FR-01
 **Decide this before the route tree is laid down.** Retrofitting locale routing after the fact is the
 expensive order.
 
-Also open: whether Swiper and `lottie-react` (both in tdg, neither in Chaos Kitchen) come across, or
-whether their uses get rebuilt on what is already here.
+## Not installed
+
+Swiper and `lottie-react` appear in tdg. **Neither is adopted.** They arrive only if a carried
+component genuinely needs a carousel or a Lottie animation and the need survives the question "can
+this be built on GSAP and what's already here?" — decided per component, at the point of lifting,
+not up front. The same test applies to anything else found in a reference repo's dependencies.
