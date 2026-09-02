@@ -15,7 +15,10 @@ export const clientSchema = z.object({
 export const serverSchema = z.object({
   POSTGRES_URL: z.string().min(1),
   PAYLOAD_SECRET: z.string().min(32),
-  BLOB_READ_WRITE_TOKEN: z.string().min(1),
+  // Required on Vercel, absent locally: without it the blob adapter stays off and Payload
+  // stores uploads on disk, so dev never writes into the production blob store.
+  BLOB_READ_WRITE_TOKEN: optional(z.string().min(1)),
+  VERCEL: optional(z.string().min(1)),
 
   // Optional by design: without SMTP_HOST the config omits the nodemailer adapter and
   // Payload logs mail to the console. Attaching it unconditionally makes the build fail
@@ -25,3 +28,12 @@ export const serverSchema = z.object({
   SMTP_USER: optional(z.string().min(1)),
   SMTP_PASS: optional(z.string().min(1)),
 })
+  .superRefine((env, ctx) => {
+    if (env.VERCEL && !env.BLOB_READ_WRITE_TOKEN) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['BLOB_READ_WRITE_TOKEN'],
+        message: 'Required on Vercel — media uploads have nowhere to go without it.',
+      })
+    }
+  })

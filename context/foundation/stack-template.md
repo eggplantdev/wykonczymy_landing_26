@@ -116,6 +116,10 @@ importing `env.server.ts`, because the Payload CLI loads it outside Next where `
 resolve — and since `build` runs `payload migrate` first, that parse *is* the server-side gate.
 Wrap optional vars so `''` counts as unset; dotenv writes empty strings, not absent keys.
 
+Gate deployment-only vars on `VERCEL` in a `superRefine` rather than making them required
+everywhere — the blob token has no business in a local build, and requiring it would push dev
+uploads into the production store.
+
 Full pattern: the `typed-env-module` skill.
 
 ## 6. `next.config.ts`

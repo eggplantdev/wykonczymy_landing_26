@@ -67,8 +67,9 @@ export default buildConfig({
     : undefined,
   plugins: [
     vercelBlobStorage({
+      enabled: Boolean(env.BLOB_READ_WRITE_TOKEN),
       collections: { media: true },
-      token: env.BLOB_READ_WRITE_TOKEN,
+      token: env.BLOB_READ_WRITE_TOKEN ?? '',
       addRandomSuffix: true,
     }),
     seoPlugin({
