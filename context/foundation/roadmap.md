@@ -20,8 +20,8 @@ finds it still too broad; that is expected and not a defect in this file.
 **Main goal — `low-complexity`.** `timeline_budget: null`, `target_scale: small`, and the PRD's own
 framing: *"Success is parity plus control, not a lift in a metric."* No handover-proofing, no role
 split, no conversion programme. Build the thinnest thing that preserves the twelve addresses and
-delivers a lead, then add. Consequence: **no observability slice and no staging environment** —
-Vercel preview deployments are the whole of the pre-production story.
+delivers a lead, then add. Consequence: **no observability slice.** That is the only thing this
+goal actually removes — see `## Environments` for why "no staging" was never a trade-off here.
 
 The risk-averse guardrails (*"No lead is lost"*, *"Search positions do not drop"*) do not argue for
 a different posture, because they are already concrete requirements — FR-037 and the live-submission
@@ -49,9 +49,35 @@ absent in code and declared in `tech-stack.md`.
 | Auth | absent | Payload admin auth, one account. No public auth, ever (PRD non-goal) |
 | Deploy / infra | absent | per `tech-stack.md`: Vercel, same account as the leads app |
 | Observability | absent | **not declared anywhere** — a real gap, deliberately not filled at this goal |
+| Environments | absent | Vercel preview deploys are the staging tier; see `## Environments` |
 
 The one existing integration point is external: the **leads app** (`/workspace/yolo/wykonczymy`), a
 separate product this project does not own.
+
+## Environments
+
+**Vercel preview deployments are staging.** Every non-production branch push gets a deployed URL on
+the real build and the real runtime, and environment variables are scoped per environment
+(Production / Preview / Development) — so Preview can hold its own `DATABASE_URI` and its own Blob
+token. With Neon branching, a preview deploy can get its own database branch. There is no separate
+staging tier to build and none is missing.
+
+**What a preview cannot isolate is the leads app.** It is one production instance in a repo this
+project does not own. A submission sent from a preview deploy writes a real row into real lead data
+— the one downstream where a test costs something, because a human may phone it.
+
+This lands directly on S2's north-star criterion, which requires a *human sending the real form and
+confirming the request in the leads app*. Three ways to satisfy it without polluting live leads:
+
+1. **A test flag on the intake** — the row is stored but filtered out of the dashboard. Cheapest;
+   needs a change in `/workspace/yolo/wykonczymy`.
+2. **A second leads-app deployment** against its own database, with a Preview-scoped intake URL here.
+   Cleanest, most work, and still work in the other repo.
+3. **Accept it once** — submit, verify, delete the row by hand. Adequate for a one-off cutover gate,
+   unacceptable as a repeatable automated test.
+
+Decide this alongside Open Question 6 (the attachment contract); both are "what does this project
+need from the leads app", and neither is answerable from inside this repo.
 
 ## At a glance
 
@@ -151,6 +177,10 @@ elsewhere. Building against a guess risks silently dropping a delivery channel �
 class the guardrail exists to prevent.
 
 **Unblocking action:** confirm the WordPress form's delivery targets. Owner: user.
+
+**Verifying this slice writes to real lead data.** A preview deploy cannot isolate the leads app —
+see `## Environments` for the three ways to run the north-star check without polluting it. Settle
+this before the verification run, not during it.
 
 **Also unknown, not blocking:** the exact question list (OQ 1). Build the delivery path against the
 current field set; adding questions later is a field addition, not a rework.
