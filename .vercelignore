@@ -1,9 +1,1 @@
-# `vercel deploy` from the CLI uploads the working directory, not the git tree —
-# .gitignore does not fully apply, so real secrets ship unless listed here.
-.env
-.env.*
-!.env.example
-
-context/
-dumps/
-docker-compose.yml
+.gitignore
