@@ -62,22 +62,10 @@ the real build and the real runtime, and environment variables are scoped per en
 token. With Neon branching, a preview deploy can get its own database branch. There is no separate
 staging tier to build and none is missing.
 
-**What a preview cannot isolate is the leads app.** It is one production instance in a repo this
-project does not own. A submission sent from a preview deploy writes a real row into real lead data
-— the one downstream where a test costs something, because a human may phone it.
-
-This lands directly on S2's north-star criterion, which requires a *human sending the real form and
-confirming the request in the leads app*. Three ways to satisfy it without polluting live leads:
-
-1. **A test flag on the intake** — the row is stored but filtered out of the dashboard. Cheapest;
-   needs a change in `/workspace/yolo/wykonczymy`.
-2. **A second leads-app deployment** against its own database, with a Preview-scoped intake URL here.
-   Cleanest, most work, and still work in the other repo.
-3. **Accept it once** — submit, verify, delete the row by hand. Adequate for a one-off cutover gate,
-   unacceptable as a repeatable automated test.
-
-Decide this alongside Open Question 6 (the attachment contract); both are "what does this project
-need from the leads app", and neither is answerable from inside this repo.
+**The one thing a preview cannot isolate is the leads app** — a single production instance, so a
+test submission writes a real lead row. Not a problem: the developer owns that app too and deletes
+the row. S2's north-star check sends the real form once and verifies it arrived. Do not build a test
+flag, a second leads-app deployment, or any other isolation machinery for this.
 
 ## At a glance
 
@@ -177,10 +165,6 @@ elsewhere. Building against a guess risks silently dropping a delivery channel �
 class the guardrail exists to prevent.
 
 **Unblocking action:** confirm the WordPress form's delivery targets. Owner: user.
-
-**Verifying this slice writes to real lead data.** A preview deploy cannot isolate the leads app —
-see `## Environments` for the three ways to run the north-star check without polluting it. Settle
-this before the verification run, not during it.
 
 **Also unknown, not blocking:** the exact question list (OQ 1). Build the delivery path against the
 current field set; adding questions later is a field addition, not a rework.
