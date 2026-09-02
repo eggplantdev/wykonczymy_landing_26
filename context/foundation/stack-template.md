@@ -104,6 +104,20 @@ The email ternary is required: attached unconditionally, nodemailer verifies the
 Multilingual? `localization: { locales: [...], defaultLocale, fallback: false }` — `fallback: true`
 silently renders the default locale and looks translated.
 
+## 5b. Typed env layer
+
+`pnpm add zod server-only`, then `src/lib/env-schema.ts` (pure schemas) + `env.ts` (public vars,
+**keyed statically** or the bundler can't inline them) + `env.server.ts` (`import 'server-only'`).
+Import `@/lib/env` from the root layout so a missing var fails the build. Ban raw `process.env`
+in `src/**` with `no-restricted-syntax`.
+
+Two things specific to Payload: `payload.config.ts` parses `serverSchema` directly rather than
+importing `env.server.ts`, because the Payload CLI loads it outside Next where `server-only` can't
+resolve — and since `build` runs `payload migrate` first, that parse *is* the server-side gate.
+Wrap optional vars so `''` counts as unset; dotenv writes empty strings, not absent keys.
+
+Full pattern: the `typed-env-module` skill.
+
 ## 6. `next.config.ts`
 
 ```ts

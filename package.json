@@ -1,7 +1,7 @@
 {
   "name": "wykonczymy-www",
   "version": "1.0.0",
-  "description": "Marketing and lead-generation site for wykonczymy.com.pl — Payload 3 + Next on Vercel.",
+  "description": "Marketing and lead-generation site for wykonczymy.com.pl \u2014 Payload 3 + Next on Vercel.",
   "packageManager": "pnpm@10.33.4",
   "type": "module",
   "scripts": {
@@ -40,7 +40,9 @@
     "payload": "3.88.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
-    "sharp": "0.34.2"
+    "server-only": "^0.0.1",
+    "sharp": "0.34.2",
+    "zod": "^4.0.0"
   },
   "devDependencies": {
     "@playwright/test": "1.58.2",

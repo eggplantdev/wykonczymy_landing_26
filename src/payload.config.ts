@@ -11,9 +11,14 @@ import { fileURLToPath } from 'url'
 
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
+// Parsed here rather than imported from env.server.ts: the Payload CLI loads this file
+// outside Next, where `server-only` cannot resolve.
+import { serverSchema } from './lib/env-schema'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+const env = serverSchema.parse(process.env)
 
 export default buildConfig({
   admin: {
@@ -31,13 +36,13 @@ export default buildConfig({
     defaultLocale: 'pl',
     fallback: false,
   },
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: env.PAYLOAD_SECRET,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: vercelPostgresAdapter({
     pool: {
-      connectionString: process.env.POSTGRES_URL || '',
+      connectionString: env.POSTGRES_URL,
     },
     push: false,
     migrationDir: path.resolve(dirname, 'migrations'),
@@ -45,17 +50,17 @@ export default buildConfig({
   // Without SMTP credentials Payload falls back to logging mail to the console.
   // Attaching the adapter regardless makes every local build fail transport
   // verification against a host that isn't there.
-  email: process.env.SMTP_HOST
+  email: env.SMTP_HOST
     ? nodemailerAdapter({
-        defaultFromAddress: process.env.SMTP_USER || '',
+        defaultFromAddress: env.SMTP_USER ?? '',
         defaultFromName: 'Wykończymy',
         transport: nodemailer.createTransport({
-          host: process.env.SMTP_HOST,
-          port: Number(process.env.SMTP_PORT ?? 587),
-          secure: Number(process.env.SMTP_PORT ?? 587) === 465,
+          host: env.SMTP_HOST,
+          port: env.SMTP_PORT ?? 587,
+          secure: (env.SMTP_PORT ?? 587) === 465,
           auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
+            user: env.SMTP_USER,
+            pass: env.SMTP_PASS,
           },
         }),
       })
@@ -63,7 +68,7 @@ export default buildConfig({
   plugins: [
     vercelBlobStorage({
       collections: { media: true },
-      token: process.env.BLOB_READ_WRITE_TOKEN || '',
+      token: env.BLOB_READ_WRITE_TOKEN,
       addRandomSuffix: true,
     }),
     seoPlugin({
