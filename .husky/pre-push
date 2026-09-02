@@ -1,6 +1,42 @@
-# Pre-push template for Vercel-linked repos.
-# pnpm is a placeholder — substitute the detected package manager (pnpm/yarn/bun/npm)
-# before writing. Drop lines for checks/scripts that don't exist in the target repo.
+# ─── prod-migrate gate — gate + remind, runs NO SQL ──────────────────────────
+# `build` no longer runs `payload migrate`, so a push can ship code that needs a
+# migration nobody applied. Reads /dev/tty because git occupies stdin with the
+# pushed-ref list the loop below parses. --diff-filter=A + '\.ts$' so an edited or
+# deleted migration, and Payload's .json snapshot siblings, don't false-positive.
+
+PROD_BRANCH=main
+
+push_to_prod= sha_from= sha_to=
+while read -r _local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = "refs/heads/$PROD_BRANCH" ]; then
+    push_to_prod=1; sha_from=$remote_sha; sha_to=$local_sha
+  fi
+done
+
+if [ -n "$push_to_prod" ]; then
+  # A brand-new branch reports an all-zero "from" sha; diff against the empty tree.
+  if [ "$sha_from" = "0000000000000000000000000000000000000000" ]; then
+    sha_from=$(git hash-object -t tree /dev/null)
+  fi
+  # --diff-filter=A + grep '\.ts$': only ADDED migration .ts files are pending
+  # applies. Without the filter a rename/edit or a *deletion* of a migration (e.g.
+  # removing a smoke-test file) trips the guard as a false positive — git diff
+  # reports D/M lines too, and a removed file is never something prod needs. The
+  # .ts match skips Payload's .json snapshot siblings.
+  if git diff --name-only --diff-filter=A "$sha_from" "$sha_to" -- src/migrations/ | grep -q '\.ts$'; then
+    if { : < /dev/tty; } 2>/dev/null; then
+      printf '\n⚠  Push to %s adds new src/migrations/.\n   Prod is NOT auto-migrated. Run `pnpm db:migrate:prod` yourself (backup-first)\n   BEFORE this deploy serves traffic, else the live app runs against an old schema.\n   Push the code now anyway? [y/N] ' "$PROD_BRANCH" > /dev/tty
+      read -r go < /dev/tty || go=n
+      case "$go" in
+        [Yy]*) echo "→ pushing code; remember to run pnpm db:migrate:prod" >&2 ;;
+        *)     echo "✗ aborted — migrate prod first, then push" >&2; exit 1 ;;
+      esac
+    else
+      echo "→ no terminal to confirm; pushing code only (migrate prod manually)" >&2
+    fi
+  fi
+fi
+# ─── end payload prod-migrate gate ───────────────────────────────────────────
 
 pnpm run typecheck
 pnpm exec vitest run

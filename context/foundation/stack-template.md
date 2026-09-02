@@ -45,7 +45,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes: [pgdata:/var/lib/postgresql/data]
-volumes: { pgdata: }
+volumes: { pgdata }
 ```
 
 `pnpm db:up`. Pick a host port nothing else on the machine uses.
@@ -69,7 +69,7 @@ Better still: **deploy from GitHub, never from the CLI.**
 
 ```yaml
 # pnpm-workspace.yaml
-minimumReleaseAge: 1440      # Vercel's pnpm enforces this; set it so local and CI agree
+minimumReleaseAge: 1440 # Vercel's pnpm enforces this; set it so local and CI agree
 allowBuilds: { esbuild: true, sharp: true, unrs-resolver: true, workerd: true }
 ```
 
@@ -113,8 +113,8 @@ in `src/**` with `no-restricted-syntax`.
 
 Two things specific to Payload: `payload.config.ts` parses `serverSchema` directly rather than
 importing `env.server.ts`, because the Payload CLI loads it outside Next where `server-only` can't
-resolve — and since `build` runs `payload migrate` first, that parse *is* the server-side gate.
-Wrap optional vars so `''` counts as unset; dotenv writes empty strings, not absent keys.
+resolve. That parse is also the server-side build gate: `next build` compiles the admin routes,
+which import the config. Wrap optional vars so `''` counts as unset; dotenv writes empty strings, not absent keys.
 
 Gate deployment-only vars on `VERCEL` in a `superRefine` rather than making them required
 everywhere — the blob token has no business in a local build, and requiring it would push dev
@@ -131,16 +131,32 @@ trailingSlash: true,   // only if your URLs carry one — one-way door once inde
 ## 7. Scripts
 
 ```jsonc
-"build":     "payload migrate && next build",
+"build":     "next build",
 "typecheck": "tsc --noEmit",
 "migrate":   "payload migrate",
 "migrate:create": "payload migrate:create",
+"db:migrate:prod": "pnpm db:dump && set -a && source .env && set +a && POSTGRES_URL=\"$PROD_POSTGRES_URL\" pnpm payload migrate",
 "db:up":     "docker compose up -d",
 "db:down":   "docker compose down"
 ```
 
-`build` runs migrations, so **the build needs a reachable database.** Wire Neon before the first
-deploy or it fails before Next compiles.
+**Take `payload migrate` out of `build`** — Payload's starter puts it there, and on Vercel
+`POSTGRES_URL` points at the hosted database for _every_ deployment, previews included, so a
+throwaway branch build migrates production. Deploys ship code; `payload migrate` owns schema.
+`db:migrate:prod` is the deliberate replacement — a human runs it, never an agent, and it dumps
+prod first because a migration that rewrites a populated column has no undo.
+
+The cost of the split: a deploy can build green and 500 on first request if the schema is behind
+the code. So the habit is **schema first** — migrate prod, then push.
+
+## 7b. Git hooks
+
+`husky-watch-deploy` scaffolds `.husky/` plus a `scripts/watch-deploy.sh` that tails the Vercel
+build triggered by the push. Then append the migration gate from `payload-prod-migrate` at the
+**top** of `pre-push`, above the slow checks, so declining aborts before the test wait: on a push
+to the prod branch that _adds_ `src/migrations/*.ts` it asks the human whether prod was migrated
+first. It runs no SQL — a hook can't enforce this, it only supplies the one fact the human
+forgets.
 
 ## 8. Vercel
 
@@ -157,13 +173,13 @@ openssl rand -hex 32   # PAYLOAD_SECRET, per environment, different from local
 
 ## 9. Neon and Blob integrations — dashboard
 
-| Setting | Value |
-|---|---|
-| Region | nearest your audience; match the function region |
-| Neon Auth | **off** — that's for your app's end users, Payload has its own |
-| Custom prefix | **empty** — a prefix gives `STORAGE_POSTGRES_URL`, the config reads `POSTGRES_URL` |
-| DB branch for deployment | **Preview only** — per-preview branch = staging isolation |
-| Sensitive | **off** — sensitive vars can't be read back by `vercel env pull` |
+| Setting                  | Value                                                                              |
+| ------------------------ | ---------------------------------------------------------------------------------- |
+| Region                   | nearest your audience; match the function region                                   |
+| Neon Auth                | **off** — that's for your app's end users, Payload has its own                     |
+| Custom prefix            | **empty** — a prefix gives `STORAGE_POSTGRES_URL`, the config reads `POSTGRES_URL` |
+| DB branch for deployment | **Preview only** — per-preview branch = staging isolation                          |
+| Sensitive                | **off** — sensitive vars can't be read back by `vercel env pull`                   |
 
 Region is not changeable later without recreating the database.
 
@@ -188,6 +204,7 @@ Create the first admin at `/admin` — Payload has no CLI path for it.
 - [ ] `pnpm typecheck` · `pnpm lint` · `pnpm build` clean locally
 - [ ] production alias returns 200, `/admin` reachable, first user created
 - [ ] `git check-ignore -v .env` matches, `.env.example` still tracked
+- [ ] `build` does **not** contain `payload migrate`; `PROD_POSTGRES_URL` is set so `db:dump` works
 
 ## Open in this template
 

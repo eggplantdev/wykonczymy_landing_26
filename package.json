@@ -5,7 +5,7 @@
   "packageManager": "pnpm@10.33.4",
   "type": "module",
   "scripts": {
-    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" payload migrate && next build",
+    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
@@ -23,6 +23,7 @@
     "db:down": "docker compose down",
     "db:dump": "set -a && source .env && set +a && mkdir -p dumps && docker exec -i \"$DOCKER_CONTAINER\" pg_dump --clean --no-owner --no-acl \"$PROD_POSTGRES_URL\" > dumps/dump-latest.sql && cp dumps/dump-latest.sql \"dumps/dump-$(date +%Y-%m-%d_%H-%M).sql\"",
     "db:import": "set -a && source .env && set +a && docker exec -i \"$DOCKER_CONTAINER\" psql -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" < ${DUMP_FILE:-dumps/dump-latest.sql}",
+    "db:migrate:prod": "pnpm db:dump && set -a && source .env && set +a && POSTGRES_URL=\"$PROD_POSTGRES_URL\" pnpm payload migrate",
     "prepare": "husky"
   },
   "dependencies": {
