@@ -71,7 +71,7 @@ flag, a second leads-app deployment, or any other isolation machinery for this.
 
 | ID | Slice | Status | Depends on | Parallel with |
 |---|---|---|---|---|
-| F1 | Scaffold, local DB, first deploy | proposed | — | — |
+| F1 | Scaffold, local DB, first deploy | **done** | — | — |
 | F2 | Localization spine + localized `slug` | proposed | F1 | — |
 | S1 | One page live at its indexed address, PL + EN | proposed | F2 | — |
 | S2 | **Quote form reaches the leads app** (north star) | blocked | S1 | S3, S4, S5 |
@@ -94,7 +94,7 @@ gives for free.
 
 ### F1 — Scaffold, local DB, first deploy
 
-**Status:** proposed · **Change ID:** `f1-scaffold`
+**Status:** done (2026-09-02) · **Change ID:** `f1-scaffold`
 
 Payload 3 + Next running locally against Postgres in Docker on port 5436, and one successful deploy
 to Vercel. Adapters swapped to `db-vercel-postgres`, `storage-vercel-blob` and the nodemailer
@@ -118,6 +118,9 @@ Payload `localization: { locales: ['pl','en'] }`, a `Pages` collection whose nat
 
 **Why it is Foundations and not a slice:** it decides the shape of every URL on the site. Getting it
 after three pages exist means rewriting three pages.
+
+**Also lands here:** wiring `@payloadcms/plugin-redirects`. It is installed but cannot be configured
+without a target collection for its `to.reference` field, so it waits for `Pages`.
 
 **Unknowns:**
 - Which fields are localized versus shared, per collection. Resolved while modelling (OQ 10).

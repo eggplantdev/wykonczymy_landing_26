@@ -36,16 +36,18 @@ snapshot of what those projects happened to have.
 | — local dev | Docker, `postgres:17-alpine` | Pinned deliberately — dev/prod parity. **Port 5436**, see below |
 | — production | Neon, via Vercel | |
 | Media storage | Vercel Blob | `@payloadcms/storage-vercel-blob` |
-| Email | Nodemailer via Payload adapter | `@payloadcms/email-nodemailer` + SMTP |
+| Email | Nodemailer via Payload adapter | `@payloadcms/email-nodemailer` + SMTP. Attached only when `SMTP_HOST` is set — otherwise Payload logs to console and local builds stay quiet |
 | Rich text | Lexical | `@payloadcms/richtext-lexical` |
 | Forms | **TanStack Form + Zod** | `@tanstack/react-form` + `zod`. Chaos Kitchen uses the same, so its form code ports |
 | Styling | **Tailwind 4+** | `@tailwindcss/postcss` — CSS-based config, not `tailwind.config.js`. Major version is the decision; take the latest within it |
 | Animation | GSAP | `framer-motion` also an option |
 | E2E tests | Playwright | Plus `@playwright/mcp` wired via `.mcp.json` |
-| Unit tests | `node --import tsx --test` | Node's built-in runner, no Vitest/Jest |
+| Unit / integration tests | **Vitest** | `vitest` + `jsdom` + `@testing-library/react`, as `create-payload-app` ships it. Supersedes an earlier "Node's built-in runner, no Vitest" line that carried no rationale — ripping out a working, wired setup bought nothing. Chaos Kitchen uses the Node runner; that is precedent, not a requirement |
 | Package manager | **pnpm** | Matches the leads app. Chaos Kitchen is on npm — its `db:*` scripts need `npm run` → `pnpm` on the way in |
 | Hosting | Vercel | Same account as the leads app — deliberate |
-| Tooling | ESLint, Prettier, husky | |
+| SEO metadata | `@payloadcms/plugin-seo` | Per-page title / description / image, for FR-014 |
+| Redirects | `@payloadcms/plugin-redirects` | Installed, **not yet wired** — its `to.reference` field needs a target collection, so it lands with `Pages` in F2. Holds the Cennik 301s as editable rows |
+| Tooling | ESLint, Prettier | `husky` not installed — add it if a hook is actually wanted |
 
 ## Local database port
 
@@ -59,6 +61,14 @@ snapshot of what those projects happened to have.
 | **5436** | **`landing26-cms` — this project** |
 
 Committed in `docker-compose.yml` and `.env.example`.
+
+**Scaffolded 2026-09-02** at Payload 3.88.0 / Next 16.3.3 / React 19.2.6. `-a claude` is a real
+flag despite being absent from the CLI README — it installed Payload's skill at
+`.claude/skills/payload/`.
+
+The connection string is **`POSTGRES_URL`**, which is both what `payload.config.ts` reads and what
+Vercel's Neon integration injects, so production needs no extra wiring. `PROD_POSTGRES_URL` exists
+only for `db:dump` pulling production data down to the local container.
 
 ## Scaffold command
 
