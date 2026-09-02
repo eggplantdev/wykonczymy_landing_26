@@ -1,7 +1,7 @@
 {
   "name": "wykonczymy-www",
   "version": "1.0.0",
-  "description": "Marketing and lead-generation site for wykonczymy.com.pl \u2014 Payload 3 + Next on Vercel.",
+  "description": "Marketing and lead-generation site for wykonczymy.com.pl — Payload 3 + Next on Vercel.",
   "type": "module",
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" payload migrate && next build",
@@ -27,7 +27,6 @@
     "@payloadcms/db-vercel-postgres": "3.88.0",
     "@payloadcms/email-nodemailer": "^3.88.0",
     "@payloadcms/next": "3.88.0",
-    "@payloadcms/plugin-redirects": "^3.88.0",
     "@payloadcms/plugin-seo": "^3.88.0",
     "@payloadcms/richtext-lexical": "3.88.0",
     "@payloadcms/storage-vercel-blob": "^3.88.0",

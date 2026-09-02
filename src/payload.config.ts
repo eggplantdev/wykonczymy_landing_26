@@ -60,9 +60,6 @@ export default buildConfig({
         }),
       })
     : undefined,
-  // redirectsPlugin is installed but not wired: its `to.reference` field needs a
-  // target collection, so it lands with Pages in F2. It holds the 301s for
-  // retired addresses as editable rows — see context/foundation/url-map.md.
   plugins: [
     vercelBlobStorage({
       collections: { media: true },

@@ -119,9 +119,6 @@ Payload `localization: { locales: ['pl','en'] }`, a `Pages` collection whose nat
 **Why it is Foundations and not a slice:** it decides the shape of every URL on the site. Getting it
 after three pages exist means rewriting three pages.
 
-**Also lands here:** wiring `@payloadcms/plugin-redirects`. It is installed but cannot be configured
-without a target collection for its `to.reference` field, so it waits for `Pages`.
-
 **Unknowns:**
 - Which fields are localized versus shared, per collection. Resolved while modelling (OQ 10).
 - Where the `pl`/`en` UI-chrome dictionary lives. A small typed object in code — `tech-stack.md`

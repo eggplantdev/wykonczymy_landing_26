@@ -46,7 +46,6 @@ snapshot of what those projects happened to have.
 | Package manager | **pnpm** | Matches the leads app. Chaos Kitchen is on npm — its `db:*` scripts need `npm run` → `pnpm` on the way in |
 | Hosting | Vercel | Same account as the leads app — deliberate |
 | SEO metadata | `@payloadcms/plugin-seo` | Per-page title / description / image, for FR-014 |
-| Redirects | `@payloadcms/plugin-redirects` | Installed, **not yet wired** — its `to.reference` field needs a target collection, so it lands with `Pages` in F2. Holds the Cennik 301s as editable rows |
 | Tooling | ESLint, Prettier | `husky` not installed — add it if a hook is actually wanted |
 
 ## Local database port
@@ -139,6 +138,12 @@ and every content field carries a concrete type rather than an open-ended array 
 that needs a new section gets a new field and a deploy — that is the intended cost.
 
 ## Not installed
+
+**`@payloadcms/plugin-redirects`.** Considered and rejected. The only redirects this site needs are
+Cennik's two retired addresses, decided once at cutover and never edited again — six lines of
+`redirects()` in `next.config.ts`, served by Vercel at the edge without touching the app or the
+database. The plugin would add a dependency, a collection, a table, and still require middleware to
+read the rows. A permanent 301 for a deleted page is not content.
 
 Swiper and `lottie-react` appear in tdg. **Neither is adopted.** They arrive only if a carried
 component genuinely needs a carousel or a Lottie animation and the need survives the question "can
