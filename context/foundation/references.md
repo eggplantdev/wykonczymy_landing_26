@@ -46,11 +46,6 @@ write here. What gets carried across is the owner's call, named file by file. It
 
 It also holds the original `context/foundation/` docs; the copies in this repo are the live ones now.
 
-## Retired
-
-`workspace/yolo/wykonczymy_front_26` — an abandoned spike, being deleted. Not a reference; do not
-cite it. Its one salvaged asset is already here at `context/foundation/live-site-snapshot/`.
-
 ## Live site snapshot — `context/foundation/live-site-snapshot/`
 
 Content scraped from wykonczymy.com.pl on **2026-03-04**: the full Cennik with prices, 6 testimonials
