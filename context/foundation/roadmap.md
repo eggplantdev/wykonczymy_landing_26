@@ -129,9 +129,11 @@ after three pages exist means rewriting three pages.
 **Deferred out of the F2 review gate** (see `context/changes/2026-09-03-f2-i18n-spine/review-gate.md`;
 tracked here because the Linear MCP was unreachable in that session — move them onto the board when it is):
 
-- **DB backing for the two app-level guards.** `slug` is indexed but not unique per locale, and
-  `is_home` has no partial unique index. Needs its own migration, applied to prod by a human.
-  Test disposition: TDD · integration, travels with the fix.
+- **DB backing for the slug guard.** `slug` is indexed but not unique per locale, so the
+  app-level validator is the only thing stopping a duplicate address. Needs its own migration,
+  applied to prod by a human. Test disposition: TDD · integration, travels with the fix.
+  (The `is_home` partial index this originally also asked for is moot — `2c87523` dropped the
+  column in favour of `pageType === 'home'`.)
 - **Locale-aware 404 and root `<html lang>`.** `not-found.tsx` sniffs the locale from
   `usePathname`, so the prerendered shell is Polish on `/en/` and hydration swaps it; the root
   layout hardcodes `lang="en"`. One routing decision — a catch-all layout cannot see the locale.

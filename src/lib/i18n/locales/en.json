@@ -33,7 +33,6 @@
     "languageEn": "English",
     "errorTitle": "Something went wrong",
     "errorBody": "An unexpected error occurred. Please try again in a moment.",
-    "retry": "Try again",
-    "loading": "Loading…"
+    "retry": "Try again"
   }
 }

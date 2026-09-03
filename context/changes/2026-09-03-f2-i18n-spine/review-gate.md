@@ -14,9 +14,9 @@ The two bug-finding checks converged independently on the same critical set.
 
 - [x] 🔴 CRITICAL · fixed · `code-review`,`impl-review` · `src/lib/routing.ts:24` · `resolveSegments` discards every segment past the first, so `/oferta/anything/at/all/` renders Oferta with a 200 — unbounded duplicate content against a twelve-address guardrail
       test: TDD · unit — resolveSegments is pure; assert deep segments resolve to a miss
-- [x] 🔴 CRITICAL · fixed · `code-review`,`impl-review` · `src/collections/hooks/revalidatePage.ts:42` · `afterDelete` applies the request locale's slug to BOTH locales — deleting a PL doc revalidates `/en/oferta/` (not an address) and leaves `/en/offer/` serving the deleted page forever
+- [x] 🔴 CRITICAL · fixed, then superseded by `2c87523` · `code-review`,`impl-review` · `src/collections/hooks/revalidatePage.ts:42` · `afterDelete` applies the request locale's slug to BOTH locales — deleting a PL doc revalidates `/en/oferta/` (not an address) and leaves `/en/offer/` serving the deleted page forever
       test: no automated test — needs a live ISR cache; covered by manual check
-- [x] 🔴 CRITICAL · fixed · `code-review`,`impl-review` · `src/collections/hooks/revalidatePage.ts:31` · the renamed-slug branch has the same cross-locale confusion: `previousDoc.slug` is one locale's string fed to every locale
+- [x] 🔴 CRITICAL · fixed, then superseded by `2c87523` · `code-review`,`impl-review` · `src/collections/hooks/revalidatePage.ts:31` · the renamed-slug branch has the same cross-locale confusion: `previousDoc.slug` is one locale's string fed to every locale
       test: no automated test — same reason
 - [x] 🔴 CRITICAL · fixed · `code-review` · `src/collections/Pages.ts:18` · `access.read: () => true` + `drafts: true` exposes unpublished content on the public REST/GraphQL surface — verified: `/api/pages/?draft=true` answers anonymously
       test: TDD · integration — assert an anonymous draft read returns nothing
@@ -28,9 +28,9 @@ The two bug-finding checks converged independently on the same critical set.
       test: TDD · e2e — this IS the test; retarget it at the catch-all
 - [x] 🟡 WARNING · fixed · `code-review` · `src/collections/hooks/revalidatePage.ts:2` · `revalidatePath` throws outside a Next request scope, so any CLI write (seed script, `payload run`) aborts mid-way
       test: no automated test — guard is a try/catch, cheaper to eyeball
-- [x] 🟡 WARNING · fixed · `code-review` · `src/collections/hooks/revalidatePage.ts:28` · moving `isHome` between pages never revalidates `/` — indexed URL #1 keeps serving the old page
+- [x] 🟡 WARNING · fixed, then superseded by `2c87523` · `code-review` · `src/collections/hooks/revalidatePage.ts:28` · moving the home page never revalidates `/` — indexed URL #1 keeps serving the old page
       test: no automated test — live ISR cache
-- [x] 🟡 WARNING · fixed · `code-review`,`impl-review` · `src/collections/Pages.ts:31` · the isHome guard's `limit: 1` can return the document being edited and miss a second home; it also cannot see drafts
+- [x] 🟡 WARNING · fixed · `code-review`,`impl-review` · `src/collections/Pages.ts:31` · the home guard's `limit: 1` can return the document being edited and miss a second home; it also cannot see drafts — the guard now keys on `pageType` after `2c87523` dropped `isHome`
       test: TDD · integration — assert a second home is rejected
 - [x] 🟡 WARNING · fixed · `scatter` · `src/payload.config.ts:36` · the locale list is hand-copied instead of imported from `i18n.ts`, so the CMS and the app can desynchronise silently
       test: no automated test — the import IS the guarantee
@@ -49,17 +49,19 @@ The two bug-finding checks converged independently on the same critical set.
 - [x] fixed · `comment-noise` · `src/app/(frontend)/[[...segments]]/page.tsx:30` · trim the sentence narrating what `locale: 'all'` does
 - [x] fixed · `impl-review` · `plan.md:359` · progress boxes 2.1/2.2/4.1 ticked without commit shas
 
+- [x] fixed · `pr-review` · `src/lib/i18n/translations-provider.tsx:22` · `useMemo` on the context value guarded against a re-render that cannot happen — the provider is mounted by a server layout with the locale fixed for the route, and `getTranslations` is a map lookup. Removed in `9d3ede0`
+
 ### Deferred — each needs a filed tracked issue before its box can check
 
-- [ ] 🟡 WARNING · deferred · `code-review`,`impl-review` · `src/migrations/20260903_121437_pages.ts:57` · `slug` is indexed but not unique per locale, and `is_home` has no partial unique index — the app-level guards have no DB backing. Needs its own migration, which a human applies to prod
+- [x] 🟡 WARNING · deferred, tracked in `roadmap.md` § F2 · `code-review`,`impl-review` · `src/migrations/20260903_121437_pages.ts:57` · `slug` is indexed but not unique per locale, so the app-level guard has no DB backing. Needs its own migration, which a human applies to prod. The `is_home` half is moot — `2c87523` dropped the column
       test: TDD · integration — travels with the fix
-- [ ] deferred · `code-review`,`impl-review` · `src/app/(frontend)/not-found.tsx:12` · the 404 sniffs the locale from `usePathname`, so the prerendered shell is Polish for `/en/` and hydration swaps it. Same routing decision as the root layout's hardcoded `lang="en"` — both need a locale a catch-all layout cannot see
+- [x] deferred, tracked in `roadmap.md` § F2 · `code-review`,`impl-review` · `src/app/(frontend)/not-found.tsx:12` · the 404 sniffs the locale from `usePathname`, so the prerendered shell is Polish for `/en/` and hydration swaps it. Same routing decision as the root layout's hardcoded `lang="en"` — both need a locale a catch-all layout cannot see
       test: TDD · e2e — travels with the fix
-- [ ] deferred · `code-review`,`impl-review` · `src/app/(frontend)/[[...segments]]/page.tsx:65` · no `alternates.canonical` / hreflang, and `generateMetadata` reads no seoPlugin fields — the plugin is not installed yet
-- [ ] deferred · `code-review`,`scatter` · `next.config.ts:15` · `/en/home/` is hardcoded in the redirect while the EN home slug is a CMS-editable field; renaming it silently breaks an indexed redirect
+- [x] deferred, tracked in `roadmap.md` § F2 · `code-review`,`impl-review` · `src/app/(frontend)/[[...segments]]/page.tsx:65` · no `alternates.canonical` / hreflang, and `generateMetadata` reads no seoPlugin fields — the plugin is not installed yet
+- [x] deferred, tracked in `roadmap.md` § F2 · `code-review`,`scatter` · `next.config.ts:15` · `/en/home/` is hardcoded in the redirect while the EN home slug is a CMS-editable field; renaming it silently breaks an indexed redirect
 
-- [x] fixed · `simplify` · `src/lib/pages.ts:33` · `pathsForPage(payload, id)` made the route re-resolve `getPayload` just to hand a client back — now `pathsForPage(id, client?)`, hooks still pass `req.payload` for the transaction
-- [x] fixed · `simplify` · `src/collections/hooks/revalidatePage.ts:20` · `Parameters<typeof pathsForPage>[0]` indirection replaced with a direct `Payload` import
+- [x] fixed, then superseded by `2c87523` · `simplify` · `src/lib/pages.ts:33` · `pathsForPage(payload, id)` made the route re-resolve `getPayload` just to hand a client back — the optional `client` param went away with the hook that needed it
+- [x] fixed, then superseded by `2c87523` · `simplify` · `src/collections/hooks/revalidatePage.ts:20` · `Parameters<typeof pathsForPage>[0]` indirection replaced with a direct `Payload` import — the hook no longer takes a client at all
 
 ### Dismissed / dropped
 
@@ -83,4 +85,15 @@ Ran /simplify — 2 applied, 0 proposed, 1 dropped, 1 dismissed; each finding fo
 - `pnpm lint` — 0 errors, 1 pre-existing warning in `tests/e2e/admin.e2e.spec.ts` (scaffold, not this slice).
 - `pnpm test:int` — 12/12 (8 unit routing, 3 Pages integration, 1 scaffold api).
 - `pnpm build` — succeeds; `/`, `/oferta`, `/en/home`, `/en/offer` all emit as ● SSG.
-- `pnpm test:e2e` — **not run**: needs the dev server up. Owed before archive.
+- `pnpm test:e2e` — 5/5 of this slice's frontend specs pass (`/`, `/oferta` → 308 → 200, `/en` → `/en/home/`,
+  a deep path 404, an unknown slug 404). The scaffold's `admin.e2e.spec.ts` is red — its `login()`
+  helper never reaches `/admin` — which is pre-existing scaffold breakage, not this slice.
+
+## Post-review changes by the owner
+
+- `2c87523` replaces per-address revalidation with `revalidatePath('/', 'layout')` and drops the
+  `isHome` field in favour of `pageType === 'home'`. Six pages make over-invalidation cheaper than
+  tracking which address moved, and the two fields could disagree about which document serves `/`.
+  The six findings marked _superseded_ above were real against the code they were written for; the
+  blunt hook cannot express those bugs at all.
+- `9d3ede0` removes the provider's `useMemo` (see the `pr-review` finding).

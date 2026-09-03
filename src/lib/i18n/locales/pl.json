@@ -33,7 +33,6 @@
     "languageEn": "English",
     "errorTitle": "Coś poszło nie tak",
     "errorBody": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie za chwilę.",
-    "retry": "Spróbuj ponownie",
-    "loading": "Ładowanie…"
+    "retry": "Spróbuj ponownie"
   }
 }
