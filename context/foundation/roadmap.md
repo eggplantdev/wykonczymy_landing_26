@@ -70,18 +70,18 @@ flag, a second leads-app deployment, or any other isolation machinery for this.
 
 ## At a glance
 
-| ID  | Slice                                                | Status   | Depends on | Parallel with |
-| --- | ---------------------------------------------------- | -------- | ---------- | ------------- |
-| F1  | Scaffold, local DB, first deploy                     | **done** | —          | —             |
-| F2  | Localization spine + localized `slug`                | proposed | F1         | —             |
-| S1  | One page live at its indexed address, PL + EN        | proposed | F2         | —             |
-| S2  | **Quote form reaches the leads app** (north star)    | blocked  | S1         | S3, S4, S5    |
-| S3  | Remaining carried pages                              | proposed | S1         | S2, S4, S5    |
-| S4  | Completed projects — listing + project pages         | proposed | S1         | S2, S3, S5    |
-| S5  | Testimonials and the shared content lists            | proposed | S1         | S2, S3, S4    |
-| S6  | Photo attachments on the form                        | blocked  | S2         | —             |
-| S7  | SEO surface — sitemap, hreflang, canonical, metadata | proposed | S3, S4     | S6            |
-| S8  | Cutover — url-map test green, redirects, DNS         | blocked  | S2, S7     | —             |
+| ID  | Slice                                                | Status      | Depends on | Parallel with |
+| --- | ---------------------------------------------------- | ----------- | ---------- | ------------- |
+| F1  | Scaffold, local DB, first deploy                     | **done**    | —          | —             |
+| F2  | Localization spine + localized `slug`                | in progress | F1         | —             |
+| S1  | One page live at its indexed address, PL + EN        | proposed    | F2         | —             |
+| S2  | **Quote form reaches the leads app** (north star)    | blocked     | S1         | S3, S4, S5    |
+| S3  | Remaining carried pages                              | proposed    | S1         | S2, S4, S5    |
+| S4  | Completed projects — listing + project pages         | proposed    | S1         | S2, S3, S5    |
+| S5  | Testimonials and the shared content lists            | proposed    | S1         | S2, S3, S4    |
+| S6  | Photo attachments on the form                        | blocked     | S2         | —             |
+| S7  | SEO surface — sitemap, hreflang, canonical, metadata | proposed    | S3, S4     | S6            |
+| S8  | Cutover — url-map test green, redirects, DNS         | blocked     | S2, S7     | —             |
 
 **Parallel band:** once S1 lands, S2 / S3 / S4 / S5 touch different collections and different routes.
 Four separate agent runs can take them concurrently. S7 needs the route tree complete, so it closes
@@ -111,7 +111,7 @@ in `tech-stack.md`. Everything after the merge is agent work.
 
 ### F2 — Localization spine + localized `slug`
 
-**Status:** proposed · **Change ID:** `f2-i18n-spine` · **Depends on:** F1
+**Status:** in progress · **Change ID:** `f2-i18n-spine` · **Depends on:** F1
 
 Payload `localization: { locales: ['pl','en'] }`, a `Pages` collection whose native `slug` field is
 `localized: true`, and the App Router resolving `[locale]/[slug]` against it via

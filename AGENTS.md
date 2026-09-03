@@ -14,7 +14,7 @@ This file assumes **Claude Code**. If a step references a skill, command, or too
 do **not** improvise a substitute, skip it silently, or guess an equivalent. **Stop, name the
 missing capability and what you were about to do, and wait for the human.**
 
-## Reference repos — three, all read-only
+## Reference repos — four, all read-only
 
 Named throughout this file. **Nothing outside `landing_26` is ever edited** — work flows one way,
 read there, write here. Roles and the rules for copying from each →
@@ -25,6 +25,11 @@ read there, write here. Roles and the rules for copying from each →
 | **Chaos Kitchen** | `/workspace/nomad_chef`      | Live site on this exact stack — the default answer to "how do we do X here" |
 | **tdg**           | `/workspace/_old_repos/tdg`  | The agency's WordPress template — the only real built markup for this site  |
 | **leads app**     | `/workspace/yolo/wykonczymy` | Where quote requests land — a separate product with its own roadmap         |
+| **fest**          | `/workspace/fest`            | Next + WP, PL/EN. The only working locale routing + dictionary on any repo  |
+
+fest's i18n module is `fest-frontend/lib/i18n/` — typed JSON dictionary, `useTranslation`,
+provider. Chaos Kitchen and tdg are both single-locale, so fest is the only precedent for
+anything bilingual.
 
 ## Hard rules (read first)
 

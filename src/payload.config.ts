@@ -10,6 +10,7 @@ import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
 import { Media } from './collections/Media'
+import { Pages } from './collections/Pages'
 import { Users } from './collections/Users'
 // Parsed here rather than imported from env.server.ts: the Payload CLI loads this file
 // outside Next, where `server-only` cannot resolve.
@@ -27,7 +28,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Pages],
   editor: lexicalEditor(),
   // Both indexed languages ship together; an English-incomplete launch is a
   // regression, so neither locale falls back to the other.
