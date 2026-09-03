@@ -37,18 +37,23 @@ Then immediately:
 # docker-compose.yml
 services:
   db:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     container_name: <project>-cms
     ports: ['<free port>:5432']
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes: [pgdata:/var/lib/postgresql/data]
+    volumes: [pgdata:/var/lib/postgresql] # 18+ wants the parent, not /data
 volumes: { pgdata }
 ```
 
 `pnpm db:up`. Pick a host port nothing else on the machine uses.
+
+**Match the local major to the hosted one** (Neon is on 18). `pg_dump` refuses to dump a server
+newer than itself, so a 17 container silently can't back up an 18 Neon — which only surfaces the
+day you need the backup. Bumping the major means recreating the volume; `pg_upgrade` is not worth
+it for a dev database.
 
 ## 3. Ignore files
 
@@ -139,6 +144,10 @@ trailingSlash: true,   // only if your URLs carry one — one-way door once inde
 "db:up":     "docker compose up -d",
 "db:down":   "docker compose down"
 ```
+
+**Quote any env value containing `&`** — a Neon URL ends in `…?sslmode=require&channel_binding=require`,
+and `source .env` on an unquoted line backgrounds the assignment, leaving the var _empty_. `pg_dump`
+then falls back to a local socket and the error names the wrong problem entirely.
 
 **Take `payload migrate` out of `build`** — Payload's starter puts it there, and on Vercel
 `POSTGRES_URL` points at the hosted database for _every_ deployment, previews included, so a
