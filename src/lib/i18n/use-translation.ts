@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { useI18nContext } from '../translations-provider'
-import type { NamespaceT, TranslationKeyT } from '../types'
+import { useI18nContext } from './translations-provider'
+import type { NamespaceT, TranslationKeyT } from './i18n'
 
 // Client components can't reach `params`, so the locale arrives through context
 // instead. Server components skip this and call getTranslations(locale).

@@ -4,42 +4,17 @@ import { getPayload } from 'payload'
 
 import config from '@/payload.config'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
-import { i18n, type Locale } from '@/lib/i18n/i18n'
+import { getTranslations, i18n } from '@/lib/i18n/i18n'
 import { TranslationsProvider } from '@/lib/i18n/translations-provider'
-import { pathForPage, resolveSegments, segmentsForPage } from '@/lib/routing'
+import { findPage, pathsForPage } from '@/lib/pages'
+import { resolveSegments, segmentsForPage } from '@/lib/routing'
 
 type ParamsT = { segments?: string[] }
 
-async function findPage(locale: Locale, slug: string | null) {
-  const payload = await getPayload({ config: await config })
-
-  const { docs } = await payload.find({
-    collection: 'pages',
-    locale,
-    depth: 0,
-    limit: 1,
-    where: {
-      _status: { equals: 'published' },
-      ...(slug === null ? { isHome: { equals: true } } : { slug: { equals: slug } }),
-    },
-  })
-
-  return docs[0] ?? null
-}
-
-// The same document answers to one address per locale, and only the document knows
-// its counterpart slug — so the switcher's hrefs come from a second read, not a
-// path rewrite. `locale: 'all'` returns every localized value in one query.
-async function pathsForPage(id: string): Promise<Record<Locale, string>> {
-  const payload = await getPayload({ config: await config })
-  const doc = await payload.findByID({ collection: 'pages', id, depth: 0, locale: 'all' })
-  const slugs = doc.slug as unknown as Record<Locale, string>
-
-  return {
-    pl: pathForPage({ slug: slugs.pl, isHome: doc.isHome }, 'pl'),
-    en: pathForPage({ slug: slugs.en, isHome: doc.isHome }, 'en'),
-  }
-}
+// The twelve indexed addresses are the whole public surface, so anything
+// generateStaticParams did not enumerate is a 404 by construction rather than an
+// on-demand render.
+export const dynamicParams = false
 
 // Resolves every public address at build time, so no request touches the database.
 // tech-stack.md makes the CMS-owned-slug decision conditional on exactly this.
@@ -56,7 +31,11 @@ export async function generateStaticParams(): Promise<ParamsT[]> {
       where: { _status: { equals: 'published' } },
     })
 
-    for (const doc of docs) params.push({ segments: segmentsForPage(doc, locale) })
+    // `fallback: false`, so a page translated in one language only comes back with an
+    // empty slug in the other — prerendering it would emit `/en/null/`.
+    for (const doc of docs) {
+      if (doc.isHome || doc.slug) params.push({ segments: segmentsForPage(doc, locale) })
+    }
   }
 
   return params
@@ -67,14 +46,15 @@ export async function generateMetadata({
 }: {
   params: Promise<ParamsT>
 }): Promise<Metadata> {
-  const { locale, slug } = resolveSegments((await params).segments)
-  const page = await findPage(locale, slug)
+  const { locale, slug, isMiss } = resolveSegments((await params).segments)
+  const page = isMiss ? null : await findPage(locale, slug)
 
-  return { title: page?.title ?? 'Nie znaleziono' }
+  return { title: page?.title ?? getTranslations(locale).common.notFoundTitle }
 }
 
 export default async function CatchAllPage({ params }: { params: Promise<ParamsT> }) {
-  const { locale, slug } = resolveSegments((await params).segments)
+  const { locale, slug, isMiss } = resolveSegments((await params).segments)
+  if (isMiss) notFound()
 
   // `/en/` is a redirect to `/en/home/`; only the default locale has a root page.
   if (slug === null && locale !== i18n.defaultLocale) notFound()
@@ -82,7 +62,7 @@ export default async function CatchAllPage({ params }: { params: Promise<ParamsT
   const page = await findPage(locale, slug)
   if (!page) notFound()
 
-  const paths = await pathsForPage(String(page.id))
+  const paths = await pathsForPage(page.id)
 
   return (
     <TranslationsProvider locale={locale}>

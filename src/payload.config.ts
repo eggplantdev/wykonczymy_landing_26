@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url'
 
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
+import { i18n } from './lib/i18n/i18n'
 import { Users } from './collections/Users'
 // Parsed here rather than imported from env.server.ts: the Payload CLI loads this file
 // outside Next, where `server-only` cannot resolve.
@@ -33,8 +34,8 @@ export default buildConfig({
   // Both indexed languages ship together; an English-incomplete launch is a
   // regression, so neither locale falls back to the other.
   localization: {
-    locales: ['pl', 'en'],
-    defaultLocale: 'pl',
+    locales: [...i18n.locales],
+    defaultLocale: i18n.defaultLocale,
     fallback: false,
   },
   secret: env.PAYLOAD_SECRET,

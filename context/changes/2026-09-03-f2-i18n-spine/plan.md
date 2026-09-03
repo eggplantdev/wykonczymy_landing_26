@@ -356,8 +356,8 @@ Run once, after Phase 4.
 
 #### Automated
 
-- [x] 2.1 Build emits both addresses as static routes
-- [x] 2.2 Typecheck passes
+- [x] 2.1 Build emits both addresses as static routes — abcee8f
+- [x] 2.2 Typecheck passes — abcee8f
 
 ### Phase 3: UI dictionary
 
@@ -370,4 +370,4 @@ Run once, after Phase 4.
 
 #### Automated
 
-- [x] 4.1 Build succeeds with the hook attached
+- [x] 4.1 Build succeeds with the hook attached — 9a16769

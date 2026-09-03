@@ -1,9 +1,7 @@
 'use client'
 
 import { createContext, useContext, useMemo } from 'react'
-import type { Locale } from './i18n'
-import type { TranslationsT } from './types'
-import { getTranslations } from './translations'
+import { getTranslations, type Locale, type TranslationsT } from './i18n'
 
 type I18nContextT = {
   locale: Locale
