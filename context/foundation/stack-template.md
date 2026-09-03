@@ -70,6 +70,17 @@ ln -s .gitignore .vercelignore   # relative target, so it survives a clone
 `vercel deploy` uploads the working directory, not the repo — without this it ships `.env`.
 Better still: **deploy from GitHub, never from the CLI.**
 
+```gitattributes
+# .gitattributes — folds these in GitHub's "Files changed" so a PR opens on the
+# code that needs judgement. Folded, not hidden: still expandable and commentable.
+context/**       linguist-generated=true
+.review-gate/**  linguist-generated=true
+tests/**         linguist-generated=true
+```
+
+Local `git diff` is unaffected — this is GitHub-side only. Worth knowing the trade: a test file
+that is itself the deliverable of a change now opens collapsed in the review of that change.
+
 ## 4. pnpm
 
 ```yaml
@@ -167,6 +178,8 @@ to the prod branch that _adds_ `src/migrations/*.ts` it asks the human whether p
 first. It runs no SQL — a hook can't enforce this, it only supplies the one fact the human
 forgets.
 
+Both skills own their own details — read them rather than reconstructing the hooks from here.
+
 ## 8. Vercel
 
 ```bash
@@ -219,5 +232,52 @@ Create the first admin at `/admin` — Payload has no CLI path for it.
 
 - **`NEXT_PUBLIC_SERVER_URL` per environment** — production is static, preview needs
   `https://${VERCEL_URL}` and must be computed in code.
-- **Locale-segmented routes with translated pathnames** — Payload's `localization` covers content
-  only; routing is yours to build.
+  (The locale-routing item that used to sit here is answered by §11.)
+
+## 11. Bilingual routing — optional, only if the site ships two languages
+
+Payload's `localization` covers **content**; routing and UI chrome are yours. Three parts, and the
+mistake is collapsing them into one:
+
+1. **Which document a URL loads** — a `localized: true` `slug` field on the page collection, so each
+   locale carries its own translated path segment. Resolved in the App Router, not in a static
+   table: a static table means a page cannot be added without a deploy.
+2. **One catch-all route**, `app/(frontend)/[[...segments]]/page.tsx`. If the default locale sits at
+   the root and the others are prefixed, that asymmetry is _data_ — a `resolveSegments` helper — not
+   a second folder tree. Enumerate every address in `generateStaticParams` and set
+   `export const dynamicParams = false`, so anything unenumerated is a 404 by construction rather
+   than an on-demand render against the database.
+3. **UI chrome** — nav labels, buttons, validation messages — a hand-rolled typed dictionary, no
+   i18n library, while the string count is small and the locales are known at build time:
+
+```
+lib/i18n/
+  i18n.ts                  # locale list, isLocale, getTranslations, the types
+  locales/{pl,en}.json     # one file per locale
+  translations-provider.tsx  # 'use client' — context, the only client file
+  use-translation.ts       # the hook client components call
+```
+
+`i18n.ts` types the dictionary as `typeof <defaultLocale>.json`, which makes the default locale the
+source of truth and forces every other locale's JSON to match it **structurally, at compile time** —
+a missing key is a typecheck failure, not a runtime blank. That single line is most of why a library
+is not needed here.
+
+**Server components call `getTranslations(locale)` directly.** The provider and hook exist only
+because a client component cannot reach `params`. Do not wrap the tree in a provider you do not
+need.
+
+Three traps, each of which cost a review-gate finding:
+
+- **`localization.fallback: false` means a locale's slug can legitimately be empty.** Every place
+  that builds a URL from a document must skip a locale with no slug, or it emits `/<locale>/undefined/`
+  and prerenders `/<locale>/null/`. Resolve a document's addresses in **one** helper and call it
+  everywhere — the language switcher, `generateStaticParams`, and the revalidation hook all need the
+  same answer, and independent copies drift apart on exactly this guard.
+- **A catch-all matches paths deeper than a page.** Without an explicit "too many segments" miss,
+  the site answers 200 at an unbounded family of URLs.
+- **On-demand revalidation must resolve both locales, before the write.** One document occupies one
+  address per locale, but a write only carries the edited locale's slug — so read the old row's
+  addresses in `beforeChange`/`beforeDelete`, while it still exists, and union them with the new
+  ones in `afterChange`. Wrap `revalidatePath` in a try/catch: Payload hooks also run under the
+  Local API (seed scripts, `payload run`), where there is no Next request scope and it throws.
