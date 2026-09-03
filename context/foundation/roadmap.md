@@ -38,18 +38,19 @@ engineering, which is why almost nothing here is hard-blocked — see `## Open q
 
 ## Baseline
 
-Verified 2026-09-02: `find` returns zero `.ts` / `.tsx` / `package.json` in the tree. Every layer is
-absent in code and declared in `tech-stack.md`.
+First measured 2026-09-02, when `find` returned zero `.ts` / `.tsx` / `package.json`. **F1 has since
+landed**, so the "at F1 start" column is history — the live picture is `project-state.md`
+`## Current state`.
 
-| Layer          | State  | Note                                                                                  |
-| -------------- | ------ | ------------------------------------------------------------------------------------- |
-| Frontend       | absent | per `tech-stack.md`: Next App Router, React 19, Tailwind 4                            |
-| Backend / API  | absent | per `tech-stack.md`: Payload 3 at `src/app/(payload)`                                 |
-| Data           | absent | `docker-compose.yml` exists (`postgres:18-alpine`, port 5436); nothing connects to it |
-| Auth           | absent | Payload admin auth, one account. No public auth, ever (PRD non-goal)                  |
-| Deploy / infra | absent | per `tech-stack.md`: Vercel, same account as the leads app                            |
-| Observability  | absent | **not declared anywhere** — a real gap, deliberately not filled at this goal          |
-| Environments   | absent | Vercel preview deploys are the staging tier; see `## Environments`                    |
+| Layer          | At F1 start | Now (2026-09-03)                                                     |
+| -------------- | ----------- | -------------------------------------------------------------------- |
+| Frontend       | absent      | Next App Router, React 19, Tailwind 4 wired; no page components yet  |
+| Backend / API  | absent      | Payload 3 at `src/app/(payload)`, Users + Media                      |
+| Data           | absent      | `postgres:18-alpine` on 5436 locally, Neon in production             |
+| Auth           | absent      | Payload admin auth, one account. No public auth, ever (PRD non-goal) |
+| Deploy / infra | absent      | Vercel, deployed from GitHub `main`, same account as the leads app   |
+| Observability  | absent      | **still absent and declared nowhere** — deliberate at this goal      |
+| Environments   | absent      | Vercel preview deploys are the staging tier; see below               |
 
 The one existing integration point is external: the **leads app** (`/workspace/yolo/wykonczymy`), a
 separate product this project does not own.
