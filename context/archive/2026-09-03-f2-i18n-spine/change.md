@@ -1,10 +1,10 @@
 ---
 change_id: f2-i18n-spine
 title: Localization spine — Pages collection, localized slugs, catch-all routing, UI dictionary
-status: implemented
+status: archived
 created: 2026-09-03
 updated: 2026-09-03
-archived_at: null
+archived_at: 2026-09-03T15:29:49Z
 branch: f2-i18n-spine
 worktree: null
 ---
