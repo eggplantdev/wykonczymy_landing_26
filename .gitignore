@@ -24,3 +24,9 @@ next-env.d.ts
 /playwright/.cache/
 
 dumps/
+
+# page-board full-resolution captures
+tools/page-board/.shots/
+
+# page-board is a local audit tool — regenerate with `pnpm board`, never committed
+public/page-board/
