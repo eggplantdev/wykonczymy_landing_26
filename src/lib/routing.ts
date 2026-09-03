@@ -1,6 +1,10 @@
 import { i18n, isLocale, type Locale } from '@/lib/i18n/i18n'
 
-type PageAddressT = { slug?: string | null; isHome?: boolean | null }
+type PageAddressT = { slug?: string | null; pageType?: string | null }
+
+// There is exactly one page per type, so the type already says which document owns
+// the root — a separate flag could only ever disagree with it.
+export const HOME_PAGE_TYPE = 'home'
 
 export type ResolvedSegmentsT = {
   locale: Locale
@@ -12,7 +16,7 @@ export type ResolvedSegmentsT = {
 // The single source of URL shape: every address ends in a slash and only the
 // non-default locale carries a prefix. See context/foundation/url-map.md.
 export function pathForPage(page: PageAddressT, locale: Locale): string {
-  if (page.isHome && locale === i18n.defaultLocale) return '/'
+  if (page.pageType === HOME_PAGE_TYPE && locale === i18n.defaultLocale) return '/'
 
   const prefix = locale === i18n.defaultLocale ? '' : `/${locale}`
   return `${prefix}/${page.slug}/`

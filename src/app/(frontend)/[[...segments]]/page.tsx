@@ -7,7 +7,7 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { getTranslations, i18n } from '@/lib/i18n/i18n'
 import { TranslationsProvider } from '@/lib/i18n/translations-provider'
 import { findPage, pathsForPage } from '@/lib/pages'
-import { resolveSegments, segmentsForPage } from '@/lib/routing'
+import { HOME_PAGE_TYPE, resolveSegments, segmentsForPage } from '@/lib/routing'
 
 type ParamsT = { segments?: string[] }
 
@@ -36,7 +36,8 @@ export async function generateStaticParams(): Promise<ParamsT[]> {
     // `fallback: false`, so a page translated in one language only comes back with an
     // empty slug in the other — prerendering it would emit `/en/null/`.
     for (const doc of docs) {
-      if (doc.isHome || doc.slug) params.push({ segments: segmentsForPage(doc, locale) })
+      if (doc.pageType === HOME_PAGE_TYPE || doc.slug)
+        params.push({ segments: segmentsForPage(doc, locale) })
     }
   }
 

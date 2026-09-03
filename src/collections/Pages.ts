@@ -1,12 +1,8 @@
 import type { CollectionConfig } from 'payload'
 import { APIError } from 'payload'
 
-import {
-  capturePagePathsBeforeChange,
-  capturePagePathsBeforeDelete,
-  revalidatePage,
-  revalidatePageDelete,
-} from './hooks/revalidatePage'
+import { HOME_PAGE_TYPE } from '@/lib/routing'
+import { revalidatePage, revalidatePageDelete } from './hooks/revalidatePage'
 
 // The six pages of the live site. A page's type selects which conditional field
 // group the admin sees; the groups arrive with the slices that render them.
@@ -29,19 +25,17 @@ export const Pages: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', 'pageType', 'isHome'],
+    defaultColumns: ['title', 'slug', 'pageType'],
   },
   versions: {
     drafts: true,
   },
   hooks: {
-    beforeChange: [capturePagePathsBeforeChange],
-    beforeDelete: [capturePagePathsBeforeDelete],
     afterChange: [revalidatePage],
     afterDelete: [revalidatePageDelete],
     beforeValidate: [
       async ({ data, originalDoc, req }) => {
-        if (!data?.isHome) return data
+        if (data?.pageType !== HOME_PAGE_TYPE) return data
 
         // Two home pages make `/` ambiguous and the resolver would pick arbitrarily.
         // Excluded in the query rather than filtered afterwards: a `limit` that
@@ -49,7 +43,7 @@ export const Pages: CollectionConfig = {
         const existing = await req.payload.find({
           collection: 'pages',
           where: {
-            isHome: { equals: true },
+            pageType: { equals: HOME_PAGE_TYPE },
             ...(originalDoc?.id ? { id: { not_equals: originalDoc.id } } : {}),
           },
           limit: 1,
@@ -95,18 +89,13 @@ export const Pages: CollectionConfig = {
       },
     },
     {
-      name: 'isHome',
-      type: 'checkbox',
-      defaultValue: false,
-      admin: {
-        description: 'Serves at / in Polish. Only one page may carry this.',
-      },
-    },
-    {
       name: 'pageType',
       type: 'select',
       required: true,
       options: [...pageTypes],
+      admin: {
+        description: 'Selects the page\u2019s field group. The "home" page also serves at /.',
+      },
     },
   ],
 }

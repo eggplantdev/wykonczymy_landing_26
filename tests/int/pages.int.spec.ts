@@ -52,7 +52,7 @@ describe('Pages', () => {
     // one is exactly what the guard forbids.
     const { totalDocs } = await payload.find({
       collection: 'pages',
-      where: { isHome: { equals: true } },
+      where: { pageType: { equals: 'home' } },
       limit: 0,
       draft: true,
     })
@@ -63,7 +63,6 @@ describe('Pages', () => {
         title: 'Dom drugi',
         slug: 'dom-drugi',
         pageType: 'home',
-        isHome: true,
         _status: 'draft',
       }),
     ).rejects.toThrow(/already the home page/)

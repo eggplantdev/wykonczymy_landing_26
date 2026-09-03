@@ -176,9 +176,8 @@ export interface Page {
    */
   slug: string
   /**
-   * Serves at / in Polish. Only one page may carry this.
+   * Selects the page’s field group. The "home" page also serves at /.
    */
-  isHome?: boolean | null
   pageType: 'home' | 'offer' | 'completed-works' | 'interior-styles' | 'contact' | 'price-list'
   updatedAt: string
   createdAt: string
@@ -309,7 +308,6 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PagesSelect<T extends boolean = true> {
   title?: T
   slug?: T
-  isHome?: T
   pageType?: T
   updatedAt?: T
   createdAt?: T

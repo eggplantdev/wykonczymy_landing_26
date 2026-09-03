@@ -4,8 +4,8 @@ import { localeFromPath, pathForPage, resolveSegments, segmentsForPage } from '@
 
 describe('pathForPage', () => {
   it('serves the home document at the bare root in the default locale only', () => {
-    expect(pathForPage({ slug: 'start', isHome: true }, 'pl')).toBe('/')
-    expect(pathForPage({ slug: 'home', isHome: true }, 'en')).toBe('/en/home/')
+    expect(pathForPage({ slug: 'start', pageType: 'home' }, 'pl')).toBe('/')
+    expect(pathForPage({ slug: 'home', pageType: 'home' }, 'en')).toBe('/en/home/')
   })
 
   it('prefixes the non-default locale and always ends in a slash', () => {
@@ -14,7 +14,7 @@ describe('pathForPage', () => {
   })
 
   it('produces params the catch-all can consume', () => {
-    expect(segmentsForPage({ slug: 'start', isHome: true }, 'pl')).toEqual([])
+    expect(segmentsForPage({ slug: 'start', pageType: 'home' }, 'pl')).toEqual([])
     expect(segmentsForPage({ slug: 'offer' }, 'en')).toEqual(['en', 'offer'])
   })
 })
