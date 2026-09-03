@@ -356,18 +356,18 @@ Run once, after Phase 4.
 
 #### Automated
 
-- [ ] 2.1 Build emits both addresses as static routes
-- [ ] 2.2 Typecheck passes
+- [x] 2.1 Build emits both addresses as static routes
+- [x] 2.2 Typecheck passes
 
 ### Phase 3: UI dictionary
 
 #### Automated
 
-- [x] 3.1 Typecheck catches a key missing from `en.json`
-- [x] 3.2 Lint passes with no i18n eslint-disable
+- [x] 3.1 Typecheck catches a key missing from `en.json` — f4abbd6
+- [x] 3.2 Lint passes with no i18n eslint-disable — f4abbd6
 
 ### Phase 4: On-demand revalidation
 
 #### Automated
 
-- [ ] 4.1 Build succeeds with the hook attached
+- [x] 4.1 Build succeeds with the hook attached

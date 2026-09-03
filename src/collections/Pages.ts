@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
+import { revalidatePage, revalidatePageDelete } from './hooks/revalidatePage'
+
 // The six pages of the live site. A page's type selects which conditional field
 // group the admin sees; the groups arrive with the slices that render them.
 export const pageTypes = [
@@ -24,6 +26,8 @@ export const Pages: CollectionConfig = {
     drafts: true,
   },
   hooks: {
+    afterChange: [revalidatePage],
+    afterDelete: [revalidatePageDelete],
     beforeValidate: [
       async ({ data, originalDoc, req }) => {
         if (!data?.isHome) return data
