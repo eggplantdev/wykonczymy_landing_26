@@ -18,19 +18,19 @@ finds it still too broad; that is expected and not a defect in this file.
 ## Framing
 
 **Main goal — `low-complexity`.** `timeline_budget: null`, `target_scale: small`, and the PRD's own
-framing: *"Success is parity plus control, not a lift in a metric."* No handover-proofing, no role
+framing: _"Success is parity plus control, not a lift in a metric."_ No handover-proofing, no role
 split, no conversion programme. Build the thinnest thing that preserves the twelve addresses and
 delivers a lead, then add. Consequence: **no observability slice.** That is the only thing this
 goal actually removes — see `## Environments` for why "no staging" was never a trade-off here.
 
-The risk-averse guardrails (*"No lead is lost"*, *"Search positions do not drop"*) do not argue for
+The risk-averse guardrails (_"No lead is lost"_, _"Search positions do not drop"_) do not argue for
 a different posture, because they are already concrete requirements — FR-037 and the live-submission
 gate. They appear below as slices, not as a global stance.
 
-**North star — S2.** From the PRD's primary success criteria: *"An actual submission through the
+**North star — S2.** From the PRD's primary success criteria: _"An actual submission through the
 live form is proven to reach the leads app before cutover — a human fills in the real form on the
 new site, sends it, and the complete request is confirmed present in the leads app. Not a mock, not
-a unit test, not a staging stub."* Nothing else in the PRD competes for this slot.
+a unit test, not a staging stub."_ Nothing else in the PRD competes for this slot.
 
 **Top blocker — `decisions`.** Nine unresolved Open Questions, over the ≥3 threshold. They cluster
 on **content** (form fields, file limits, retention, where Cennik's traffic goes) rather than on
@@ -38,18 +38,19 @@ engineering, which is why almost nothing here is hard-blocked — see `## Open q
 
 ## Baseline
 
-Verified 2026-09-02: `find` returns zero `.ts` / `.tsx` / `package.json` in the tree. Every layer is
-absent in code and declared in `tech-stack.md`.
+First measured 2026-09-02, when `find` returned zero `.ts` / `.tsx` / `package.json`. **F1 has since
+landed**, so the "at F1 start" column is history — the live picture is `project-state.md`
+`## Current state`.
 
-| Layer | State | Note |
-|---|---|---|
-| Frontend | absent | per `tech-stack.md`: Next App Router, React 19, Tailwind 4 |
-| Backend / API | absent | per `tech-stack.md`: Payload 3 at `src/app/(payload)` |
-| Data | absent | `docker-compose.yml` exists (`postgres:17-alpine`, port 5436); nothing connects to it |
-| Auth | absent | Payload admin auth, one account. No public auth, ever (PRD non-goal) |
-| Deploy / infra | absent | per `tech-stack.md`: Vercel, same account as the leads app |
-| Observability | absent | **not declared anywhere** — a real gap, deliberately not filled at this goal |
-| Environments | absent | Vercel preview deploys are the staging tier; see `## Environments` |
+| Layer          | At F1 start | Now (2026-09-03)                                                     |
+| -------------- | ----------- | -------------------------------------------------------------------- |
+| Frontend       | absent      | Next App Router, React 19, Tailwind 4 wired; no page components yet  |
+| Backend / API  | absent      | Payload 3 at `src/app/(payload)`, Users + Media                      |
+| Data           | absent      | `postgres:18-alpine` on 5436 locally, Neon in production             |
+| Auth           | absent      | Payload admin auth, one account. No public auth, ever (PRD non-goal) |
+| Deploy / infra | absent      | Vercel, deployed from GitHub `main`, same account as the leads app   |
+| Observability  | absent      | **still absent and declared nowhere** — deliberate at this goal      |
+| Environments   | absent      | Vercel preview deploys are the staging tier; see below               |
 
 The one existing integration point is external: the **leads app** (`/workspace/yolo/wykonczymy`), a
 separate product this project does not own.
@@ -69,18 +70,18 @@ flag, a second leads-app deployment, or any other isolation machinery for this.
 
 ## At a glance
 
-| ID | Slice | Status | Depends on | Parallel with |
-|---|---|---|---|---|
-| F1 | Scaffold, local DB, first deploy | **done** | — | — |
-| F2 | Localization spine + localized `slug` | proposed | F1 | — |
-| S1 | One page live at its indexed address, PL + EN | proposed | F2 | — |
-| S2 | **Quote form reaches the leads app** (north star) | blocked | S1 | S3, S4, S5 |
-| S3 | Remaining carried pages | proposed | S1 | S2, S4, S5 |
-| S4 | Completed projects — listing + project pages | proposed | S1 | S2, S3, S5 |
-| S5 | Testimonials and the shared content lists | proposed | S1 | S2, S3, S4 |
-| S6 | Photo attachments on the form | blocked | S2 | — |
-| S7 | SEO surface — sitemap, hreflang, canonical, metadata | proposed | S3, S4 | S6 |
-| S8 | Cutover — url-map test green, redirects, DNS | blocked | S2, S7 | — |
+| ID  | Slice                                                | Status    | Depends on | Parallel with |
+| --- | ---------------------------------------------------- | --------- | ---------- | ------------- |
+| F1  | Scaffold, local DB, first deploy                     | **done**  | —          | —             |
+| F2  | Localization spine + localized `slug`                | in review | F1         | —             |
+| S1  | One page live at its indexed address, PL + EN        | proposed  | F2         | —             |
+| S2  | **Quote form reaches the leads app** (north star)    | blocked   | S1         | S3, S4, S5    |
+| S3  | Remaining carried pages                              | proposed  | S1         | S2, S4, S5    |
+| S4  | Completed projects — listing + project pages         | proposed  | S1         | S2, S3, S5    |
+| S5  | Testimonials and the shared content lists            | proposed  | S1         | S2, S3, S4    |
+| S6  | Photo attachments on the form                        | blocked   | S2         | —             |
+| S7  | SEO surface — sitemap, hreflang, canonical, metadata | proposed  | S3, S4     | S6            |
+| S8  | Cutover — url-map test green, redirects, DNS         | blocked   | S2, S7     | —             |
 
 **Parallel band:** once S1 lands, S2 / S3 / S4 / S5 touch different collections and different routes.
 Four separate agent runs can take them concurrently. S7 needs the route tree complete, so it closes
@@ -110,7 +111,7 @@ in `tech-stack.md`. Everything after the merge is agent work.
 
 ### F2 — Localization spine + localized `slug`
 
-**Status:** proposed · **Change ID:** `f2-i18n-spine` · **Depends on:** F1
+**Status:** in review · **Change ID:** `f2-i18n-spine` · **Depends on:** F1
 
 Payload `localization: { locales: ['pl','en'] }`, a `Pages` collection whose native `slug` field is
 `localized: true`, and the App Router resolving `[locale]/[slug]` against it via
@@ -120,9 +121,25 @@ Payload `localization: { locales: ['pl','en'] }`, a `Pages` collection whose nat
 after three pages exist means rewriting three pages.
 
 **Unknowns:**
+
 - Which fields are localized versus shared, per collection. Resolved while modelling (OQ 10).
 - Where the `pl`/`en` UI-chrome dictionary lives. A small typed object in code — `tech-stack.md`
   problem 3. Not architectural.
+
+**Deferred out of the F2 review gate** (see `context/changes/2026-09-03-f2-i18n-spine/review-gate.md`;
+tracked here because the Linear MCP was unreachable in that session — move them onto the board when it is):
+
+- **DB backing for the two app-level guards.** `slug` is indexed but not unique per locale, and
+  `is_home` has no partial unique index. Needs its own migration, applied to prod by a human.
+  Test disposition: TDD · integration, travels with the fix.
+- **Locale-aware 404 and root `<html lang>`.** `not-found.tsx` sniffs the locale from
+  `usePathname`, so the prerendered shell is Polish on `/en/` and hydration swaps it; the root
+  layout hardcodes `lang="en"`. One routing decision — a catch-all layout cannot see the locale.
+  Test disposition: TDD · e2e, travels with the fix.
+- **`alternates.canonical` + hreflang, and seoPlugin fields in `generateMetadata`.** Belongs with
+  S7 — the plugin's fields are not modelled yet.
+- **`/en/home/` is hardcoded in `next.config.ts`'s redirect** while the EN home slug is a
+  CMS-editable field; renaming it silently breaks an indexed redirect.
 
 **Landmine:** `trailingSlash: true` is not optional. Every one of the twelve indexed addresses ends
 in a slash and Next strips it by default. Omit it and all twelve break at once.
@@ -170,7 +187,7 @@ class the guardrail exists to prevent.
 current field set; adding questions later is a field addition, not a rework.
 
 **Note on ordering:** everything except the final live verification can be built while OQ 5 is open.
-The block is on *declaring the slice done*, not on starting it.
+The block is on _declaring the slice done_, not on starting it.
 
 ### S3 — Remaining carried pages
 
@@ -200,6 +217,7 @@ business adds one from the admin, in both languages, without a developer.
 local searches which today have nowhere to land.
 
 **Unknowns:**
+
 - **OQ 11 — do the 16 existing gallery photos get retrofitted with project pages?** FR-009 currently
   says no: pages exist for new projects only, old photos stay a gallery. Reversing it is content
   labour, not engineering, so it does not block the build. Build for FR-009 as written.
@@ -225,7 +243,7 @@ modelling detail resolved during the work, not a gate on it.
 
 **Status:** blocked · **Change ID:** `s6-attachments` · **Depends on:** S2
 
-FR-031 plus its client-side guards: type and size refused *before* the visitor waits through an
+FR-031 plus its client-side guards: type and size refused _before_ the visitor waits through an
 upload that will be rejected (FR-035).
 
 **Why it is blocked, and by what:** **this is not a slice this project can finish alone.** The leads
@@ -248,8 +266,8 @@ which is why it sits after the north star rather than inside it.
 Sitemap covering both languages (FR-013), per-page title, description, canonical, and correct
 `hreflang` pairing between the Polish and English addresses (FR-014).
 
-**User-visible outcome:** invisible to visitors, load-bearing for the *"search positions do not
-drop"* guardrail.
+**User-visible outcome:** invisible to visitors, load-bearing for the _"search positions do not
+drop"_ guardrail.
 
 **Why it closes the parallel band:** it enumerates every route, so it needs the route tree complete.
 
@@ -284,17 +302,17 @@ split, and it should fail loudly on every slice that touches routing, not only a
 
 Nine open, routed to where they are resolvable. Only one blocks cutover.
 
-| # | Question | Blocks | Resolve during |
-|---|---|---|---|
-| 1 | Exact form question list | no | S2 — build against today's fields, add later |
-| 2 | File limits (types, size, count) | no | S6 — with the leads-app contract |
-| 3 | Where Cennik's two addresses lead | **before cutover** | S8 — owner decision, needed for `url-map.md` |
-| 4 | Is Cennik's removal final? | no | S8 |
-| 5 | Where submissions land today | **before cutover** | S2 — owner confirmation, gates "done" not "start" |
-| 6 | How attachments reach and persist | no | S6 — leads-app work |
-| 7 | Retention period for photos and contact details | no | S6 — a policy decision, not a build one |
-| 10 | Collection versus global, which fields localize | no | F2 / S5 — modelling detail |
-| 11 | Retrofit old gallery photos with project pages? | no | S4 — content labour, build FR-009 as written |
+| #   | Question                                        | Blocks             | Resolve during                                    |
+| --- | ----------------------------------------------- | ------------------ | ------------------------------------------------- |
+| 1   | Exact form question list                        | no                 | S2 — build against today's fields, add later      |
+| 2   | File limits (types, size, count)                | no                 | S6 — with the leads-app contract                  |
+| 3   | Where Cennik's two addresses lead               | **before cutover** | S8 — owner decision, needed for `url-map.md`      |
+| 4   | Is Cennik's removal final?                      | no                 | S8                                                |
+| 5   | Where submissions land today                    | **before cutover** | S2 — owner confirmation, gates "done" not "start" |
+| 6   | How attachments reach and persist               | no                 | S6 — leads-app work                               |
+| 7   | Retention period for photos and contact details | no                 | S6 — a policy decision, not a build one           |
+| 10  | Collection versus global, which fields localize | no                 | F2 / S5 — modelling detail                        |
+| 11  | Retrofit old gallery photos with project pages? | no                 | S4 — content labour, build FR-009 as written      |
 
 **Resolved, recorded for provenance:** OQ 8 (page set — five carried, Cennik retired, plus project
 pages) and OQ 9 (no editor/admin split — one account, slug guardrail moved to FR-037). Both

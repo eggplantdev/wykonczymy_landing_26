@@ -1,0 +1,59 @@
+# ─── prod-migrate gate — gate + remind, runs NO SQL ──────────────────────────
+# `build` no longer runs `payload migrate`, so a push can ship code that needs a
+# migration nobody applied. Reads /dev/tty because git occupies stdin with the
+# pushed-ref list the loop below parses. --diff-filter=A + '\.ts$' so an edited or
+# deleted migration, and Payload's .json snapshot siblings, don't false-positive.
+
+PROD_BRANCH=main
+
+push_to_prod= sha_from= sha_to=
+while read -r _local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = "refs/heads/$PROD_BRANCH" ]; then
+    push_to_prod=1; sha_from=$remote_sha; sha_to=$local_sha
+  fi
+done
+
+if [ -n "$push_to_prod" ]; then
+  # A brand-new branch reports an all-zero "from" sha; diff against the empty tree.
+  if [ "$sha_from" = "0000000000000000000000000000000000000000" ]; then
+    sha_from=$(git hash-object -t tree /dev/null)
+  fi
+  # --diff-filter=A + grep '\.ts$': only ADDED migration .ts files are pending
+  # applies. Without the filter a rename/edit or a *deletion* of a migration (e.g.
+  # removing a smoke-test file) trips the guard as a false positive — git diff
+  # reports D/M lines too, and a removed file is never something prod needs. The
+  # .ts match skips Payload's .json snapshot siblings.
+  if git diff --name-only --diff-filter=A "$sha_from" "$sha_to" -- src/migrations/ | grep -q '\.ts$'; then
+    if { : < /dev/tty; } 2>/dev/null; then
+      printf '\n⚠  Push to %s adds new src/migrations/.\n   Prod is NOT auto-migrated. Run `pnpm db:migrate:prod` yourself (backup-first)\n   BEFORE this deploy serves traffic, else the live app runs against an old schema.\n   Push the code now anyway? [y/N] ' "$PROD_BRANCH" > /dev/tty
+      read -r go < /dev/tty || go=n
+      case "$go" in
+        [Yy]*) echo "→ pushing code; remember to run pnpm db:migrate:prod" >&2 ;;
+        *)     echo "✗ aborted — migrate prod first, then push" >&2; exit 1 ;;
+      esac
+    else
+      echo "→ no terminal to confirm; pushing code only (migrate prod manually)" >&2
+    fi
+  fi
+fi
+# ─── end payload prod-migrate gate ───────────────────────────────────────────
+
+pnpm run typecheck
+pnpm exec vitest run
+
+# Background watcher: prints Vercel deployment state transitions to this terminal.
+# Detached subshell so `git push` returns immediately when the hook exits.
+# DEPLOY_SHA pins the watcher to THIS commit's deploy (matched by SHA), not "newest".
+# Set SKIP_WATCH_DEPLOY=1 to bypass (CI machines, offline pushes, etc.).
+#
+# Foreground auth precheck FIRST (~1s): a dead local CLI token can't watch
+# deploys, and a backgrounded watcher would just poll blind and then misblame the
+# Git integration 3 min later. Surface it loudly here instead. Non-fatal — never
+# block a push over LOCAL auth; just skip the (useless) watcher.
+if [ -z "${SKIP_WATCH_DEPLOY:-}" ]; then
+  if bash scripts/watch-deploy.sh --check-auth; then
+    ( DEPLOY_SHA="$(git rev-parse HEAD)" bash scripts/watch-deploy.sh & )
+  else
+    echo "  🔒 vercel: skipping deploy watcher — fix local CLI auth (see above), then push again to tail." >&2
+  fi
+fi

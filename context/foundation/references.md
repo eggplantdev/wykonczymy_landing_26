@@ -2,11 +2,12 @@
 
 What each repo is for, and the rules for touching it. Read this before copying anything in.
 
-| Repo | Path | Role | May I edit it? |
-|---|---|---|---|
-| **Chaos Kitchen** | `workspace/nomad_chef` | Primary pattern source | No — read only |
-| **Leads app** | `workspace/yolo/wykonczymy` | Integration contract | No — separate product |
-| **tdg** | `workspace/_old_repos/tdg` | Design / markup source | **No. Never.** |
+| Repo              | Path                        | Role                   | May I edit it?        |
+| ----------------- | --------------------------- | ---------------------- | --------------------- |
+| **Chaos Kitchen** | `workspace/nomad_chef`      | Primary pattern source | No — read only        |
+| **Leads app**     | `workspace/yolo/wykonczymy` | Integration contract   | No — separate product |
+| **tdg**           | `workspace/_old_repos/tdg`  | Design / markup source | **No. Never.**        |
+| **fest**          | `workspace/fest`            | i18n pattern source    | No — read only        |
 
 ## Chaos Kitchen — `workspace/nomad_chef`
 
@@ -32,7 +33,7 @@ Where quote requests land. A different product with its own roadmap; this projec
 
 Relevant surface: the `leads` collection, its intake path, and its auth model. The PRD records the
 constraint that matters — the current intake carries a flat set of text answers and cannot accept
-file attachments, so photo uploads require work *in that repo*, not a workaround in this one.
+file attachments, so photo uploads require work _in that repo_, not a workaround in this one.
 
 ## tdg — `workspace/_old_repos/tdg`
 
@@ -45,6 +46,21 @@ write here. What gets carried across is the owner's call, named file by file. It
 `wpStarterTypes` props must be retyped against Payload media on the way in.
 
 It also holds the original `context/foundation/` docs; the copies in this repo are the live ones now.
+
+## fest — `workspace/fest`
+
+A Next frontend (`fest-frontend/`) on a WordPress + WPML backend, running PL/EN. Found while
+planning F2; it is the **only** repo here with working locale routing and a UI dictionary — Chaos
+Kitchen and tdg are both single-locale.
+
+What is worth lifting is `fest-frontend/lib/i18n/`: JSON locale files typed by inference
+(`typeof pl.json`), a `useTranslation(namespace)` hook, and the server/client split — server
+components call `getTranslations(locale)` directly, the hook exists only for client components that
+cannot reach `params`.
+
+What is **not** worth lifting is its WPML plumbing — `translated-slug-setter.tsx` and the
+`translatedSlug` context state exist because WPML gives it no way to know a page's counterpart slug
+up front. Payload does, so that whole layer collapses to a prop.
 
 ## Live site snapshot — `context/foundation/live-site-snapshot/`
 

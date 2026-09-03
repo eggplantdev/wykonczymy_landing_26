@@ -24,6 +24,25 @@ const eslintConfig = [
     },
   },
   {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: [
+      'src/lib/env.ts',
+      'src/lib/env.server.ts',
+      'src/lib/env-schema.ts',
+      'src/payload.config.ts',
+    ],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            "MemberExpression[object.object.name='process'][object.property.name='env']:not([property.name='NODE_ENV'])",
+          message: 'Read env through src/lib/env.ts or env.server.ts, never raw process.env.',
+        },
+      ],
+    },
+  },
+  {
     ignores: ['.next/', 'src/migrations/', 'src/payload-types.ts'],
   },
 ]

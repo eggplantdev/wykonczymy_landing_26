@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "home": "Start",
+    "offer": "Oferta",
+    "completedWorks": "Realizacje",
+    "interiorStyles": "Style wnętrz",
+    "priceList": "Cennik",
+    "contact": "Kontakt",
+    "menu": "Menu",
+    "closeMenu": "Zamknij menu"
+  },
+  "form": {
+    "name": "Imię i nazwisko",
+    "email": "Adres e-mail",
+    "phone": "Telefon",
+    "message": "Wiadomość",
+    "submit": "Wyślij zapytanie",
+    "sending": "Wysyłanie…",
+    "success": "Dziękujemy, odezwiemy się wkrótce.",
+    "error": "Nie udało się wysłać. Spróbuj ponownie.",
+    "required": "To pole jest wymagane",
+    "invalidEmail": "Podaj poprawny adres e-mail",
+    "invalidPhone": "Podaj poprawny numer telefonu",
+    "tooShort": "Wpisz co najmniej {{min}} znaków"
+  },
+  "common": {
+    "backToHome": "Wróć na stronę główną",
+    "notFoundTitle": "Nie znaleziono strony",
+    "notFoundBody": "Ta strona nie istnieje lub została przeniesiona.",
+    "readMore": "Czytaj więcej",
+    "close": "Zamknij",
+    "languagePl": "Polski",
+    "languageEn": "English"
+  }
+}

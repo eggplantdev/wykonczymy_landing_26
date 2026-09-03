@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
   // Every indexed address ends in a slash; Next strips it by default, which
   // would break all twelve at once. See context/foundation/url-map.md.
   trailingSlash: true,
+  // `/en/` is indexed and 301s to `/en/home/` on the live site; the catch-all has no
+  // page for a non-default locale root. See context/foundation/url-map.md.
+  redirects: async () => [{ source: '/en', destination: '/en/home/', permanent: true }],
   images: {
     localPatterns: [
       {

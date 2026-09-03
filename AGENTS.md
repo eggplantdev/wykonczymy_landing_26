@@ -4,9 +4,9 @@
 lead-generation site for a Warsaw renovation contractor, from WordPress to Payload + Next on Vercel.
 Canonical, cross-tool agent onboarding file.
 
-> **This repo has no application code yet.** Docs only — see **Where things stand** at the bottom.
-> Conventions (structure, testing, commands) get written here *after* the scaffold lands, not
-> invented in advance.
+> **The scaffold is in and production is live**; there are no page components yet. See **Where
+> things stand** at the bottom. Conventions (structure, testing, commands) get written here once
+> there is real application code to describe, not invented in advance.
 
 ## STOP if you can't run what this file references
 
@@ -14,17 +14,22 @@ This file assumes **Claude Code**. If a step references a skill, command, or too
 do **not** improvise a substitute, skip it silently, or guess an equivalent. **Stop, name the
 missing capability and what you were about to do, and wait for the human.**
 
-## Reference repos — three, all read-only
+## Reference repos — four, all read-only
 
 Named throughout this file. **Nothing outside `landing_26` is ever edited** — work flows one way,
 read there, write here. Roles and the rules for copying from each →
 `@context/foundation/references.md`.
 
-| Name | Path | What it is |
-|---|---|---|
-| **Chaos Kitchen** | `/workspace/nomad_chef` | Live site on this exact stack — the default answer to "how do we do X here" |
-| **tdg** | `/workspace/_old_repos/tdg` | The agency's WordPress template — the only real built markup for this site |
-| **leads app** | `/workspace/yolo/wykonczymy` | Where quote requests land — a separate product with its own roadmap |
+| Name              | Path                         | What it is                                                                  |
+| ----------------- | ---------------------------- | --------------------------------------------------------------------------- |
+| **Chaos Kitchen** | `/workspace/nomad_chef`      | Live site on this exact stack — the default answer to "how do we do X here" |
+| **tdg**           | `/workspace/_old_repos/tdg`  | The agency's WordPress template — the only real built markup for this site  |
+| **leads app**     | `/workspace/yolo/wykonczymy` | Where quote requests land — a separate product with its own roadmap         |
+| **fest**          | `/workspace/fest`            | Next + WP, PL/EN. The only working locale routing + dictionary on any repo  |
+
+fest's i18n module is `fest-frontend/lib/i18n/` — typed JSON dictionary, `useTranslation`,
+provider. Chaos Kitchen and tdg are both single-locale, so fest is the only precedent for
+anything bilingual.
 
 ## Hard rules (read first)
 
@@ -35,9 +40,13 @@ read there, write here. Roles and the rules for copying from each →
   `git add -A` sweeps up another agent's in-flight work.
 - **Use** `pnpm` — not npm, not yarn. Chaos Kitchen is on npm, so its `db:*` scripts need their
   `npm run` calls swapped on the way in.
-- **Install latest at scaffold time.** Do **not** copy version numbers out of the reference repos;
-  they are a snapshot of what those projects happened to have. The only pinned majors are decisions:
-  Payload 3, React 19, Tailwind 4, `postgres:17-alpine`.
+- **Install latest _mature_.** Do **not** copy version numbers out of the reference repos; they are
+  a snapshot of what those projects happened to have. But "latest" is not "published this morning":
+  `minimumReleaseAge: 1440` in `pnpm-workspace.yaml` makes Vercel refuse a lockfile containing
+  anything under a day old, and `pnpm add` pins today's version by default — widen the range so a
+  mature fallback exists. This cost a failed production deploy; see
+  `@context/foundation/stack-template.md`. The only pinned majors are decisions: Payload 3,
+  React 19, Tailwind 4, `postgres:17-alpine`.
 - **Payload owns the** `src/` **layout** — `src/app/(payload)/{admin,api}`, `payload.config.ts`,
   `withPayload()` wrapping the Next config. App Router only.
 - **Never write to** `context/archive/` — archived changes are immutable. All project docs live
@@ -68,12 +77,22 @@ read there, write here. Roles and the rules for copying from each →
 Layer table, rationale, and the two tdg migration frictions (Tailwind 3→4 class migration;
 `WpImageT` → Payload media retyping) → `@context/foundation/tech-stack.md`.
 
+**Before touching scaffold, deploy or environment config, read
+`@context/foundation/stack-template.md`** — a follow-top-to-bottom runbook for standing this stack
+up on Vercel. It is the seed for a reusable starter, so keep it free of anything specific to this
+site.
+
 - Local Postgres runs in Docker on **port 5436** — 5433/5434/5435 are taken by other projects on this
   machine. Wired in `@docker-compose.yml` / `@.env.example`.
 - Deployed to Vercel on the **same account as the leads app** — deliberate, removes cross-org access
   problems. Use the `vercel:*` skills to talk to Vercel rather than guessing its API.
 - `create-payload-app` **needs a TTY and cannot be run by an agent.** The owner runs it; the exact
   command is in `tech-stack.md`.
+- **`build` never migrates the database.** `POSTGRES_URL` on Vercel points at production for every
+  deployment, previews included. Schema is applied by hand with `pnpm db:migrate:prod` — **a human
+  runs it, never an agent** — and it goes up _before_ the code that needs it.
+- **Read env through `src/lib/env.ts` / `env.server.ts`, never raw `process.env`** — ESLint rejects
+  it in `src/**`. `payload.config.ts` is the one exception, and parses `serverSchema` itself.
 
 ## Claude Code workflow
 
@@ -83,7 +102,7 @@ Layer table, rationale, and the two tdg migration frictions (Tailwind 3→4 clas
 > **Workflow = 10x, not superpowers** — use the `/10x-*` skills for research/plan/implement/review.
 
 Close out **every change that has its own** `context/changes/<id>/` **folder** by running the
-`slice-review-gate` skill; having a change folder *is* the trigger. Only trivial folder-less edits
+`slice-review-gate` skill; having a change folder _is_ the trigger. Only trivial folder-less edits
 skip it.
 
 ## Where things stand
