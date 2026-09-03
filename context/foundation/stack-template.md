@@ -144,6 +144,34 @@ Full pattern: the `typed-env-module` skill.
 trailingSlash: true,   // only if your URLs carry one — one-way door once indexed
 ```
 
+## 6b. App Router special files — day one, not later
+
+The scaffold ships none of these, and each one's absence is invisible until the moment it matters:
+an unhandled throw takes down the whole tree, a slow segment shows a blank frame. Add all four
+before the first real page.
+
+```
+app/(frontend)/
+  not-found.tsx      # 404 — also what notFound() renders
+  error.tsx          # segment error boundary — MUST be 'use client' ('reset' re-renders)
+  global-error.tsx   # root layout itself threw — supplies its own <html>/<body>
+  loading.tsx        # Suspense fallback for the segment
+components/
+  Spinner.tsx        # role="status" + a visually-hidden label, or it is silent to a screen reader
+```
+
+- **`error.tsx` cannot be a server component.** Its `reset` prop re-renders the segment, which only
+  the client can do. `global-error.tsx` is the same, plus it renders `<html>`/`<body>` itself —
+  the root layout that normally supplies them is exactly what failed.
+- **Log `error.digest`.** Next strips the message in production before it reaches the browser; the
+  digest is the only handle that correlates the page with the server log.
+- **`loading.tsx` looks dead on a fully-static site and still belongs there** — it costs nothing
+  and covers the first route that streams or opts out of static generation.
+- **None of these can see the locale.** They render outside the page's params, so on a bilingual
+  site they either sniff the path prefix (`not-found`, `error`) or accept the default locale as a
+  known-wrong answer (`loading`, `global-error`). Decide which per file rather than discovering it
+  in review — see §11.
+
 ## 7. Scripts
 
 ```jsonc
