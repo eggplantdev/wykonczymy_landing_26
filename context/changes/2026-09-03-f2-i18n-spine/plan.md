@@ -349,8 +349,8 @@ Run once, after Phase 4.
 
 #### Automated
 
-- [x] 1.1 Migration applies against the local database
-- [x] 1.2 Types regenerate and include `Page`
+- [x] 1.1 Migration applies against the local database — 41c93b2
+- [x] 1.2 Types regenerate and include `Page` — 41c93b2
 
 ### Phase 2: Catch-all route and resolver
 
