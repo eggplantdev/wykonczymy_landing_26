@@ -126,6 +126,21 @@ after three pages exist means rewriting three pages.
 - Where the `pl`/`en` UI-chrome dictionary lives. A small typed object in code — `tech-stack.md`
   problem 3. Not architectural.
 
+**Deferred out of the F2 review gate** (see `context/changes/2026-09-03-f2-i18n-spine/review-gate.md`;
+tracked here because the Linear MCP was unreachable in that session — move them onto the board when it is):
+
+- **DB backing for the two app-level guards.** `slug` is indexed but not unique per locale, and
+  `is_home` has no partial unique index. Needs its own migration, applied to prod by a human.
+  Test disposition: TDD · integration, travels with the fix.
+- **Locale-aware 404 and root `<html lang>`.** `not-found.tsx` sniffs the locale from
+  `usePathname`, so the prerendered shell is Polish on `/en/` and hydration swaps it; the root
+  layout hardcodes `lang="en"`. One routing decision — a catch-all layout cannot see the locale.
+  Test disposition: TDD · e2e, travels with the fix.
+- **`alternates.canonical` + hreflang, and seoPlugin fields in `generateMetadata`.** Belongs with
+  S7 — the plugin's fields are not modelled yet.
+- **`/en/home/` is hardcoded in `next.config.ts`'s redirect** while the EN home slug is a
+  CMS-editable field; renaming it silently breaks an indexed redirect.
+
 **Landmine:** `trailingSlash: true` is not optional. Every one of the twelve indexed addresses ends
 in a slash and Next strips it by default. Omit it and all twelve break at once.
 
