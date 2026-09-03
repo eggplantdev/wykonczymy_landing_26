@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useMemo } from 'react'
+import { createContext, useContext } from 'react'
 import { getTranslations, type Locale, type TranslationsT } from './i18n'
 
 type I18nContextT = {
@@ -17,9 +17,9 @@ export function TranslationsProvider({
   locale: Locale
   children: React.ReactNode
 }) {
-  const value = useMemo(() => ({ locale, translations: getTranslations(locale) }), [locale])
-
-  return <I18nContext value={value}>{children}</I18nContext>
+  return (
+    <I18nContext value={{ locale, translations: getTranslations(locale) }}>{children}</I18nContext>
+  )
 }
 
 export function useI18nContext() {
