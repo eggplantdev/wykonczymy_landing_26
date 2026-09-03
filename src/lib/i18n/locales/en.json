@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "home": "Home",
+    "offer": "Offer",
+    "completedWorks": "Completed works",
+    "interiorStyles": "Interior styles",
+    "priceList": "Price list",
+    "contact": "Contact",
+    "menu": "Menu",
+    "closeMenu": "Close menu"
+  },
+  "form": {
+    "name": "Full name",
+    "email": "Email address",
+    "phone": "Phone",
+    "message": "Message",
+    "submit": "Send enquiry",
+    "sending": "Sending…",
+    "success": "Thank you, we will be in touch shortly.",
+    "error": "Sending failed. Please try again.",
+    "required": "This field is required",
+    "invalidEmail": "Enter a valid email address",
+    "invalidPhone": "Enter a valid phone number",
+    "tooShort": "Enter at least {{min}} characters"
+  },
+  "common": {
+    "backToHome": "Back to home page",
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "This page does not exist or has been moved.",
+    "readMore": "Read more",
+    "close": "Close",
+    "languagePl": "Polski",
+    "languageEn": "English"
+  }
+}

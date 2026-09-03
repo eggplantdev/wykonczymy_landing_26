@@ -3,8 +3,10 @@ import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 
 import config from '@/payload.config'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { i18n, type Locale } from '@/lib/i18n/i18n'
-import { resolveSegments, segmentsForPage } from '@/lib/routing'
+import { TranslationsProvider } from '@/lib/i18n/translations-provider'
+import { pathForPage, resolveSegments, segmentsForPage } from '@/lib/routing'
 
 type ParamsT = { segments?: string[] }
 
@@ -23,6 +25,20 @@ async function findPage(locale: Locale, slug: string | null) {
   })
 
   return docs[0] ?? null
+}
+
+// The same document answers to one address per locale, and only the document knows
+// its counterpart slug — so the switcher's hrefs come from a second read, not a
+// path rewrite. `locale: 'all'` returns every localized value in one query.
+async function pathsForPage(id: string): Promise<Record<Locale, string>> {
+  const payload = await getPayload({ config: await config })
+  const doc = await payload.findByID({ collection: 'pages', id, depth: 0, locale: 'all' })
+  const slugs = doc.slug as unknown as Record<Locale, string>
+
+  return {
+    pl: pathForPage({ slug: slugs.pl, isHome: doc.isHome }, 'pl'),
+    en: pathForPage({ slug: slugs.en, isHome: doc.isHome }, 'en'),
+  }
 }
 
 // Resolves every public address at build time, so no request touches the database.
@@ -66,12 +82,17 @@ export default async function CatchAllPage({ params }: { params: Promise<ParamsT
   const page = await findPage(locale, slug)
   if (!page) notFound()
 
+  const paths = await pathsForPage(String(page.id))
+
   return (
-    <article>
-      <h1>{page.title}</h1>
-      <p>
-        {page.pageType} · {locale}
-      </p>
-    </article>
+    <TranslationsProvider locale={locale}>
+      <article>
+        <h1>{page.title}</h1>
+        <p>
+          {page.pageType} · {locale}
+        </p>
+        <LanguageSwitcher paths={paths} />
+      </article>
+    </TranslationsProvider>
   )
 }

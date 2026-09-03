@@ -363,8 +363,8 @@ Run once, after Phase 4.
 
 #### Automated
 
-- [ ] 3.1 Typecheck catches a key missing from `en.json`
-- [ ] 3.2 Lint passes with no i18n eslint-disable
+- [x] 3.1 Typecheck catches a key missing from `en.json`
+- [x] 3.2 Lint passes with no i18n eslint-disable
 
 ### Phase 4: On-demand revalidation
 
