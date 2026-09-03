@@ -11,10 +11,12 @@ import { resolveSegments, segmentsForPage } from '@/lib/routing'
 
 type ParamsT = { segments?: string[] }
 
-// The twelve indexed addresses are the whole public surface, so anything
-// generateStaticParams did not enumerate is a 404 by construction rather than an
-// on-demand render.
-export const dynamicParams = false
+// Left on (the default) so an unenumerated address still reaches this segment and is
+// rejected by notFound() — which is what renders not-found.tsx. With it off, Next
+// rejects the param before the segment runs and serves its own bare 404 instead: no
+// layout, no locale, none of our copy. The cost is a database lookup per unknown URL;
+// the twelve real addresses are all prerendered and never pay it.
+export const dynamicParams = true
 
 // Resolves every public address at build time, so no request touches the database.
 // tech-stack.md makes the CMS-owned-slug decision conditional on exactly this.

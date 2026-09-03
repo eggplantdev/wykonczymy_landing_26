@@ -6,9 +6,8 @@ import { usePathname } from 'next/navigation'
 import { getTranslations } from '@/lib/i18n/i18n'
 import { localeFromPath } from '@/lib/routing'
 
-// An error boundary is always a client component: `reset` re-renders the segment, which
-// only the client can do. Like not-found.tsx it renders outside the catch-all, so the
-// path prefix is the only locale signal available.
+// Same layout as not-found.tsx. An error boundary is always a client component:
+// `reset` re-renders the segment, which only the client can do.
 export default function Error({
   error,
   reset,
@@ -18,19 +17,23 @@ export default function Error({
 }) {
   const copy = getTranslations(localeFromPath(usePathname())).common
 
-  // The digest is the only handle on a production error: Next strips the message before
-  // it reaches the browser, and this is what correlates the page with the server log.
+  // Next strips the message in production before it reaches the browser; logging here
+  // is what correlates the page with the server-side digest.
   useEffect(() => {
     console.error(error)
   }, [error])
 
   return (
-    <article>
-      <h1>{copy.errorTitle}</h1>
-      <p>{copy.errorBody}</p>
-      <button type="button" onClick={reset}>
-        {copy.retry}
-      </button>
-    </article>
+    <div className="flex min-h-svh items-center justify-center">
+      <div className="flex items-center gap-6">
+        <h1 className="border-r border-current/30 pr-6 text-2xl font-medium">500</h1>
+        <div className="space-y-1">
+          <p className="text-sm">{copy.errorBody}</p>
+          <button className="text-sm underline" type="button" onClick={reset}>
+            {copy.retry}
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }
