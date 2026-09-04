@@ -3,7 +3,7 @@ import { Media } from '@/components/media/media'
 import { getTranslations, type Locale } from '@/lib/i18n/i18n'
 import { RelatedStylesCarousel } from './related-styles-carousel'
 import { StyleGallery } from './style-gallery'
-import type { InteriorStyleT } from './types'
+import type { InteriorStyleT } from '@/types/interior-styles'
 
 type PropsT = {
   locale: Locale

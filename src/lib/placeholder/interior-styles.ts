@@ -1,4 +1,4 @@
-import type { InteriorStyleT } from '@/components/interior-styles/types'
+import type { InteriorStyleT } from '@/types/interior-styles'
 import type { MediaImageT } from '@/components/media/types'
 
 // Stand-in for the `interior-styles` collection. Copy and photos are the live site's own

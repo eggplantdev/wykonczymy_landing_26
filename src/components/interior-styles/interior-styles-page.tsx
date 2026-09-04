@@ -1,6 +1,6 @@
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { StyleCard } from './style-card'
-import type { InteriorStyleT } from './types'
+import type { InteriorStyleT } from '@/types/interior-styles'
 
 export type InteriorStylesPageDataT = {
   styles: InteriorStyleT[]

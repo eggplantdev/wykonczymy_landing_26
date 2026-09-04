@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { StyleCardBody } from '@/components/interior-styles/style-card-body'
-import type { InteriorStyleT } from '@/components/interior-styles/types'
+import type { InteriorStyleT } from '@/types/interior-styles'
 
 type PropsT = {
   style: InteriorStyleT

@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { Media } from '@/components/media/media'
 import { CarouselArrow } from '@/components/ui/carousel-arrow'
-import type { InteriorStyleT } from './types'
+import type { InteriorStyleT } from '@/types/interior-styles'
 
 type PropsT = {
   style: InteriorStyleT

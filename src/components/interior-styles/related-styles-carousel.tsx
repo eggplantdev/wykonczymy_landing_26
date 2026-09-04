@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
 import { RelatedStyleSlide } from './related-style-slide'
-import type { InteriorStyleT } from './types'
+import type { InteriorStyleT } from '@/types/interior-styles'
 
 type PropsT = {
   sectionTitle: string

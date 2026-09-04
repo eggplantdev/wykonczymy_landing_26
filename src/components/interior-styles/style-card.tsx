@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { twMerge } from 'tailwind-merge'
 
 import { StyleCardBody } from './style-card-body'
-import type { InteriorStyleT } from './types'
+import type { InteriorStyleT } from '@/types/interior-styles'
 
 type PropsT = {
   style: InteriorStyleT

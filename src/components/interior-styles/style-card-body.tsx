@@ -1,7 +1,7 @@
 import { twMerge } from 'tailwind-merge'
 
 import { Media } from '@/components/media/media'
-import type { InteriorStyleT } from './types'
+import type { InteriorStyleT } from '@/types/interior-styles'
 
 type PropsT = {
   style: InteriorStyleT
