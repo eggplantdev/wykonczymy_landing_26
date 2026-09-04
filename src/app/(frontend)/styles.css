@@ -1,1 +1,176 @@
 @import 'tailwindcss';
+
+/* Ported from tdg's `tailwind.config.js` + `styles/globals.css`. tdg declared `fontFamily`
+   and `fontSize` at the top level of `theme`, which in v3 REPLACED the default scales — v4
+   merges instead, so both namespaces are cleared to `initial` first. Everything tdg kept
+   under `extend` merges here as-is. */
+@theme {
+  --font-*: initial;
+  --font-sans: var(--font-riforma), ui-sans-serif, system-ui, sans-serif;
+
+  --text-*: initial;
+  --text-10: 0.625rem;
+  --text-12: 0.75rem;
+  --text-14: 0.875rem;
+  --text-16: 1rem;
+  --text-18: 1.125rem;
+  --text-20: 1.25rem;
+  --text-22: 1.375rem;
+  --text-24: 1.5rem;
+  --text-28: 1.75rem;
+  --text-32: 2rem;
+  --text-36: 2.25rem;
+  --text-40: 2.5rem;
+  --text-52: 3.25rem;
+  --text-58: 3.625rem;
+  --text-60: 3.75rem;
+  --text-72: 4.5rem;
+
+  /* tdg's `sm` is 12px, not Tailwind's 14px — lifted markup depends on the smaller value. */
+  --text-sm: 0.75rem;
+  --text-base: 1rem;
+  --text-base--line-height: 150%;
+  --text-base--letter-spacing: -0.16px;
+  --text-md: 1.25rem;
+  --text-md--line-height: 140%;
+  --text-md--letter-spacing: -0.2px;
+  --text-lg: 1.5rem;
+  --text-lg--line-height: 150%;
+  --text-xl: 2.5rem;
+  --text-xl--line-height: 135%;
+  --text-xxl: 3.75rem;
+  --text-xxl--line-height: 120%;
+  --text-xxl--letter-spacing: 1.2px;
+
+  /* `sm` and `xl` diverge from Tailwind's defaults (640/1280). tdg extended rather than
+     replaced, so the untouched `2xl: 1536px` still exists above `xl`. */
+  --breakpoint-sm: 360px;
+  --breakpoint-smd: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xlg: 1280px;
+  --breakpoint-xl: 1440px;
+  --breakpoint-xxl: 1920px;
+
+  --color-grau_100: #565656;
+  --color-grau_200: #848484;
+  --color-grau_300: #a3a3a3;
+  --color-grau_400: #b8b8b8;
+  --color-grau_500: #c8c8c8;
+  --color-grau_600: #d7d7d7;
+  --color-grau_700: #dfdfdf;
+  --color-grau_800: #ebebeb;
+  --color-grau_900: #f5f5f5;
+
+  --color-finance_100: #202c42;
+  --color-finance_200: #2e4061;
+  --color-finance_300: #3e5682;
+  --color-finance_400: #597aba;
+  --color-finance_500: #658bd4;
+  --color-finance_600: #84a3dd;
+  --color-finance_700: #a3bae5;
+  --color-finance_800: #c2d1ee;
+  --color-finance_900: #e0e8f6;
+
+  --color-optimum_100: #525e43;
+  --color-optimum_200: #677755;
+  --color-optimum_300: #809469;
+  --color-optimum_400: #96ad7b;
+  --color-optimum_500: #9eb782;
+  --color-optimum_600: #b2c69b;
+  --color-optimum_700: #c5d4b4;
+  --color-optimum_800: #d8e2cd;
+  --color-optimum_900: #ecf1e6;
+
+  --color-living_100: #3f495e;
+  --color-living_200: #5e6f91;
+  --color-living_300: #8191b0;
+  --color-living_400: #aab7d1;
+  --color-living_500: #b7c5e1;
+  --color-living_600: #c5d1e7;
+  --color-living_700: #d4dced;
+  --color-living_800: #e2e8f3;
+  --color-living_900: #f1f3f9;
+
+  --color-shwarz: #1b1b1b;
+  --color-white: #fdfdfd;
+  --color-error: #d45d5c;
+
+  --leading-normal: 120%;
+  --leading-120: 120%;
+  --leading-125: 125%;
+  --leading-130: 130%;
+  --leading-135: 135%;
+  --leading-140: 140%;
+
+  --shadow-header: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+@layer base {
+  :root {
+    --headerH: 4.25rem;
+    --headerHMd: 6.5rem;
+  }
+
+  /* tdg sets this on `*`, so lifted markup inherits the browser keyword rather than
+     Tailwind's 1.5 — dropping it reflows every section. */
+  * {
+    line-height: normal;
+  }
+
+  /* v3's `borderColor.DEFAULT`, which v4 removed: an unqualified `border` is black here,
+     not `currentColor`. */
+  *,
+  ::after,
+  ::before {
+    border-color: #000;
+  }
+
+  body {
+    @apply flex flex-col overscroll-none scroll-smooth text-shwarz;
+  }
+
+  input,
+  textarea {
+    @apply resize-none outline-none;
+  }
+
+  input:-webkit-autofill,
+  textarea:-webkit-autofill {
+    box-shadow: inset 0 0 0 2000px rgb(242 242 242);
+  }
+}
+
+@utility paddings {
+  @apply px-6 md:px-8 xl:px-12;
+}
+
+@utility center-absolute {
+  @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+}
+
+/* tdg's `.gridContainerLg` was byte-identical to `.gridContainer`; only one survives. */
+@utility gridContainer {
+  @apply grid grid-cols-6 gap-x-5 md:grid-cols-8 lg:grid-cols-12;
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Driven by DebugTools toggling `data-debug-*` on the root. Scoped to `main` so the
+   panel and the grid overlay, which are siblings of it, stay legible. */
+@layer utilities {
+  [data-debug-outlines] main * {
+    outline: 1px solid var(--color-optimum_400);
+  }
+
+  [data-debug-layers] main * {
+    background-color: color-mix(in oklab, var(--color-error) 10%, transparent);
+  }
+}
