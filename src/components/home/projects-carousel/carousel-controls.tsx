@@ -3,7 +3,7 @@
 import { useSwiper, useSwiperSlide } from 'swiper/react'
 import { twMerge } from 'tailwind-merge'
 
-import { CarouselArrow } from './carousel-arrow'
+import { CarouselArrow } from '@/components/ui/carousel-arrow'
 import { CarouselCounter } from './carousel-counter'
 
 type PropsT = {
