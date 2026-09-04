@@ -65,7 +65,7 @@ export function homePlaceholder(paths: PathsT): HomePageDataT {
       ],
     },
 
-    offers: {
+    projects: {
       sectionTitle: 'Recent work',
       ctaLabel: 'See all projects',
       ctaHref: link('completed-works'),

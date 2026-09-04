@@ -35,6 +35,7 @@
     "errorBody": "An unexpected error occurred. Please try again in a moment.",
     "retry": "Try again",
     "goBack": "Go back",
-    "gallery": "Gallery"
+    "gallery": "Gallery",
+    "moreInteriorStyles": "More interior styles"
   }
 }

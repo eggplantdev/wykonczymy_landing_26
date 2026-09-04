@@ -35,6 +35,7 @@
     "errorBody": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie za chwilę.",
     "retry": "Spróbuj ponownie",
     "goBack": "Wróć",
-    "gallery": "Galeria"
+    "gallery": "Galeria",
+    "moreInteriorStyles": "Więcej stylów wnętrz"
   }
 }

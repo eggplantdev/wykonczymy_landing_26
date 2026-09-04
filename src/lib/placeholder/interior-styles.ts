@@ -211,10 +211,22 @@ export const interiorStyles: InteriorStyleT[] = seeds.map((seed, index) => {
     text: seed.text,
     body: seed.body,
     image: gallery[0],
+    contentImage: gallery[1] ?? null,
     gallery,
   }
 })
 
 export const interiorStylesPlaceholder = {
   styles: interiorStyles,
+}
+
+/** The styles following this one, so every article ends on a different set of suggestions. */
+export const relatedStyles = (slug: string, count = 3): InteriorStyleT[] => {
+  const index = interiorStyles.findIndex((style) => style.slug === slug)
+  if (index < 0) return []
+
+  return Array.from(
+    { length: Math.min(count, interiorStyles.length - 1) },
+    (_, offset) => interiorStyles[(index + offset + 1) % interiorStyles.length],
+  )
 }
