@@ -6,7 +6,8 @@
     "priceList": "Cennik",
     "contact": "Kontakt",
     "menu": "Menu",
-    "closeMenu": "Zamknij menu"
+    "closeMenu": "Zamknij menu",
+    "callUs": "Zadzwoń do nas"
   },
   "form": {
     "name": "Imię i nazwisko",

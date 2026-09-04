@@ -6,7 +6,8 @@
     "priceList": "Price list",
     "contact": "Contact",
     "menu": "Menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "callUs": "Call us"
   },
   "form": {
     "name": "Full name",

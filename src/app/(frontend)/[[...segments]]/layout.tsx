@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 
+import { MobileMenu } from '@/components/layout/mobile-menu'
 import { SiteHeader } from '@/components/layout/site-header'
 import { SiteFooter } from '@/components/footer/site-footer'
 import { footerPlaceholder } from '@/lib/placeholder/footer'
@@ -26,12 +27,20 @@ export default async function SegmentLayout({
   const page = await findPage(locale, slug)
   const typePaths = await pathsByType(locale)
   const paths = page ? await pathsForPage(page.id) : {}
+  const footer = footerPlaceholder(locale)
 
   return (
     <TranslationsProvider locale={locale}>
-      <SiteHeader homeHref={typePaths[HOME_PAGE_TYPE] ?? '/'} paths={paths} />
-      {children}
-      <SiteFooter container="paddings pb-20 md:pb-30" data={footerPlaceholder(locale)} />
+      <SiteHeader homeHref={typePaths[HOME_PAGE_TYPE] ?? '/'} paths={paths} typePaths={typePaths} />
+      <MobileMenu paths={paths} typePaths={typePaths} phone={footer.phone} />
+      {/* The background is painted here rather than on body: a background on html/body
+          propagates to the browser canvas, which is not part of the root group's
+          backdrop, so the menu toggle's mix-blend-difference would have nothing to
+          invert against on plain sections. */}
+      <div className="bg-white flex min-h-lvh flex-col">
+        <div className="grow">{children}</div>
+        <SiteFooter container="paddings pt-20 pb-20 md:pt-30 md:pb-30 xl:pt-40" data={footer} />
+      </div>
     </TranslationsProvider>
   )
 }
