@@ -1,6 +1,8 @@
 import React from 'react'
 import './styles.css'
 
+import { DebugTools } from '@/components/debug/debug-tools'
+
 // Side-effect import: every route renders through this layout, so a missing or malformed
 // public var fails `next build` instead of surfacing as undefined in the browser.
 import '@/lib/env'
@@ -17,6 +19,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     <html lang="en">
       <body>
         <main>{children}</main>
+        <DebugTools />
       </body>
     </html>
   )
