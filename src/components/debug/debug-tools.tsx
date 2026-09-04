@@ -46,7 +46,7 @@ export function DebugTools() {
     layers: false,
   })
 
-  if (process.env.NODE_ENV !== 'production') return
+  if (process.env.NODE_ENV === 'production') return null
 
   // tdg shared this through a zustand store because its triggers sit in the header while
   // the outline/layer effect wraps `children`. One attribute on the root reaches the whole
