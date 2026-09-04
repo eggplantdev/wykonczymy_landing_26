@@ -7,7 +7,9 @@ import { HomePage } from '@/components/home/home-page'
 import { InteriorStylesPage } from '@/components/interior-styles/interior-styles-page'
 import { StylePage } from '@/components/interior-styles/style-page'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { SiteFooter } from '@/components/footer/site-footer'
 import { SiteLogo } from '@/components/layout/site-logo'
+import { footerPlaceholder } from '@/lib/placeholder/footer'
 import { homePlaceholder } from '@/lib/placeholder/home'
 import {
   interiorStyles,
@@ -123,6 +125,7 @@ export default async function CatchAllPage({ params }: { params: Promise<ParamsT
     <TranslationsProvider locale={locale}>
       <SiteLogo homeHref={typePaths[HOME_PAGE_TYPE] ?? '/'} />
       {body()}
+      <SiteFooter container="paddings pb-20 md:pb-30" data={footerPlaceholder(locale)} />
       <LanguageSwitcher paths={paths} />
     </TranslationsProvider>
   )

@@ -21,7 +21,14 @@
     "required": "To pole jest wymagane",
     "invalidEmail": "Podaj poprawny adres e-mail",
     "invalidPhone": "Podaj poprawny numer telefonu",
-    "tooShort": "Wpisz co najmniej {{min}} znaków"
+    "tooShort": "Wpisz co najmniej {{min}} znaków",
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "scope": "Zakres prac (remont, wykończenie, inne)",
+    "area": "Powierzchnia (do 30 m², 30–60 m², 60–120 m², więcej)",
+    "acceptTerms": "Akceptuję politykę prywatności",
+    "send": "Wyślij",
+    "attachments": "Dodaj załączniki, jeśli masz — projekt, rzut, zdjęcia"
   },
   "common": {
     "backToHome": "Wróć na stronę główną",
