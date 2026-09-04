@@ -8,10 +8,6 @@ import { InteriorStylesPage } from '@/components/interior-styles/interior-styles
 import { StylePage } from '@/components/interior-styles/style-page'
 import { ProjectPage } from '@/components/projects/project-page'
 import { ProjectsPage } from '@/components/projects/projects-page'
-import { LanguageSwitcher } from '@/components/LanguageSwitcher'
-import { SiteFooter } from '@/components/footer/site-footer'
-import { SiteLogo } from '@/components/layout/site-logo'
-import { footerPlaceholder } from '@/lib/placeholder/footer'
 import { homePlaceholder } from '@/lib/placeholder/home'
 import {
   interiorStyles,
@@ -20,8 +16,7 @@ import {
 } from '@/lib/placeholder/interior-styles'
 import { projects, projectsPlaceholder, relatedProjects } from '@/lib/placeholder/projects'
 import { getTranslations, i18n } from '@/lib/i18n/i18n'
-import { TranslationsProvider } from '@/lib/i18n/translations-provider'
-import { findPage, pathsByType, pathsForPage } from '@/lib/pages'
+import { findPage, pathsByType } from '@/lib/pages'
 import { HOME_PAGE_TYPE, pathForPage, resolveSegments, segmentsForPage } from '@/lib/routing'
 
 type ParamsT = { segments?: string[] }
@@ -108,7 +103,6 @@ export default async function CatchAllPage({ params }: { params: Promise<ParamsT
     page.pageType === PROJECTS_PAGE_TYPE && childSlug ? findProject(childSlug) : undefined
   if (childSlug && !style && !project) notFound()
 
-  const paths = await pathsForPage(page.id)
   const typePaths = await pathsByType(locale)
 
   const body = () => {
@@ -156,12 +150,5 @@ export default async function CatchAllPage({ params }: { params: Promise<ParamsT
     return null
   }
 
-  return (
-    <TranslationsProvider locale={locale}>
-      <SiteLogo homeHref={typePaths[HOME_PAGE_TYPE] ?? '/'} />
-      {body()}
-      <SiteFooter container="paddings pb-20 md:pb-30" data={footerPlaceholder(locale)} />
-      <LanguageSwitcher paths={paths} />
-    </TranslationsProvider>
-  )
+  return body()
 }
