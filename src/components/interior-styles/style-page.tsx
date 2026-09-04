@@ -1,7 +1,7 @@
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { Media } from '@/components/media/media'
 import { getTranslations, type Locale } from '@/lib/i18n/i18n'
-import { RelatedStylesCarousel } from './related-styles-carousel'
+import { ObjectCarousel } from '@/components/object-carousel/object-carousel'
 import { StyleGallery } from './style-gallery'
 import type { InteriorStyleT } from '@/types/interior-styles'
 
@@ -64,10 +64,16 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
 
       <StyleGallery title={common.gallery} images={gallery} />
 
-      <RelatedStylesCarousel
+      <ObjectCarousel
+        container="lg:pt-30 pt-16 md:pt-20"
         sectionTitle={common.moreInteriorStyles}
-        basePath={basePath}
-        styles={related}
+        items={related.map((item) => ({
+          key: item.slug,
+          href: `${basePath}${item.slug}/`,
+          title: item.title,
+          text: item.text,
+          image: item.image,
+        }))}
       />
     </PageWrapper>
   )

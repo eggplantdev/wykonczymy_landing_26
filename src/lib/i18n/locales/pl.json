@@ -44,5 +44,17 @@
     "goBack": "Wróć",
     "gallery": "Galeria",
     "moreInteriorStyles": "Więcej stylów wnętrz"
+  },
+  "projects": {
+    "project": "Realizacja",
+    "otherProjects": "Inne realizacje",
+    "details": "Szczegóły",
+    "typeOfWork": "Rodzaj prac",
+    "scopeOfWork": "Zakres prac",
+    "materials": "Materiały i wykończenia",
+    "area": "Powierzchnia",
+    "duration": "Czas trwania",
+    "location": "Lokalizacja",
+    "from": "Cena"
   }
 }

@@ -6,24 +6,26 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
-import { RelatedStyleSlide } from './related-style-slide'
-import type { InteriorStyleT } from '@/types/interior-styles'
+import type { ObjectCarouselItemT } from '@/types/object-carousel'
+import { ObjectCarouselSlide } from './object-carousel-slide'
 
 type PropsT = {
+  container: string
   sectionTitle: string
-  basePath: string
-  styles: InteriorStyleT[]
+  items: ObjectCarouselItemT[]
 }
 
-export function RelatedStylesCarousel({ sectionTitle, basePath, styles }: PropsT) {
+// The section that closes a detail page — tdg's `ObjectsSlider`, shared by the interior
+// style pages and the project pages.
+export function ObjectCarousel({ container, sectionTitle, items }: PropsT) {
   // Swiper lays the track out on the client, so the first paint is a stack of
   // full-width slides; held hidden until it reports ready.
   const [isReady, setIsReady] = useState(false)
 
-  if (styles.length < 1) return null
+  if (items.length < 1) return null
 
   return (
-    <section className={twMerge('lg:pt-30 pt-16 duration-200 md:pt-20', !isReady && 'opacity-0')}>
+    <section className={twMerge('duration-200', container, !isReady && 'opacity-0')}>
       <Swiper
         modules={[Autoplay]}
         loop
@@ -34,13 +36,9 @@ export function RelatedStylesCarousel({ sectionTitle, basePath, styles }: PropsT
         centeredSlides
         onSwiper={() => setIsReady(true)}
       >
-        {styles.map((style) => (
-          <SwiperSlide key={style.slug}>
-            <RelatedStyleSlide
-              style={style}
-              href={`${basePath}${style.slug}/`}
-              sectionTitle={sectionTitle}
-            />
+        {items.map((item) => (
+          <SwiperSlide key={item.key}>
+            <ObjectCarouselSlide item={item} sectionTitle={sectionTitle} />
           </SwiperSlide>
         ))}
       </Swiper>

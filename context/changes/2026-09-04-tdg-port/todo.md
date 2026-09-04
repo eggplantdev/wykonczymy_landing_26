@@ -17,9 +17,9 @@ so the review gate is not armed. Run `/10x-new tdg-port` to make it one.
       column placement of the meta row and date is the part most likely to differ.
 - [x] **Style page gallery is a Swiper.** `style-gallery.tsx` — `grabCursor` plus the
       `Keyboard` module, 1.15 / 2.2 / 3 slides per view. Follows the `offers-carousel`
-      idiom (client component, `isReady` opacity guard). Not tdg's `ObjectsSlider` shape
-      (looping, centred, one slide, navigation + pagination) — revisit if the design wants
-      arrows and dots.
+      idiom (client component, `isReady` opacity guard). tdg's `ObjectsSlider` shape
+      (looping, centred, one slide) is now a separate thing — `related-styles-carousel.tsx`,
+      the "More interior styles" section closing every style page.
 - [ ] Port the remaining pages: Oferta (tdg `about` / `textPage`), Realizacje (tdg `object`),
       Kontakt.
 
@@ -35,5 +35,7 @@ so the review gate is not armed. Run `/10x-new tdg-port` to make it one.
 
 ## Dropped from the tdg template, on purpose
 
+- The related-slide category `Tag` — tdg colours each slide by an article category this
+  site has no equivalent for, so the tag and the per-category slide background are gone.
 - Author name, role and avatar on the article meta row — blog furniture with no asset and
   no obvious meaning for an interior style. Reinstate if the design calls for it.

@@ -2,6 +2,7 @@ import type { HomePageDataT } from '@/components/home/home-page'
 import type { MediaImageT } from '@/components/media/types'
 import type { Page } from '@/payload-types'
 import { interiorStyles } from './interior-styles'
+import { projects } from './projects'
 
 // Stand-in for the `home` field group, which arrives with S1. Carried over from tdg's
 // `utils/temp/homeTemplateData.ts` so the ported sections have the shape of content they
@@ -69,32 +70,14 @@ export function homePlaceholder(paths: PathsT): HomePageDataT {
       sectionTitle: 'Recent work',
       ctaLabel: 'See all projects',
       ctaHref: link('completed-works'),
-      slides: [
-        {
-          image: image(
-            project('Zupnicza-19-m57-1.webp'),
-            'Apartment renovation on Zupnicza street',
-          ),
-          video: null,
-          caption: 'Zupnicza 19 — a two-room apartment taken from bare walls to move-in ready.',
-        },
-        {
-          image: image(
-            project('Jastrzebie-Patkow-lesnych-106G-12.webp'),
-            'House renovation in Jastrzębie',
-          ),
-          video: null,
-          caption: 'Pątków Leśnych 106G — a full house renovation, inside and out.',
-        },
-        {
-          image: image(
-            project('Lizbonska-5-m197-1.webp'),
-            'Apartment renovation on Lizbońska street',
-          ),
-          video: null,
-          caption: 'Lizbońska 5 — kitchen and bathroom rebuilt around a new layout.',
-        },
-      ],
+      // The carousel teases the same documents the Realizacje page lists, so it reads
+      // them rather than restating their photos and copy.
+      slides: projects.map((item) => ({
+        image: item.image,
+        video: null,
+        caption: `${item.title} — ${item.summary}`,
+        href: `${link('completed-works')}${item.slug}/`,
+      })),
     },
 
     // Figures come from the published price list, so they stay true to what is actually quoted.

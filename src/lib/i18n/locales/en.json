@@ -44,5 +44,17 @@
     "goBack": "Go back",
     "gallery": "Gallery",
     "moreInteriorStyles": "More interior styles"
+  },
+  "projects": {
+    "project": "Project",
+    "otherProjects": "Other projects",
+    "details": "Details",
+    "typeOfWork": "Type of work",
+    "scopeOfWork": "Scope of work",
+    "materials": "Materials & finishes",
+    "area": "Area",
+    "duration": "Duration",
+    "location": "Location",
+    "from": "From"
   }
 }
