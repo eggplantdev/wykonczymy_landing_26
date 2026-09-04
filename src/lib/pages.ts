@@ -2,6 +2,7 @@ import { cache } from 'react'
 import { getPayload } from 'payload'
 
 import config from '@/payload.config'
+import type { Page } from '@/payload-types'
 import { i18n, type Locale } from '@/lib/i18n/i18n'
 import { HOME_PAGE_TYPE, pathForPage } from '@/lib/routing'
 
@@ -47,3 +48,29 @@ export async function pathsForPage(id: string | number): Promise<Partial<Record<
 
   return paths
 }
+
+// Copy links to a *page*, not to a string: PL and EN slugs differ, so an href written
+// into content is right in at most one locale. Placeholder data names a page type and
+// this turns it into that locale's address.
+export const pathsByType = cache(
+  async (locale: Locale): Promise<Partial<Record<Page['pageType'], string>>> => {
+    const payload = await getPayload({ config: await config })
+
+    const { docs } = await payload.find({
+      collection: 'pages',
+      locale,
+      depth: 0,
+      limit: 1000,
+      where: { _status: { equals: 'published' } },
+    })
+
+    const paths: Partial<Record<Page['pageType'], string>> = {}
+
+    for (const doc of docs) {
+      if (doc.pageType === HOME_PAGE_TYPE || doc.slug)
+        paths[doc.pageType] = pathForPage(doc, locale)
+    }
+
+    return paths
+  },
+)

@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
-import type { InteriorStyleT } from '@/components/interior-styles/types'
+import type { InteriorStyleT } from '@/types/interior-styles'
 import { SectionTitle } from '@/components/layout/section-title'
 import { ButtonLink } from '@/components/ui/button-link'
 import { InteriorStyleSlide } from './interior-style-slide'
