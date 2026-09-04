@@ -3,11 +3,7 @@ import Link from 'next/link'
 
 export function SiteLogo({ homeHref }: { homeHref: string }) {
   return (
-    <Link
-      href={homeHref}
-      aria-label="Wykończymy"
-      className="fixed top-4 left-4 z-50 md:top-6 md:left-6"
-    >
+    <Link href={homeHref} aria-label="Wykończymy">
       <Image
         src="/images/logo-wykonczymy.png"
         alt="Wykończymy"
