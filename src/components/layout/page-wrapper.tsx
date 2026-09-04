@@ -13,7 +13,7 @@ export function PageWrapper({ children, hasHero = true, className }: PropsT) {
   return (
     <div
       className={twMerge(
-        'w-full overflow-x-hidden pb-20 md:pb-40',
+        'w-full overflow-x-hidden',
         className,
         !hasHero && 'pt-20 md:pt-30 lg:pt-40',
       )}

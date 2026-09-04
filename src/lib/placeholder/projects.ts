@@ -133,6 +133,9 @@ export const projectsPlaceholder = {
   projects,
 }
 
+/** The project the home page leads with. A CMS relationship field once S1 lands. */
+export const featuredProjectSlug = 'zupnicza-19'
+
 /** Every other project, so the page always closes on somewhere else to go. */
 export const relatedProjects = (slug: string): ProjectT[] =>
   projects.filter((project) => project.slug !== slug)

@@ -2,7 +2,7 @@ import type { HomePageDataT } from '@/components/home/home-page'
 import type { MediaImageT } from '@/components/media/types'
 import type { Page } from '@/payload-types'
 import { interiorStyles } from './interior-styles'
-import { projects } from './projects'
+import { featuredProjectSlug, projects } from './projects'
 
 // Stand-in for the `home` field group, which arrives with S1. Carried over from tdg's
 // `utils/temp/homeTemplateData.ts` so the ported sections have the shape of content they
@@ -15,6 +15,7 @@ type PathsT = Partial<Record<Page['pageType'], string>>
 
 export function homePlaceholder(paths: PathsT): HomePageDataT {
   const link = (pageType: Page['pageType']) => paths[pageType] ?? '/'
+  const featured = projects.find((item) => item.slug === featuredProjectSlug)
 
   return {
     hero: {
@@ -89,17 +90,13 @@ export function homePlaceholder(paths: PathsT): HomePageDataT {
       styles: interiorStyles,
     },
 
-    featuredProject: {
+    featuredProject: featured && {
       sectionTitle: 'Featured project',
-      projectTitle: 'Pątków Leśnych 106G',
-      projectSubtitle:
-        'A full house renovation in Jastrzębie, finished room by room while the owners stayed in.',
+      projectTitle: featured.title,
+      projectSubtitle: featured.summary,
       ctaLabel: 'See the project',
-      ctaHref: link('completed-works'),
-      image: image(
-        project('Jastrzebie-Patkow-lesnych-106G-13.webp'),
-        'House renovation in Jastrzębie',
-      ),
+      ctaHref: `${link('completed-works')}${featured.slug}/`,
+      image: featured.gallery[1] ?? featured.image,
       video: null,
     },
   }
