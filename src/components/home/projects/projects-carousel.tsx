@@ -7,21 +7,21 @@ import 'swiper/css'
 
 import { SectionTitle } from '@/components/layout/section-title'
 import { ButtonLink } from '@/components/ui/button-link'
-import { OfferSlide, type OfferSlideT } from './offer-slide'
+import { ProjectSlide, type ProjectSlideT } from './project-slide'
 
-export type OffersSectionT = {
+export type ProjectsSectionT = {
   sectionTitle?: string
   ctaLabel?: string
   ctaHref: string
-  slides: OfferSlideT[]
+  slides: ProjectSlideT[]
 }
 
 type PropsT = {
   container: string
-  data: OffersSectionT
+  data: ProjectsSectionT
 }
 
-export function OffersCarousel({ container, data }: PropsT) {
+export function ProjectsCarousel({ container, data }: PropsT) {
   const { slides, ctaLabel, ctaHref, sectionTitle } = data
   const [isReady, setIsReady] = useState(false)
 
@@ -50,7 +50,7 @@ export function OffersCarousel({ container, data }: PropsT) {
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.caption}>
-            <OfferSlide slide={slide} />
+            <ProjectSlide slide={slide} />
           </SwiperSlide>
         ))}
       </Swiper>

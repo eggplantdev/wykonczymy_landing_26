@@ -1,18 +1,18 @@
-import { CarouselControls } from '@/components/carousel/carousel-controls'
 import { Media } from '@/components/media/media'
 import type { MediaImageT, MediaVideoT } from '@/components/media/types'
+import { CarouselControls } from './carousel-controls'
 
-export type OfferSlideT = {
+export type ProjectSlideT = {
   image: MediaImageT | null
   video: MediaVideoT | null
   caption?: string | null
 }
 
 type PropsT = {
-  slide: OfferSlideT
+  slide: ProjectSlideT
 }
 
-export function OfferSlide({ slide }: PropsT) {
+export function ProjectSlide({ slide }: PropsT) {
   const { image, video, caption } = slide
 
   return (
@@ -21,7 +21,7 @@ export function OfferSlide({ slide }: PropsT) {
         <Media
           image={image}
           video={video}
-          sizes="(min-width: 1920px) 1240px, (min-width: 1024px) 67vw, (min-width: 768px) 87vw, 100vw"
+          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 87vw, (max-width: 1919px) 67vw, 1240px"
         />
       </div>
       <CarouselControls title={caption} />
