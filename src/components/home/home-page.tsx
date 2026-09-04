@@ -7,7 +7,7 @@ import {
 } from './interior-styles/interior-styles-carousel'
 import { NumbersSection, type NumbersSectionT } from './numbers/numbers-section'
 import { ProjectsCarousel, type ProjectsSectionT } from './projects-carousel/projects-carousel'
-import { ServicesSection, type ServicesSectionT } from './services/services-section'
+import { ServicesCarousel, type ServicesSectionT } from './services/services-carousel'
 import { TextSection, type TextSectionT } from './text-section'
 
 export type HomePageDataT = {
@@ -35,7 +35,9 @@ export function HomePage({ data }: PropsT) {
       {intro && (
         <TextSection container="gridContainer paddings pt-12 md:pt-30 xl:pt-24" data={intro} />
       )}
-      {services && <ServicesSection container="paddings pt-20 md:pt-24 xl:pt-30" data={services} />}
+      {services && (
+        <ServicesCarousel container="paddings pt-20 md:pt-24 xl:pt-30" data={services} />
+      )}
       {projects && (
         <ProjectsCarousel container="paddings pt-20 md:pt-24 xl:pt-40" data={projects} />
       )}
