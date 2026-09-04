@@ -31,7 +31,7 @@ sitemap's page set is unchanged (`lastmod` 2025-12-19) — nothing has been adde
 | #   | Polish          | English                | Page                                                                            | New address   |
 | --- | --------------- | ---------------------- | ------------------------------------------------------------------------------- | ------------- |
 | 1   | `/`             | `/en/home/`            | Start                                                                           | unchanged     |
-| 2   | `/oferta/`      | `/en/offer/`           | Oferta                                                                          | unchanged     |
+| 2   | `/oferta/`      | `/en/offer/`           | Oferta — **retired 2026-09-04**, its content became tiles on the home page      | **UNDECIDED** |
 | 3   | `/realizacje/`  | `/en/completed-works/` | Realizacje                                                                      | unchanged     |
 | 4   | `/wykonczenia/` | `/en/interior-styles/` | Wykończenia                                                                     | unchanged     |
 | 5   | `/kontakt/`     | `/en/contact/`         | Kontakt                                                                         | unchanged     |
@@ -39,11 +39,16 @@ sitemap's page set is unchanged (`lastmod` 2025-12-19) — nothing has been adde
 
 Plus two redirects that already exist and must keep working: apex → `www`, and `/en/` → `/en/home/`.
 
-Page set resolved 2026-09-02 (PRD Open Question 8): the five surviving pages keep their addresses
-1:1, so only Cennik's two need replacements. Individual project pages are new addresses and appear
-in no row here — they cannot break anything that is indexed today.
+Page set resolved 2026-09-02 (PRD Open Question 8): the surviving pages keep their addresses 1:1,
+so only Cennik's and Oferta's need replacements. Individual project pages are new addresses and
+appear in no row here — they cannot break anything that is indexed today.
 
-**One row is still open.** A row left empty at cutover is the
+**Oferta was retired on 2026-09-04.** The "What we do" section on the home page became a carousel of
+tiles that link nowhere, and the page they used to point at was deleted from the CMS. Four indexed
+addresses now have no target — `/oferta/`, `/en/offer/`, `/cennik/`, `/en/price-list/` — and each
+needs a deliberate `301` before cutover.
+
+**Two rows are still open.** A row left empty at cutover is the
 defect the guardrail exists to prevent. If PRD Open Question 8 changes the page set, a row's target
 changes — the address still has to resolve or redirect deliberately.
 

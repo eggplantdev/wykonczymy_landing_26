@@ -4,11 +4,10 @@ import { APIError } from 'payload'
 import { HOME_PAGE_TYPE } from '@/lib/routing'
 import { revalidatePage, revalidatePageDelete } from './hooks/revalidatePage'
 
-// The six pages of the live site. A page's type selects which conditional field
+// The five pages of the live site. A page's type selects which conditional field
 // group the admin sees; the groups arrive with the slices that render them.
 export const pageTypes = [
   'home',
-  'offer',
   'completed-works',
   'interior-styles',
   'contact',
