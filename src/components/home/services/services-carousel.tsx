@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
+import { carouselDefaults } from '@/lib/carousel'
 import { SectionTitle } from '@/components/layout/section-title'
 import { ServiceSlide, type ServiceCardT } from './service-slide'
 
@@ -31,7 +32,7 @@ export function ServicesCarousel({ container, data }: PropsT) {
       <SectionTitle title={sectionTitle} className="smd:w-full w-1/2 pb-6 md:pb-8 lg:pb-10" />
 
       <Swiper
-        loop
+        {...carouselDefaults}
         spaceBetween={16}
         slidesPerView={1.29}
         breakpoints={{

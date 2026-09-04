@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
+import { carouselDefaults } from '@/lib/carousel'
 import { SectionTitle } from '@/components/layout/section-title'
 import { ButtonLink } from '@/components/ui/button-link'
 import { ProjectSlide, type ProjectSlideT } from './project-slide'
@@ -40,6 +41,7 @@ export function ProjectsCarousel({ container, data }: PropsT) {
         </div>
       </div>
       <Swiper
+        {...carouselDefaults}
         spaceBetween={24}
         slidesPerView={1}
         breakpoints={{

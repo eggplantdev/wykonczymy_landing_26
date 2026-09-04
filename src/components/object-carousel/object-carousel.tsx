@@ -1,11 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Autoplay } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
+import { carouselDefaults } from '@/lib/carousel'
 import type { ObjectCarouselItemT } from '@/types/object-carousel'
 import { ObjectCarouselSlide } from './object-carousel-slide'
 
@@ -27,10 +27,7 @@ export function ObjectCarousel({ container, sectionTitle, items }: PropsT) {
   return (
     <section className={twMerge('duration-200', container, !isReady && 'opacity-0')}>
       <Swiper
-        modules={[Autoplay]}
-        loop
-        autoplay={{ delay: 5000 }}
-        speed={200}
+        {...carouselDefaults}
         spaceBetween={24}
         slidesPerView={1}
         centeredSlides

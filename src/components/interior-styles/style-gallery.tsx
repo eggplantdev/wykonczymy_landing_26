@@ -1,11 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Keyboard } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
+import { carouselDefaults } from '@/lib/carousel'
 import { Media } from '@/components/media/media'
 import type { MediaImageT } from '@/components/media/types'
 
@@ -26,9 +26,7 @@ export function StyleGallery({ title, images }: PropsT) {
       <h2 className="text-22 md:text-28 lg:text-36 mb-6 font-medium md:mb-8">{title}</h2>
 
       <Swiper
-        modules={[Keyboard]}
-        grabCursor
-        keyboard
+        {...carouselDefaults}
         spaceBetween={16}
         slidesPerView={1.15}
         breakpoints={{

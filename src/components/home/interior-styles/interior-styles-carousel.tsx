@@ -1,11 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Autoplay, Keyboard } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
+import { carouselDefaults } from '@/lib/carousel'
 import type { InteriorStyleT } from '@/types/interior-styles'
 import { SectionTitle } from '@/components/layout/section-title'
 import { ButtonLink } from '@/components/ui/button-link'
@@ -35,12 +35,7 @@ export function InteriorStylesCarousel({ container, data }: PropsT) {
     <section className={twMerge(container, !isReady && 'opacity-0')}>
       <SectionTitle title={sectionTitle} className="pb-6 md:pb-8 lg:pb-10" />
       <Swiper
-        loop
-        modules={[Autoplay, Keyboard]}
-        autoplay={{ delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true }}
-        speed={200}
-        grabCursor
-        keyboard={{ enabled: true }}
+        {...carouselDefaults}
         slidesPerView="auto"
         className="xlg:mb-10 mb-8"
         onSwiper={() => setIsReady(true)}
