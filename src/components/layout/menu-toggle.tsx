@@ -24,7 +24,7 @@ const OPEN_DURATION_MS = 520
 const CLOSE_DURATION_MS = 820
 
 // White strokes inverted against whatever they sit over, so one icon reads on a photo,
-// on white page sections and on the panel it slides over. Difference only sees the
+// on white page sections and on the menu it slides over. Difference only sees the
 // backdrop of the nearest stacking-context ancestor, which is why the button positions
 // itself instead of sitting inside the fixed header.
 export function MenuToggle({ label, isOpen, onClick, className, ...ariaProps }: PropsT) {
@@ -51,7 +51,7 @@ export function MenuToggle({ label, isOpen, onClick, className, ...ariaProps }: 
         width="48"
         className={twMerge(
           'transition-[translate,rotate]',
-          isOpen && 'translate-[-2px_-2px] rotate-45',
+          isOpen && '-translate-x-0.5 -translate-y-0.5 rotate-45',
         )}
         style={{ transitionDuration: `${durationMs}ms` }}
       >

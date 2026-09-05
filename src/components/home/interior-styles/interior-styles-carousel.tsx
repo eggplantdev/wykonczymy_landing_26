@@ -1,12 +1,11 @@
 'use client'
 
-import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
-import { carouselDefaults } from '@/lib/carousel'
-import type { InteriorStyleT } from '@/types/interior-styles'
+import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
+import type { InteriorStyleT } from '@/lib/content/interior-styles'
 import { SectionTitle } from '@/components/layout/section-title'
 import { ButtonLink } from '@/components/ui/button-link'
 import { InteriorStyleSlide } from './interior-style-slide'
@@ -25,22 +24,21 @@ type PropsT = {
 
 export function InteriorStylesCarousel({ container, data }: PropsT) {
   const { sectionTitle, ctaLabel, ctaHref, styles } = data
-  // Swiper lays the track out on the client, so the first paint is a stack of
-  // full-width slides; held hidden until it reports ready.
-  const [isReady, setIsReady] = useState(false)
+  const carousel = useCarouselReady()
 
   if (styles.length < 1) return null
 
   return (
-    <section className={twMerge(container, !isReady && 'opacity-0')}>
+    <section className={twMerge(container, carousel.className)}>
       <SectionTitle title={sectionTitle} className="pb-6 md:pb-8 lg:pb-10" />
       <Swiper
         {...carouselDefaults}
         slidesPerView="auto"
         className="xlg:mb-10 mb-8"
-        onSwiper={() => setIsReady(true)}
+        onSwiper={carousel.onSwiper}
       >
-        {/* Every card goes to the listing page: the styles have no addresses of their own. */}
+        {/* The home teaser sends every card to the listing; a style's own page is reached
+            from there, not from here. */}
         {styles.map((style) => (
           <SwiperSlide key={style.id} className="w-auto!">
             <InteriorStyleSlide style={style} href={ctaHref} />

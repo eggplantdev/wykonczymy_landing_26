@@ -4,7 +4,7 @@ import { Arrow } from '@/components/ui/icons/arrow'
 import { Media } from '@/components/media/media'
 import { SpecStrip } from '@/components/ui/spec-strip'
 import type { MediaImageT } from '@/components/media/types'
-import type { SpecItemT } from '@/types/projects'
+import type { SpecItemT } from '@/components/ui/spec-item'
 
 type PropsT = {
   href: string
@@ -22,7 +22,7 @@ export function ProjectRow({ href, title, summary, image, details }: PropsT) {
       href={href}
       className="gridContainer paddings group bg-transparent py-8 delay-100 duration-1000 hover:bg-grau_900 lg:py-12"
     >
-      <div className="relative col-span-full mb-6 aspect-[3/2] overflow-hidden md:order-2 md:col-span-4 md:col-start-5 md:mb-0 lg:col-span-6 lg:col-start-7">
+      <div className="relative col-span-full mb-6 aspect-3/2 overflow-hidden md:order-2 md:col-span-4 md:col-start-5 md:mb-0 lg:col-span-6 lg:col-start-7">
         <Media image={image} sizes="(max-width: 767px) 100vw, 50vw" />
       </div>
 

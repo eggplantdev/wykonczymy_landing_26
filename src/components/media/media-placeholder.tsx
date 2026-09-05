@@ -15,12 +15,13 @@ const GRADIENTS: Record<PlaceholderTypeT, string> = {
   light: 'bg-linear-to-r from-grau_600/0 via-grau_900/50 to-grau_400',
 }
 
-// Sits behind the image rather than swapping with it: `next/image` fades in over the
-// pulse, so a slow photo never leaves a bare box.
+// Sits behind the image rather than swapping with it, so a slow photo never leaves a
+// bare box — and stays visible for media that never arrives, which is why it is a
+// static gradient and not a loading pulse.
 export function MediaPlaceholder({ type = 'default', className, children }: PropsT) {
   return (
     <div className="relative h-full w-full">
-      <div className={twMerge('h-full w-full animate-pulse', className, GRADIENTS[type])} />
+      <div className={twMerge('h-full w-full', className, GRADIENTS[type])} />
       <div className="absolute inset-0">{children}</div>
     </div>
   )

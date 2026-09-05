@@ -1,5 +1,5 @@
 import { Media } from '@/components/media/media'
-import type { ProjectT } from '@/types/projects'
+import type { ProjectT } from '@/lib/content/projects'
 
 type PropsT = {
   project: ProjectT
@@ -18,7 +18,7 @@ export function ProjectHero({ project }: PropsT) {
       <div className="paddings relative flex h-full w-full flex-col items-start justify-end pb-5 text-white md:pb-12 xl:pb-10">
         <h1 className="text-18 xl:text-24 mb-6 md:leading-[111%] xl:leading-normal">{title}</h1>
         <div className="w-full justify-between xl:flex">
-          <p className={`mb-4 max-w-[402px] md:mb-10 xl:mb-0 xl:max-w-[887px] ${textStyle}`}>
+          <p className={`mb-4 max-w-100.5 md:mb-10 xl:mb-0 xl:max-w-221.75 ${textStyle}`}>
             {summary}
           </p>
           <div className={`gap-x-2 md:flex xl:flex-col ${textStyle}`}>

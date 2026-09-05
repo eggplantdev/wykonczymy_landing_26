@@ -2,9 +2,27 @@ import { i18n, isLocale, type Locale } from '@/lib/i18n/i18n'
 
 type PageAddressT = { slug?: string | null; pageType?: string | null }
 
+// The five pages of the live site. A page's type selects which conditional field group
+// the admin sees, and it is how content links to a page: PL and EN slugs differ, so an
+// href written into a field would be right in at most one locale.
+export const pageTypes = [
+  'home',
+  'completed-works',
+  'interior-styles',
+  'contact',
+  'price-list',
+] as const
+
+export type PageTypeT = (typeof pageTypes)[number]
+
 // There is exactly one page per type, so the type already says which document owns
 // the root — a separate flag could only ever disagree with it.
 export const HOME_PAGE_TYPE = 'home'
+
+// The two page types with children. A second segment under anything else is not an
+// address — see resolveSegments.
+export const PROJECTS_PAGE_TYPE = 'completed-works'
+export const INTERIOR_STYLES_PAGE_TYPE = 'interior-styles'
 
 export type ResolvedSegmentsT = {
   locale: Locale
@@ -25,6 +43,19 @@ export function pathForPage(page: PageAddressT, locale: Locale, childSlug?: stri
   return `${prefix}/${page.slug}/${child}`
 }
 
+// A child hangs off its parent's address. Six call sites used to concatenate this by
+// hand, which put the trailing-slash rule — the thing all twelve indexed addresses
+// depend on — in six places instead of one.
+export function childPath(basePath: string, slug: string): string {
+  return `${basePath}${slug}/`
+}
+
+// The address a locale switch lands on when there is no counterpart page. Only Polish
+// has a bare root; `/en/` is a redirect, so English resolves through the home page.
+export function localeRoot(locale: Locale, homeSlug = HOME_PAGE_TYPE): string {
+  return locale === i18n.defaultLocale ? '/' : `/${locale}/${homeSlug}/`
+}
+
 export function segmentsForPage(page: PageAddressT, locale: Locale, childSlug?: string): string[] {
   return pathForPage(page, locale, childSlug).split('/').filter(Boolean)
 }
@@ -39,22 +70,15 @@ export function segmentsForPage(page: PageAddressT, locale: Locale, childSlug?: 
 // route decides.
 export function resolveSegments(segments?: string[]): ResolvedSegmentsT {
   const parts = segments ?? []
-  const [first, ...rest] = parts
-
-  if (first !== undefined && isLocale(first) && first !== i18n.defaultLocale) {
-    return {
-      locale: first,
-      slug: rest[0] ?? null,
-      childSlug: rest[1] ?? null,
-      isMiss: rest.length > 2,
-    }
-  }
+  const [first] = parts
+  const hasPrefix = first !== undefined && isLocale(first) && first !== i18n.defaultLocale
+  const rest = hasPrefix ? parts.slice(1) : parts
 
   return {
-    locale: i18n.defaultLocale,
-    slug: parts[0] ?? null,
-    childSlug: parts[1] ?? null,
-    isMiss: parts.length > 2,
+    locale: hasPrefix ? first : i18n.defaultLocale,
+    slug: rest[0] ?? null,
+    childSlug: rest[1] ?? null,
+    isMiss: rest.length > 2,
   }
 }
 

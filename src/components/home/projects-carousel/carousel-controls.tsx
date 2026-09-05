@@ -8,11 +8,12 @@ import { CarouselCounter } from './carousel-counter'
 
 type PropsT = {
   title?: string | null
+  total: number
 }
 
 // Rendered inside every slide, not once beside the track — the caption belongs to the
 // slide, so the inactive copies are faded out rather than hidden.
-export function CarouselControls({ title }: PropsT) {
+export function CarouselControls({ title, total }: PropsT) {
   const swiperSlide = useSwiperSlide()
   const swiper = useSwiper()
 
@@ -23,8 +24,8 @@ export function CarouselControls({ title }: PropsT) {
         swiperSlide?.isActive ? 'opacity-100' : 'opacity-0',
       )}
     >
-      <h6 className="w-[190px] md:order-2 md:w-auto md:px-[58px]">{title}</h6>
-      <CarouselCounter />
+      <h6 className="w-47.5 md:order-2 md:w-auto md:px-14.5">{title}</h6>
+      <CarouselCounter total={total} />
       <div className="order-3 ml-auto hidden gap-x-2.5 md:flex">
         <CarouselArrow direction="left" disabled={swiper.isBeginning} />
         <CarouselArrow direction="right" disabled={swiper.isEnd} />

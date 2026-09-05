@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { Media } from '@/components/media/media'
-import type { ObjectCarouselItemT } from '@/types/object-carousel'
+import type { ObjectCarouselItemT } from '@/components/object-carousel/types'
 import { SpecStrip } from '@/components/ui/spec-strip'
 
 type PropsT = {
@@ -9,8 +9,7 @@ type PropsT = {
   sectionTitle: string
 }
 
-// The body of one carousel slide, also used as a row on the projects listing — image on
-// the right from tablet up, heading and blurb on the left.
+// Image on the right from tablet up, heading and blurb on the left.
 export function ObjectSlideContent({ item, sectionTitle }: PropsT) {
   const { href, title, text, image, details } = item
 
@@ -18,7 +17,7 @@ export function ObjectSlideContent({ item, sectionTitle }: PropsT) {
     <Link href={href} className="gridContainer col-span-full lg:col-span-10 lg:grid-cols-10">
       <h2 className="text-14 col-span-full my-6 font-medium md:hidden">{sectionTitle}</h2>
 
-      <div className="relative col-span-full mb-6 aspect-[312/209] overflow-hidden md:order-2 md:col-span-3 md:col-start-6 md:mb-0 md:aspect-auto lg:col-span-4 lg:col-start-7">
+      <div className="relative col-span-full mb-6 aspect-312/209 overflow-hidden md:order-2 md:col-span-3 md:col-start-6 md:mb-0 md:aspect-auto lg:col-span-4 lg:col-start-7">
         <Media image={image} sizes="(max-width: 767px) 100vw, 33vw" />
       </div>
 

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { Button, type ButtonVariantT } from './button'
+import { buttonClasses, buttonLabelClasses, type ButtonVariantT } from './button'
 
 type PropsT = {
   href: string
@@ -13,8 +13,8 @@ export function ButtonLink({ href, label, variant = 'light', className }: PropsT
   if (!label) return null
 
   return (
-    <Link href={href}>
-      <Button label={label} variant={variant} className={className} />
+    <Link href={href} className={buttonClasses({ variant, className })}>
+      <span className={buttonLabelClasses({ variant })}>{label}</span>
     </Link>
   )
 }

@@ -1,15 +1,15 @@
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { ObjectCarousel } from '@/components/object-carousel/object-carousel'
 import { getTranslations, type Locale } from '@/lib/i18n/i18n'
-import type { ProjectT } from '@/types/projects'
+import type { ProjectT } from '@/lib/content/projects'
 import { ProjectDescription } from './project-description'
 import { ProjectGallery } from './project-gallery'
 import { ProjectHero } from './project-hero'
+import { childPath } from '@/lib/routing'
 
 type PropsT = {
   locale: Locale
   project: ProjectT
-  // The listing page's own address; every project hangs off it as `<basePath><slug>/`.
   basePath: string
   related: ProjectT[]
 }
@@ -49,7 +49,7 @@ export function ProjectPage({ locale, project, basePath, related }: PropsT) {
         sectionTitle={projects.otherProjects}
         items={related.map((item) => ({
           key: item.slug,
-          href: `${basePath}${item.slug}/`,
+          href: childPath(basePath, item.slug),
           title: item.title,
           text: item.summary,
           image: item.image,

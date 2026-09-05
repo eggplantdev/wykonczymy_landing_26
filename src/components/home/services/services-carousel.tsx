@@ -1,11 +1,10 @@
 'use client'
 
-import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
-import { carouselDefaults } from '@/lib/carousel'
+import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
 import { SectionTitle } from '@/components/layout/section-title'
 import { ServiceSlide, type ServiceCardT } from './service-slide'
 
@@ -21,14 +20,12 @@ type PropsT = {
 
 export function ServicesCarousel({ container, data }: PropsT) {
   const { sectionTitle, cards } = data
-  // Swiper lays the track out on the client, so the first paint is a stack of
-  // full-width slides; held hidden until it reports ready.
-  const [isReady, setIsReady] = useState(false)
+  const carousel = useCarouselReady()
 
   if (cards.length < 1) return null
 
   return (
-    <section className={twMerge(container, 'col-span-full pr-0', !isReady && 'opacity-0')}>
+    <section className={twMerge(container, 'col-span-full pr-0', carousel.className)}>
       <SectionTitle title={sectionTitle} className="smd:w-full w-1/2 pb-6 md:pb-8 lg:pb-10" />
 
       <Swiper
@@ -40,7 +37,7 @@ export function ServicesCarousel({ container, data }: PropsT) {
           1024: { spaceBetween: 22, slidesPerView: 2.2 },
           1280: { spaceBetween: 24, slidesPerView: 2.5 },
         }}
-        onSwiper={() => setIsReady(true)}
+        onSwiper={carousel.onSwiper}
       >
         {cards.map((card) => (
           <SwiperSlide key={card.title}>

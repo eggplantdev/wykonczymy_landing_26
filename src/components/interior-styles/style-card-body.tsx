@@ -1,7 +1,7 @@
 import { twMerge } from 'tailwind-merge'
 
 import { Media } from '@/components/media/media'
-import type { InteriorStyleT } from '@/types/interior-styles'
+import type { InteriorStyleT } from '@/lib/content/interior-styles'
 
 type PropsT = {
   style: InteriorStyleT
@@ -19,7 +19,7 @@ export function StyleCardBody({ style, imageClassName, sizes }: PropsT) {
       <header className="text-14 md:text-18 xlg:text-20 leading-120 xlg:h-12 mb-3 line-clamp-2 h-8.5 font-medium md:h-11">
         {title}
       </header>
-      <div className="text-12 md:leading-135 xlg:line-clamp-4 xlg:h-16 mb-5 line-clamp-5 h-[4.375rem] md:mb-6 md:h-20">
+      <div className="text-12 md:leading-135 xlg:line-clamp-4 xlg:h-16 mb-5 line-clamp-5 h-17.5 md:mb-6 md:h-20">
         {text}
       </div>
       <div className={twMerge('relative overflow-hidden', imageClassName)}>

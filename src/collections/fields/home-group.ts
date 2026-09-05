@@ -1,0 +1,120 @@
+import type { Field } from 'payload'
+
+import { HOME_PAGE_TYPE, pageTypes } from '@/lib/routing'
+
+// Copy links to a *page*, not to a string: PL and EN slugs differ, so an href written
+// into a field is right in at most one locale. There is one page per type, so the type
+// is the whole address.
+const ctaFields = (): Field[] => [
+  { name: 'ctaLabel', type: 'text', localized: true },
+  {
+    name: 'ctaLink',
+    type: 'select',
+    options: [...pageTypes],
+    admin: { description: 'The page the button opens, in whichever language is being read.' },
+  },
+]
+
+const mediaFields = (): Field[] => [
+  { name: 'image', type: 'upload', relationTo: 'media' },
+  {
+    name: 'video',
+    type: 'upload',
+    relationTo: 'media',
+    admin: { description: 'Plays over the image when set.' },
+  },
+]
+
+// The home page's sections. Their order and the rhythm between them are layout, owned by
+// HomePage — an editor fills each section in, never rearranges them.
+export const homeGroup: Field = {
+  name: 'home',
+  type: 'group',
+  label: 'Home page',
+  admin: { condition: (data) => data?.pageType === HOME_PAGE_TYPE },
+  fields: [
+    {
+      name: 'hero',
+      type: 'group',
+      fields: [{ name: 'title', type: 'text', localized: true }, ...mediaFields(), ...ctaFields()],
+    },
+    {
+      name: 'intro',
+      type: 'group',
+      fields: [
+        { name: 'text', type: 'textarea', localized: true },
+        {
+          name: 'position',
+          type: 'select',
+          defaultValue: 'left',
+          options: ['left', 'right'],
+        },
+      ],
+    },
+    {
+      name: 'services',
+      type: 'group',
+      fields: [
+        { name: 'sectionTitle', type: 'text', localized: true },
+        {
+          name: 'cards',
+          type: 'array',
+          // Not localized: the row set and its photos are shared, only the copy differs.
+          admin: { initCollapsed: true },
+          fields: [
+            { name: 'title', type: 'text', localized: true, required: true },
+            { name: 'text', type: 'textarea', localized: true },
+            ...mediaFields(),
+          ],
+        },
+      ],
+    },
+    {
+      name: 'projects',
+      type: 'group',
+      label: 'Projects carousel',
+      admin: { description: 'Teases every published project — the slides are not curated here.' },
+      fields: [{ name: 'sectionTitle', type: 'text', localized: true }, ...ctaFields()],
+    },
+    {
+      name: 'numbers',
+      type: 'group',
+      fields: [
+        { name: 'sectionTitle', type: 'text', localized: true },
+        {
+          name: 'cards',
+          type: 'array',
+          admin: { initCollapsed: true },
+          fields: [
+            { name: 'value', type: 'number', required: true },
+            { name: 'unit', type: 'text', localized: true },
+            { name: 'description', type: 'text', localized: true },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'interiorStyles',
+      type: 'group',
+      label: 'Interior styles carousel',
+      admin: {
+        description: 'Teases every published interior style — the slides are not curated here.',
+      },
+      fields: [{ name: 'sectionTitle', type: 'text', localized: true }, ...ctaFields()],
+    },
+    {
+      name: 'featuredProject',
+      type: 'group',
+      fields: [
+        { name: 'sectionTitle', type: 'text', localized: true },
+        { name: 'ctaLabel', type: 'text', localized: true },
+        {
+          name: 'project',
+          type: 'relationship',
+          relationTo: 'projects',
+          admin: { description: 'Its title, summary and photo are read from the project itself.' },
+        },
+      ],
+    },
+  ],
+}

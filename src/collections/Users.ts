@@ -6,8 +6,14 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
   },
   auth: true,
-  fields: [
-    // Email added by default
-    // Add more fields as needed
-  ],
+  // A single editor account per person, created in the admin. Nothing here is public,
+  // so every operation requires a logged-in user rather than Payload's default of an
+  // open `create`.
+  access: {
+    create: ({ req }) => Boolean(req.user),
+    read: ({ req }) => Boolean(req.user),
+    update: ({ req }) => Boolean(req.user),
+    delete: ({ req }) => Boolean(req.user),
+  },
+  fields: [],
 }

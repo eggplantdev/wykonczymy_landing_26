@@ -9,6 +9,7 @@
   --font-sans: var(--font-riforma), ui-sans-serif, system-ui, sans-serif;
 
   --text-*: initial;
+  --text-8: 0.5rem;
   --text-10: 0.625rem;
   --text-12: 0.75rem;
   --text-14: 0.875rem;
@@ -102,16 +103,12 @@
   --leading-130: 130%;
   --leading-135: 135%;
   --leading-140: 140%;
+  --leading-150: 150%;
 
   --shadow-header: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
 }
 
 @layer base {
-  :root {
-    --headerH: 4.25rem;
-    --headerHMd: 6.5rem;
-  }
-
   /* tdg sets this on `*`, so lifted markup inherits the browser keyword rather than
      Tailwind's 1.5 — dropping it reflows every section. */
   * {

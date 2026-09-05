@@ -1,27 +1,15 @@
 import type { CollectionConfig } from 'payload'
 import { APIError } from 'payload'
 
-import { HOME_PAGE_TYPE } from '@/lib/routing'
+import { HOME_PAGE_TYPE, pageTypes } from '@/lib/routing'
+import { publishedOnly } from './access/published-only'
+import { homeGroup } from './fields/home-group'
+import { slugField } from './fields/slug'
 import { revalidatePage, revalidatePageDelete } from './hooks/revalidatePage'
-
-// The five pages of the live site. A page's type selects which conditional field
-// group the admin sees; the groups arrive with the slices that render them.
-export const pageTypes = [
-  'home',
-  'completed-works',
-  'interior-styles',
-  'contact',
-  'price-list',
-] as const
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
-  access: {
-    // Payload mounts a public REST/GraphQL surface, and `drafts: true` makes an
-    // unpublished version readable through it. Anonymous callers get published rows
-    // only; the filter has to live here, not just in the route's query.
-    read: ({ req: { user } }) => (user ? true : { _status: { equals: 'published' } }),
-  },
+  access: { read: publishedOnly },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'pageType'],
@@ -70,23 +58,9 @@ export const Pages: CollectionConfig = {
       localized: true,
       required: true,
     },
-    {
-      name: 'slug',
-      type: 'text',
-      localized: true,
-      required: true,
-      index: true,
-      // Free text here becomes a URL. A slug with a space or a slash builds an href
-      // that cannot be resolved back to the document.
-      validate: (value: string | null | undefined) =>
-        typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)
-          ? true
-          : 'Use lowercase letters, digits and single hyphens only (e.g. "price-list").',
-      admin: {
-        description:
-          'The address segment, without slashes. Indexed by Google — see context/foundation/url-map.md before changing one.',
-      },
-    },
+    slugField(
+      'The address segment, without slashes. Indexed by Google — see context/foundation/url-map.md before changing one.',
+    ),
     {
       name: 'pageType',
       type: 'select',
@@ -96,5 +70,6 @@ export const Pages: CollectionConfig = {
         description: 'Selects the page\u2019s field group. The "home" page also serves at /.',
       },
     },
+    homeGroup,
   ],
 }

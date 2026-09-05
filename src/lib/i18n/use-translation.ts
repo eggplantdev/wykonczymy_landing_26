@@ -1,3 +1,5 @@
+'use client'
+
 import { useCallback } from 'react'
 import { useI18nContext } from './translations-provider'
 import type { NamespaceT, TranslationKeyT } from './i18n'

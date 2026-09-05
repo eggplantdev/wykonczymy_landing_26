@@ -9,8 +9,11 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
+import { InteriorStyles } from './collections/InteriorStyles'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
+import { Projects } from './collections/Projects'
+import { Footer } from './globals/Footer'
 import { i18n } from './lib/i18n/i18n'
 import { Users } from './collections/Users'
 // Parsed here rather than imported from env.server.ts: the Payload CLI loads this file
@@ -29,7 +32,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages],
+  collections: [Users, Media, Pages, Projects, InteriorStyles],
+  globals: [Footer],
   editor: lexicalEditor(),
   // Both indexed languages ship together; an English-incomplete launch is a
   // regression, so neither locale falls back to the other.
@@ -74,7 +78,10 @@ export default buildConfig({
       token: env.BLOB_READ_WRITE_TOKEN ?? '',
       addRandomSuffix: true,
     }),
+    // Without `collections` the plugin adds its fields to nothing, so the admin has no
+    // meta title/description to fill and the routes have none to render.
     seoPlugin({
+      collections: ['pages', 'interior-styles', 'projects'],
       uploadsCollection: 'media',
     }),
   ],

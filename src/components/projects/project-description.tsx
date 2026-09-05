@@ -1,6 +1,6 @@
 import { SpecTable } from '@/components/ui/spec-table'
 import { SpecGroupHeading } from './spec-group-heading'
-import type { SpecItemT } from '@/types/projects'
+import type { SpecItemT } from '@/components/ui/spec-item'
 
 type PropsT = {
   container: string

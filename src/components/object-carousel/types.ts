@@ -1,5 +1,5 @@
 import type { MediaImageT } from '@/components/media/types'
-import type { SpecItemT } from '@/types/projects'
+import type { SpecItemT } from '@/components/ui/spec-item'
 
 // tdg's `ObjectSlideT` and `NewsSlideT` were two near-identical shapes kept in step by
 // hand and told apart at runtime; one shape with an optional detail strip serves both.

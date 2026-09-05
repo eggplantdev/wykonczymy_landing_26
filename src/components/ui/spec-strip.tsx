@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge'
 
-import type { SpecItemT } from '@/types/projects'
+import type { SpecItemT } from '@/components/ui/spec-item'
 
 type PropsT = {
   items: SpecItemT[]

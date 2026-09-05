@@ -3,10 +3,10 @@ import type { ReactNode } from 'react'
 import { MobileMenu } from '@/components/layout/mobile-menu'
 import { SiteHeader } from '@/components/layout/site-header'
 import { SiteFooter } from '@/components/footer/site-footer'
-import { footerPlaceholder } from '@/lib/placeholder/footer'
+import { findFooter } from '@/lib/content/footer'
 import { TranslationsProvider } from '@/lib/i18n/translations-provider'
 import { findPage, pathsByType, pathsForPage } from '@/lib/pages'
-import { HOME_PAGE_TYPE, resolveSegments } from '@/lib/routing'
+import { resolveSegments } from '@/lib/routing'
 
 type ParamsT = { segments?: string[] }
 
@@ -24,14 +24,17 @@ export default async function SegmentLayout({
   params: Promise<ParamsT>
 }) {
   const { locale, slug } = resolveSegments((await params).segments)
-  const page = await findPage(locale, slug)
-  const typePaths = await pathsByType(locale)
+  const [page, typePaths, footer] = await Promise.all([
+    findPage(locale, slug),
+    pathsByType(locale),
+    findFooter(locale),
+  ])
+  // The only dependent lookup — it needs the page's id.
   const paths = page ? await pathsForPage(page.id) : {}
-  const footer = footerPlaceholder(locale)
 
   return (
     <TranslationsProvider locale={locale}>
-      <SiteHeader homeHref={typePaths[HOME_PAGE_TYPE] ?? '/'} paths={paths} typePaths={typePaths} />
+      <SiteHeader paths={paths} typePaths={typePaths} />
       <MobileMenu paths={paths} typePaths={typePaths} phone={footer.phone} />
       {/* The background is painted here rather than on body: a background on html/body
           propagates to the browser canvas, which is not part of the root group's

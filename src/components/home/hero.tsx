@@ -1,8 +1,6 @@
-import Link from 'next/link'
-
 import { Media } from '@/components/media/media'
 import type { MediaImageT, MediaVideoT } from '@/components/media/types'
-import { Button } from '@/components/ui/button'
+import { ButtonLink } from '@/components/ui/button-link'
 
 export type HeroT = {
   title: string
@@ -24,15 +22,12 @@ export function Hero({ data }: PropsT) {
       <div className="absolute inset-0 flex">
         <Media image={image} video={video} priority sizes="100vw" />
       </div>
-      <div className="absolute inset-0 flex">
-        <Media image={image} video={video} priority sizes="100vw" />
-      </div>
       <div className="relative flex h-full flex-col items-center justify-center text-white">
         <p className="text-32 md:text-40 xl:text-58 mx-10 text-center">{title}</p>
         {ctaLabel && ctaHref && (
-          <Link href={ctaHref} className="pt-6 md:pt-10">
-            <Button label={ctaLabel} variant="light" />
-          </Link>
+          <div className="pt-6 md:pt-10">
+            <ButtonLink href={ctaHref} label={ctaLabel} variant="light" />
+          </div>
         )}
       </div>
     </section>

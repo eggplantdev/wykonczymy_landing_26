@@ -17,7 +17,7 @@ export function ServiceSlide({ card }: PropsT) {
 
   return (
     <div className="shrink-0 px-4 pt-3 pb-4 md:pb-6">
-      <div className="relative aspect-[233/156] md:aspect-[400/381]">
+      <div className="relative aspect-233/156 md:aspect-400/381">
         <Media
           image={image}
           video={video}
@@ -29,7 +29,7 @@ export function ServiceSlide({ card }: PropsT) {
       <header className="text-18 md:text-20 mb-3 line-clamp-1 pt-4 font-medium md:mb-4 md:pt-8">
         {title}
       </header>
-      <div className="text-12 md:text-14 md:leading-130 line-clamp-7 h-[6.125rem] overflow-hidden md:h-[5.625rem]">
+      <div className="text-12 md:text-14 md:leading-130 line-clamp-7 h-24.5 overflow-hidden md:h-22.5">
         {text}
       </div>
     </div>

@@ -3,12 +3,12 @@ import { Media } from '@/components/media/media'
 import { getTranslations, type Locale } from '@/lib/i18n/i18n'
 import { ObjectCarousel } from '@/components/object-carousel/object-carousel'
 import { StyleGallery } from './style-gallery'
-import type { InteriorStyleT } from '@/types/interior-styles'
+import type { InteriorStyleT } from '@/lib/content/interior-styles'
+import { childPath } from '@/lib/routing'
 
 type PropsT = {
   locale: Locale
   style: InteriorStyleT
-  // The listing page's own address; every style hangs off it as `<basePath><slug>/`.
   basePath: string
   related: InteriorStyleT[]
 }
@@ -31,11 +31,7 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
             {title}
           </h1>
           <div className="relative mb-8 h-80 overflow-hidden md:mb-12 md:h-88 xl:h-140">
-            <Media
-              image={image}
-              priority
-              sizes="(max-width: 1023px) 100vw, (max-width: 1919px) 80vw, 1240px"
-            />
+            <Media image={image} priority sizes="(max-width: 1023px) 100vw, 80vw" />
           </div>
         </header>
 
@@ -47,7 +43,7 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
             </p>
           ))}
 
-          <div className="relative my-10 aspect-[312/238] overflow-hidden md:my-8 md:aspect-[523/342] lg:my-12 lg:aspect-[661/432]">
+          <div className="relative my-10 aspect-312/238 overflow-hidden md:my-8 md:aspect-523/342 lg:my-12 lg:aspect-661/432">
             <Media
               image={contentImage}
               sizes="(max-width: 767px) 100vw, (max-width: 1023px) 72vw, 48vw"
@@ -69,7 +65,7 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
         sectionTitle={common.moreInteriorStyles}
         items={related.map((item) => ({
           key: item.slug,
-          href: `${basePath}${item.slug}/`,
+          href: childPath(basePath, item.slug),
           title: item.title,
           text: item.text,
           image: item.image,

@@ -1,5 +1,5 @@
-// Shaped after Payload's `Media` upload type so the placeholder data and a real CMS
-// document are interchangeable at the call site once the home field group exists.
+// What a component needs off a Payload `Media` document. The mappers in lib/content
+// narrow to this, so an unpopulated upload is `null` at the call site rather than an id.
 export type MediaImageT = {
   url: string
   alt: string

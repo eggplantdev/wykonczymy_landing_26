@@ -13,8 +13,7 @@ type PropsT = {
   className?: string
 }
 
-// One entry point for both media kinds so a section never branches on which one the CMS
-// happens to hold; video wins when both are set, matching tdg.
+// Video wins when both are set, matching tdg.
 export function Media({
   image,
   video,

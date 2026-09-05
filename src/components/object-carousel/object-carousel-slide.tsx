@@ -1,5 +1,5 @@
 import { CarouselArrow } from '@/components/ui/carousel-arrow'
-import type { ObjectCarouselItemT } from '@/types/object-carousel'
+import type { ObjectCarouselItemT } from '@/components/object-carousel/types'
 import { ObjectSlideContent } from './object-slide-content'
 
 type PropsT = {

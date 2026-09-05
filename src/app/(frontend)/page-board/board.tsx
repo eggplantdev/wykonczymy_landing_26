@@ -23,7 +23,7 @@ export function Board({ manifest }: PropsT) {
       <header className="sticky top-0 z-20 border-b border-stone-300 bg-stone-100/90 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/90">
         <div className="mx-auto flex max-w-[1600px] flex-wrap items-baseline gap-x-6 gap-y-2 px-6 py-4">
           <h1 className="text-xl font-semibold tracking-tight">tdg — page board</h1>
-          <p className="font-mono text-xs text-stone-500 dark:text-zinc-400">
+          <p className="font-mono text-12 text-stone-500 dark:text-zinc-400">
             {rendered} routes × {viewports.length} breakpoints · captured {capturedAt}
           </p>
           <div className="ml-auto flex flex-wrap gap-1.5">
@@ -58,7 +58,7 @@ export function Board({ manifest }: PropsT) {
             >
               <header className="flex items-center gap-3 border-b border-stone-300 bg-stone-200/60 px-3 py-2 dark:border-zinc-800 dark:bg-zinc-800/60">
                 <code className="truncate text-[13px]">{page.route}</code>
-                <code className="ml-auto shrink-0 text-[10px] text-stone-500 dark:text-zinc-500">
+                <code className="ml-auto shrink-0 text-10 text-stone-500 dark:text-zinc-500">
                   {page.source}
                 </code>
               </header>
@@ -74,7 +74,7 @@ export function Board({ manifest }: PropsT) {
                     const viewport = viewports.find((item) => item.key === view.viewport)!
                     return (
                       <figure className="m-0" key={view.viewport}>
-                        <figcaption className="flex items-baseline gap-1.5 px-1 pb-1 font-mono text-[10px] text-stone-500 tabular-nums dark:text-zinc-500">
+                        <figcaption className="flex items-baseline gap-1.5 px-1 pb-1 font-mono text-10 text-stone-500 tabular-nums dark:text-zinc-500">
                           <span className="text-stone-700 dark:text-zinc-300">
                             {viewport.label}
                           </span>

@@ -1,11 +1,10 @@
 'use client'
 
-import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
-import { carouselDefaults } from '@/lib/carousel'
+import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
 import { SectionTitle } from '@/components/layout/section-title'
 import { ButtonLink } from '@/components/ui/button-link'
 import { ProjectSlide, type ProjectSlideT } from './project-slide'
@@ -24,12 +23,12 @@ type PropsT = {
 
 export function ProjectsCarousel({ container, data }: PropsT) {
   const { slides, ctaLabel, ctaHref, sectionTitle } = data
-  const [isReady, setIsReady] = useState(false)
+  const carousel = useCarouselReady()
 
   if (slides.length < 1) return null
 
   return (
-    <section className={twMerge(container, !isReady && 'opacity-0')}>
+    <section className={twMerge(container, carousel.className)}>
       <div className="gridContainer mb-4 items-center justify-between md:mb-6 xl:mb-10">
         <SectionTitle title={sectionTitle} className="col-span-4 lg:col-span-5 lg:col-start-3" />
         <div className="col-span-3">
@@ -48,11 +47,11 @@ export function ProjectsCarousel({ container, data }: PropsT) {
           768: { spaceBetween: 20, slidesPerView: 1.144 },
           1024: { centeredSlides: true, spaceBetween: 22, slidesPerView: 1.5 },
         }}
-        onSwiper={() => setIsReady(true)}
+        onSwiper={carousel.onSwiper}
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.caption}>
-            <ProjectSlide slide={slide} />
+            <ProjectSlide slide={slide} total={slides.length} />
           </SwiperSlide>
         ))}
       </Swiper>

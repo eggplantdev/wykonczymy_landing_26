@@ -1,6 +1,7 @@
 import type { MediaImageT } from '@/components/media/types'
 import { GalleryPair } from './gallery-pair'
 import { GallerySingle } from './gallery-single'
+import { SectionTitle } from '@/components/layout/section-title'
 
 type PropsT = {
   container: string
@@ -23,7 +24,7 @@ export function ProjectGallery({ container, title, images }: PropsT) {
 
   return (
     <section className={container}>
-      <h2 className="text-22 md:text-28 lg:text-36 mb-6 font-medium md:mb-8">{title}</h2>
+      <SectionTitle title={title} className="mb-6 md:mb-8" />
 
       <div className="grid gap-6 md:gap-4 xl:gap-y-16">
         {rows.map(([large, small], rowIndex) =>

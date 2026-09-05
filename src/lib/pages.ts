@@ -14,7 +14,9 @@ export const findPage = cache(async (locale: Locale, slug: string | null) => {
   const { docs } = await payload.find({
     collection: 'pages',
     locale,
-    depth: 0,
+    // Two levels: the page's own media and its featured-project relationship, then that
+    // project's photos.
+    depth: 2,
     limit: 1,
     where: {
       _status: { equals: 'published' },
@@ -22,7 +24,15 @@ export const findPage = cache(async (locale: Locale, slug: string | null) => {
     },
   })
 
-  return docs[0] ?? null
+  const doc = docs[0] ?? null
+
+  // The home document owns the locale root, so in the default locale its own slug is not a
+  // second address for it — `dynamicParams` would otherwise resolve `/start/` to a byte-identical
+  // copy of `/`, which is duplicate content against the twelve-address map.
+  if (doc && slug !== null && doc.pageType === HOME_PAGE_TYPE && locale === i18n.defaultLocale)
+    return null
+
+  return doc
 })
 
 // The same document answers to one address per locale, and only the document knows
@@ -32,41 +42,49 @@ export const findPage = cache(async (locale: Locale, slug: string | null) => {
 // `fallback: false` means a locale's slug can legitimately be empty while the page is
 // live in the other language, so a locale without one is omitted rather than turned
 // into `/en/undefined/`.
-export async function pathsForPage(id: string | number): Promise<Partial<Record<Locale, string>>> {
+export const pathsForPage = cache(
+  async (id: string | number): Promise<Partial<Record<Locale, string>>> => {
+    const payload = await getPayload({ config: await config })
+    const doc = await payload.findByID({ collection: 'pages', id, depth: 0, locale: 'all' })
+
+    // `locale: 'all'` widens every localized field to a per-locale record, which the
+    // generated single-locale types do not describe.
+    const slugs = doc.slug as unknown as Partial<Record<Locale, string>>
+    const paths: Partial<Record<Locale, string>> = {}
+
+    for (const locale of i18n.locales) {
+      const slug = slugs?.[locale]
+      if (slug) paths[locale] = pathForPage({ slug, pageType: doc.pageType }, locale)
+    }
+
+    return paths
+  },
+)
+
+// "Which pages are live" is one contract, read by both the address maps and the
+// prerender list — as two copies it could be narrowed in one and not the other.
+export const findPublishedPages = cache(async (locale: Locale): Promise<Page[]> => {
   const payload = await getPayload({ config: await config })
-  const doc = await payload.findByID({ collection: 'pages', id, depth: 0, locale: 'all' })
 
-  // `locale: 'all'` widens every localized field to a per-locale record, which the
-  // generated single-locale types do not describe.
-  const slugs = doc.slug as unknown as Partial<Record<Locale, string>>
-  const paths: Partial<Record<Locale, string>> = {}
+  const { docs } = await payload.find({
+    collection: 'pages',
+    locale,
+    depth: 0,
+    limit: 1000,
+    where: { _status: { equals: 'published' } },
+  })
 
-  for (const locale of i18n.locales) {
-    const slug = slugs?.[locale]
-    if (slug) paths[locale] = pathForPage({ slug, pageType: doc.pageType }, locale)
-  }
-
-  return paths
-}
+  return docs
+})
 
 // Copy links to a *page*, not to a string: PL and EN slugs differ, so an href written
 // into content is right in at most one locale. Placeholder data names a page type and
 // this turns it into that locale's address.
 export const pathsByType = cache(
   async (locale: Locale): Promise<Partial<Record<Page['pageType'], string>>> => {
-    const payload = await getPayload({ config: await config })
-
-    const { docs } = await payload.find({
-      collection: 'pages',
-      locale,
-      depth: 0,
-      limit: 1000,
-      where: { _status: { equals: 'published' } },
-    })
-
     const paths: Partial<Record<Page['pageType'], string>> = {}
 
-    for (const doc of docs) {
+    for (const doc of await findPublishedPages(locale)) {
       if (doc.pageType === HOME_PAGE_TYPE || doc.slug)
         paths[doc.pageType] = pathForPage(doc, locale)
     }

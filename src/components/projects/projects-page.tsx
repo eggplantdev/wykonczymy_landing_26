@@ -1,7 +1,8 @@
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { getTranslations, type Locale } from '@/lib/i18n/i18n'
-import type { ProjectT } from '@/types/projects'
+import type { ProjectT } from '@/lib/content/projects'
 import { ProjectRow } from './project-row'
+import { childPath } from '@/lib/routing'
 
 export type ProjectsPageDataT = {
   projects: ProjectT[]
@@ -11,7 +12,6 @@ type PropsT = {
   locale: Locale
   // The heading is the page document's own localized title, not part of the field group.
   title: string
-  // This page's own address; each project hangs off it as `<basePath><slug>/`.
   basePath: string
   data: ProjectsPageDataT
 }
@@ -29,7 +29,7 @@ export function ProjectsPage({ locale, title, basePath, data }: PropsT) {
         {data.projects.map((project) => (
           <ProjectRow
             key={project.slug}
-            href={`${basePath}${project.slug}/`}
+            href={childPath(basePath, project.slug)}
             title={project.title}
             summary={project.summary}
             image={project.image}

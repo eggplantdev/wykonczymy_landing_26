@@ -1,6 +1,7 @@
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { StyleCard } from './style-card'
-import type { InteriorStyleT } from '@/types/interior-styles'
+import type { InteriorStyleT } from '@/lib/content/interior-styles'
+import { childPath } from '@/lib/routing'
 
 export type InteriorStylesPageDataT = {
   styles: InteriorStyleT[]
@@ -9,7 +10,6 @@ export type InteriorStylesPageDataT = {
 type PropsT = {
   // The heading is the page document's own localized title, not part of the field group.
   title: string
-  // This page's own address; each style hangs off it as `<basePath><slug>/`.
   basePath: string
   data: InteriorStylesPageDataT
 }
@@ -28,7 +28,7 @@ export function InteriorStylesPage({ title, basePath, data }: PropsT) {
             <StyleCard
               key={style.id}
               style={style}
-              href={`${basePath}${style.slug}/`}
+              href={childPath(basePath, style.slug)}
               index={index}
             />
           ))}

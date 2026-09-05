@@ -91,6 +91,10 @@ site.
 - **`build` never migrates the database.** `POSTGRES_URL` on Vercel points at production for every
   deployment, previews included. Schema is applied by hand with `pnpm db:migrate:prod` — **a human
   runs it, never an agent** — and it goes up _before_ the code that needs it.
+- **Content is seeded, not typed into the admin twice.** `pnpm seed` upserts every page, project,
+  interior style and the footer global in both locales from `scripts/seed/data/`; it is idempotent
+  and never touches uploads, so photos attached in the admin survive it. `pnpm seed:prod` points the
+  same script at production — **a human runs it, never an agent.**
 - **Read env through `src/lib/env.ts` / `env.server.ts`, never raw `process.env`** — ESLint rejects
   it in `src/**`. `payload.config.ts` is the one exception, and parses `serverSchema` itself.
 

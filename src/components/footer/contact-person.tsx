@@ -16,7 +16,7 @@ export function ContactPerson({ title, avatar, name, role, phone, mail }: PropsT
     <div className="mb-12 md:mb-16 lg:col-span-3 lg:mb-10">
       <p className="text-14 md:text-18 lg:text-20 mb-8 font-medium md:mb-11 lg:mb-10">{title}</p>
       <div className="flex gap-x-5">
-        <div className="size-[90px] shrink-0 overflow-hidden rounded-full">
+        <div className="size-22.5 shrink-0 overflow-hidden rounded-full">
           <Media image={avatar} sizes="90px" placeholderClassName="rounded-full" />
         </div>
         <div className="text-10 flex grow flex-col gap-y-1">

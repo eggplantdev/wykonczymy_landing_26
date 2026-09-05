@@ -24,7 +24,7 @@ export function FeaturedProject({ container, data }: PropsT) {
   return (
     <section className={container}>
       <SectionTitle title={sectionTitle} className="pb-6 md:pb-8" />
-      <div className="relative flex h-[100lvh] items-center justify-center md:h-[704px] lg:h-[755px]">
+      <div className="relative flex h-lvh items-center justify-center md:h-176 lg:h-[755px]">
         <div className="absolute inset-0 flex">
           <Media image={image} video={video} sizes="100vw" />
         </div>

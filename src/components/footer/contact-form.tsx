@@ -35,11 +35,11 @@ export function ContactForm() {
             onChange={(event) => setAcceptsTerms(event.target.checked)}
             className="peer sr-only"
           />
-          <span className="bg-grau_600 text-grau_200 flex size-[18px] shrink-0 items-center justify-center rounded-[1px] peer-focus-visible:outline peer-focus-visible:outline-offset-2">
+          <span className="bg-grau_600 text-grau_200 flex size-4.5 shrink-0 items-center justify-center rounded-[1px] peer-focus-visible:outline peer-focus-visible:outline-offset-2">
             {acceptsTerms && <Checkmark />}
           </span>
           <span
-            className={`ml-[30px] w-2/3 leading-[18px] md:w-auto ${acceptsTerms ? 'text-grau_200' : 'text-grau_500'}`}
+            className={`ml-7.5 w-2/3 leading-150 md:w-auto ${acceptsTerms ? 'text-grau_200' : 'text-grau_500'}`}
           >
             {t('acceptTerms')}
           </span>

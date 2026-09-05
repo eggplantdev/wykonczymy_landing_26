@@ -1,25 +1,29 @@
+import type { Metadata } from 'next'
 import React from 'react'
 import './styles.css'
 
 import { DebugTools } from '@/components/debug/debug-tools'
+// Every route renders through this layout, so a missing or malformed public var fails
+// `next build` here instead of surfacing as undefined in the browser.
+import { SERVER_URL } from '@/lib/env'
 
-// Side-effect import: every route renders through this layout, so a missing or malformed
-// public var fails `next build` instead of surfacing as undefined in the browser.
-import '@/lib/env'
+const SITE_NAME = 'Wykończymy'
 
-export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+// metadataBase is what makes the per-page `alternates` resolve to absolute URLs; without
+// it Next emits relative canonicals, which search engines treat as no canonical at all.
+export const metadata: Metadata = {
+  metadataBase: new URL(SERVER_URL),
+  title: { default: SITE_NAME, template: `%s | ${SITE_NAME}` },
 }
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const { children } = props
-
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
         <main>{children}</main>
-        <DebugTools />
+        {/* Gated here, not inside the component: an early return still ships the whole
+            client module to production browsers. */}
+        {process.env.NODE_ENV !== 'production' && <DebugTools />}
       </body>
     </html>
   )

@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
-import { carouselDefaults } from '@/lib/carousel'
+import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
 import { Media } from '@/components/media/media'
 import type { MediaImageT } from '@/components/media/types'
+import { SectionTitle } from '@/components/layout/section-title'
 
 type PropsT = {
   title: string
@@ -15,15 +15,13 @@ type PropsT = {
 }
 
 export function StyleGallery({ title, images }: PropsT) {
-  // Swiper lays the track out on the client, so the first paint is a stack of
-  // full-width slides; held hidden until it reports ready.
-  const [isReady, setIsReady] = useState(false)
+  const carousel = useCarouselReady()
 
   if (images.length < 1) return null
 
   return (
-    <section className={twMerge('paddings pt-16 md:pt-20 lg:pt-30', !isReady && 'opacity-0')}>
-      <h2 className="text-22 md:text-28 lg:text-36 mb-6 font-medium md:mb-8">{title}</h2>
+    <section className={twMerge('paddings pt-16 md:pt-20 lg:pt-30', carousel.className)}>
+      <SectionTitle title={title} className="mb-6 md:mb-8" />
 
       <Swiper
         {...carouselDefaults}
@@ -33,7 +31,7 @@ export function StyleGallery({ title, images }: PropsT) {
           768: { spaceBetween: 20, slidesPerView: 2.2 },
           1024: { spaceBetween: 20, slidesPerView: 3 },
         }}
-        onSwiper={() => setIsReady(true)}
+        onSwiper={carousel.onSwiper}
       >
         {images.map((image) => (
           <SwiperSlide key={image.url}>

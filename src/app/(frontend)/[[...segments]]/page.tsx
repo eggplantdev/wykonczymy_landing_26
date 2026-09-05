@@ -1,42 +1,26 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getPayload } from 'payload'
-
-import config from '@/payload.config'
 import { HomePage } from '@/components/home/home-page'
 import { InteriorStylesPage } from '@/components/interior-styles/interior-styles-page'
 import { StylePage } from '@/components/interior-styles/style-page'
 import { ProjectPage } from '@/components/projects/project-page'
 import { ProjectsPage } from '@/components/projects/projects-page'
-import { homePlaceholder } from '@/lib/placeholder/home'
-import {
-  interiorStyles,
-  interiorStylesPlaceholder,
-  relatedStyles,
-} from '@/lib/placeholder/interior-styles'
-import { projects, projectsPlaceholder, relatedProjects } from '@/lib/placeholder/projects'
+import { toHomeData } from '@/lib/content/home'
+import { findChildren } from '@/lib/content/children'
+import { findInteriorStyles, relatedStyles } from '@/lib/content/interior-styles'
+import { findProjects, relatedProjects } from '@/lib/content/projects'
 import { getTranslations, i18n } from '@/lib/i18n/i18n'
-import { findPage, pathsByType } from '@/lib/pages'
-import { HOME_PAGE_TYPE, pathForPage, resolveSegments, segmentsForPage } from '@/lib/routing'
+import { findPage, findPublishedPages, pathsByType, pathsForPage } from '@/lib/pages'
+import {
+  HOME_PAGE_TYPE,
+  INTERIOR_STYLES_PAGE_TYPE,
+  PROJECTS_PAGE_TYPE,
+  pathForPage,
+  resolveSegments,
+  segmentsForPage,
+} from '@/lib/routing'
 
 type ParamsT = { segments?: string[] }
-
-// The two page types with children. A second segment under anything else is not an
-// address — see resolveSegments.
-const INTERIOR_STYLES_PAGE_TYPE = 'interior-styles'
-const PROJECTS_PAGE_TYPE = 'completed-works'
-
-// Every child address a parent owns, so prerendering and resolution read one list rather
-// than each spelling out which collection hangs off which page type.
-const childSlugsFor = (pageType: string): string[] => {
-  if (pageType === INTERIOR_STYLES_PAGE_TYPE) return interiorStyles.map((style) => style.slug)
-  if (pageType === PROJECTS_PAGE_TYPE) return projects.map((project) => project.slug)
-  return []
-}
-
-const findStyle = (childSlug: string) => interiorStyles.find((style) => style.slug === childSlug)
-
-const findProject = (childSlug: string) => projects.find((project) => project.slug === childSlug)
 
 // Left on (the default) so an unenumerated address still reaches this segment and is
 // rejected by notFound() — which is what renders not-found.tsx. With it off, Next
@@ -48,31 +32,37 @@ export const dynamicParams = true
 // Resolves every public address at build time, so no request touches the database.
 // tech-stack.md makes the CMS-owned-slug decision conditional on exactly this.
 export async function generateStaticParams(): Promise<ParamsT[]> {
-  const payload = await getPayload({ config: await config })
-  const params: ParamsT[] = []
+  const perLocale = await Promise.all(
+    i18n.locales.map(async (locale) => {
+      const docs = await findPublishedPages(locale)
+      const params: ParamsT[] = []
 
-  for (const locale of i18n.locales) {
-    const { docs } = await payload.find({
-      collection: 'pages',
-      locale,
-      depth: 0,
-      limit: 1000,
-      where: { _status: { equals: 'published' } },
-    })
+      // Hoisted out of the document loop so the two child collections are read once per
+      // locale by construction, rather than relying on `cache()` to collapse a read per page.
+      const children = new Map(
+        await Promise.all(
+          docs.map(
+            async (doc) => [doc.pageType, await findChildren(doc.pageType, locale)] as const,
+          ),
+        ),
+      )
 
-    // `fallback: false`, so a page translated in one language only comes back with an
-    // empty slug in the other — prerendering it would emit `/en/null/`.
-    for (const doc of docs) {
-      if (doc.pageType !== HOME_PAGE_TYPE && !doc.slug) continue
+      // `fallback: false`, so a page translated in one language only comes back with an
+      // empty slug in the other — prerendering it would emit `/en/null/`.
+      for (const doc of docs) {
+        if (doc.pageType !== HOME_PAGE_TYPE && !doc.slug) continue
 
-      params.push({ segments: segmentsForPage(doc, locale) })
+        params.push({ segments: segmentsForPage(doc, locale) })
 
-      for (const childSlug of childSlugsFor(doc.pageType))
-        params.push({ segments: segmentsForPage(doc, locale, childSlug) })
-    }
-  }
+        for (const child of children.get(doc.pageType) ?? [])
+          params.push({ segments: segmentsForPage(doc, locale, child.slug) })
+      }
 
-  return params
+      return params
+    }),
+  )
+
+  return perLocale.flat()
 }
 
 export async function generateMetadata({
@@ -82,9 +72,28 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, slug, childSlug, isMiss } = resolveSegments((await params).segments)
   const page = isMiss ? null : await findPage(locale, slug)
-  const child = childSlug ? (findStyle(childSlug) ?? findProject(childSlug)) : undefined
+  const child =
+    page && childSlug
+      ? (await findChildren(page.pageType, locale)).find((item) => item.slug === childSlug)
+      : undefined
 
-  return { title: child?.title ?? page?.title ?? getTranslations(locale).common.notFoundTitle }
+  if (!page) return { title: getTranslations(locale).common.notFoundTitle }
+
+  // Twelve indexed addresses with translated slugs: without an explicit canonical the
+  // trailing-slash and www variants each look like a separate document, and without
+  // `languages` the two translations look like duplicates rather than a pair.
+  //
+  // A child's counterpart slug lives in its own collection and is not resolvable from
+  // the parent, so only page-level addresses advertise their translations.
+  const languages = childSlug ? undefined : await pathsForPage(page.id)
+
+  return {
+    title: child?.title ?? page.title,
+    alternates: {
+      canonical: pathForPage(page, locale, childSlug ?? undefined),
+      languages,
+    },
+  }
 }
 
 export default async function CatchAllPage({ params }: { params: Promise<ParamsT> }) {
@@ -97,58 +106,56 @@ export default async function CatchAllPage({ params }: { params: Promise<ParamsT
   const page = await findPage(locale, slug)
   if (!page) notFound()
 
-  const style =
-    page.pageType === INTERIOR_STYLES_PAGE_TYPE && childSlug ? findStyle(childSlug) : undefined
-  const project =
-    page.pageType === PROJECTS_PAGE_TYPE && childSlug ? findProject(childSlug) : undefined
-  if (childSlug && !style && !project) notFound()
+  const basePath = pathForPage(page, locale)
 
-  const typePaths = await pathsByType(locale)
+  if (page.pageType === INTERIOR_STYLES_PAGE_TYPE) {
+    const styles = await findInteriorStyles(locale)
+    const style = childSlug ? styles.find((item) => item.slug === childSlug) : undefined
+    if (childSlug && !style) notFound()
 
-  const body = () => {
-    if (style)
-      return (
-        <StylePage
-          locale={locale}
-          style={style}
-          basePath={pathForPage(page, locale)}
-          related={relatedStyles(style.slug)}
-        />
-      )
-
-    if (project)
-      return (
-        <ProjectPage
-          locale={locale}
-          project={project}
-          basePath={pathForPage(page, locale)}
-          related={relatedProjects(project.slug)}
-        />
-      )
-
-    if (page.pageType === HOME_PAGE_TYPE) return <HomePage data={homePlaceholder(typePaths)} />
-
-    if (page.pageType === INTERIOR_STYLES_PAGE_TYPE)
-      return (
-        <InteriorStylesPage
-          title={page.title}
-          basePath={pathForPage(page, locale)}
-          data={interiorStylesPlaceholder}
-        />
-      )
-
-    if (page.pageType === PROJECTS_PAGE_TYPE)
-      return (
-        <ProjectsPage
-          locale={locale}
-          title={page.title}
-          basePath={pathForPage(page, locale)}
-          data={projectsPlaceholder}
-        />
-      )
-
-    return null
+    return style ? (
+      <StylePage
+        locale={locale}
+        style={style}
+        basePath={basePath}
+        related={relatedStyles(styles, style.slug)}
+      />
+    ) : (
+      <InteriorStylesPage title={page.title} basePath={basePath} data={{ styles }} />
+    )
   }
 
-  return body()
+  if (page.pageType === PROJECTS_PAGE_TYPE) {
+    const projects = await findProjects(locale)
+    const project = childSlug ? projects.find((item) => item.slug === childSlug) : undefined
+    if (childSlug && !project) notFound()
+
+    return project ? (
+      <ProjectPage
+        locale={locale}
+        project={project}
+        basePath={basePath}
+        related={relatedProjects(projects, project.slug)}
+      />
+    ) : (
+      <ProjectsPage locale={locale} title={page.title} basePath={basePath} data={{ projects }} />
+    )
+  }
+
+  // Only the two listing types own a second segment; anywhere else it is not an address.
+  if (childSlug) notFound()
+
+  if (page.pageType === HOME_PAGE_TYPE) {
+    const [projects, styles, typePaths] = await Promise.all([
+      findProjects(locale),
+      findInteriorStyles(locale),
+      pathsByType(locale),
+    ])
+
+    return <HomePage data={toHomeData(page, { projects, styles, typePaths })} />
+  }
+
+  // `contact` and `price-list` have no components yet. They are two of the twelve
+  // indexed addresses, so the route answers rather than 404s until they are built.
+  return null
 }

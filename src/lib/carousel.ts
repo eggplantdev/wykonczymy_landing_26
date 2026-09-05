@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Autoplay, Keyboard } from 'swiper/modules'
 import type { SwiperProps } from 'swiper/react'
 
@@ -14,3 +15,15 @@ export const carouselDefaults = {
   grabCursor: true,
   keyboard: { enabled: true },
 } satisfies SwiperProps
+
+// Swiper lays the track out on the client, so the first paint is a stack of full-width
+// slides. Every carousel hides itself until Swiper reports ready; the gate lives here so
+// the trade — an SSR-invisible section in exchange for no layout flash — is decided once.
+export function useCarouselReady() {
+  const [isReady, setIsReady] = useState(false)
+
+  return {
+    className: isReady ? undefined : 'opacity-0',
+    onSwiper: () => setIsReady(true),
+  }
+}
