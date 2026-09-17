@@ -7,7 +7,8 @@
     "contact": "Kontakt",
     "menu": "Menu",
     "closeMenu": "Zamknij menu",
-    "callUs": "Zadzwoń do nas"
+    "callUs": "Zadzwoń do nas",
+    "privacyPolicy": "Polityka prywatności"
   },
   "form": {
     "name": "Imię i nazwisko",

@@ -93,6 +93,9 @@
   --color-living_800: #e2e8f3;
   --color-living_900: #f1f3f9;
 
+  /* Review stars, sampled from the Fixly badge this mirrors. */
+  --color-rating: #ffd739;
+
   --color-shwarz: #1b1b1b;
   --color-white: #fdfdfd;
   --color-error: #d45d5c;
@@ -140,6 +143,45 @@
 
 @utility paddings {
   @apply px-6 md:px-8 xl:px-12;
+}
+
+/* The legal pages are one rich-text field, so their headings, lists and links carry no
+   classes of their own — the rhythm has to come from the wrapper. */
+@utility legal-prose {
+  @apply text-14 md:text-16 text-grau_100 leading-150;
+
+  & h2 {
+    @apply text-20 md:text-24 text-shwarz mt-10 mb-4 first:mt-0;
+  }
+
+  & h3 {
+    @apply text-16 md:text-18 text-shwarz mt-8 mb-3;
+  }
+
+  & p {
+    @apply mb-4 last:mb-0;
+  }
+
+  & ul,
+  & ol {
+    @apply mb-4 flex flex-col gap-y-2 pl-5;
+  }
+
+  & ul {
+    @apply list-disc;
+  }
+
+  & ol {
+    @apply list-decimal;
+  }
+
+  & a {
+    @apply text-shwarz underline underline-offset-4 transition-colors hover:text-grau_200;
+  }
+
+  & strong {
+    @apply text-shwarz;
+  }
 }
 
 @utility center-absolute {

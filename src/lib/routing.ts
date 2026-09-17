@@ -2,15 +2,16 @@ import { i18n, isLocale, type Locale } from '@/lib/i18n/i18n'
 
 type PageAddressT = { slug?: string | null; pageType?: string | null }
 
-// The five pages of the live site. A page's type selects which conditional field group
-// the admin sees, and it is how content links to a page: PL and EN slugs differ, so an
-// href written into a field would be right in at most one locale.
+// The five pages of the live site, plus the privacy policy. A page's type selects which
+// conditional field group the admin sees, and it is how content links to a page: PL and EN
+// slugs differ, so an href written into a field would be right in at most one locale.
 export const pageTypes = [
   'home',
   'completed-works',
   'interior-styles',
   'contact',
   'price-list',
+  'privacy-policy',
 ] as const
 
 export type PageTypeT = (typeof pageTypes)[number]
@@ -25,6 +26,9 @@ export const CONTACT_PAGE_TYPE = 'contact'
 // address — see resolveSegments.
 export const PROJECTS_PAGE_TYPE = 'completed-works'
 export const INTERIOR_STYLES_PAGE_TYPE = 'interior-styles'
+
+// A prose page: one rich-text body and nothing else.
+export const PRIVACY_POLICY_PAGE_TYPE = 'privacy-policy'
 
 export type ResolvedSegmentsT = {
   locale: Locale

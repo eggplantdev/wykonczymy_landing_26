@@ -9,6 +9,7 @@ import * as migration_20260917_163304_drop_featured_project from './20260917_163
 import * as migration_20260917_171038_footer_ratings from './20260917_171038_footer_ratings'
 import * as migration_20260917_171404_contact_details from './20260917_171404_contact_details'
 import * as migration_20260917_173902_testimonial_rich_text from './20260917_173902_testimonial_rich_text'
+import * as migration_20260917_184739_legal_pages from './20260917_184739_legal_pages'
 
 export const migrations = [
   {
@@ -65,5 +66,10 @@ export const migrations = [
     up: migration_20260917_173902_testimonial_rich_text.up,
     down: migration_20260917_173902_testimonial_rich_text.down,
     name: '20260917_173902_testimonial_rich_text',
+  },
+  {
+    up: migration_20260917_184739_legal_pages.up,
+    down: migration_20260917_184739_legal_pages.down,
+    name: '20260917_184739_legal_pages',
   },
 ]

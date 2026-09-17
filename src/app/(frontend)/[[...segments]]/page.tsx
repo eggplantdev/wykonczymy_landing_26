@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { ContactPage } from '@/components/contact/contact-page'
 import { HomePage } from '@/components/home/home-page'
 import { InteriorStylesPage } from '@/components/interior-styles/interior-styles-page'
+import { LegalPage } from '@/components/legal/legal-page'
 import { StylePage } from '@/components/interior-styles/style-page'
 import { ProjectPage } from '@/components/projects/project-page'
 import { ProjectsPage } from '@/components/projects/projects-page'
@@ -18,6 +19,7 @@ import {
   HOME_PAGE_TYPE,
   INTERIOR_STYLES_PAGE_TYPE,
   PROJECTS_PAGE_TYPE,
+  PRIVACY_POLICY_PAGE_TYPE,
   pathForPage,
   resolveSegments,
   segmentsForPage,
@@ -186,6 +188,9 @@ export default async function CatchAllPage({ params }: { params: Promise<ParamsT
       />
     )
   }
+
+  if (page.pageType === PRIVACY_POLICY_PAGE_TYPE)
+    return <LegalPage title={page.title} body={page.legal?.body} />
 
   // `price-list` has no component. It is one of the twelve indexed addresses, so the
   // route answers rather than 404s until it is built or the type is dropped.

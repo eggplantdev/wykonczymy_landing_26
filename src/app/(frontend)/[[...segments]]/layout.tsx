@@ -5,7 +5,7 @@ import { SiteHeader } from '@/components/layout/site-header'
 import { SiteFooter } from '@/components/footer/site-footer'
 import { findFooter } from '@/lib/content/footer'
 import { TranslationsProvider } from '@/lib/i18n/translations-provider'
-import { findPage, pathsByType, pathsForPage } from '@/lib/pages'
+import { findPage, pathsByType, pathsForPage } from '@/lib/content/pages'
 import { resolveSegments } from '@/lib/routing'
 
 type ParamsT = { segments?: string[] }
@@ -42,7 +42,12 @@ export default async function SegmentLayout({
           invert against on plain sections. */}
       <div className="bg-white flex min-h-lvh flex-col">
         <div className="grow">{children}</div>
-        <SiteFooter container="paddings pt-20 pb-20 md:pt-30 md:pb-30 xl:pt-40" data={footer} />
+        <SiteFooter
+          container="paddings pt-20 pb-10 md:pt-30  xl:pt-40"
+          data={footer}
+          locale={locale}
+          typePaths={typePaths}
+        />
       </div>
     </TranslationsProvider>
   )

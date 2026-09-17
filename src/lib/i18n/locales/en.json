@@ -7,7 +7,8 @@
     "contact": "Contact",
     "menu": "Menu",
     "closeMenu": "Close menu",
-    "callUs": "Call us"
+    "callUs": "Call us",
+    "privacyPolicy": "Privacy policy"
   },
   "form": {
     "name": "Full name",

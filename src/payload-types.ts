@@ -186,7 +186,8 @@ export interface Page {
   /**
    * Selects the page’s field group. The "home" page also serves at /.
    */
-  pageType: 'home' | 'completed-works' | 'interior-styles' | 'contact' | 'price-list'
+  pageType:
+    'home' | 'completed-works' | 'interior-styles' | 'contact' | 'price-list' | 'privacy-policy'
   home?: {
     hero?: {
       title?: string | null
@@ -199,7 +200,16 @@ export interface Page {
       /**
        * The page the button opens, in whichever language is being read.
        */
-      ctaLink?: ('home' | 'completed-works' | 'interior-styles' | 'contact' | 'price-list') | null
+      ctaLink?:
+        | (
+            | 'home'
+            | 'completed-works'
+            | 'interior-styles'
+            | 'contact'
+            | 'price-list'
+            | 'privacy-policy'
+          )
+        | null
     }
     intro?: {
       text?: string | null
@@ -229,7 +239,16 @@ export interface Page {
       /**
        * The page the button opens, in whichever language is being read.
        */
-      ctaLink?: ('home' | 'completed-works' | 'interior-styles' | 'contact' | 'price-list') | null
+      ctaLink?:
+        | (
+            | 'home'
+            | 'completed-works'
+            | 'interior-styles'
+            | 'contact'
+            | 'price-list'
+            | 'privacy-policy'
+          )
+        | null
     }
     numbers?: {
       sectionTitle?: string | null
@@ -276,7 +295,16 @@ export interface Page {
       /**
        * The page the button opens, in whichever language is being read.
        */
-      ctaLink?: ('home' | 'completed-works' | 'interior-styles' | 'contact' | 'price-list') | null
+      ctaLink?:
+        | (
+            | 'home'
+            | 'completed-works'
+            | 'interior-styles'
+            | 'contact'
+            | 'price-list'
+            | 'privacy-policy'
+          )
+        | null
     }
   }
   contact?: {
@@ -288,6 +316,26 @@ export interface Page {
      * Tax id. Digits only — the label is added by the page.
      */
     nip?: string | null
+  }
+  legal?: {
+    /**
+     * The full text. Headings and lists are yours to use.
+     */
+    body?: {
+      root: {
+        type: string
+        children: {
+          type: any
+          version: number
+          [k: string]: unknown
+        }[]
+        direction: ('ltr' | 'rtl') | null
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+        indent: number
+        version: number
+      }
+      [k: string]: unknown
+    } | null
   }
   meta?: {
     title?: string | null
@@ -612,6 +660,11 @@ export interface PagesSelect<T extends boolean = true> {
     | {
         address?: T
         nip?: T
+      }
+  legal?:
+    | T
+    | {
+        body?: T
       }
   meta?:
     | T
