@@ -1,10 +1,18 @@
 import type { Payload } from 'payload'
+import { convertMarkdownToLexical, editorConfigFactory } from '@payloadcms/richtext-lexical'
+import type { SanitizedServerEditorConfig } from '@payloadcms/richtext-lexical'
 
 import type { Page } from '@/payload-types'
 
 import { i18n, type Locale } from '@/lib/i18n/i18n'
-import { CONTACT_PAGE_TYPE, HOME_PAGE_TYPE, type PageTypeT } from '@/lib/routing'
+import {
+  CONTACT_PAGE_TYPE,
+  HOME_PAGE_TYPE,
+  PRIVACY_POLICY_PAGE_TYPE,
+  type PageTypeT,
+} from '@/lib/routing'
 import { contactCopy } from './data/contact'
+import { legalBodySeeds } from './data/legal'
 import { footerContact, footerCopy, footerRatings } from './data/footer'
 import { interiorStyleSeeds } from './data/interior-styles'
 import { homeCopy } from './data/home'
@@ -102,13 +110,23 @@ function groupFor(
   pageType: PageTypeT,
   locale: Locale,
   existing: Page | undefined,
+  editorConfig: SanitizedServerEditorConfig,
 ): Record<string, unknown> {
   if (pageType === HOME_PAGE_TYPE) return { home: homeGroup(homeCopy[locale], rowIdsOf(existing)) }
   if (pageType === CONTACT_PAGE_TYPE) return { contact: contactCopy[locale] }
+  if (pageType === PRIVACY_POLICY_PAGE_TYPE) {
+    return {
+      legal: { body: convertMarkdownToLexical({ editorConfig, markdown: legalBodySeeds[locale] }) },
+    }
+  }
   return {}
 }
 
 async function seedPages(payload: Payload): Promise<void> {
+  // The field declares no editor of its own, so the default config is the one the admin's own
+  // editor uses — which is what makes the seeded tree identical to a hand-typed one.
+  const editorConfig = await editorConfigFactory.default({ config: payload.config })
+
   for (const seed of pageSeeds) {
     const { docs } = await payload.find({
       collection: 'pages',
@@ -124,7 +142,7 @@ async function seedPages(payload: Payload): Promise<void> {
       ...seed.copy.pl,
       pageType: seed.pageType,
       _status: 'published' as const,
-      ...groupFor(seed.pageType, 'pl', existing),
+      ...groupFor(seed.pageType, 'pl', existing, editorConfig),
     }
 
     const doc = existing
@@ -137,7 +155,7 @@ async function seedPages(payload: Payload): Promise<void> {
       locale: 'en',
       data: {
         ...seed.copy.en,
-        ...groupFor(seed.pageType, 'en', doc),
+        ...groupFor(seed.pageType, 'en', doc, editorConfig),
       },
     })
   }

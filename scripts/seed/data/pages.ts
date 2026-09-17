@@ -5,7 +5,7 @@ export type PageCopyT = { title: string; slug: string }
 
 // The four live pages plus the privacy policy. The live slugs are indexed addresses — see
 // context/foundation/url-map.md before changing one. The policy is a new address, so nothing
-// is riding on its slug; its body is written in the admin, not seeded.
+// is riding on its slug; its body lives in ./legal.ts.
 export const pageSeeds: { pageType: PageTypeT; copy: LocalizedT<PageCopyT> }[] = [
   {
     pageType: 'home',
