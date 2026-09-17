@@ -1,8 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
-import { revalidateAllPages } from '@/collections/hooks/revalidatePage'
+import { revalidateAllPages } from '@/lib/revalidate'
 
-// The contact block and quote form that close every page — one document, no address of
+// The contact block and form that close every page — one document, no address of
 // its own, so a global rather than a collection.
 export const Footer: GlobalConfig = {
   slug: 'footer',
