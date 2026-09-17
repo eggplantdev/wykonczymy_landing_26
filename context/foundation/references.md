@@ -29,7 +29,7 @@ preservation is a PRD guardrail. Do not assume a pattern exists for this. There 
 
 ## Leads app — `workspace/yolo/wykonczymy`
 
-Where quote requests land. A different product with its own roadmap; this project does not own it.
+Where contact form submissions land. A different product with its own roadmap; this project does not own it.
 
 Relevant surface: the `leads` collection, its intake path, and its auth model. The PRD records the
 constraint that matters — the current intake carries a flat set of text answers and cannot accept

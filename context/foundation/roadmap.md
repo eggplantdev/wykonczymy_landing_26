@@ -3,7 +3,7 @@ project: wykonczymy-www
 generated: 2026-09-02
 source_prd: context/foundation/prd.md
 main_goal: low-complexity
-north_star: S2 — a real quote submission reaches the leads app
+north_star: S2 — a real contact form submission reaches the leads app
 top_blocker: decisions
 ---
 
@@ -75,7 +75,7 @@ flag, a second leads-app deployment, or any other isolation machinery for this.
 | F1  | Scaffold, local DB, first deploy                     | **done** | —          | —             |
 | F2  | Localization spine + localized `slug`                | done     | F1         | —             |
 | S1  | One page live at its indexed address, PL + EN        | proposed | F2         | —             |
-| S2  | **Quote form reaches the leads app** (north star)    | blocked  | S1         | S3, S4, S5    |
+| S2  | **Contact form reaches the leads app** (north star)  | blocked  | S1         | S3, S4, S5    |
 | S3  | Remaining carried pages                              | proposed | S1         | S2, S4, S5    |
 | S4  | Completed projects — listing + project pages         | proposed | S1         | S2, S3, S5    |
 | S5  | Testimonials and the shared content lists            | proposed | S1         | S2, S3, S4    |
@@ -165,11 +165,11 @@ this is where it surfaces — cheaply.
 
 **Unknowns:** none blocking. The tdg markup exists; the copy is in `live-site-snapshot/`.
 
-### S2 — Quote form reaches the leads app (north star)
+### S2 — Contact form reaches the leads app (north star)
 
-**Status:** blocked · **Change ID:** `s2-quote-form` · **Depends on:** S1 · **Parallel with:** S3, S4, S5
+**Status:** blocked · **Change ID:** `s2-contact-form` · **Depends on:** S1 · **Parallel with:** S3, S4, S5
 
-Text-only submission: TanStack Form + Zod, explicit consent capture, bot refusal (FR-036),
+Text-only submission: explicit consent capture, bot refusal (FR-036),
 idempotency on retry/double-click, confirmation to the visitor (FR-033), and a plain failure message
 with the phone number when delivery fails (FR-034). **Files are deliberately not in this slice** —
 they are S6.

@@ -23,7 +23,7 @@ checkpoint:
       decision: "submissions land in the existing Payload app at workspace/yolo/wykonczymy, which already owns a leads collection and a /leads dashboard"
     - topic: "non-goals"
       decision: "no estimator/calculator, no wizard, Cennik retired not rebuilt, leads dashboard out of scope, no visitor accounts, not a conversion programme"
-    - topic: "quote form scope"
+    - topic: "contact form scope"
       decision: "bigger than today — more questions plus file inputs; explicitly not a wizard, estimator, or calculator"
     - topic: "repo boundary"
       decision: "two separate repos — the public site is its own frontend and posts leads across a network boundary; the leads app is not modified by this project"
@@ -39,7 +39,7 @@ checkpoint:
 
 ## Current System
 
-**Purpose.** Marketing and lead-generation site for a Warsaw renovation and interior-finishing contractor (ul. Terespolska 2, 03-813 Warszawa). Its job is to turn a search visitor into a free-quote request.
+**Purpose.** Marketing and lead-generation site for a Warsaw renovation and interior-finishing contractor (ul. Terespolska 2, 03-813 Warszawa). Its job is to turn a search visitor into a contact form submission.
 
 **Architecture.** Server-rendered WordPress monolith, built on a purchased/agency theme. Not headless today, though the REST API is exposed.
 
@@ -50,7 +50,7 @@ checkpoint:
 **Core functionality today.**
 - Public pages: Start, Cennik (pricing), Oferta (services), Realizacje (completed projects), Wykończenia (finishes), Kontakt.
 - PL/EN language switch.
-- Free-quote CTA ("Umów się na darmową wycenę") appearing twice on the homepage, backed by a contact form capturing: name, phone, email, project scope, square footage, preferred contact time.
+- Free-quote CTA ("Umów się na darmową wycenę") appearing twice on the homepage, backed by a contact form. Fields enumerated once, in `live-site-snapshot/scraped-content.md` (`### Contact Form Fields`).
 - Direct contact: phone +48 505 805 425, e-mail biuro@wykonczymy.com.pl.
 - Photo gallery of completed projects.
 - Client testimonials.
@@ -70,7 +70,7 @@ The change is a **replatform plus a new layout** — move off WordPress onto a s
 Confirmed as must-not-break:
 
 - **URLs and SEO ranking.** Existing page URLs keep resolving (directly or via 301), and current positions for local renovation searches do not drop.
-- **Quote form and lead delivery.** The free-quote form keeps capturing the same fields and keeps delivering leads to their current destination. A silently broken form is invisible lost revenue.
+- **Contact form and lead delivery.** The contact form keeps capturing the same fields and keeps delivering leads to their current destination. A silently broken form is invisible lost revenue.
 - **Portfolio photos and testimonials.** Realizacje imagery and client reviews carry over; nothing is re-shot or re-collected.
 - **PL/EN language switch.** Both language versions survive the rebuild.
 
@@ -83,7 +83,7 @@ Not part of the PRD schema — captured here for `/10x-stack-assess` downstream.
 - Driving requirement: full control over the code.
 - **This repo is the design source, not scaffolding.** 142 components, ~6,700 lines of TSX, a full multi-template site built for a German real-estate client. What carries over:
   - **Design system** — `grau_100`–`grau_900` tokens, a 12-column responsive grid, and an `IMAGE_SIZES` constants module that feeds correct `sizes` props to every `next/image`.
-  - **`components/elastic/contactForm/`** — nine components including `ContactFormTerms` / `ContactFormTermsText` / `ContactFormCheckbox`. The consent-checkbox pattern the quote form needs already exists here.
+  - **`components/elastic/contactForm/`** — nine components including `ContactFormTerms` / `ContactFormTermsText` / `ContactFormCheckbox`. The consent-checkbox pattern the contact form needs already exists here.
   - **`components/elastic/askForOffer/`** — a request-an-offer section (contact person, image, rich text). Structurally already "Umów się na darmową wycenę".
   - **`components/common/flexibleContent/` + `elasticComponentsManager/`** — CMS-driven section composition. Maps onto Payload blocks nearly one-to-one; the highest-value carry-over in the repo.
   - **Page templates** — home, about, news + article, object (+ subpages), investoren, textPage, legal.
@@ -137,7 +137,7 @@ The role split is a deliberate addition, not parity. Its purpose is to let the b
 
 ### Primary
 - Every page on the current site has a working equivalent on the new stack, and the DNS switch happens without any URL 404ing — every old URL either resolves or 301s to its new home.
-- The free-quote form on the new site delivers a real lead to its current destination, verified by an end-to-end submission before cutover.
+- The contact form on the new site delivers a real lead to its current destination, verified by an end-to-end submission before cutover.
 - The business can add a new realizacja and edit Cennik copy through the new admin, in both languages, without touching code or asking a developer.
 
 ### Secondary
@@ -188,16 +188,16 @@ No blog. No per-project detail pages — Realizacje is a single gallery. `/en/` 
 - **Removed:** Cennik. Both `/cennik/` and `/en/price-list/` are retired; their 301 targets are an open question, and retiring them forfeits ranking on high-intent pricing queries.
 - **Restructured:** Realizacje becomes a Payload collection with per-project detail pages. Existing project photos migrate as a flat gallery without detail pages; projects added after launch get full entries. This creates new indexable URLs that do not exist today.
 - **Rebuilt at parity:** Home, Oferta, Wykończenia, Kontakt — same URLs, new layout, content moved into Payload.
-- **Reworked:** the free-quote flow. Scope not yet captured; the owner has indicated it is substantially more than a rebuilt contact form. **This is the likely home of the product's domain rule** and is the last unresolved piece of discovery.
+- **Reworked:** the contact form flow. Scope not yet captured; the owner has indicated it is substantially more than a rebuilt contact form. **This is the likely home of the product's domain rule** and is the last unresolved piece of discovery.
 - **Added:** owner-controlled codebase and deploy pipeline. (The admin/editor role split proposed here was later dropped — see above.)
 
 ## Lead destination (existing system, out of scope)
 
-Quote submissions do not terminate in this project. They are handed to an **existing, separately deployed Payload application** (`workspace/yolo/wykonczymy`) that already owns the lead record, the `/leads` dashboard, contact-status tracking, and lead notification. That app is **not modified by this project** and its dashboard is **not in this PRD's scope**.
+Contact form submissions do not terminate in this project. They are handed to an **existing, separately deployed Payload application** (`workspace/yolo/wykonczymy`) that already owns the lead record, the `/leads` dashboard, contact-status tracking, and lead notification. That app is **not modified by this project** and its dashboard is **not in this PRD's scope**.
 
 What this project owns is the *public side of the boundary*: collecting the homeowner's answers, and handing them over reliably. Two consequences:
 
-- The lead payload is a **contract with a system this project does not control**. Whatever the quote flow asks a homeowner must map onto what the leads app can store.
+- The lead payload is a **contract with a system this project does not control**. Whatever the contact form flow asks a homeowner must map onto what the leads app can store.
 - **File inputs break the existing contract.** The live ingestion endpoint (`/api/webhooks/wpforms`) accepts a `fields` map of strings and numbers only, and the `leads` collection has no upload relationship. Attachments cannot traverse it. The leads app must therefore gain a way to accept and store them — the option of "conform to what already exists" is closed by FR-031, as a matter of fact rather than preference.
 - "No lead is lost" is now a **cross-network guarantee**, not an in-process one. It requires an explicit failure story: what the homeowner sees, and what happens to their answers, if the leads API is unreachable mid-submission. Silent failure here is the single most expensive defect this project can ship.
 
@@ -207,16 +207,16 @@ What this project owns is the *public side of the boundary*: collecting the home
 
 This is a marketing and lead-capture site, not an application. It applies no recommendation, scoring, or calculation — deliberately. The owner has ruled out an estimator or price calculator: the form asks more than it does today, but it does not compute anything back to the visitor.
 
-What the rule consumes: the homeowner's contact details, their description of the job, and **files they attach** — photos of the space, floor plans, inspiration images. What it produces: a lead record in a separate system, carrying enough context that the contractor can prepare before calling. Where the homeowner meets it: the free-quote form, reached from the CTA present on the current site.
+What the rule consumes: the homeowner's contact details, their description of the job, and **files they attach** — photos of the space, floor plans, inspiration images. What it produces: a lead record in a separate system, carrying enough context that the contractor can prepare before calling. Where the homeowner meets it: the contact form, reached from the CTA present on the current site.
 
 The domain value is therefore concentrated in *reliability and richness of capture*, not in computation. A lead that arrives with photos and a described scope is worth materially more than a name and a phone number — and a lead that silently fails to arrive is worth nothing. That is where this product's quality lives.
 
 ## User Stories
 
-### US-01: Homeowner requests a free quote with photos
+### US-01: Homeowner sends a contact form with photos
 
 - **Given** a Warsaw homeowner who has browsed Realizacje and decided the work looks credible
-- **When** they complete the free-quote form — contact details, a description of the job, attached photos of the space — and consent to being contacted
+- **When** they complete the contact form — contact details, a description of the job, attached photos of the space — and consent to being contacted
 - **Then** they see confirmation that the request was received, and the lead reaches the contractor's leads system with every answer and attachment intact
 
 #### Acceptance Criteria
@@ -267,12 +267,12 @@ Format: `FR-NNN: [Actor] can [capability]. Priority. Change: new | modified | pr
 - FR-020: Admin can change the content model, site configuration, and deployment. Priority: must-have. Change: new
 - FR-021: Admin can create, suspend, and remove editor accounts. Priority: must-have. Change: new
 
-### Quote form
+### Contact form
 
 Numbered from FR-030 so the earlier blocks stay stable.
 
-- FR-030: Visitor can request a free quote by submitting contact details and a description of the job. Priority: must-have. Change: modified
-- FR-031: Visitor can attach one or more files to the quote request — photos of the space, plans, inspiration images. Priority: must-have. Change: new
+- FR-030: Visitor can send a contact form carrying their contact details and a description of the job. Priority: must-have. Change: modified
+- FR-031: Visitor can attach one or more files to the contact form submission — photos of the space, plans, inspiration images. Priority: must-have. Change: new
 - FR-032: Visitor can see, before submitting, what happens to their data, and give explicit consent to being contacted. Priority: must-have. Change: new
 - FR-033: Visitor receives confirmation that the request was received. Priority: must-have. Change: preserved (the leads app already sends an auto-reply)
 - FR-034: Visitor whose submission cannot be delivered is told so plainly and given the phone number, rather than seeing a success message for a lead that vanished. Priority: must-have. Change: new
@@ -287,4 +287,4 @@ Numbered from FR-030 so the earlier blocks stay stable.
 2. **How do attachments reach and live in the leads app?** — A new or extended ingestion path plus storage is required (see Lead destination). Routine to solve; decided at build time, not here. The only judgement worth carrying forward: the leads app should own the stored files, so a lead's attachments don't depend on the marketing site's storage outliving it. Block: no.
 3. **What are the file limits?** — Accepted types, max size, max count per submission. Needed for FR-035. Owner: user. Block: no.
 4. **Where do `/cennik/` and `/en/price-list/` 301 to** once Cennik is retired? — Candidates: Oferta, Kontakt, home. Affects retention of high-intent pricing traffic. Owner: user. Block: no (cutover-time decision).
-5. **Where do quote-form leads actually land today?** — Assumed `biuro@wykonczymy.com.pl`, but the WP form may also write to a database table or a third-party service. Must be confirmed before cutover, since lead delivery is a guardrail. Owner: user. Block: yes for cutover, no for PRD.
+5. **Where do contact form leads actually land today?** — Assumed `biuro@wykonczymy.com.pl`, but the WP form may also write to a database table or a third-party service. Must be confirmed before cutover, since lead delivery is a guardrail. Owner: user. Block: yes for cutover, no for PRD.

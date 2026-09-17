@@ -21,7 +21,7 @@ timeline_budget:
 
 ## Current System Overview
 
-**Purpose.** wykonczymy.com.pl is the marketing and lead-generation site for a renovation and interior-finishing contractor in Warsaw (ul. Terespolska 2, 03-813). Its job is to turn a search visitor into a **quote form submission** — the site's single conversion event, triggered by the "Umów się na darmową wycenę" call to action. Throughout this document "quote form submission" means exactly that: one visitor filling in and sending that form. It is not a stage, a pipeline, or a record type.
+**Purpose.** wykonczymy.com.pl is the marketing and lead-generation site for a renovation and interior-finishing contractor in Warsaw (ul. Terespolska 2, 03-813). Its job is to turn a search visitor into a **contact form submission** — the site's single conversion event, triggered by the "Umów się na darmową wycenę" call to action. Throughout this document "contact form submission" means exactly that: one visitor filling in and sending that form. It is not a stage, a pipeline, or a record type.
 
 **Architecture.** A server-rendered WordPress monolith built on a purchased agency theme. Not headless, though its REST API is reachable.
 
@@ -32,7 +32,7 @@ timeline_budget:
 **Core functionality today.**
 - Six public pages in two languages: Start, Cennik, Oferta, Realizacje, Wykończenia, Kontakt.
 - Twelve indexed URLs. English uses **translated slugs** rather than a locale prefix — `/en/offer/`, not `/en/oferta/`.
-- A free-quote call to action appearing twice on the home page, backed by a form capturing name, phone, e-mail, project scope, square footage, and preferred contact time.
+- A free-quote call to action appearing twice on the home page, backed by a contact form. Its fields are enumerated once, in `live-site-snapshot/scraped-content.md` (`### Contact Form Fields`) — not restated here, and not settled as the new form's field set (see Open Question 1).
 - Direct contact by phone (+48 505 805 425) and e-mail (biuro@wykonczymy.com.pl).
 - A flat photo gallery of completed projects — no individual project pages.
 - Client testimonials.
@@ -94,10 +94,10 @@ the admin fills slots, it never arranges them.
 
 ## User Stories
 
-### US-01: Homeowner requests a free quote with photos
+### US-01: Homeowner sends a contact form with photos
 
 - **Given** a Warsaw homeowner who has browsed the completed projects and decided the work looks credible
-- **When** they complete the free-quote form — contact details, a description of the job, photos of the space — and consent to being contacted
+- **When** they complete the contact form — contact details, a description of the job, photos of the space — and consent to being contacted
 - **Then** they see confirmation that the request was received, and it reaches the contractor's lead system with every answer and photo intact
 
 **Different before:** the form could not accept files at all, so photos arrived later by e-mail or not at all, and the first call started from nothing.
@@ -155,7 +155,7 @@ Requirement ids are carried from the shaping notes so the two documents stay cro
 - FR-015: An editor signs in to a content admin they control, rather than one held by an agency.
 - FR-017: An editor can edit the copy on the remaining pages, in both languages.
 - FR-018: An editor can add and edit client testimonials.
-- FR-030: A visitor can request a free quote by submitting contact details and a description of the job. The form asks more than it does today.
+- FR-030: A visitor can send a contact form carrying their contact details and a description of the job. The form asks more than it does today.
 
 ### Removed
 
@@ -194,7 +194,7 @@ These are not assumptions. Each is a requirement whose breakage is a defect.
 
 **Both languages are one deliverable.** The current site has Polish and English. Shipping one without the other is a regression, not a phase.
 
-**The lead contract belongs to someone else.** Quote requests terminate in a separate application that this project does not control. Two consequences follow:
+**The lead contract belongs to someone else.** Contact form submissions terminate in a separate application that this project does not control. Two consequences follow:
 
 - Whatever the form asks a homeowner must map onto what that application can record. The form's design is constrained by a system outside this project's authority.
 - **The current intake cannot carry files.** It accepts a flat set of text answers and has nowhere to put an attachment. FR-031 therefore cannot be delivered by conforming to what already exists — the receiving application has to gain the ability to accept and hold attachments. This is a fact about the existing contract, not a preference between designs.

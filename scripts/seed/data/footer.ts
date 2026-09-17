@@ -2,7 +2,7 @@ import type { LocalizedT } from '../types'
 
 type FooterCopyT = { title: string; intro: string; role: string }
 
-// The person a quote request reaches. Shared across locales except the job title.
+// The person a contact form submission reaches. Shared across locales except the job title.
 export const footerContact = {
   name: 'Bartosz Antonik',
   phone: '+48 505 805 425',

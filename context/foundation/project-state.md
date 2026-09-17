@@ -130,6 +130,6 @@ sequences the work.
 
 ## Open questions
 
-Eleven, recorded in `prd.md` under `## Open Questions`. Only one blocks cutover: **where quote
-requests actually land today** must be confirmed, since preserving lead delivery is a guardrail and
-the current behaviour is the thing being preserved. None block building.
+Eleven, recorded in `prd.md` under `## Open Questions`. Only one blocks cutover: **where contact
+form submissions actually land today** must be confirmed, since preserving lead delivery is a
+guardrail and the current behaviour is the thing being preserved. None block building.
