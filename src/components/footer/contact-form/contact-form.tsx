@@ -169,7 +169,7 @@ export function ContactForm() {
               label={isSubmitting ? t('sending') : t('send')}
               disabled={isSubmitting}
               isBusy={isSubmitting}
-              className="mb-8 md:mb-0 md:ml-auto"
+              className="md:ml-auto"
             >
               <span
                 aria-hidden
