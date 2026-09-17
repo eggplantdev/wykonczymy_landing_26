@@ -32,11 +32,7 @@ export function ProjectsCarousel({ container, data }: PropsT) {
       <div className="gridContainer mb-4 items-center justify-between md:mb-6 xl:mb-10">
         <SectionTitle title={sectionTitle} className="col-span-4 lg:col-span-5 lg:col-start-3" />
         <div className="col-span-3">
-          <ButtonLink
-            label={ctaLabel}
-            href={ctaHref}
-            className="ml-auto hidden text-nowrap md:block"
-          />
+          <ButtonLink label={ctaLabel} href={ctaHref} className="ml-auto hidden md:flex" />
         </div>
       </div>
       <Swiper
