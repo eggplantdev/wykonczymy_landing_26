@@ -8,7 +8,9 @@ type StyleT = {
   variant?: ButtonVariantT
   size?: ButtonSizeT
   disabled?: boolean
-  hasIcon?: boolean
+  // Which end the icon sits at: an icon needs less room on its own side than a word
+  // does, so that end's padding tightens.
+  icon?: 'leading' | 'trailing'
   className?: string
 }
 
@@ -19,7 +21,7 @@ export function buttonClasses({
   variant = 'light',
   size = 'responsive',
   disabled,
-  hasIcon,
+  icon,
   className,
 }: StyleT) {
   return cn(
@@ -34,7 +36,8 @@ export function buttonClasses({
     size === 'responsive' && 'h-8 px-4.5 text-12 md:h-9 md:text-14',
     size === 'sm' && 'h-8 px-4.5 text-12',
     size === 'xl' && 'text-18 h-12 px-6',
-    hasIcon && 'pr-3 pl-4',
+    icon === 'trailing' && 'pr-3 pl-4',
+    icon === 'leading' && 'pl-3 pr-4',
     disabled && 'pointer-events-none',
     className,
   )
@@ -69,7 +72,7 @@ export function Button({
   onClick,
   children,
   disabled,
-  hasIcon,
+  icon,
   className,
   type = 'button',
   isBusy,
@@ -80,7 +83,7 @@ export function Button({
       disabled={disabled}
       onClick={onClick}
       aria-busy={isBusy}
-      className={buttonClasses({ variant, size, disabled, hasIcon, className })}
+      className={buttonClasses({ variant, size, disabled, icon, className })}
     >
       {label && <span className={buttonLabelClasses({ variant, disabled })}>{label}</span>}
       {children}

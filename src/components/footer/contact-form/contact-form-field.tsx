@@ -1,15 +1,10 @@
 import { useId, type ReactNode } from 'react'
 import { cn } from '@/lib/cn'
 
-// The underline the whole form lines up on. Shared with the attachments row, which is a
-// <label> rather than a control and so cannot take the control-only half below.
-export const fieldShellClasses = 'border-grau_300 text-12 text-grau_300 w-full border-b pt-8 pb-2'
-
 // `placeholder:` is not decoration: a browser does not inherit the element's `color` into
-// `::placeholder`, so without it the fields show the UA's own grey while the attachments
-// label — real text, not a placeholder — sits next to them in `grau_300`.
+// `::placeholder`, so without it the fields show the UA's own grey instead of `grau_300`.
 export const fieldControlClasses = cn(
-  fieldShellClasses,
+  'border-grau_300 text-12 text-grau_300 w-full pt-8 pb-2',
   'focus:border-grau_100 aria-invalid:border-error placeholder:text-grau_300 border-0 border-b bg-transparent pl-0',
 )
 

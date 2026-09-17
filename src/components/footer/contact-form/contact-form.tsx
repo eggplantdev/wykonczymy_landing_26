@@ -128,12 +128,12 @@ export function ContactForm() {
         </form.Field>
       ))}
 
-      {TEXTAREA_FIELDS.map((name) => (
-        <form.Field key={name} name={name}>
+      {TEXTAREA_FIELDS.map((textareaName) => (
+        <form.Field key={textareaName} name={textareaName}>
           {(field) => (
             <ContactFormTextarea
               name={field.name}
-              placeholder={t(name)}
+              placeholder={t(textareaName)}
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
@@ -165,7 +165,7 @@ export function ContactForm() {
           {(isSubmitting) => (
             <Button
               type="submit"
-              hasIcon
+              icon="trailing"
               label={isSubmitting ? t('sending') : t('send')}
               disabled={isSubmitting}
               isBusy={isSubmitting}
