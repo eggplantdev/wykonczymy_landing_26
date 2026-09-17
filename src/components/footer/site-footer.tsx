@@ -4,6 +4,7 @@ import { CONTACT_FORM_ANCHOR } from '@/lib/anchors'
 import type { MediaImageT } from '@/components/media/types'
 import { cn } from '@/lib/cn'
 import { getTranslations, type Locale } from '@/lib/i18n/i18n'
+import { PRIVACY_POLICY_PAGE_TYPE } from '@/lib/routing'
 import { ContactForm } from './contact-form/contact-form'
 import { ContactPerson } from './contact-person'
 import { LegalLinks } from './legal-links'
@@ -44,7 +45,7 @@ export function SiteFooter({ container, data, locale, typePaths }: PropsT) {
       >
         <ContactPerson {...person} />
         <div className="lg:col-span-8 lg:col-start-5">
-          <ContactForm />
+          <ContactForm privacyPolicyHref={typePaths[PRIVACY_POLICY_PAGE_TYPE]} />
         </div>
       </div>
 

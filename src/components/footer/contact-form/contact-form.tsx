@@ -10,6 +10,7 @@ import { useContactFormStore } from '@/lib/contact/contact-form-store'
 import { contactSchema, emptyContactValues, firstIssueKey } from '@/lib/contact/contact-schema'
 import { submitContactForm } from '@/lib/contact/submit-contact-form'
 import { useTranslation } from '@/lib/i18n/use-translation'
+import { ConsentLabel } from './consent-label'
 import { ContactFormAttachments } from './contact-form-attachments'
 import { ContactFormCheckbox } from './contact-form-checkbox'
 import { ContactFormInput } from './contact-form-input'
@@ -41,7 +42,12 @@ const TEXT_FIELDS: readonly TextFieldT[] = [
 // full width of the grid. Each name doubles as its own `form` translation key.
 const TEXTAREA_FIELDS = ['scope', 'message'] as const
 
-export function ContactForm() {
+type PropsT = {
+  /** The policy's address in the locale being read; absent until the page is published. */
+  privacyPolicyHref?: string
+}
+
+export function ContactForm({ privacyPolicyHref }: PropsT) {
   const { t } = useTranslation('form')
   const setDraft = useContactFormStore((state) => state.setDraft)
   const clearDraft = useContactFormStore((state) => state.clearDraft)
@@ -151,7 +157,7 @@ export function ContactForm() {
           {(field) => (
             <ContactFormCheckbox
               name={field.name}
-              label={t('acceptTerms')}
+              label={<ConsentLabel href={privacyPolicyHref} />}
               checked={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}

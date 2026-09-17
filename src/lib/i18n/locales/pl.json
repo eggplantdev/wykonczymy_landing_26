@@ -23,7 +23,8 @@
     "tooLong": "Wiadomość jest za długa",
     "scope": "Zakres prac (remont, wykończenie, inne)",
     "area": "Powierzchnia prac, np. 30–60 m²",
-    "acceptTerms": "Akceptuję politykę prywatności",
+    "acceptTerms": "Akceptuję {link}",
+    "acceptTermsLink": "politykę prywatności",
     "send": "Wyślij",
     "attachments": "Dodaj załączniki, jeśli masz — projekt, rzut, zdjęcia — im więcej informacji dostaniemy, tym łatwiej będzie nam przygotować wycenę prac.",
     "attachmentsCta": "Wybierz pliki"

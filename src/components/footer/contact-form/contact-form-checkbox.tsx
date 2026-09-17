@@ -1,12 +1,14 @@
 'use client'
 
+import type { ReactNode } from 'react'
+
 import { Checkmark } from '@/components/ui/icons/checkmark'
 import { cn } from '@/lib/cn'
 import { FieldError, useFieldIds } from './contact-form-field'
 
 type PropsT = {
   name: string
-  label: string
+  label: ReactNode
   checked: boolean
   onChange: (checked: boolean) => void
   onBlur: () => void

@@ -23,7 +23,8 @@
     "tooLong": "Message is too long",
     "scope": "Scope of work (renovation, finishing, other)",
     "area": "Work area, e.g. 30–60 m²",
-    "acceptTerms": "I agree to the privacy policy",
+    "acceptTerms": "I accept the {link}",
+    "acceptTermsLink": "privacy policy",
     "send": "Send",
     "attachments": "Add attachments if you have any — a design, a floor plan, photos — the more we get, the easier it is to prepare your quote.",
     "attachmentsCta": "Choose files"
