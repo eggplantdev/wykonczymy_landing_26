@@ -20,7 +20,7 @@ export function LegalLinks({ typePaths, nav, className }: PropsT) {
   return (
     <ul
       className={cn(
-        'text-10 text-grau_500 flex flex-wrap items-center justify-center gap-x-6 gap-y-2',
+        'text-10 text-grau_500 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 lg:justify-start',
         className,
       )}
     >
