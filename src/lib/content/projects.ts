@@ -8,8 +8,8 @@ import type { MediaImageT } from '@/components/media/types'
 import type { SpecItemT } from '@/components/ui/spec-item'
 import { toImage, toImages } from './media'
 import { toSpecs } from './specs'
+import { isTranslated } from './translated'
 
-// Shared by the listing page, the home page's carousel teaser and the project's own page.
 export type ProjectT = {
   id: number
   slug: string
@@ -61,9 +61,9 @@ export const findProjects = cache(async (locale: Locale): Promise<ProjectT[]> =>
     where: { _status: { equals: 'published' } },
   })
 
-  return docs.map(toProject)
+  return docs.filter(isTranslated).map(toProject)
 })
 
-/** The projects following this one, so the page always closes on somewhere else to go. */
+/** The first few that are not this one, so the page always closes on somewhere else to go. */
 export const relatedProjects = (projects: ProjectT[], slug: string, count = 3): ProjectT[] =>
   projects.filter((project) => project.slug !== slug).slice(0, count)
