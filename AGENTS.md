@@ -109,6 +109,12 @@ Close out **every change that has its own** `context/changes/<id>/` **folder** b
 `slice-review-gate` skill; having a change folder _is_ the trigger. Only trivial folder-less edits
 skip it.
 
+Findings the gate defers are filed to Linear — project **Wykonczymy**, team **Ex-plant** — and
+**every issue filed from this repo carries the `landing` label.** That project is shared with the
+leads app, which owns the large majority of its issues; the label is the only thing separating the
+two backlogs, so an unlabelled issue is indistinguishable from leads-app work and is effectively
+lost.
+
 ## Where things stand
 
 **Don't propose conversion-optimisation work — it is an explicit non-goal.** Success is measured as
