@@ -17,7 +17,7 @@ everywhere else.
 
 ## Findings
 
-- [ ] 🔴 CRITICAL · skipped · `code-review` · `src/components/footer/contact-form.tsx:17-55` ·
+- [x] 🔴 CRITICAL · filed EX-790 · `code-review` · `src/components/footer/contact-form.tsx:17-55` ·
       the contact form has no `action`, no `onSubmit` and no server action, so every lead
       submitted through the site-wide footer is silently dropped — needs the leads-app contract
       in `/workspace/yolo/wykonczymy`, which this repo does not own. Already tracked in this
@@ -33,11 +33,13 @@ everywhere else.
       the twelve indexed addresses shipped Payload's starter meta description ("A blank template
       using Payload in a Next.js app").
       test: no automated test — covered by the metadata e2e assertion added for the finding below
-- [ ] 🟡 WARNING · proposed · `code-review` · `src/app/(frontend)/layout.tsx:19` · `<html lang="en">`
+- [x] 🟡 WARNING · fixed · `code-review` · `src/app/(frontend)/layout.tsx:19` · `<html lang="en">`
       is hardcoded, so the Polish half of the site declares itself English. The root layout cannot
-      see the route's params, so the fix needs either middleware setting a pathname header or a
-      restructure — an architectural addition that wants your call, not a silent patch.
-      test: no automated test · e2e — assert `lang` per locale once the approach is chosen
+      see the route's params. **Decided: `lang="pl"`, keep static.** PL is the default locale and
+      the majority of the site, so half the pages go from wrong to right for one word; `/en/` stays
+      knowingly wrong until the locale moves into a real route segment. Middleware was rejected —
+      `headers()` would opt the root layout into dynamic rendering and un-prerender the whole site.
+      test: no automated test · e2e — deferred with the `[locale]` restructure
 - [x] 🟡 WARNING · skipped · `code-review` · `src/app/(frontend)/[[...segments]]/page.tsx:140-151` ·
       `contact` and `price-list` fall through to `return null`, serving two indexed addresses as
       empty 200s. 404-ing them would delete two of the twelve addresses from the map, so the real
@@ -86,11 +88,13 @@ everywhere else.
       but it is the deliberate trade documented in each file (Swiper lays the track out on the
       client; the alternative is a flash of stacked full-width slides). Changing it is a design
       decision, not a review fix. The duplication was folded into the reuse pass below.
-- [ ] 🟡 WARNING · proposed · `code-review` · `src/app/(frontend)/next.config.ts:15` +
+- [x] 🟡 WARNING · fixed · `code-review` · `next.config.ts:15` +
       `context/foundation/url-map.md` · four indexed addresses have neither a target nor a redirect:
       `/oferta/` and `/cennik/` 404 today, plus their `/en/` counterparts. Oferta was retired on
-      purpose, so these need a redirect decision from you — content call, not a code defect.
-- [ ] 🟡 WARNING · proposed · `code-review` · deploy config · the apex→`www` canonical redirect
+      purpose. **Decided: 301 to the home page.** The Polish pair goes to `/`, the English pair to
+      `/en/home/` rather than `/en/`, so it lands in one hop instead of chaining through the
+      existing locale-root redirect.
+- [x] 🟡 WARNING · filed EX-793 · `code-review` · deploy config · the apex→`www` canonical redirect
       exists only as a Vercel domain setting and cannot be verified from the repo. **Confirm before
       cutover** — the whole url-map depends on it.
 - [x] 🔵 OBSERVATION · fixed · `code-review` · `src/collections/Users.ts` · no access control, so
@@ -245,10 +249,10 @@ everywhere else.
       Migration generated, applied **locally**, `generate:types` re-run. Additive columns plus a
       non-unique→unique index swap — no data loss. **Production still owes `pnpm db:migrate:prod`,
       which a human runs.**
-- [ ] proposed · `simplify` · `styles.css` · two typographic ladders coexist — the numeric
+- [x] filed EX-794 · `simplify` · `styles.css` · two typographic ladders coexist — the numeric
       `--text-N` scale used everywhere, and a semantic `--text-sm/base/…` block carrying the only
       line-height and letter-spacing values, used only in `error.tsx` / `not-found.tsx`. Pick one.
-- [ ] proposed · `simplify` · `styles.css:9` · `--font-sans` references `--font-riforma`, but no
+- [x] filed EX-794 · `simplify` · `styles.css:9` · `--font-sans` references `--font-riforma`, but no
       font is loaded anywhere in `src/` (no `next/font`), so `font-sans` falls through to
       `ui-sans-serif`. Either wire the font or drop the var.
 
@@ -271,3 +275,241 @@ resolved — that work landed in `lib/content/*` and the fan-out findings keyed 
 - `pnpm build` — green after the migration; 42 paths prerendered.
 - `pnpm test:int` / `pnpm test:e2e` — **not run.** Step 3 (authoring the post-`/simplify` tests)
   is still owed, and the full suite has not been run against this slice.
+
+---
+
+# Review-gate ledger — run 2 · tdg-port (CMS/seed slice) · 2026-09-17
+
+Second gate run on the same change folder, 13 days after run 1. New diff, so a new
+findings list rather than an edit of run 1's — run 1's record above is left intact.
+
+Scope: `d09eac6..worktree`, including uncommitted and untracked files. The slice:
+seed split into `scripts/seed/run.ts` + `scripts/seed/data/home.ts`, revalidation
+extracted to `src/lib/revalidate.ts`, `src/lib/pages.ts` → `src/lib/content/pages.ts`,
+`payload-types.ts` regenerated, int/unit tests added; plus three committed UI fixes
+(`06333d9`, `ecc9ede`, `79e6152`).
+
+Excluded as generated: `src/payload-types.ts`, `src/app/(payload)/admin/importMap.js`.
+
+Fan-out: code-review, tailwind-v4-audit, feature-first-structure, module-cohesion-audit,
+structure-scatter-audit (diff-scoped), comment-noise-audit (flag-only).
+Dropped: `/10x-impl-review` — no `plan.md` in the change folder.
+Step 0.5 verification pass: skipped — no verification skill installed, and browser
+automation is off by standing instruction.
+
+**Tree caveat:** at dispatch, ~95% of the slice was another session's uncommitted work,
+with two files written 90 seconds prior. The user was asked and explicitly chose the full
+gate, accepting that `/simplify` mutates those files. Recorded here because run 1 hit the
+same hazard and resolved it by waiting instead.
+
+**Carried forward from run 1:** 6 open boxes (2 🔴/🟡 correctness, 2 deploy-config
+warnings, 2 `simplify` proposals on `styles.css`). They remain archive blockers and are
+not restated in run 2's list — see run 1's `## Findings` above, lines 20/36/89/93/248/251.
+
+## Findings — run 2
+
+- [x] filed EX-791 · `simplify`/altitude · `tests/int/seed.int.spec.ts:30` · the re-seed test asserts
+      row IDS are stable but never that the row's `image`/`video` survives — which is the actual
+      thing the id-preservation machinery exists to protect, and the literal AGENTS.md promise
+      ("never touches uploads"). Cheap to write (attach media to a card, re-seed, assert), but it
+      needs another WRITE against the int suite's DB — blocked behind the `.env` decision above.
+      test: TDD · integration — the guard IS the finding
+- [x] fixed · `simplify`/simplification · `src/lib/content/projects.ts:65` +
+      `interior-styles.ts:56` · byte-identical `filter((doc) => doc.slug && doc.title)` AND a
+      byte-identical two-line comment, copy-pasted into both readers. Extracted to
+      `src/lib/content/translated.ts` as `isTranslated`, comment with it. The altitude pass called
+      this "minor, not worth a helper"; the simplification pass called the comment a fork that
+      will drift. Fixed on the comment argument — the prose is the part that rots.
+- [x] fixed · `simplify`/simplification · `tests/int/projects.int.spec.ts:28` · `as never` copied
+      from `pages.int.spec.ts`'s precedent, where it IS load-bearing. Here it is not — verified by
+      removing it and running `tsc --noEmit` clean. Dropped.
+- [x] skipped · `simplify`/reuse · `scripts/seed/run.ts:23-149` · `seedProjects` /
+      `seedInteriorStyles` / `seedPages` triplicate one find→create-or-update(pl)→update(en) shape,
+      ~90 lines. Real, but `seedPages` carries the `isHome` branch and a different return type
+      (`Record<string, number>`), so the extraction is a refactor with its own blast radius — not a
+      cleanup-pass edit. Review-worthy.
+- [x] skipped · `simplify`/altitude · `src/lib/routing.ts:54` · sharpened diagnosis of the earlier
+      🔵: `HOME_PAGE_TYPE` is the page-type DISCRIMINATOR, and `localeRoot` spends it as a URL
+      segment. `scripts/seed/data/pages.ts:12` proves the axes differ — PL home slug is `start`,
+      EN is `home`, equal to the discriminator only by coincidence. `site-header.tsx:19` already
+      shows the right pattern (`typePaths[HOME_PAGE_TYPE] ?? '/'`). Two of the three call sites
+      could adopt it for free; `language-menu.tsx` needs the OTHER locale's home address, which no
+      current query supplies. Split fix across 3 files, so: review-worthy.
+- [x] skipped · `simplify`/altitude · `src/lib/revalidate.ts:8` · Payload hook `context` could
+      carry `disableRevalidate` from the seed so the hook KNOWS it is out-of-request instead of
+      discovering it via an exception. The audit calls it marginal and the current try/catch
+      honestly commented; agreed.
+- [x] skipped · `simplify`/altitude · `src/collections/Pages.ts` · a `beforeValidate` guard
+      rejecting `_status: published` on a half-translated doc (precedent exists there — the
+      duplicate-home check). `_status` is not localized, so Payload's `required` only binds the
+      locale being written; a project published PL-only silently vanishes from the EN listing with
+      no error. The audit itself calls this defer-not-fix-now for a solo-operator six-page site.
+- [x] dropped · `simplify`/efficiency · `scripts/seed/run.ts:164` · `seedInteriorStyles`,
+      `seedPages` and `seedFooter` write disjoint collections and could run under one `Promise.all`
+      after `seedProjects`. Safe, but they are interleaved with `payload.logger.info` progress
+      lines that are the operator's only feedback during a `seed:prod` run — scrambling those to
+      save a few hundred ms on an occasional CLI is the wrong trade.
+- [x] dismissed · `simplify`/efficiency · no N+1 and no uncached duplicate query introduced —
+      every content-layer read is `cache()`-wrapped, `generateStaticParams` already hoists
+      `findChildren` out of its per-doc loop, and `layout.tsx`'s one serial `await` is a real
+      `page.id` dependency. The per-entry `find → pl write → en write` chains only LOOK like
+      parallelisable locale loops; the EN update needs the id the PL write returns.
+- [x] dismissed · `simplify`/reuse · 3 false positives verified: the `payload.find` argument shape
+      across `src/lib/content/*` (every call site's `depth`/`limit`/`sort`/`draft` is tuned to its
+      need — idiomatic SDK use, not a hand-rolled abstraction); `spec()` in
+      `data/projects.ts` vs `toSpecs` (opposite directions — seed input vs doc-to-component); the
+      int-test `getPayload` bootstrap (4 copies now, but the pattern pre-dates this slice in
+      `api.int.spec.ts` and `pages.int.spec.ts` — not new duplication).
+- [x] dismissed · `simplify`/simplification · `scripts/seed.ts`'s 9-line stub (it is the CLI entry;
+      `seedAll` is exported precisely so the int tests run the operator's code, not a copy), the
+      `home-group.ts` extraction (it COLLAPSED a hardcoded `emptyRowIds` + a separate inline EN
+      recompute into one `rowIdsOf`), the `SpecRowT` removal, and the `revalidate.ts` extraction —
+      all net reductions.
+- [x] dismissed · `simplify`/simplification · two files named `home-group.ts`
+      (`src/collections/fields/` vs `scripts/seed/`) both exporting `homeGroup` · different
+      concerns disambiguated by their directories; nothing imports one expecting the other.
+- [x] 🟡 WARNING · filed EX-792 · `code-review` · `tests/int/seed.int.spec.ts:25` · `pnpm test:int`
+      resolves `POSTGRES_URL` from `.env` (via `vitest.setup.ts`'s `dotenv/config`) and then calls
+      `seedAll` twice, so running the suite overwrites whatever an editor typed into the local
+      admin. New blast radius: before this slice the int tests only created throwaway docs.
+      Needs an env decision (a `.env.test` the int suite points at) — not silently rewired.
+      test: TDD · integration — assert the suite is not pointed at `.env`'s URL
+- [x] 🟡 WARNING · filed EX-791 · `code-review` · `scripts/seed/home-group.ts:29,38` · re-seed still
+      destroys admin-added array rows. Row ids are preserved (the slice's real fix) but matching
+      is POSITIONAL and the array is replaced, not merged: a 4th services card added in the admin
+      is deleted with its photo, and reordering rows in the admin writes each title onto the
+      neighbour's row — correct copy over the wrong image, no error. Contradicts AGENTS.md's
+      "never touches uploads". Fix is id-keyed or append-only merge — behaviour-changing, wants
+      your call. (Line refs are post-extraction; was `run.ts:120,129-133`.)
+      test: TDD · integration — append a 4th card + reverse row order, re-seed, assert survival
+- [x] 🟡 WARNING · fixed · `code-review` · `tests/int/projects.int.spec.ts` · the fixture is a
+      PUBLISHED project in the shared content DB, cleaned up in `afterAll` with
+      `.catch(() => undefined)` — an assertion failure or a killed worker leaks a live project
+      onto `/realizacje/` and burns its `unique` slug forever. Now created inside the `it` with
+      cleanup in `finally`, allowed to throw.
+      test: no automated test · integration — test hygiene, not product behaviour
+- [x] 🔵 OBSERVATION · skipped · `code-review` · `src/lib/content/projects.ts:65` · the
+      `fallback: false` filter checks `slug && title` but not `summary`, so a half-translated
+      project renders "Zupnicza 19 — null" in the EN carousel. Real, but the fix is a product
+      decision (filter it out vs. coerce to `''`) on another agent's in-flight file.
+      test: TDD · integration — extend the existing PL-only fixture
+- [x] 🔵 OBSERVATION · skipped · `code-review` · `src/lib/content/pages.ts:88` +
+      `page.tsx:53` · the home type is exempted from the no-slug guard, so a home doc with no EN
+      slug yields `/en/null/` as a prerendered address. Pre-existing, low reachability
+      (`slugField` is required), but sits on the twelve-address guardrail.
+      test: TDD · unit — `pathsByType` with a null-slug home doc
+- [x] 🔵 OBSERVATION · skipped · `code-review` · `src/lib/content/home.ts:75,107` · the new
+      `localeRoot` fallback is fed into `childPath`, synthesising `/en/home/zupnicza-19/` — a
+      hard 404. Not a regression (the old `'/'` fallback also 404'd), but a fallback that exists
+      to avoid a wrong address still emits one. Dropping the href is the honest behaviour.
+      test: TDD · unit — `typePaths: {}` case in `home-content.spec.ts`
+- [x] 🔵 OBSERVATION · dropped · `code-review` · `scripts/seed/run.ts:63` · interior-style `body`
+      rows are written without ids, so each re-seed recreates them. Harmless today (no uploads on
+      that row), latent if an image field is ever added.
+      test: no automated test — no live defect to guard
+- [x] 🔵 OBSERVATION · skipped · `code-review` · `src/lib/routing.ts:54` · `localeRoot`'s
+      hardcoded `'home'` now has three consumers baking in `/en/home/`; the EN home slug is a
+      CMS-editable field and nothing prevents a rename. Enforceable version is a Payload
+      `beforeValidate`, not a test.
+      test: no automated test — coupling recorded
+- [x] 🔵 OBSERVATION · dropped · `code-review` · `src/lib/revalidate.ts:14` · one `seedAll` run
+      emits ~20 identical `revalidatePath skipped` warnings, so the "not silent" rationale is
+      undercut by its own volume. Log ergonomics.
+      test: no automated test — not behaviour
+- [x] 🔵 OBSERVATION · skipped · `code-review` · `tests/int/*` · no `payload.destroy()`, and
+      vitest runs files in parallel while `seed.int.spec.ts` bulk-writes `pages` that
+      `pages.int.spec.ts` also touches. No deterministic breakage found; `fileParallelism: false`
+      would remove the class. Pre-existing pattern.
+      test: no automated test — infrastructure
+- [x] 🔵 OBSERVATION · skipped · `code-review` · `tests/int/seed.int.spec.ts:40-56` · the
+      'writes both locales of a shared array row' test asserts only length-equality and
+      first-row-difference — it never checks the ids match across locales, which is the thing the
+      `RowIdsT` machinery exists for.
+      test: TDD · integration — strengthen in place
+- [x] fixed · `cohesion`+`feature-first` · `tests/int/seed.int.spec.ts:59-92` → new
+      `tests/int/projects.int.spec.ts` · `findProjects` is a content-layer subject grafted into
+      the seed spec; the `payload = payload ?? …` re-init existed only because two subjects
+      shared one module-scope handle. Flagged independently by both audits.
+- [x] fixed · `scatter`+`feature-first` · `tests/int/seed.int.spec.ts:3` · `@/../scripts/seed/run`
+      used the `@/*` alias to climb out of its own target. Added `"@scripts/*": ["./scripts/*"]`
+      to `tsconfig.json`; `vite-tsconfig-paths` picks it up with no further wiring. Flagged
+      independently by both audits.
+- [x] fixed · `cohesion` · `scripts/seed/run.ts:98-145` → new `scripts/seed/home-group.ts` ·
+      `RowIdsT`/`rowIdsOf`/`homeGroup` are a field-shape MAPPING concern among four WRITE
+      routines, moving in lockstep with `src/collections/fields/home-group.ts`. Two call sites;
+      the now-unused `Page` import left with them. `run.ts` 214 → 165 lines.
+- [x] fixed · `cohesion` · `scripts/seed/types.ts:3` · `SpecRowT` was re-exported through a
+      non-barrel purely so `data/projects.ts` could use one import line. Deleted; the one
+      consumer now imports from `@/lib/content/specs` directly.
+- [x] fixed · `tailwind-v4` · `src/components/home/featured-project.tsx:27` · `lg:h-[755px]` was
+      an off-scale px literal (755/4 = 188.75) beside a rem sibling `md:h-176`. Now `lg:h-189`
+      (756px, +1px). PRE-EXISTING line — the slice only touched 32/34.
+- [x] fixed · `comment-noise` · `src/lib/content/projects.ts:68` · the doc claimed "the projects
+      FOLLOWING this one" but the code is `filter(...).slice(0, count)` — the first N that aren't
+      this one, no wrap-around. Only its twin `relatedStyles` actually wraps; the phrasing was
+      copied across and is false in one of the two files.
+- [x] fixed · `comment-noise` · `src/lib/revalidate.ts:5` + `revalidatePage.ts:7` · both said
+      "at six pages"; `pageTypes` holds FIVE. Dropped the number rather than pick one — it drifts
+      and the cost argument does not need it.
+- [x] fixed · `comment-noise` · `src/lib/content/interior-styles.ts:40` · "the same twelve rows"
+      was the last hardcoded count, surviving in the file furthest from the data after the slice
+      removed it from the seed's own header.
+- [x] fixed · `comment-noise` · `src/components/layout/language-menu.tsx:8` · the `pathsForPage`
+      fallback comment was left floating above `type PropsT`, ~24 lines from the
+      `paths[candidate] ?? localeRoot(candidate)` it explains — orphaned by my own separator
+      removal. Moved onto that line.
+- [x] skipped · `cohesion` · `src/lib/routing.ts:8-25` · the page-type vocabulary
+      (`pageTypes`/`PageTypeT`/the three sentinels) is a second clock in the URL-grammar file and
+      wants `src/lib/page-types.ts`. Ripples to ~8 import sites and the audit called it the
+      weakest of its findings — a review-worthy refactor, not a cleanup-pass edit.
+- [x] dropped · `comment-noise` · 6 deletes + 5 trims across `run.ts:12,198`, `routing.ts:5,46`,
+      `data/{home:15,pages:6,interior-styles:11,projects:19}`, `layout.tsx:32`, `Footer.ts:5`,
+      `content/interior-styles.ts:10,20` · all genuine noise (tdg provenance, refactor narration,
+      duplicated rationale), but cosmetic churn spread across another session's in-flight files.
+      The factually WRONG and drifting ones were fixed above; these are prose.
+- [x] dismissed · `code-review` · 6 items verified benign: `ecc9ede`'s `md:flex` fix (confirmed
+      correct, `text-nowrap` genuinely redundant), `79e6152`'s `paddings`/`text-balance` (image
+      `sizes="100vw"` unaffected — the overlay is a sibling of the image container), the
+      `language-menu` `key` move, `home.ts:37`'s `_status` guard, `page.tsx:82`'s metadata
+      symmetry, and `generateStaticParams`' children hoist (no N+1).
+- [x] dismissed · `tailwind-v4` · `page.tsx:121` `style={style}` · a domain prop carrying an
+      interior-style record, not an inline style attribute.
+- [x] dismissed · `feature-first` · `src/lib/content/*` → `src/components/**` type-only imports ·
+      seven edges, ALL pre-dating `d09eac6`; the slice added zero. Type-only so no runtime/RSC
+      edge, and hoisting them to `src/types/` is the outcome run 1 already rejected.
+
+## Simplify pass — run 2
+
+Ran `/simplify` over `d09eac6..worktree` — 4 cleanup agents in parallel (reuse, simplification,
+efficiency, altitude). **2 applied, 1 proposed, 4 skipped, 1 dropped, 4 dismissed**; every finding
+is folded into `## Findings — run 2` above tagged `simplify`, per this gate's one-list rule — no
+separate report file.
+
+Two agents collided on `src/lib/content/{projects,interior-styles}.ts:65/56` and reached opposite
+conclusions (simplification: extract; altitude: leave it). Resolved toward extraction, on the
+narrower ground that the duplicated **comment** is what drifts, not the one-line predicate.
+
+## Tests & suite — run 2
+
+- `pnpm typecheck` — **pass** (clean, after both simplify edits)
+- `pnpm lint` — **pass** (clean)
+- `pnpm test` / `pnpm test:int` / `pnpm test:e2e` / `pnpm build` — **not run.** `test:int` is the
+  subject of an open 🟡: it calls `seedAll` against whatever `POSTGRES_URL` `.env` holds, so
+  running it overwrites the local content DB. Not run without your call.
+
+**Archive is UNBLOCKED** — 0 open boxes. Two findings were fixed on your decision (`lang="pl"`;
+301s for the four retired addresses) and five were filed to Linear, project **Wykonczymy**, team
+Ex-plant:
+
+| Issue | What |
+| --- | --- |
+| EX-790 | 🔴 contact form drops every lead — blocked on the leads-app contract |
+| EX-791 | 🟡 re-seeding deletes admin-added rows and mis-pairs copy with photos |
+| EX-792 | 🟡 `pnpm test:int` seeds the real local content database |
+| EX-793 | 🟡 confirm the apex→`www` redirect in Vercel before cutover |
+| EX-794 | typography — two competing scales, plus a brand font nobody loads |
+
+Deleting the seed machinery outright was raised and reverted, so EX-791 and EX-792 stand.
+
+`pnpm typecheck` currently fails on `src/components/footer/contact-form.tsx:23` — another
+session's in-flight work, untouched here.
