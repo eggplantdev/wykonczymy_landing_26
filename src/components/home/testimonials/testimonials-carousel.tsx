@@ -61,8 +61,15 @@ export function TestimonialsCarousel({ container, data, ratings }: PropsT) {
               swiper.current = instance
               carousel.onSwiper()
             }}
+            // `slideChange` also fires without the visitor moving: expanding a quote
+            // re-renders the track, and Swiper's loop fix shifts `activeIndex` to emit it.
+            // Keying off `realIndex` tells a real move from that bookkeeping — otherwise
+            // opening a quote closes it again in the same tick.
             onSlideChange={(instance) => {
-              setCurrent(instance.realIndex + 1)
+              const next = instance.realIndex + 1
+              if (next === current) return
+
+              setCurrent(next)
               if (!expandedId) return
               setExpandedId(undefined)
               instance.autoplay.start()
