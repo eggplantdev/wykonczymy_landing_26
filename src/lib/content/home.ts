@@ -2,6 +2,7 @@ import type { HomePageDataT } from '@/components/home/home-page'
 import type { Page } from '@/payload-types'
 import type { InteriorStyleT } from '@/lib/content/interior-styles'
 import type { ProjectT } from '@/lib/content/projects'
+import { CONTACT_FORM_ANCHOR } from '@/lib/anchors'
 import type { Locale } from '@/lib/i18n/i18n'
 import { childPath, localeRoot, PROJECTS_PAGE_TYPE, type PageTypeT } from '@/lib/routing'
 import { toImage, toVideo } from './media'
@@ -53,7 +54,10 @@ export function toHomeData(
           image: toImage(hero.image),
           video: toVideo(hero.video),
           ctaLabel: hero.ctaLabel ?? undefined,
-          ctaHref: hero.ctaLabel ? link(hero.ctaLink) : undefined,
+          // The one button on the site that does not open a page: booking the free quote is
+          // the footer form, and sending a visitor to another address to reach a form that is
+          // already under them is a detour. Its `ctaLink` field is therefore inert.
+          ctaHref: hero.ctaLabel ? `#${CONTACT_FORM_ANCHOR}` : undefined,
         }
       : undefined,
 

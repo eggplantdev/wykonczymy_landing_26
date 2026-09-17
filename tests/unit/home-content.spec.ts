@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { Page } from '@/payload-types'
 import { toHomeData } from '@/lib/content/home'
+import type { InteriorStyleT } from '@/lib/content/interior-styles'
 
 const page = (): Page =>
   ({
@@ -60,11 +61,29 @@ describe('toHomeData', () => {
     expect(testimonials).toBe(undefined)
   })
 
+  // The hero button is the one CTA that does not open a page: it scrolls to the footer form,
+  // so whichever page an editor picks in `ctaLink` is deliberately ignored.
+  it('points the hero button at the footer form in both locales', () => {
+    expect(toHomeData(page(), { locale: 'pl', ...sources }).hero?.ctaHref).toBe('#contact-form')
+
+    expect(toHomeData(page(), { locale: 'en', ...sources }).hero?.ctaHref).toBe('#contact-form')
+  })
+
   // A page with no slug in this locale has no address here; `/` is the Polish root, so the
   // English site must not fall back to it.
-  it('falls back to the locale root when the CTA target has no address', () => {
-    expect(toHomeData(page(), { locale: 'pl', ...sources }).hero?.ctaHref).toBe('/')
+  it('falls back to the locale root when a CTA target has no address', () => {
+    const withStyles = {
+      ...page(),
+      home: { interiorStyles: { sectionTitle: 'Style', ctaLabel: 'Więcej', ctaLink: 'contact' } },
+    } as Page
+    const styleSources = { ...sources, styles: [{}] as unknown as InteriorStyleT[] }
 
-    expect(toHomeData(page(), { locale: 'en', ...sources }).hero?.ctaHref).toBe('/en/home/')
+    expect(toHomeData(withStyles, { locale: 'pl', ...styleSources }).interiorStyles?.ctaHref).toBe(
+      '/',
+    )
+
+    expect(toHomeData(withStyles, { locale: 'en', ...styleSources }).interiorStyles?.ctaHref).toBe(
+      '/en/home/',
+    )
   })
 })
