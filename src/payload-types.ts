@@ -242,6 +242,31 @@ export interface Page {
           }[]
         | null
     }
+    testimonials?: {
+      sectionTitle?: string | null
+      quotes?:
+        | {
+            quote: {
+              root: {
+                type: string
+                children: {
+                  type: any
+                  version: number
+                  [k: string]: unknown
+                }[]
+                direction: ('ltr' | 'rtl') | null
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+                indent: number
+                version: number
+              }
+              [k: string]: unknown
+            }
+            name: string
+            role?: string | null
+            id?: string | null
+          }[]
+        | null
+    }
     /**
      * Teases every published interior style — the slides are not curated here.
      */
@@ -253,14 +278,16 @@ export interface Page {
        */
       ctaLink?: ('home' | 'completed-works' | 'interior-styles' | 'contact' | 'price-list') | null
     }
-    featuredProject?: {
-      sectionTitle?: string | null
-      ctaLabel?: string | null
-      /**
-       * Its title, summary and photo are read from the project itself.
-       */
-      project?: (number | null) | Project
-    }
+  }
+  contact?: {
+    /**
+     * One line, as it should read. Links to a Google Maps search for it.
+     */
+    address?: string | null
+    /**
+     * Tax id. Digits only — the label is added by the page.
+     */
+    nip?: string | null
   }
   meta?: {
     title?: string | null
@@ -559,6 +586,19 @@ export interface PagesSelect<T extends boolean = true> {
                     id?: T
                   }
             }
+        testimonials?:
+          | T
+          | {
+              sectionTitle?: T
+              quotes?:
+                | T
+                | {
+                    quote?: T
+                    name?: T
+                    role?: T
+                    id?: T
+                  }
+            }
         interiorStyles?:
           | T
           | {
@@ -566,13 +606,12 @@ export interface PagesSelect<T extends boolean = true> {
               ctaLabel?: T
               ctaLink?: T
             }
-        featuredProject?:
-          | T
-          | {
-              sectionTitle?: T
-              ctaLabel?: T
-              project?: T
-            }
+      }
+  contact?:
+    | T
+    | {
+        address?: T
+        nip?: T
       }
   meta?:
     | T
@@ -706,6 +745,18 @@ export interface Footer {
   phone: string
   mail: string
   avatar?: (number | null) | Media
+  /**
+   * Typed in by hand: Fixly publishes no API, and Google licenses its rating per page view under terms that forbid storing it.
+   */
+  ratings?:
+    | {
+        platform: 'fixly' | 'google'
+        rating: number
+        reviewCount?: number | null
+        profileUrl?: string | null
+        id?: string | null
+      }[]
+    | null
   updatedAt?: string | null
   createdAt?: string | null
 }
@@ -721,6 +772,15 @@ export interface FooterSelect<T extends boolean = true> {
   phone?: T
   mail?: T
   avatar?: T
+  ratings?:
+    | T
+    | {
+        platform?: T
+        rating?: T
+        reviewCount?: T
+        profileUrl?: T
+        id?: T
+      }
   updatedAt?: T
   createdAt?: T
   globalType?: T

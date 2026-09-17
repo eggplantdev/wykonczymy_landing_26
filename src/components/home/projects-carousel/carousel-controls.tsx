@@ -3,8 +3,8 @@
 import { useSwiper, useSwiperSlide } from 'swiper/react'
 
 import { CarouselArrow } from '@/components/ui/carousel-arrow'
+import { CarouselCounter } from '@/components/ui/carousel-counter'
 import { cn } from '@/lib/cn'
-import { CarouselCounter } from './carousel-counter'
 
 type PropsT = {
   title?: string | null
@@ -25,7 +25,7 @@ export function CarouselControls({ title, total }: PropsT) {
       )}
     >
       <h6 className="w-47.5 md:order-2 md:w-auto md:px-14.5">{title}</h6>
-      <CarouselCounter total={total} />
+      <CarouselCounter current={swiper.realIndex + 1} total={total} className="md:order-1" />
       <div className="order-3 ml-auto hidden gap-x-2.5 md:flex">
         <CarouselArrow direction="left" disabled={swiper.isBeginning} />
         <CarouselArrow direction="right" disabled={swiper.isEnd} />

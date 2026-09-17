@@ -57,9 +57,10 @@ export const homeGroup: Field = {
       fields: [
         { name: 'sectionTitle', type: 'text', localized: true },
         {
+          // Not localized: one row set with shared photos, translated field by field. The
+          // seed has to carry the existing row ids or a re-run replaces the rows.
           name: 'cards',
           type: 'array',
-          // Not localized: the row set and its photos are shared, only the copy differs.
           admin: { initCollapsed: true },
           fields: [
             { name: 'title', type: 'text', localized: true, required: true },
@@ -94,6 +95,28 @@ export const homeGroup: Field = {
       ],
     },
     {
+      name: 'testimonials',
+      type: 'group',
+      label: 'Client testimonials',
+      fields: [
+        { name: 'sectionTitle', type: 'text', localized: true },
+        {
+          // Same shape as `services.cards`: one non-localized row set, translated field by
+          // field, so the seed has to carry the existing row ids or a re-run replaces them.
+          name: 'quotes',
+          type: 'array',
+          admin: { initCollapsed: true },
+          fields: [
+            { name: 'quote', type: 'richText', localized: true, required: true },
+            // A name reads the same in both languages; what the person is described as
+            // ("Mieszkanie na Mokotowie") does not.
+            { name: 'name', type: 'text', required: true },
+            { name: 'role', type: 'text', localized: true },
+          ],
+        },
+      ],
+    },
+    {
       name: 'interiorStyles',
       type: 'group',
       label: 'Interior styles carousel',
@@ -101,20 +124,6 @@ export const homeGroup: Field = {
         description: 'Teases every published interior style — the slides are not curated here.',
       },
       fields: [{ name: 'sectionTitle', type: 'text', localized: true }, ...ctaFields()],
-    },
-    {
-      name: 'featuredProject',
-      type: 'group',
-      fields: [
-        { name: 'sectionTitle', type: 'text', localized: true },
-        { name: 'ctaLabel', type: 'text', localized: true },
-        {
-          name: 'project',
-          type: 'relationship',
-          relationTo: 'projects',
-          admin: { description: 'Its title, summary and photo are read from the project itself.' },
-        },
-      ],
     },
   ],
 }

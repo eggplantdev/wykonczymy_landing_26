@@ -9,6 +9,23 @@ export const footerContact = {
   mail: 'bartekantonik@gmail.com',
 }
 
+// Read off each profile by hand — Fixly has no API, and Google's costs money per page view.
+// Google's link is the listing's CID, the one identifier that survives a rename or a move.
+export const footerRatings = [
+  {
+    platform: 'fixly',
+    rating: 4.8,
+    reviewCount: 206,
+    profileUrl: 'https://fixly.pl/profil/tYMYyA5I',
+  },
+  {
+    platform: 'google',
+    rating: 4.9,
+    reviewCount: 89,
+    profileUrl: 'https://maps.google.com/?cid=15506338548739739236',
+  },
+] as const
+
 export const footerCopy: LocalizedT<FooterCopyT> = {
   pl: {
     title: 'Twoja wiadomość do nas',

@@ -1,5 +1,6 @@
 import type { GlobalConfig } from 'payload'
 
+import { RATING_PLATFORMS } from '@/lib/ratings'
 import { revalidateAllPages } from '@/lib/revalidate'
 
 // The contact block and form that close every page — one document, no address of
@@ -33,5 +34,21 @@ export const Footer: GlobalConfig = {
       ],
     },
     { name: 'avatar', type: 'upload', relationTo: 'media' },
+    {
+      name: 'ratings',
+      type: 'array',
+      label: 'Rating badges',
+      admin: {
+        initCollapsed: true,
+        description:
+          'Typed in by hand: Fixly publishes no API, and Google licenses its rating per page view under terms that forbid storing it.',
+      },
+      fields: [
+        { name: 'platform', type: 'select', options: [...RATING_PLATFORMS], required: true },
+        { name: 'rating', type: 'number', required: true, min: 0, max: 5 },
+        { name: 'reviewCount', type: 'number' },
+        { name: 'profileUrl', type: 'text', label: 'Link to the reviews' },
+      ],
+    },
   ],
 }

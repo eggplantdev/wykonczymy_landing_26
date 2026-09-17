@@ -2,11 +2,12 @@ import type { HomePageDataT } from '@/components/home/home-page'
 import type { Page } from '@/payload-types'
 import type { InteriorStyleT } from '@/lib/content/interior-styles'
 import type { ProjectT } from '@/lib/content/projects'
-import { childPath, PROJECTS_PAGE_TYPE, type PageTypeT } from '@/lib/routing'
+import type { Locale } from '@/lib/i18n/i18n'
+import { childPath, localeRoot, PROJECTS_PAGE_TYPE, type PageTypeT } from '@/lib/routing'
 import { toImage, toVideo } from './media'
-import { toProject } from './projects'
 
 type SourcesT = {
+  locale: Locale
   projects: ProjectT[]
   styles: InteriorStyleT[]
   typePaths: Partial<Record<PageTypeT, string>>
@@ -14,17 +15,36 @@ type SourcesT = {
 
 // The carousels tease the same documents the listing pages show, so they read the
 // collections rather than restating photos and copy in a curated field.
-export function toHomeData(page: Page, { projects, styles, typePaths }: SourcesT): HomePageDataT {
+export function toHomeData(
+  page: Page,
+  { locale, projects, styles, typePaths }: SourcesT,
+): HomePageDataT {
   const home = page.home
   if (!home) return {}
 
-  const link = (pageType?: PageTypeT | null) => (pageType && typePaths[pageType]) || '/'
+  // A target page with no slug in this locale has no address here, so the button falls back
+  // to this locale's own root rather than sending an English visitor to the Polish site.
+  const link = (pageType?: PageTypeT | null) =>
+    (pageType && typePaths[pageType]) || localeRoot(locale)
 
-  const { hero, intro, services, numbers, featuredProject } = home
-  const featured =
-    featuredProject?.project && typeof featuredProject.project === 'object'
-      ? toProject(featuredProject.project)
-      : null
+  const { hero, intro, services, numbers, testimonials } = home
+
+  // `localization.fallback` is off, so a row added in one locale comes back with a null
+  // `quote` in the other — the generated type says `string` because the field is required
+  // in the config, not because this locale has been filled in.
+  const quotes =
+    testimonials?.quotes?.flatMap((row, index) =>
+      row.quote
+        ? [
+            {
+              id: row.id ?? String(index),
+              quote: row.quote,
+              name: row.name,
+              role: row.role ?? undefined,
+            },
+          ]
+        : [],
+    ) ?? []
 
   return {
     hero: hero?.title
@@ -77,26 +97,16 @@ export function toHomeData(page: Page, { projects, styles, typePaths }: SourcesT
         }
       : undefined,
 
+    testimonials: quotes.length
+      ? { sectionTitle: testimonials?.sectionTitle ?? undefined, quotes }
+      : undefined,
+
     interiorStyles: styles.length
       ? {
           sectionTitle: home.interiorStyles?.sectionTitle ?? '',
           ctaLabel: home.interiorStyles?.ctaLabel ?? '',
           ctaHref: link(home.interiorStyles?.ctaLink),
           styles,
-        }
-      : undefined,
-
-    featuredProject: featured
-      ? {
-          sectionTitle: featuredProject?.sectionTitle ?? '',
-          projectTitle: featured.title,
-          projectSubtitle: featured.summary,
-          ctaLabel: featuredProject?.ctaLabel ?? null,
-          ctaHref: childPath(link(PROJECTS_PAGE_TYPE), featured.slug),
-          // The hero photo already opens the project's own page, so the section leads
-          // with the next one down.
-          image: featured.gallery[1] ?? featured.image,
-          video: null,
         }
       : undefined,
   }

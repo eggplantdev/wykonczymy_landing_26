@@ -1,10 +1,13 @@
 import type { Payload } from 'payload'
 
+import type { Page } from '@/payload-types'
+
 import { i18n, type Locale } from '@/lib/i18n/i18n'
-import { HOME_PAGE_TYPE } from '@/lib/routing'
-import { footerContact, footerCopy } from './data/footer'
+import { CONTACT_PAGE_TYPE, HOME_PAGE_TYPE, type PageTypeT } from '@/lib/routing'
+import { contactCopy } from './data/contact'
+import { footerContact, footerCopy, footerRatings } from './data/footer'
 import { interiorStyleSeeds } from './data/interior-styles'
-import { homeCopy, homeShared } from './data/home'
+import { homeCopy } from './data/home'
 import { homeGroup, rowIdsOf } from './home-group'
 import { pageSeeds } from './data/pages'
 import { projectSeeds } from './data/projects'
@@ -20,9 +23,7 @@ import { projectSeeds } from './data/projects'
 /** Payload writes one locale at a time, and `fallback: false` means both are required. */
 const locales = i18n.locales as readonly Locale[]
 
-async function seedProjects(payload: Payload): Promise<Record<string, number>> {
-  const ids: Record<string, number> = {}
-
+async function seedProjects(payload: Payload): Promise<void> {
   for (const seed of projectSeeds) {
     const { docs } = await payload.find({
       collection: 'projects',
@@ -48,10 +49,7 @@ async function seedProjects(payload: Payload): Promise<Record<string, number>> {
         })
 
     await payload.update({ collection: 'projects', id: doc.id, locale: 'en', data: seed.en })
-    ids[seed.pl.slug] = doc.id
   }
-
-  return ids
 }
 
 async function seedInteriorStyles(payload: Payload): Promise<void> {
@@ -95,10 +93,23 @@ async function seedInteriorStyles(payload: Payload): Promise<void> {
   }
 }
 
-async function seedPages(payload: Payload, projectIds: Record<string, number>): Promise<void> {
-  for (const seed of pageSeeds) {
-    const isHome = seed.pageType === HOME_PAGE_TYPE
+/**
+ * The conditional field group a page type owns, if it owns one. Keyed off the type rather
+ * than branched at both call sites: the Polish and English passes have to agree on which
+ * group they write, or one locale silently keeps the other's shape.
+ */
+function groupFor(
+  pageType: PageTypeT,
+  locale: Locale,
+  existing: Page | undefined,
+): Record<string, unknown> {
+  if (pageType === HOME_PAGE_TYPE) return { home: homeGroup(homeCopy[locale], rowIdsOf(existing)) }
+  if (pageType === CONTACT_PAGE_TYPE) return { contact: contactCopy[locale] }
+  return {}
+}
 
+async function seedPages(payload: Payload): Promise<void> {
+  for (const seed of pageSeeds) {
     const { docs } = await payload.find({
       collection: 'pages',
       locale: 'pl',
@@ -113,15 +124,7 @@ async function seedPages(payload: Payload, projectIds: Record<string, number>): 
       ...seed.copy.pl,
       pageType: seed.pageType,
       _status: 'published' as const,
-      ...(isHome
-        ? {
-            home: homeGroup(
-              homeCopy.pl,
-              projectIds[homeShared.featuredProjectSlug],
-              rowIdsOf(existing),
-            ),
-          }
-        : {}),
+      ...groupFor(seed.pageType, 'pl', existing),
     }
 
     const doc = existing
@@ -134,26 +137,27 @@ async function seedPages(payload: Payload, projectIds: Record<string, number>): 
       locale: 'en',
       data: {
         ...seed.copy.en,
-        ...(isHome
-          ? {
-              home: homeGroup(
-                homeCopy.en,
-                projectIds[homeShared.featuredProjectSlug],
-                rowIdsOf(doc),
-              ),
-            }
-          : {}),
+        ...groupFor(seed.pageType, 'en', doc),
       },
     })
   }
 }
 
 async function seedFooter(payload: Payload): Promise<void> {
+  // Same row-id rule as the page arrays: a row written without an id replaces the stored one,
+  // so both locale passes carry the ids already in the database.
+  const stored = await payload.findGlobal({ slug: 'footer' })
+  const rowIds = (stored.ratings ?? []).map((row) => row.id ?? undefined)
+
   for (const locale of locales) {
     await payload.updateGlobal({
       slug: 'footer',
       locale,
-      data: { ...footerContact, ...footerCopy[locale] },
+      data: {
+        ...footerContact,
+        ...footerCopy[locale],
+        ratings: footerRatings.map((row, index) => ({ id: rowIds[index], ...row })),
+      },
     })
   }
 }
@@ -163,13 +167,13 @@ async function seedFooter(payload: Payload): Promise<void> {
  * so the integration tests can run the same code the operator runs, rather than a copy of it.
  */
 export async function seedAll(payload: Payload): Promise<void> {
-  const projectIds = await seedProjects(payload)
-  payload.logger.info(`Seeded ${Object.keys(projectIds).length} projects`)
+  await seedProjects(payload)
+  payload.logger.info(`Seeded ${projectSeeds.length} projects`)
 
   await seedInteriorStyles(payload)
   payload.logger.info(`Seeded ${interiorStyleSeeds.length} interior styles`)
 
-  await seedPages(payload, projectIds)
+  await seedPages(payload)
   payload.logger.info(`Seeded ${pageSeeds.length} pages`)
 
   await seedFooter(payload)

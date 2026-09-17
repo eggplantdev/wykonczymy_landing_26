@@ -1,6 +1,8 @@
 'use client'
 
 import { useSwiper } from 'swiper/react'
+
+import { useTranslation } from '@/lib/i18n/use-translation'
 import { cn } from '@/lib/cn'
 
 type PropsT = {
@@ -17,6 +19,7 @@ export function CarouselArrow({
   className,
 }: PropsT) {
   const swiper = useSwiper()
+  const { t } = useTranslation('common')
 
   function handleClick() {
     if (direction === 'left') swiper.slidePrev()
@@ -26,6 +29,7 @@ export function CarouselArrow({
   return (
     <button
       type="button"
+      aria-label={t(direction === 'left' ? 'previousSlide' : 'nextSlide')}
       disabled={disabled}
       onClick={handleClick}
       className={cn(

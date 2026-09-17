@@ -30,7 +30,7 @@
     "backToHome": "Wróć na stronę główną",
     "notFoundTitle": "Nie znaleziono strony",
     "notFoundBody": "Ta strona nie istnieje lub została przeniesiona.",
-    "readMore": "Czytaj więcej",
+    "readMore": "Czytaj dalej",
     "close": "Zamknij",
     "languagePl": "Polski",
     "languageEn": "English",
@@ -38,8 +38,18 @@
     "errorBody": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie za chwilę.",
     "retry": "Spróbuj ponownie",
     "goBack": "Wróć",
+    "previousSlide": "Poprzedni slajd",
+    "nextSlide": "Następny slajd",
     "gallery": "Galeria",
-    "moreInteriorStyles": "Więcej stylów wnętrz"
+    "moreInteriorStyles": "Więcej stylów wnętrz",
+    "followUsOnSocial": "Śledź nas w mediach społecznościowych",
+    "showLess": "Zwiń"
+  },
+  "contact": {
+    "address": "Adres",
+    "email": "Adres e-mail",
+    "phone": "Telefon",
+    "nip": "NIP"
   },
   "projects": {
     "project": "Realizacja",

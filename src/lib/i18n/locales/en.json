@@ -38,8 +38,18 @@
     "errorBody": "An unexpected error occurred. Please try again in a moment.",
     "retry": "Try again",
     "goBack": "Go back",
+    "previousSlide": "Previous slide",
+    "nextSlide": "Next slide",
     "gallery": "Gallery",
-    "moreInteriorStyles": "More interior styles"
+    "moreInteriorStyles": "More interior styles",
+    "followUsOnSocial": "Follow us on social media",
+    "showLess": "Show less"
+  },
+  "contact": {
+    "address": "Address",
+    "email": "Email address",
+    "phone": "Phone",
+    "nip": "Tax id (NIP)"
   },
   "projects": {
     "project": "Project",

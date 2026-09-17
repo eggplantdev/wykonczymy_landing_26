@@ -1,7 +1,11 @@
+import { BrandLogo } from '@/components/brand/brand-logo'
 import type { MediaImageT } from '@/components/media/types'
 import { cn } from '@/lib/cn'
+import { getTranslations, type Locale } from '@/lib/i18n/i18n'
 import { ContactForm } from './contact-form/contact-form'
 import { ContactPerson } from './contact-person'
+import { PhoneCta } from './phone-cta'
+import { SocialLinks } from './social-links'
 
 export type SiteFooterT = {
   intro: string
@@ -16,10 +20,12 @@ export type SiteFooterT = {
 type PropsT = {
   container?: string
   data: SiteFooterT
+  locale: Locale
 }
 
-export function SiteFooter({ container, data }: PropsT) {
+export function SiteFooter({ container, data, locale }: PropsT) {
   const { intro, ...person } = data
+  const { common, nav } = getTranslations(locale)
 
   return (
     <footer className={cn('md:grid md:grid-cols-8 md:gap-x-5 lg:grid-cols-12', container)}>
@@ -31,6 +37,29 @@ export function SiteFooter({ container, data }: PropsT) {
         <ContactPerson {...person} />
         <div className="lg:col-span-8 lg:col-start-5">
           <ContactForm />
+        </div>
+      </div>
+
+      <div className="border-grau_700 col-span-full mt-12 border-t pt-8 md:mt-16">
+        {/* Three zones rather than justify-between: the socials sit in the middle column,
+            so they stay centred on the row whatever the phone number and credit measure. */}
+        <div className="flex flex-col items-center gap-y-6 md:grid md:grid-cols-3 md:items-center md:gap-x-5">
+          <PhoneCta phone={data.phone} callLabel={nav.callUs} />
+
+          <div className="flex flex-col items-center gap-y-3 md:justify-self-center">
+            <p className="text-10 md:text-14">{common.followUsOnSocial}</p>
+            <SocialLinks />
+          </div>
+
+          <a
+            href="https://eggplantdev.com"
+            target="_blank"
+            rel="noreferrer"
+            className="text-10 hover:text-grau_100 inline-flex items-center gap-x-2 transition-colors md:justify-self-end"
+          >
+            <span>© 2026 eggplantdev.com</span>
+            <BrandLogo className="h-8 w-auto" />
+          </a>
         </div>
       </div>
     </footer>

@@ -1,5 +1,6 @@
 import type { Page } from '@/payload-types'
 import { homeShared, type HomeCopyT } from './data/home'
+import { toLexical } from './lexical'
 
 /**
  * Payload matches array rows by id: a row written without one is a new row, so the old row
@@ -7,18 +8,19 @@ import { homeShared, type HomeCopyT } from './data/home'
  * to a services card. Both passes therefore carry the ids already in the database, the Polish
  * one included; otherwise re-seeding rebuilds the rows from scratch on every run.
  */
-export type RowIdsT = { services: (string | undefined)[]; numbers: (string | undefined)[] }
+export type RowIdsT = {
+  services: (string | undefined)[]
+  numbers: (string | undefined)[]
+  testimonials: (string | undefined)[]
+}
 
 export const rowIdsOf = (doc: Page | undefined): RowIdsT => ({
   services: (doc?.home?.services?.cards ?? []).map((card) => card.id ?? undefined),
   numbers: (doc?.home?.numbers?.cards ?? []).map((card) => card.id ?? undefined),
+  testimonials: (doc?.home?.testimonials?.quotes ?? []).map((row) => row.id ?? undefined),
 })
 
-export const homeGroup = (
-  copy: HomeCopyT,
-  featuredProject: number | undefined,
-  rowIds: RowIdsT,
-) => ({
+export const homeGroup = (copy: HomeCopyT, rowIds: RowIdsT) => ({
   hero: {
     title: copy.hero.title,
     ctaLabel: copy.hero.ctaLabel,
@@ -42,14 +44,17 @@ export const homeGroup = (
       ...card,
     })),
   },
+  testimonials: {
+    sectionTitle: copy.testimonials.sectionTitle,
+    quotes: copy.testimonials.quotes.map((row, index) => ({
+      ...row,
+      id: rowIds.testimonials[index],
+      quote: toLexical(row.quote),
+    })),
+  },
   interiorStyles: {
     sectionTitle: copy.interiorStyles.sectionTitle,
     ctaLabel: copy.interiorStyles.ctaLabel,
     ctaLink: homeShared.interiorStylesCtaLink,
-  },
-  featuredProject: {
-    sectionTitle: copy.featuredProject.sectionTitle,
-    ctaLabel: copy.featuredProject.ctaLabel,
-    project: featuredProject,
   },
 })

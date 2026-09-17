@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { ContactPage } from '@/components/contact/contact-page'
 import { HomePage } from '@/components/home/home-page'
 import { InteriorStylesPage } from '@/components/interior-styles/interior-styles-page'
 import { StylePage } from '@/components/interior-styles/style-page'
@@ -10,8 +11,10 @@ import { findChildren } from '@/lib/content/children'
 import { findInteriorStyles, relatedStyles } from '@/lib/content/interior-styles'
 import { findProjects, relatedProjects } from '@/lib/content/projects'
 import { getTranslations, i18n } from '@/lib/i18n/i18n'
-import { findPage, findPublishedPages, pathsByType, pathsForPage } from '@/lib/pages'
+import { findFooter } from '@/lib/content/footer'
+import { findPage, findPublishedPages, pathsByType, pathsForPage } from '@/lib/content/pages'
 import {
+  CONTACT_PAGE_TYPE,
   HOME_PAGE_TYPE,
   INTERIOR_STYLES_PAGE_TYPE,
   PROJECTS_PAGE_TYPE,
@@ -29,8 +32,8 @@ type ParamsT = { segments?: string[] }
 // the twelve real addresses are all prerendered and never pay it.
 export const dynamicParams = true
 
-// Resolves every public address at build time, so no request touches the database.
-// tech-stack.md makes the CMS-owned-slug decision conditional on exactly this.
+// tech-stack.md makes the CMS-owned-slug decision conditional on exactly this: every
+// public address resolves at build time, so no request pays for a slug lookup.
 export async function generateStaticParams(): Promise<ParamsT[]> {
   const perLocale = await Promise.all(
     i18n.locales.map(async (locale) => {
@@ -77,7 +80,9 @@ export async function generateMetadata({
       ? (await findChildren(page.pageType, locale)).find((item) => item.slug === childSlug)
       : undefined
 
-  if (!page) return { title: getTranslations(locale).common.notFoundTitle }
+  // The route notFound()s an unresolvable child, so the metadata has to agree — otherwise
+  // the 404 ships a real title and a canonical pointing at itself.
+  if (!page || (childSlug && !child)) return { title: getTranslations(locale).common.notFoundTitle }
 
   // Twelve indexed addresses with translated slugs: without an explicit canonical the
   // trailing-slash and www variants each look like a separate document, and without
@@ -146,16 +151,43 @@ export default async function CatchAllPage({ params }: { params: Promise<ParamsT
   if (childSlug) notFound()
 
   if (page.pageType === HOME_PAGE_TYPE) {
-    const [projects, styles, typePaths] = await Promise.all([
+    // The rating badges are stored on the footer global; `findFooter` is request-cached, so
+    // reading it here costs no second query on top of the layout's own footer.
+    const [projects, styles, typePaths, footer] = await Promise.all([
       findProjects(locale),
       findInteriorStyles(locale),
       pathsByType(locale),
+      findFooter(locale),
     ])
 
-    return <HomePage data={toHomeData(page, { projects, styles, typePaths })} />
+    return (
+      <HomePage
+        data={toHomeData(page, { locale, projects, styles, typePaths })}
+        ratings={footer.ratings}
+      />
+    )
   }
 
-  // `contact` and `price-list` have no components yet. They are two of the twelve
-  // indexed addresses, so the route answers rather than 404s until they are built.
+  if (page.pageType === CONTACT_PAGE_TYPE) {
+    // Phone and mail live on the footer global, which is already loaded for the layout's
+    // footer — `findFooter` is request-cached, so reading it again costs no second query.
+    const footer = await findFooter(locale)
+
+    return (
+      <ContactPage
+        locale={locale}
+        title={page.title}
+        data={{
+          address: page.contact?.address ?? undefined,
+          nip: page.contact?.nip ?? undefined,
+          phone: footer.phone,
+          mail: footer.mail,
+        }}
+      />
+    )
+  }
+
+  // `price-list` has no component. It is one of the twelve indexed addresses, so the
+  // route answers rather than 404s until it is built or the type is dropped.
   return null
 }
