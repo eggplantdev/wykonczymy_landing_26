@@ -8,7 +8,7 @@ export type StyleCopyT = {
   body: string[]
 }
 
-// The twelve styles the live site publishes under /wykonczenia/. Photos are added in the
+// The styles the live site publishes under /wykonczenia/. Photos are added in the
 // admin — the seed only writes copy.
 export const interiorStyleSeeds: LocalizedT<StyleCopyT>[] = [
   {
