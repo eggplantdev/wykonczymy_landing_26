@@ -54,10 +54,9 @@ export function ProjectPage({ locale, project, basePath, related }: PropsT) {
           text: item.summary,
           image: item.image,
           details: [
-            { id: 1, name: projects.from, value: item.price },
-            { id: 2, name: projects.location, value: item.address },
-            { id: 3, name: projects.area, value: item.area },
-            { id: 4, name: projects.duration, value: item.duration },
+            { id: 1, name: projects.location, value: item.address },
+            { id: 2, name: projects.area, value: item.area },
+            { id: 3, name: projects.duration, value: item.duration },
           ],
         }))}
       />

@@ -34,7 +34,7 @@ export function ProjectRow({ href, title, summary, image, details }: PropsT) {
           </div>
         </div>
         <p className="text-12 md:text-14 leading-130 mb-8 lg:mb-12">{summary}</p>
-        <SpecStrip items={details} className="mt-auto grid-cols-1 lg:grid" />
+        <SpecStrip items={details} className="mt-auto grid-cols-1" />
       </div>
     </Link>
   )
