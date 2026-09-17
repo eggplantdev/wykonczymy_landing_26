@@ -18,7 +18,10 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    // The root layout cannot see route params, so this is the default locale, not the
+    // current one — `/en/` knowingly declares itself Polish until the locale moves into
+    // a real route segment.
+    <html lang="pl">
       <body>
         <main>{children}</main>
         {/* Gated here, not inside the component: an early return still ships the whole

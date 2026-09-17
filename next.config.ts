@@ -12,7 +12,17 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   // `/en/` is indexed and 301s to `/en/home/` on the live site; the catch-all has no
   // page for a non-default locale root. See context/foundation/url-map.md.
-  redirects: async () => [{ source: '/en', destination: '/en/home/', permanent: true }],
+  // Oferta was retired 2026-09-04 and Cennik with it, leaving four indexed addresses with
+  // no target. They 301 to the home page rather than 404 — Oferta's content literally
+  // became the home page's tiles. The English pair points at `/en/home/` rather than `/en/`
+  // so it lands in one hop instead of chaining through the locale-root redirect below.
+  redirects: async () => [
+    { source: '/en', destination: '/en/home/', permanent: true },
+    { source: '/oferta', destination: '/', permanent: true },
+    { source: '/cennik', destination: '/', permanent: true },
+    { source: '/en/offer', destination: '/en/home/', permanent: true },
+    { source: '/en/price-list', destination: '/en/home/', permanent: true },
+  ],
   images: {
     localPatterns: [
       {
