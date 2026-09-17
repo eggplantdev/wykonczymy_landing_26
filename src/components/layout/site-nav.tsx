@@ -10,10 +10,11 @@ import type { Page } from '@/payload-types'
 import { useTranslation } from '@/lib/i18n/use-translation'
 
 // The order the bar reads in, which is editorial and not the order the collection
-// happens to declare its options in. Home is absent because the logo already links it.
-const NAV_ORDER = ['completed-works', 'interior-styles', 'price-list', 'contact'] as const
+// happens to declare its options in.
+const NAV_ORDER = ['home', 'completed-works', 'interior-styles', 'price-list', 'contact'] as const
 
 const labelKeys = {
+  home: 'home',
   'completed-works': 'completedWorks',
   'interior-styles': 'interiorStyles',
   'price-list': 'priceList',

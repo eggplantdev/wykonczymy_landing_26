@@ -16,7 +16,7 @@ export function NavItem({ href, children, className, ...linkProps }: PropsT) {
         href={href}
         {...linkProps}
         className={cn(
-          'text-14 text-shwarz hover:bg-shwarz aria-[current=page]:bg-grau_800 inline-flex min-h-8 items-center rounded-md px-4 duration-300 hover:text-white',
+          'text-14 text-shwarz hover:bg-shwarz inline-flex min-h-8 items-center rounded-md px-4 duration-300 hover:text-white aria-[current=page]:underline aria-[current=page]:underline-offset-4',
           className,
         )}
       >
