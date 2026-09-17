@@ -3,7 +3,9 @@
 import { useEffect, useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 
-import { Button } from '@/components/ui/button'
+import { Button, buttonLabelClasses } from '@/components/ui/button'
+import { Arrow } from '@/components/ui/icons/arrow'
+import { cn } from '@/lib/cn'
 import { useContactFormStore } from '@/lib/contact/contact-form-store'
 import { contactSchema, emptyContactValues, firstIssueKey } from '@/lib/contact/contact-schema'
 import { submitContactForm } from '@/lib/contact/submit-contact-form'
@@ -163,12 +165,19 @@ export function ContactForm() {
           {(isSubmitting) => (
             <Button
               type="submit"
-              variant="dark"
+              hasIcon
               label={isSubmitting ? t('sending') : t('send')}
               disabled={isSubmitting}
               isBusy={isSubmitting}
               className="mb-8 md:mb-0 md:ml-auto"
-            />
+            >
+              <span
+                aria-hidden
+                className={cn(buttonLabelClasses({ disabled: isSubmitting }), 'flex h-3')}
+              >
+                <Arrow />
+              </span>
+            </Button>
           )}
         </form.Subscribe>
       </div>
