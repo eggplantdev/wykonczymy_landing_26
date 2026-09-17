@@ -1,4 +1,4 @@
-import { twMerge } from 'tailwind-merge'
+import { cn } from '@/lib/cn'
 
 type PropsT = {
   label: string
@@ -37,7 +37,7 @@ export function MenuToggle({ label, isOpen, onClick, className, ...ariaProps }: 
       aria-label={label}
       aria-expanded={isOpen}
       {...ariaProps}
-      className={twMerge(
+      className={cn(
         'fixed top-4 right-6 z-50 text-white mix-blend-difference md:hidden',
         className,
       )}
@@ -49,7 +49,7 @@ export function MenuToggle({ label, isOpen, onClick, className, ...ariaProps }: 
         fill="none"
         viewBox="-10 -10 105 120"
         width="48"
-        className={twMerge(
+        className={cn(
           'transition-[translate,rotate]',
           isOpen && '-translate-x-0.5 -translate-y-0.5 rotate-45',
         )}

@@ -1,8 +1,7 @@
 'use client'
 
-import { twMerge } from 'tailwind-merge'
-
 import { ContactFormField, fieldControlClasses, useFieldIds } from './contact-form-field'
+import { cn } from '@/lib/cn'
 
 type PropsT = {
   name: string
@@ -38,7 +37,7 @@ export function ContactFormTextarea({
           the fallback where `field-sizing` is unsupported; the cap keeps a 5000-character
           message from pushing the send button off the footer. */}
       <textarea
-        className={twMerge(fieldControlClasses, 'field-sizing-content max-h-64 resize-none')}
+        className={cn(fieldControlClasses, 'field-sizing-content max-h-64 resize-none')}
         id={id}
         name={name}
         placeholder={placeholder}

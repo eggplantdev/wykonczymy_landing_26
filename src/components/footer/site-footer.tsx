@@ -1,6 +1,5 @@
-import { twMerge } from 'tailwind-merge'
-
 import type { MediaImageT } from '@/components/media/types'
+import { cn } from '@/lib/cn'
 import { ContactForm } from './contact-form/contact-form'
 import { ContactPerson } from './contact-person'
 
@@ -23,7 +22,7 @@ export function SiteFooter({ container, data }: PropsT) {
   const { intro, ...person } = data
 
   return (
-    <footer className={twMerge('md:grid md:grid-cols-8 md:gap-x-5 lg:grid-cols-12', container)}>
+    <footer className={cn('md:grid md:grid-cols-8 md:gap-x-5 lg:grid-cols-12', container)}>
       <p className="text-18 leading-125 md:text-20 lg:text-32 mb-12 md:col-span-6 md:mb-16 lg:col-span-8 lg:col-start-5 lg:leading-normal">
         {intro}
       </p>

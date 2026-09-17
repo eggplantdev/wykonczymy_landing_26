@@ -1,7 +1,7 @@
 import Image from 'next/image'
-import { twMerge } from 'tailwind-merge'
 
 import type { MediaImageT } from './types'
+import { cn } from '@/lib/cn'
 
 type PropsT = {
   image: MediaImageT
@@ -18,7 +18,7 @@ export function MediaImage({ image, sizes, priority, className }: PropsT) {
       alt={image.alt}
       sizes={sizes}
       priority={priority}
-      className={twMerge('object-cover', className)}
+      className={cn('object-cover', className)}
     />
   )
 }

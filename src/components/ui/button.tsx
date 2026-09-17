@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { twMerge } from 'tailwind-merge'
+import { cn } from '@/lib/cn'
 
 export type ButtonVariantT = 'light' | 'dark' | 'outline'
 export type ButtonSizeT = 'sm' | 'xl' | 'responsive'
@@ -22,7 +22,7 @@ export function buttonClasses({
   hasIcon,
   className,
 }: StyleT) {
-  return twMerge(
+  return cn(
     // w-fit because a <button> shrink-wraps on its own but an <a> wearing this pill
     // does not — without it the link stretches across its row.
     'group flex w-fit items-center justify-center gap-2.5 rounded-full text-nowrap duration-200',
@@ -44,7 +44,7 @@ export function buttonLabelClasses({
   variant = 'light',
   disabled,
 }: Pick<StyleT, 'variant' | 'disabled'>) {
-  return twMerge(
+  return cn(
     'duration-200',
     variant === 'light' && 'text-shwarz group-hover:text-grau_900',
     variant === 'dark' && 'text-shwarz group-hover:text-grau_900',

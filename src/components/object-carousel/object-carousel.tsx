@@ -1,11 +1,11 @@
 'use client'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
 import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
 import type { ObjectCarouselItemT } from '@/components/object-carousel/types'
+import { cn } from '@/lib/cn'
 import { ObjectCarouselSlide } from './object-carousel-slide'
 
 type PropsT = {
@@ -22,7 +22,7 @@ export function ObjectCarousel({ container, sectionTitle, items }: PropsT) {
   if (items.length < 1) return null
 
   return (
-    <section className={twMerge('duration-200', container, carousel.className)}>
+    <section className={cn('duration-200', container, carousel.className)}>
       <Swiper
         {...carouselDefaults}
         spaceBetween={24}

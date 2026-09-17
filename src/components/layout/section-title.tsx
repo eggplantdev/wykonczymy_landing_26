@@ -1,4 +1,4 @@
-import { twMerge } from 'tailwind-merge'
+import { cn } from '@/lib/cn'
 
 type PropsT = {
   title?: string
@@ -7,7 +7,7 @@ type PropsT = {
 
 export function SectionTitle({ title, className }: PropsT) {
   return (
-    <h2 className={twMerge('text-22 md:text-28 lg:text-36 font-medium text-balance', className)}>
+    <h2 className={cn('text-22 md:text-28 lg:text-36 font-medium text-balance', className)}>
       {title}
     </h2>
   )

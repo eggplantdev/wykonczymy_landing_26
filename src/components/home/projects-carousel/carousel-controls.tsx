@@ -1,9 +1,9 @@
 'use client'
 
 import { useSwiper, useSwiperSlide } from 'swiper/react'
-import { twMerge } from 'tailwind-merge'
 
 import { CarouselArrow } from '@/components/ui/carousel-arrow'
+import { cn } from '@/lib/cn'
 import { CarouselCounter } from './carousel-counter'
 
 type PropsT = {
@@ -19,7 +19,7 @@ export function CarouselControls({ title, total }: PropsT) {
 
   return (
     <div
-      className={twMerge(
+      className={cn(
         'text-14 md:text-16 *:leading-140 flex items-center justify-between transition-opacity duration-300 md:justify-start',
         swiperSlide?.isActive ? 'opacity-100' : 'opacity-0',
       )}

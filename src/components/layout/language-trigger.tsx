@@ -1,6 +1,5 @@
-import { twMerge } from 'tailwind-merge'
-
 import { ChevronDown } from '@/components/ui/icons/chevron-down'
+import { cn } from '@/lib/cn'
 import type { Locale } from '@/lib/i18n/i18n'
 
 type PropsT = {
@@ -20,7 +19,7 @@ export function LanguageTrigger({ locale, label, isOpen, onClick, menuId, isMobi
       aria-controls={menuId}
       aria-label={label}
       onClick={onClick}
-      className={twMerge(
+      className={cn(
         'text-14 text-shwarz inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-white px-4',
         isMobileMenu && 'bg-grau_800',
         // Open, the trigger drops the edge it shares with the list so the two read as
@@ -31,7 +30,7 @@ export function LanguageTrigger({ locale, label, isOpen, onClick, menuId, isMobi
       {locale.toUpperCase()}
       <span
         aria-hidden="true"
-        className={twMerge('inline-flex size-4 duration-300', isOpen && 'rotate-180')}
+        className={cn('inline-flex size-4 duration-300', isOpen && 'rotate-180')}
       >
         <ChevronDown />
       </span>

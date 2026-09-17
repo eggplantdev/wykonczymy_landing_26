@@ -1,5 +1,5 @@
 import { useId, type ReactNode } from 'react'
-import { twMerge } from 'tailwind-merge'
+import { cn } from '@/lib/cn'
 
 // The underline the whole form lines up on. Shared with the attachments row, which is a
 // <label> rather than a control and so cannot take the control-only half below.
@@ -8,7 +8,7 @@ export const fieldShellClasses = 'border-grau_300 text-12 text-grau_300 w-full b
 // `placeholder:` is not decoration: a browser does not inherit the element's `color` into
 // `::placeholder`, so without it the fields show the UA's own grey while the attachments
 // label — real text, not a placeholder — sits next to them in `grau_300`.
-export const fieldControlClasses = twMerge(
+export const fieldControlClasses = cn(
   fieldShellClasses,
   'focus:border-grau_100 aria-invalid:border-error placeholder:text-grau_300 border-0 border-b bg-transparent pl-0',
 )
@@ -37,7 +37,7 @@ export function FieldError({ id, error, className }: ErrorPropsT) {
       id={id}
       role="status"
       aria-live="polite"
-      className={twMerge('text-10 text-error block', className)}
+      className={cn('text-10 text-error block', className)}
     >
       {error}
     </span>

@@ -1,8 +1,7 @@
 'use client'
 
-import { twMerge } from 'tailwind-merge'
-
 import { Checkmark } from '@/components/ui/icons/checkmark'
+import { cn } from '@/lib/cn'
 import { FieldError, useFieldIds } from './contact-form-field'
 
 type PropsT = {
@@ -47,7 +46,7 @@ export function ContactFormCheckbox({
           {checked && <Checkmark />}
         </span>
         <span
-          className={twMerge(
+          className={cn(
             'ml-7.5 w-2/3 leading-150 md:w-auto',
             checked ? 'text-grau_200' : 'text-grau_500',
           )}

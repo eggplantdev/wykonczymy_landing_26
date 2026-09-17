@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { twMerge } from 'tailwind-merge'
+import { cn } from '@/lib/cn'
 
 type PlaceholderTypeT = 'light' | 'dark' | 'default'
 
@@ -21,7 +21,7 @@ const GRADIENTS: Record<PlaceholderTypeT, string> = {
 export function MediaPlaceholder({ type = 'default', className, children }: PropsT) {
   return (
     <div className="relative h-full w-full">
-      <div className={twMerge('h-full w-full', className, GRADIENTS[type])} />
+      <div className={cn('h-full w-full', className, GRADIENTS[type])} />
       <div className="absolute inset-0">{children}</div>
     </div>
   )

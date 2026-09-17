@@ -1,10 +1,10 @@
 'use client'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
 import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
+import { cn } from '@/lib/cn'
 import type { InteriorStyleT } from '@/lib/content/interior-styles'
 import { SectionTitle } from '@/components/layout/section-title'
 import { ButtonLink } from '@/components/ui/button-link'
@@ -29,7 +29,7 @@ export function InteriorStylesCarousel({ container, data }: PropsT) {
   if (styles.length < 1) return null
 
   return (
-    <section className={twMerge(container, carousel.className)}>
+    <section className={cn(container, carousel.className)}>
       <SectionTitle title={sectionTitle} className="pb-6 md:pb-8 lg:pb-10" />
       <Swiper
         {...carouselDefaults}

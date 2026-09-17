@@ -1,7 +1,6 @@
-import { twMerge } from 'tailwind-merge'
-
 import { NavGroup } from '@/components/layout/nav-group'
 import { NavItem } from '@/components/layout/nav-item'
+import { cn } from '@/lib/cn'
 import { i18n, type Locale } from '@/lib/i18n/i18n'
 import { localeRoot } from '@/lib/routing'
 
@@ -18,7 +17,7 @@ export function LanguageMenu({ paths, locale, labelFor, onSelect, id, isMobileMe
   return (
     <NavGroup
       id={id}
-      className={twMerge(
+      className={cn(
         'w-full flex-col rounded-t-none border-t-transparent p-1 pt-0',
         isMobileMenu && 'bg-grau_800',
       )}
@@ -29,7 +28,7 @@ export function LanguageMenu({ paths, locale, labelFor, onSelect, id, isMobileMe
           // Home is the fallback because `pathsForPage` omits a locale the page has no slug
           // for — the switcher still has somewhere to send you, in the language you asked for.
           href={paths[candidate] ?? localeRoot(candidate)}
-          className={twMerge(
+          className={cn(
             'w-full justify-center',
             // The default marker for the current locale is the surface colour the list
             // itself wears here, so it needs one the grey does not swallow.

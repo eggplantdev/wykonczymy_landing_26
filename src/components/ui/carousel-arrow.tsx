@@ -1,7 +1,7 @@
 'use client'
 
 import { useSwiper } from 'swiper/react'
-import { twMerge } from 'tailwind-merge'
+import { cn } from '@/lib/cn'
 
 type PropsT = {
   direction?: 'left' | 'right'
@@ -28,7 +28,7 @@ export function CarouselArrow({
       type="button"
       disabled={disabled}
       onClick={handleClick}
-      className={twMerge(
+      className={cn(
         'h-5.5 rounded-full px-4',
         variant === 'default' && 'bg-grau_900 hover:bg-grau_800',
         variant === 'transparent' && 'bg-grau_200/30 hover:bg-grau_200/50',

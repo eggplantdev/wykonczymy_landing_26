@@ -1,12 +1,12 @@
 'use client'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
 import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
 import { SectionTitle } from '@/components/layout/section-title'
 import { ButtonLink } from '@/components/ui/button-link'
+import { cn } from '@/lib/cn'
 import { ProjectSlide, type ProjectSlideT } from './project-slide'
 
 export type ProjectsSectionT = {
@@ -28,7 +28,7 @@ export function ProjectsCarousel({ container, data }: PropsT) {
   if (slides.length < 1) return null
 
   return (
-    <section className={twMerge(container, carousel.className)}>
+    <section className={cn(container, carousel.className)}>
       <div className="gridContainer mb-4 items-center justify-between md:mb-6 xl:mb-10">
         <SectionTitle title={sectionTitle} className="col-span-4 lg:col-span-5 lg:col-start-3" />
         <div className="col-span-3">

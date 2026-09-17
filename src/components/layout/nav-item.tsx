@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { ComponentProps, ReactNode } from 'react'
-import { twMerge } from 'tailwind-merge'
+import { cn } from '@/lib/cn'
 
 type PropsT = {
   href: string
@@ -15,7 +15,7 @@ export function NavItem({ href, children, className, ...linkProps }: PropsT) {
       <Link
         href={href}
         {...linkProps}
-        className={twMerge(
+        className={cn(
           'text-14 text-shwarz hover:bg-shwarz aria-[current=page]:bg-grau_800 inline-flex min-h-8 items-center rounded-md px-4 duration-300 hover:text-white',
           className,
         )}

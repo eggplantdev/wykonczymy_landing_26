@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { twMerge } from 'tailwind-merge'
+import { cn } from '@/lib/cn'
 
 type PropsT = {
   children: ReactNode
@@ -12,11 +12,7 @@ type PropsT = {
 export function PageWrapper({ children, hasHero = true, className }: PropsT) {
   return (
     <div
-      className={twMerge(
-        'w-full overflow-x-hidden',
-        className,
-        !hasHero && 'pt-20 md:pt-30 lg:pt-40',
-      )}
+      className={cn('w-full overflow-x-hidden', className, !hasHero && 'pt-20 md:pt-30 lg:pt-40')}
     >
       {children}
     </div>

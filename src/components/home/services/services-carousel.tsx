@@ -1,11 +1,11 @@
 'use client'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
 import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
 import { SectionTitle } from '@/components/layout/section-title'
+import { cn } from '@/lib/cn'
 import { ServiceSlide, type ServiceCardT } from './service-slide'
 
 export type ServicesSectionT = {
@@ -25,7 +25,7 @@ export function ServicesCarousel({ container, data }: PropsT) {
   if (cards.length < 1) return null
 
   return (
-    <section className={twMerge(container, 'col-span-full pr-0', carousel.className)}>
+    <section className={cn(container, 'col-span-full pr-0', carousel.className)}>
       <SectionTitle title={sectionTitle} className="smd:w-full w-1/2 pb-6 md:pb-8 lg:pb-10" />
 
       <Swiper

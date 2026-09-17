@@ -1,8 +1,8 @@
 'use client'
 
 import { useId, useState } from 'react'
-import { twMerge } from 'tailwind-merge'
 
+import { cn } from '@/lib/cn'
 import { useTranslation } from '@/lib/i18n/use-translation'
 import { fieldShellClasses } from './contact-form-field'
 
@@ -19,10 +19,7 @@ export function ContactFormAttachments({ className }: PropsT) {
     <div className={className}>
       <label
         htmlFor={id}
-        className={twMerge(
-          fieldShellClasses,
-          'hover:text-grau_100 flex cursor-pointer duration-200',
-        )}
+        className={cn(fieldShellClasses, 'hover:text-grau_100 flex cursor-pointer duration-200')}
       >
         {t('attachments')}
         <input

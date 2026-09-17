@@ -1,13 +1,13 @@
 'use client'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { twMerge } from 'tailwind-merge'
 import 'swiper/css'
 
 import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
 import { Media } from '@/components/media/media'
 import type { MediaImageT } from '@/components/media/types'
 import { SectionTitle } from '@/components/layout/section-title'
+import { cn } from '@/lib/cn'
 
 type PropsT = {
   title: string
@@ -20,7 +20,7 @@ export function StyleGallery({ title, images }: PropsT) {
   if (images.length < 1) return null
 
   return (
-    <section className={twMerge('paddings pt-16 md:pt-20 lg:pt-30', carousel.className)}>
+    <section className={cn('paddings pt-16 md:pt-20 lg:pt-30', carousel.className)}>
       <SectionTitle title={title} className="mb-6 md:mb-8" />
 
       <Swiper

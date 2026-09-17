@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { twMerge } from 'tailwind-merge'
 
 import { StyleCardBody } from './style-card-body'
+import { cn } from '@/lib/cn'
 import type { InteriorStyleT } from '@/lib/content/interior-styles'
 
 type PropsT = {
@@ -16,7 +16,7 @@ export function StyleCard({ style, href, index }: PropsT) {
   return (
     <Link
       href={href}
-      className={twMerge(
+      className={cn(
         'group border-grau_300 relative pt-6 md:px-6 md:even:border-l lg:border-r lg:px-6.5 lg:even:border-l-0',
         isLastInRow && 'lg:border-r-0',
       )}
