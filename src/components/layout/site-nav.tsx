@@ -35,7 +35,7 @@ export function SiteNav({ paths, variant = 'header', onNavigate }: PropsT) {
 
   // Resolved up front so the separators know which item is last: an unpublished page has
   // no address, so it is dropped rather than linked, and dropping it inside the render
-  // would leave a hairline dangling at the end of the group.
+  // would leave a hairline dangling at the end of the bar.
   const links = NAV_ORDER.flatMap((pageType) => {
     const href = paths[pageType]
     return href ? [{ pageType, href }] : []
@@ -62,9 +62,7 @@ export function SiteNav({ paths, variant = 'header', onNavigate }: PropsT) {
             >
               {t(labelKeys[pageType])}
             </NavItem>
-            {index < links.length - 1 && (
-              <NavSeparator className={isMobileMenu ? 'mx-auto h-px w-2/3' : ''} />
-            )}
+            {!isMobileMenu && index < links.length - 1 && <NavSeparator />}
           </Fragment>
         ))}
       </NavGroup>

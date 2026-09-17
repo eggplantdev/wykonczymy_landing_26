@@ -5,9 +5,6 @@ import { NavItem } from '@/components/layout/nav-item'
 import { i18n, type Locale } from '@/lib/i18n/i18n'
 import { localeRoot } from '@/lib/routing'
 
-// Home is the fallback because `pathsForPage` omits a locale the page has no slug
-// for — the switcher still has somewhere to send you, in the language you asked for.
-
 type PropsT = {
   paths: Partial<Record<Locale, string>>
   locale: Locale
@@ -23,17 +20,20 @@ export function LanguageMenu({ paths, locale, labelFor, onSelect, id, isMobileMe
       id={id}
       className={twMerge(
         'w-full flex-col rounded-t-none border-t-transparent p-1 pt-0',
-        isMobileMenu && 'bg-shwarz rounded-2xl rounded-t-none border-transparent shadow-xl',
+        isMobileMenu && 'bg-grau_800',
       )}
     >
       {i18n.locales.map((candidate) => (
         <NavItem
           key={candidate}
+          // Home is the fallback because `pathsForPage` omits a locale the page has no slug
+          // for — the switcher still has somewhere to send you, in the language you asked for.
           href={paths[candidate] ?? localeRoot(candidate)}
           className={twMerge(
             'w-full justify-center',
-            isMobileMenu &&
-              'text-24 min-h-12 rounded-xl text-white hover:bg-transparent hover:text-white',
+            // The default marker for the current locale is the surface colour the list
+            // itself wears here, so it needs one the grey does not swallow.
+            isMobileMenu && 'aria-[current=page]:bg-white',
           )}
           hrefLang={candidate}
           aria-label={labelFor(candidate)}

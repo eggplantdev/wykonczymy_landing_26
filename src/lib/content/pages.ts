@@ -78,8 +78,8 @@ export const findPublishedPages = cache(async (locale: Locale): Promise<Page[]> 
 })
 
 // Copy links to a *page*, not to a string: PL and EN slugs differ, so an href written
-// into content is right in at most one locale. Placeholder data names a page type and
-// this turns it into that locale's address.
+// into content is right in at most one locale. Content names a page type; this turns it
+// into that locale's address.
 export const pathsByType = cache(
   async (locale: Locale): Promise<Partial<Record<Page['pageType'], string>>> => {
     const paths: Partial<Record<Page['pageType'], string>> = {}

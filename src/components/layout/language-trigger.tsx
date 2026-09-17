@@ -21,10 +21,8 @@ export function LanguageTrigger({ locale, label, isOpen, onClick, menuId, isMobi
       aria-label={label}
       onClick={onClick}
       className={twMerge(
-        'text-14 text-shwarz inline-flex items-center justify-center gap-2',
-        isMobileMenu
-          ? 'bg-shwarz text-24 min-h-12 rounded-2xl border-transparent px-6 text-white'
-          : 'min-h-10 rounded-lg bg-white px-4',
+        'text-14 text-shwarz inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-white px-4',
+        isMobileMenu && 'bg-grau_800',
         // Open, the trigger drops the edge it shares with the list so the two read as
         // one continuous shape rather than a pill with a box parked underneath.
         isOpen && 'rounded-b-none border-b-transparent',
