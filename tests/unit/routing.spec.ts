@@ -27,10 +27,23 @@ describe('resolveSegments', () => {
     expect(resolveSegments(['en'])).toMatchObject({ locale: 'en', slug: null })
   })
 
-  it('treats a path deeper than <locale>/<slug> as a miss', () => {
-    expect(resolveSegments(['oferta', 'anything']).isMiss).toBe(true)
+  it('reads a second segment as a child rather than a miss', () => {
+    expect(resolveSegments(['realizacje', 'zupnicza-19'])).toMatchObject({
+      slug: 'realizacje',
+      childSlug: 'zupnicza-19',
+      isMiss: false,
+    })
+    expect(resolveSegments(['en', 'completed-works', 'zupnicza-19'])).toMatchObject({
+      locale: 'en',
+      slug: 'completed-works',
+      childSlug: 'zupnicza-19',
+      isMiss: false,
+    })
+  })
+
+  it('treats a path deeper than <locale>/<slug>/<child> as a miss', () => {
     expect(resolveSegments(['oferta', 'a', 'b']).isMiss).toBe(true)
-    expect(resolveSegments(['en', 'offer', 'junk']).isMiss).toBe(true)
+    expect(resolveSegments(['en', 'offer', 'a', 'b']).isMiss).toBe(true)
   })
 
   it('does not treat a real address as a miss', () => {
