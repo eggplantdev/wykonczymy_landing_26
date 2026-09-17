@@ -29,9 +29,9 @@ export function FeaturedProject({ container, data }: PropsT) {
           <Media image={image} video={video} sizes="100vw" />
         </div>
 
-        <div className="relative flex flex-col items-center justify-center text-white">
+        <div className="paddings relative flex flex-col items-center justify-center text-center text-white">
           <p className="text-32 md:text-40 lg:text-58">{projectTitle}</p>
-          <p className="text-18 leading-125 md:text-20 md:leading-130 lg:text-32 lg:leading-normal pt-3 md:pt-3.5 xl:pt-4">
+          <p className="text-18 leading-125 md:text-20 md:leading-130 lg:text-32 lg:leading-normal pt-3 text-balance md:pt-3.5 xl:pt-4">
             {projectSubtitle}
           </p>
         </div>
