@@ -21,10 +21,11 @@
     "invalidEmail": "Enter a valid email address",
     "tooLong": "Message is too long",
     "scope": "Scope of work (renovation, finishing, other)",
-    "area": "Area (up to 30 m², 30–60 m², 60–120 m², more)",
+    "area": "Work area, e.g. 30–60 m²",
     "acceptTerms": "I agree to the privacy policy",
     "send": "Send",
-    "attachments": "Add attachments if you have any — a design, a floor plan, photos"
+    "attachments": "Add attachments if you have any — a design, a floor plan, photos — the more we get, the easier it is to prepare your quote.",
+    "attachmentsCta": "Choose files"
   },
   "common": {
     "backToHome": "Back to home page",
