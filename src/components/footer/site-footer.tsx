@@ -42,11 +42,15 @@ export function SiteFooter({ container, data, locale }: PropsT) {
 
       <div className="border-grau_700 col-span-full mt-12 border-t pt-8 md:mt-16">
         {/* Three zones rather than justify-between: the socials sit in the middle column,
-            so they stay centred on the row whatever the phone number and credit measure. */}
-        <div className="flex flex-col items-center gap-y-6 md:grid md:grid-cols-3 md:items-center md:gap-x-5">
+            so they stay centred on the row whatever the phone number and credit measure.
+            Bottom-aligned because only the middle zone carries a label above its icons —
+            centring the zones would leave the phone, the socials and the credit on three
+            different lines. Held back to lg: a third of the tablet row is narrower than the
+            socials label, which then wraps mid-phrase. */}
+        <div className="flex flex-col items-center gap-y-7 lg:grid lg:grid-cols-3 lg:items-end lg:gap-x-5">
           <PhoneCta phone={data.phone} callLabel={nav.callUs} />
 
-          <div className="flex flex-col items-center gap-y-3 md:justify-self-center">
+          <div className="flex flex-col items-center gap-y-3 lg:justify-self-center">
             <p className="text-10 md:text-14">{common.followUsOnSocial}</p>
             <SocialLinks />
           </div>
@@ -55,7 +59,7 @@ export function SiteFooter({ container, data, locale }: PropsT) {
             href="https://eggplantdev.com"
             target="_blank"
             rel="noreferrer"
-            className="text-10 hover:text-grau_100 inline-flex items-center gap-x-2 transition-colors md:justify-self-end"
+            className="text-10 hover:text-grau_100 inline-flex items-center gap-x-2 transition-colors lg:justify-self-end"
           >
             <span>© 2026 eggplantdev.com</span>
             <BrandLogo className="h-8 w-auto" />
