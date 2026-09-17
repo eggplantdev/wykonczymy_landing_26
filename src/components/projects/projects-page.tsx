@@ -22,9 +22,7 @@ export function ProjectsPage({ locale, title, basePath, data }: PropsT) {
   const { projects: strings } = getTranslations(locale)
 
   return (
-    <PageWrapper hasHero={false}>
-      <h1 className="text-32 md:text-40 lg:text-58 mb-12 text-center md:mb-24 lg:mb-20">{title}</h1>
-
+    <PageWrapper hasHero={false} title={title}>
       <div className="divide-grau_300 border-grau_300 grid divide-y border-b">
         {data.projects.map((project) => (
           <ProjectRow

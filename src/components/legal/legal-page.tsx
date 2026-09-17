@@ -13,11 +13,9 @@ type PropsT = {
 // read at — long legal prose across the full grid is unreadable.
 export function LegalPage({ title, body }: PropsT) {
   return (
-    <PageWrapper hasHero={false}>
-      <div className="paddings py-12 md:py-20">
+    <PageWrapper hasHero={false} title={title}>
+      <div className="paddings pb-12 md:pb-20">
         <div className="mx-auto max-w-[68ch]">
-          <h1 className="text-32 md:text-40 lg:text-52 mb-8 md:mb-12">{title}</h1>
-
           {body && (
             <div className="legal-prose">
               <RichText data={body} disableContainer />

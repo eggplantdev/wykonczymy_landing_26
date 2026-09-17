@@ -60,10 +60,8 @@ export function ContactPage({ locale, title, data }: PropsT) {
   ]
 
   return (
-    <PageWrapper hasHero={false}>
-      <div className="flex flex-col items-center py-12 text-center md:py-20">
-        <h1 className="text-32 md:text-40 lg:text-58 mb-10 md:mb-14">{title}</h1>
-
+    <PageWrapper hasHero={false} title={title}>
+      <div className="flex flex-col items-center pb-12 text-center md:pb-20">
         <ul className="text-14 md:text-18 flex flex-col items-start gap-y-4">
           {rows.map(({ key, label, text, href, Icon }) => (
             <li key={key} className="flex items-center gap-x-4">
