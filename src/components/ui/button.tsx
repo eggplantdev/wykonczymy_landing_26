@@ -59,6 +59,7 @@ type PropsT = StyleT & {
   children?: ReactNode
   // A form's send control has to be a submit button.
   type?: 'button' | 'submit'
+  isBusy?: boolean
 }
 
 export function Button({
@@ -71,12 +72,14 @@ export function Button({
   hasIcon,
   className,
   type = 'button',
+  isBusy,
 }: PropsT) {
   return (
     <button
       type={type}
       disabled={disabled}
       onClick={onClick}
+      aria-busy={isBusy}
       className={buttonClasses({ variant, size, disabled, hasIcon, className })}
     >
       {label && <span className={buttonLabelClasses({ variant, disabled })}>{label}</span>}

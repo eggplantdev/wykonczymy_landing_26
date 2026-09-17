@@ -1,7 +1,7 @@
 import { twMerge } from 'tailwind-merge'
 
 import type { MediaImageT } from '@/components/media/types'
-import { ContactForm } from './contact-form'
+import { ContactForm } from './contact-form/contact-form'
 import { ContactPerson } from './contact-person'
 
 export type SiteFooterT = {
