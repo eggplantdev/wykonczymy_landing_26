@@ -1,0 +1,4 @@
+# Prose, not code. Prettier reflows markdown tables and rewrites YAML frontmatter quotes,
+# which buries a one-line edit under a hundred lines of churn.
+context/
+*.md
