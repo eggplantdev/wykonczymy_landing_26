@@ -32,16 +32,17 @@ export function ContactFormTextarea({
       error={error}
       className={className}
     >
-      {/* Grows with what is typed. The drag handle goes with it: resizing writes an inline
-          height that then pins the box and stops it growing. `rows` stays as the floor and as
-          the fallback where `field-sizing` is unsupported; the cap keeps a 5000-character
+      {/* Starts at the height of the single-line fields and grows with what is typed. The drag
+          handle goes with it: resizing writes an inline height that then pins the box and stops
+          it growing. `field-sizing` sizes the box from its content, which overrides `rows` — so
+          `rows` only covers the browsers that don't support it. The cap keeps a 5000-character
           message from pushing the send button off the footer. */}
       <textarea
         className={cn(fieldControlClasses, 'field-sizing-content max-h-64 resize-none')}
         id={id}
         name={name}
         placeholder={placeholder}
-        rows={3}
+        rows={1}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         onBlur={onBlur}
