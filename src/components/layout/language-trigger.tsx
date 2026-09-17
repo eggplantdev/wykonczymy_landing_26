@@ -20,7 +20,7 @@ export function LanguageTrigger({ locale, label, isOpen, onClick, menuId, isMobi
       aria-label={label}
       onClick={onClick}
       className={cn(
-        'text-14 text-shwarz inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-white px-4',
+        'text-14 text-shwarz hover:bg-grau_100 hover:text-grau_900 inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-white px-4 duration-200',
         isMobileMenu && 'bg-grau_800',
         // Open, the trigger drops the edge it shares with the list so the two read as
         // one continuous shape rather than a pill with a box parked underneath.

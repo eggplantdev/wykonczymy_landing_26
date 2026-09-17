@@ -28,12 +28,7 @@ export function LanguageMenu({ paths, locale, labelFor, onSelect, id, isMobileMe
           // Home is the fallback because `pathsForPage` omits a locale the page has no slug
           // for — the switcher still has somewhere to send you, in the language you asked for.
           href={paths[candidate] ?? localeRoot(candidate)}
-          className={cn(
-            'w-full justify-center',
-            // The default marker for the current locale is the surface colour the list
-            // itself wears here, so it needs one the grey does not swallow.
-            isMobileMenu && 'aria-[current=page]:bg-white',
-          )}
+          className="w-full justify-center"
           hrefLang={candidate}
           aria-label={labelFor(candidate)}
           aria-current={candidate === locale ? 'page' : undefined}
