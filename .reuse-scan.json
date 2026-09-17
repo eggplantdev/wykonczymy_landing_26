@@ -1,0 +1,9 @@
+{
+  "primitiveHomes": [
+    "src/components/ui",
+    "src/components/media",
+    "src/lib/**",
+    "src/lib/i18n/use-translation.ts"
+  ],
+  "note": "Where reusable primitives live — read by primitive-reuse-scan. Add a home if a new shared dir appears; this is a map of dirs, NOT a symbol catalogue (that's rebuilt each run). This repo has no src/hooks, src/types, src/utils or src/constants; cross-cutting helpers live flat in src/lib."
+}
