@@ -27,7 +27,10 @@ export function ContactFormCheckbox({
 
   return (
     <div className={className}>
-      <label htmlFor={id} className="text-12 text-grau_300 flex cursor-pointer items-center">
+      <label
+        htmlFor={id}
+        className="text-12 text-grau_300 flex cursor-pointer items-center gap-x-2"
+      >
         {/* The real control is hidden rather than absent, so it keeps its own focus,
             keyboard and assistive-tech behaviour while the span next to it is what the
             visitor sees. `peer` is how that span mirrors its focus ring. */}
@@ -46,15 +49,12 @@ export function ContactFormCheckbox({
           {checked && <Checkmark />}
         </span>
         <span
-          className={cn(
-            'ml-7.5 w-2/3 leading-150 md:w-auto',
-            checked ? 'text-grau_200' : 'text-grau_500',
-          )}
+          className={cn('w-2/3 leading-150 md:w-auto', checked ? 'text-grau_200' : 'text-grau_500')}
         >
           {label}
         </span>
       </label>
-      <FieldError id={errorId} error={error} className="ml-7.5" />
+      <FieldError id={errorId} error={error} className="ml-6.5" />
     </div>
   )
 }
