@@ -1,4 +1,5 @@
-import type { LocalizedT, SpecRowT } from '../types'
+import type { SpecRowT } from '@/lib/content/specs'
+import type { LocalizedT } from '../types'
 
 export type ProjectCopyT = {
   title: string
@@ -16,8 +17,8 @@ export type ProjectCopyT = {
 const spec = (rows: [string, string][]): SpecRowT[] =>
   rows.map(([name, value]) => ({ name, value }))
 
-// Three completed jobs, carried over from tdg's object template with its four subpages
-// flattened onto one address. Photos are added in the admin — the seed only writes copy.
+// Carried over from tdg's object template, with its four subpages flattened onto one
+// address. Photos are added in the admin — the seed only writes copy.
 export const projectSeeds: LocalizedT<ProjectCopyT>[] = [
   {
     pl: {
@@ -182,6 +183,3 @@ export const projectSeeds: LocalizedT<ProjectCopyT>[] = [
     },
   },
 ]
-
-/** The project the home page leads with, matched on its Polish slug. */
-export const featuredProjectSlug = 'zupnicza-19'
