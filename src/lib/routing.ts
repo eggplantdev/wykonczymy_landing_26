@@ -19,6 +19,8 @@ export type PageTypeT = (typeof pageTypes)[number]
 // the root — a separate flag could only ever disagree with it.
 export const HOME_PAGE_TYPE = 'home'
 
+export const CONTACT_PAGE_TYPE = 'contact'
+
 // The two page types with children. A second segment under anything else is not an
 // address — see resolveSegments.
 export const PROJECTS_PAGE_TYPE = 'completed-works'
@@ -43,9 +45,8 @@ export function pathForPage(page: PageAddressT, locale: Locale, childSlug?: stri
   return `${prefix}/${page.slug}/${child}`
 }
 
-// A child hangs off its parent's address. Six call sites used to concatenate this by
-// hand, which put the trailing-slash rule — the thing all twelve indexed addresses
-// depend on — in six places instead of one.
+// A child hangs off its parent's address. The trailing-slash rule all twelve indexed
+// addresses depend on lives here, in one place, rather than at every call site.
 export function childPath(basePath: string, slug: string): string {
   return `${basePath}${slug}/`
 }

@@ -3,6 +3,7 @@ import { APIError } from 'payload'
 
 import { HOME_PAGE_TYPE, pageTypes } from '@/lib/routing'
 import { publishedOnly } from './access/published-only'
+import { contactGroup } from './fields/contact-group'
 import { homeGroup } from './fields/home-group'
 import { slugField } from './fields/slug'
 import { revalidatePage, revalidatePageDelete } from './hooks/revalidatePage'
@@ -71,5 +72,6 @@ export const Pages: CollectionConfig = {
       },
     },
     homeGroup,
+    contactGroup,
   ],
 }
