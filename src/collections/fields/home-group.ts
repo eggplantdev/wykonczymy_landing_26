@@ -98,7 +98,9 @@ export const homeGroup: Field = {
           type: 'array',
           admin: { initCollapsed: true },
           fields: [
-            { name: 'value', type: 'number', required: true },
+            // Text, not number: a figure is sometimes written rather than counted —
+            // "24/7", "od 16" — and the card only ever prints it.
+            { name: 'value', type: 'text', required: true },
             { name: 'unit', type: 'text', localized: true },
             { name: 'description', type: 'text', localized: true },
           ],

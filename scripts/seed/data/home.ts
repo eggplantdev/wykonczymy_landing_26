@@ -25,7 +25,7 @@ export const homeShared = {
   interiorStylesCtaLink: 'interior-styles',
   introPosition: 'left',
   afterServicesPosition: 'right',
-  numberValues: [16, 70, 120, 250],
+  numberValues: ['16', '70', '120', '250'],
 } as const
 
 export const homeCopy: LocalizedT<HomeCopyT> = {

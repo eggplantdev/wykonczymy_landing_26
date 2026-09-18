@@ -258,7 +258,7 @@ export interface Page {
       sectionTitle?: string | null
       cards?:
         | {
-            value: number
+            value: string
             unit?: string | null
             description?: string | null
             id?: string | null

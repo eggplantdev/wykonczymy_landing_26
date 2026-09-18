@@ -12,6 +12,7 @@ import * as migration_20260917_173902_testimonial_rich_text from './20260917_173
 import * as migration_20260917_184739_legal_pages from './20260917_184739_legal_pages'
 import * as migration_20260918_143125_drop_project_price from './20260918_143125_drop_project_price'
 import * as migration_20260918_161801_after_services_text from './20260918_161801_after_services_text'
+import * as migration_20260918_163821_numbers_value_text from './20260918_163821_numbers_value_text'
 import * as migration_20260918_190000_project_cover_from_gallery from './20260918_190000_project_cover_from_gallery'
 
 export const migrations = [
@@ -84,6 +85,11 @@ export const migrations = [
     up: migration_20260918_161801_after_services_text.up,
     down: migration_20260918_161801_after_services_text.down,
     name: '20260918_161801_after_services_text',
+  },
+  {
+    up: migration_20260918_163821_numbers_value_text.up,
+    down: migration_20260918_163821_numbers_value_text.down,
+    name: '20260918_163821_numbers_value_text',
   },
   {
     up: migration_20260918_190000_project_cover_from_gallery.up,

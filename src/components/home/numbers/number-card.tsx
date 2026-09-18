@@ -1,6 +1,6 @@
 export type NumberCardT = {
   id: number
-  value: number
+  value: string
   unit?: string
   description?: string
 }
