@@ -1,11 +1,9 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { Fragment } from 'react'
 
 import { NavGroup } from '@/components/layout/nav-group'
-import { mobileMenuGap, NavItem } from '@/components/layout/nav-item'
-import { NavSeparator } from '@/components/layout/nav-separator'
+import { NavItemPill } from '@/components/layout/nav-item-pill'
 import type { Page } from '@/payload-types'
 import { useTranslation } from '@/lib/i18n/use-translation'
 
@@ -45,24 +43,23 @@ export function SiteNav({ paths, variant = 'header', onNavigate }: PropsT) {
   return (
     <nav>
       <NavGroup
+        // The links sit one flex container deeper than the language switcher and the
+        // phone CTA, so the panel's rhythm only stays even while this gap matches the
+        // one the Sheet spaces its own children by.
         className={
-          isMobileMenu
-            ? mobileMenuGap + ' w-full flex-col border-transparent bg-transparent p-0'
-            : ''
+          isMobileMenu ? 'w-full flex-col gap-4 border-transparent bg-transparent p-0' : ''
         }
       >
-        {links.map(({ pageType, href }, index) => (
-          <Fragment key={pageType}>
-            <NavItem
-              href={href}
-              variant={isMobileMenu ? 'mobile' : 'bar'}
-              aria-current={pathname === href ? 'page' : undefined}
-              onClick={onNavigate}
-            >
-              {t(labelKeys[pageType])}
-            </NavItem>
-            {!isMobileMenu && index < links.length - 1 && <NavSeparator />}
-          </Fragment>
+        {links.map(({ pageType, href }) => (
+          <NavItemPill
+            key={pageType}
+            href={href}
+            variant={isMobileMenu ? 'mobile' : 'bar'}
+            isActive={pathname === href}
+            onClick={onNavigate}
+          >
+            {t(labelKeys[pageType])}
+          </NavItemPill>
         ))}
       </NavGroup>
     </nav>
