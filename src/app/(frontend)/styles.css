@@ -126,6 +126,11 @@
     border-color: #000;
   }
 
+  /* v3's preflight set this and v4's dropped it. */
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+
   body {
     @apply flex flex-col overscroll-none scroll-smooth text-shwarz;
   }

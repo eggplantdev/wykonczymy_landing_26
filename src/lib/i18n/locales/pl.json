@@ -65,5 +65,20 @@
     "duration": "Czas trwania",
     "location": "Lokalizacja",
     "from": "Cena"
+  },
+  "cookies": {
+    "title": "Ustawienia prywatności",
+    "description": "Chcemy liczyć odwiedziny, żeby wiedzieć, jak korzystasz ze strony. Możesz się zgodzić, zostawić tylko to, co niezbędne, albo wybrać samodzielnie.",
+    "acceptAll": "Akceptuję wszystkie",
+    "rejectAll": "Tylko niezbędne",
+    "customize": "Dostosuj",
+    "save": "Zapisz wybór",
+    "settingsTitle": "Ustawienia plików cookie",
+    "settingsTrigger": "Ustawienia plików cookie",
+    "settingsDescription": "Zdecyduj, na co pozwalasz. Wybór możesz zmienić w każdej chwili w stopce strony.",
+    "necessaryTitle": "Niezbędne",
+    "necessaryBody": "Potrzebne, żeby strona działała — zapamiętują między innymi Twój wybór w tym oknie. Nie można ich wyłączyć.",
+    "measurementTitle": "Statystyki",
+    "measurementBody": "Zbiorcze statystyki odwiedzin — które podstrony są oglądane i jak często. Nie śledzimy Cię między stronami."
   }
 }

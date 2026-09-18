@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react'
 
+import { ConsentProvider } from '@/components/cookies/consent-provider'
 import { MobileMenu } from '@/components/layout/mobile-menu'
 import { SiteHeader } from '@/components/layout/site-header'
 import { SiteFooter } from '@/components/footer/site-footer'
 import { findFooter } from '@/lib/content/footer'
 import { TranslationsProvider } from '@/lib/i18n/translations-provider'
 import { findPage, pathsByType, pathsForPage } from '@/lib/content/pages'
-import { resolveSegments } from '@/lib/routing'
+import { PRIVACY_POLICY_PAGE_TYPE, resolveSegments } from '@/lib/routing'
 
 type ParamsT = { segments?: string[] }
 
@@ -34,21 +35,23 @@ export default async function SegmentLayout({
 
   return (
     <TranslationsProvider locale={locale}>
-      <SiteHeader paths={paths} typePaths={typePaths} />
-      <MobileMenu paths={paths} typePaths={typePaths} phone={footer.phone} />
-      {/* The background is painted here rather than on body: a background on html/body
-          propagates to the browser canvas, which is not part of the root group's
-          backdrop, so the menu toggle's mix-blend-difference would have nothing to
-          invert against on plain sections. */}
-      <div className="bg-white flex min-h-lvh flex-col">
-        <div className="grow">{children}</div>
-        <SiteFooter
-          container="paddings pt-20 pb-10 md:pt-30  xl:pt-40"
-          data={footer}
-          locale={locale}
-          typePaths={typePaths}
-        />
-      </div>
+      <ConsentProvider privacyPolicyHref={typePaths[PRIVACY_POLICY_PAGE_TYPE]}>
+        <SiteHeader paths={paths} typePaths={typePaths} />
+        <MobileMenu paths={paths} typePaths={typePaths} phone={footer.phone} />
+        {/* The background is painted here rather than on body: a background on html/body
+            propagates to the browser canvas, which is not part of the root group's
+            backdrop, so the menu toggle's mix-blend-difference would have nothing to
+            invert against on plain sections. */}
+        <div className="bg-white flex min-h-lvh flex-col">
+          <div className="grow">{children}</div>
+          <SiteFooter
+            container="paddings pt-20 pb-10 md:pt-30  xl:pt-40"
+            data={footer}
+            locale={locale}
+            typePaths={typePaths}
+          />
+        </div>
+      </ConsentProvider>
     </TranslationsProvider>
   )
 }

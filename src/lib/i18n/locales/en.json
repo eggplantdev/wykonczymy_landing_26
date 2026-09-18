@@ -65,5 +65,20 @@
     "duration": "Duration",
     "location": "Location",
     "from": "From"
+  },
+  "cookies": {
+    "title": "Privacy settings",
+    "description": "We would like to count visits, to see how the site is used. You can agree, keep only what is necessary, or choose for yourself.",
+    "acceptAll": "Accept all",
+    "rejectAll": "Necessary only",
+    "customize": "Customise",
+    "save": "Save choices",
+    "settingsTitle": "Cookie settings",
+    "settingsTrigger": "Cookie settings",
+    "settingsDescription": "Decide what you allow. You can change your choice at any time from the page footer.",
+    "necessaryTitle": "Necessary",
+    "necessaryBody": "Needed for the site to work — they remember things like your choice in this window. They cannot be switched off.",
+    "measurementTitle": "Statistics",
+    "measurementBody": "Aggregate visit statistics — which pages are viewed and how often. We do not follow you across sites."
   }
 }

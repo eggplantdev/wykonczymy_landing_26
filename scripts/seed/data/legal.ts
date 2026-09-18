@@ -27,7 +27,7 @@ Nie powołaliśmy inspektora ochrony danych.
 
 ## 2. Jakie dane zbieramy
 
-Zbieramy wyłącznie dane, które sam nam podasz w formularzu kontaktowym:
+W formularzu kontaktowym zbieramy wyłącznie dane, które sam nam podasz:
 
 - imię lub nazwę,
 - adres e-mail,
@@ -38,6 +38,8 @@ Zbieramy wyłącznie dane, które sam nam podasz w formularzu kontaktowym:
 
 Nie zbieramy danych szczególnych kategorii, czyli tak zwanych danych wrażliwych, i prosimy, żebyś nie umieszczał ich w wiadomości ani w załącznikach.
 
+Poza formularzem zapisujemy jeszcze Twoją odpowiedź na pytanie o pliki cookie, a jeśli się na nie zgodzisz — zbiorcze statystyki odwiedzin. Opisujemy to w punkcie 10.
+
 ## 3. Po co przetwarzamy Twoje dane i na jakiej podstawie
 
 **Żeby odpowiedzieć na Twoje zapytanie, przygotować wycenę i uzgodnić zakres prac** — art. 6 ust. 1 lit. b RODO, czyli działania podejmowane na Twoje żądanie, zanim zawrzemy umowę.
@@ -47,6 +49,8 @@ Nie zbieramy danych szczególnych kategorii, czyli tak zwanych danych wrażliwyc
 **Żeby wystawić i przechować dokumenty księgowe** — art. 6 ust. 1 lit. c RODO, czyli obowiązek, który nakładają na nas przepisy podatkowe.
 
 **Żeby ustalić, dochodzić lub bronić się przed roszczeniami** — art. 6 ust. 1 lit. f RODO. Naszym prawnie uzasadnionym interesem jest w tym wypadku możliwość wykazania, na co się umówiliśmy i co zostało zrobione.
+
+**Żeby prowadzić statystyki odwiedzin strony** — art. 6 ust. 1 lit. a RODO, czyli Twoja zgoda. Możesz ją wycofać w każdej chwili, a wycofanie nie wpływa na to, co zrobiliśmy wcześniej. Samo zapamiętanie Twojej odpowiedzi opiera się na art. 6 ust. 1 lit. f RODO — naszym prawnie uzasadnionym interesem jest uszanowanie wyboru, którego już dokonałeś.
 
 ## 4. Czy podanie danych jest obowiązkowe
 
@@ -95,7 +99,13 @@ Nie podejmujemy wobec Ciebie decyzji w sposób wyłącznie zautomatyzowany i nie
 
 ## 10. Pliki cookies i pamięć przeglądarki
 
-Nie używamy cookies analitycznych, marketingowych ani śledzących. Nie korzystamy z Google Analytics ani z żadnego innego narzędzia, które śledziłoby Twoje zachowanie na stronie.
+Nie korzystamy z Google Analytics ani z żadnego narzędzia reklamowego, które budowałoby Twój profil albo śledziło Cię na innych stronach.
+
+Gdy pierwszy raz wejdziesz na stronę, zapytamy Cię o zgodę na statystyki. Twoją odpowiedź zapisujemy w pliku cookie o nazwie „c15t” oraz w pamięci przeglądarki — to nasz własny plik, nie należy do żadnej firmy zewnętrznej. Trzymamy w nim to, na co się zgodziłeś, datę wyboru, skrót wersji polityki, której zgoda dotyczyła, i losowy numer nadany Twojej przeglądarce, żeby ten wybór dało się później rozpoznać. Jak każdy plik cookie, jest on wysyłany na nasz serwer przy każdym wejściu na stronę — po to, żeby Twój wybór był znany, zanim cokolwiek się uruchomi. Sam plik wygasa po 6 miesiącach, ale kopia w pamięci przeglądarki nie wygasa, więc Twój wybór pamiętamy do czasu, aż go zmienisz albo wyczyścisz dane strony. Ten jeden plik jest niezbędny do działania strony — bez niego nie moglibyśmy zapamiętać, że nie chcesz statystyk.
+
+Jeśli zgodzisz się na statystyki, uruchamiamy Vercel Web Analytics. Narzędzie to liczy odsłony podstron i nie zapisuje żadnych plików cookies ani nie tworzy trwałego identyfikatora, który pozwalałby rozpoznać Cię następnego dnia lub na innej stronie. Dopóki nie wyrazisz zgody, jego kod w ogóle się nie wczytuje.
+
+Zgodę możesz wycofać w każdej chwili — tak samo łatwo, jak jej udzieliłeś — klikając „Ustawienia plików cookie” w stopce strony. Odmowa nie ogranicza korzystania ze strony w żaden sposób.
 
 Treść formularza, którą wpisałeś, a jeszcze nie wysłałeś, zapisujemy w pamięci Twojej przeglądarki, żebyś nie stracił jej przy odświeżeniu strony. Te dane nie opuszczają Twojego urządzenia i znikają po zamknięciu karty. Możesz je w każdej chwili usunąć, czyszcząc dane strony w ustawieniach przeglądarki.
 
@@ -120,7 +130,7 @@ We have not appointed a data protection officer.
 
 ## 2. What data we collect
 
-We collect only what you give us in the contact form:
+In the contact form we collect only what you give us:
 
 - your name or company name,
 - your e-mail address,
@@ -131,6 +141,8 @@ We collect only what you give us in the contact form:
 
 We do not collect special categories of data, and we ask that you not put any into your message or attachments.
 
+Beyond the form, we also store your answer to the cookie question and, if you agree to it, aggregate visit statistics. Section 10 describes both.
+
 ## 3. Why we process your data, and on what basis
 
 **To answer your enquiry, prepare a quote and agree the scope of work** — art. 6(1)(b) GDPR: steps taken at your request before entering into a contract.
@@ -140,6 +152,8 @@ We do not collect special categories of data, and we ask that you not put any in
 **To issue and keep accounting records** — art. 6(1)(c) GDPR: an obligation imposed on us by tax law.
 
 **To establish, pursue or defend against claims** — art. 6(1)(f) GDPR. Our legitimate interest here is being able to show what was agreed and what was done.
+
+**To keep visit statistics** — art. 6(1)(a) GDPR: your consent. You can withdraw it at any time, and withdrawal does not affect what we did before. Remembering your answer itself rests on art. 6(1)(f) GDPR — our legitimate interest being to honour a choice you have already made.
 
 ## 4. Is giving us your data mandatory
 
@@ -188,7 +202,13 @@ We do not make decisions about you by purely automated means and we do not profi
 
 ## 10. Cookies and browser storage
 
-We use no analytics, marketing or tracking cookies. We do not use Google Analytics or any other tool that would track your behaviour on this site.
+We do not use Google Analytics, nor any advertising tool that would build a profile of you or follow you across other sites.
+
+The first time you arrive, we ask whether you agree to statistics. Your answer is stored in a cookie named “c15t” and in your browser's own storage — it is our own cookie, not a third party's. It holds what you agreed to, when you chose, a digest of the policy version the choice applied to, and a random number assigned to your browser so that the choice can be recognised later. Like any cookie, it is sent to our server on every visit — so that your choice is known before anything runs. The cookie itself expires after 6 months, but the copy in your browser's own storage does not, so we remember your choice until you change it or clear this site's data. This one cookie is strictly necessary: without it we could not remember that you declined statistics.
+
+If you do agree to statistics, we run Vercel Web Analytics. It counts page views; it stores no cookies and builds no lasting identifier that could recognise you the next day or on another site. Until you consent, its code is not loaded at all.
+
+You can withdraw your consent at any time — as easily as you gave it — from “Cookie settings” in the page footer. Declining limits nothing about your use of this site.
 
 What you have typed into the form but not yet sent is kept in your browser's own storage, so that a page refresh does not lose it. That data never leaves your device and is discarded when you close the tab. You can remove it at any time by clearing this site's data in your browser settings.
 
