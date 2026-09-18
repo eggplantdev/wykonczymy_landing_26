@@ -38,37 +38,20 @@ export function HomePage({ data, ratings }: PropsT) {
     data
 
   return (
-    <PageWrapper>
+    // The rhythm is one gap on the column, not a top padding per section: a section that
+    // carries its own spacing only knows what comes before it in the one order it was
+    // written for, and each of these renders conditionally.
+    <PageWrapper className="flex flex-col gap-20 md:gap-24 xl:gap-40">
       {hero && <Hero data={hero} />}
-      {intro && (
-        <TextSection container="gridContainer paddings pt-12 md:pt-30 xl:pt-24" data={intro} />
-      )}
-      {services && (
-        <ServicesCarousel container="paddings pt-20 md:pt-24 xl:pt-30" data={services} />
-      )}
-      {afterServices && (
-        <TextSection
-          container="gridContainer paddings pt-20 md:pt-24 xl:pt-30"
-          data={afterServices}
-        />
-      )}
-      {numbers && <NumbersSection container="paddings pt-20 md:pt-24 xl:pt-40" data={numbers} />}
-      {projects && (
-        <ProjectsCarousel container="paddings pt-20 md:pt-24 xl:pt-40" data={projects} />
-      )}
+      {intro && <TextSection container="gridContainer paddings" data={intro} />}
+      {services && <ServicesCarousel container="paddings" data={services} />}
+      {afterServices && <TextSection container="gridContainer paddings" data={afterServices} />}
+      {numbers && <NumbersSection container="paddings" data={numbers} />}
+      {projects && <ProjectsCarousel container="paddings" data={projects} />}
       {testimonials && (
-        <TestimonialsCarousel
-          container="paddings pt-20 md:pt-24 xl:pt-40"
-          data={testimonials}
-          ratings={ratings}
-        />
+        <TestimonialsCarousel container="paddings" data={testimonials} ratings={ratings} />
       )}
-      {interiorStyles && (
-        <InteriorStylesCarousel
-          container="paddings pt-16 md:pt-30 xl:pt-40"
-          data={interiorStyles}
-        />
-      )}
+      {interiorStyles && <InteriorStylesCarousel container="paddings" data={interiorStyles} />}
     </PageWrapper>
   )
 }
