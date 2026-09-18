@@ -2,6 +2,8 @@ import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { seoPlugin } from '@payloadcms/plugin-seo'
+import { en } from '@payloadcms/translations/languages/en'
+import { pl } from '@payloadcms/translations/languages/pl'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import nodemailer from 'nodemailer'
 import path from 'path'
@@ -35,6 +37,10 @@ export default buildConfig({
   collections: [Users, Media, Pages, Projects, InteriorStyles],
   globals: [Footer],
   editor: lexicalEditor(),
+  // Admin UI chrome only — the `Locale` picker below is content localization, a separate
+  // feature. Payload's default supported set is `{ en }`, so without this the account
+  // language selector has nothing to offer.
+  i18n: { supportedLanguages: { en, pl }, fallbackLanguage: 'pl' },
   // Both indexed languages ship together; an English-incomplete launch is a
   // regression, so neither locale falls back to the other.
   localization: {
