@@ -37,6 +37,10 @@ export function ProjectsCarousel({ container, data }: PropsT) {
       </div>
       <Swiper
         {...carouselDefaults}
+        // Too few projects to loop: Swiper keeps a slide on each flank of the centred one
+        // and runs out, parking the track with a hole beside whichever side came up short.
+        // A bounded track puts that space where it belongs — before the first, after the last.
+        loop={false}
         spaceBetween={24}
         slidesPerView={1}
         breakpoints={{
