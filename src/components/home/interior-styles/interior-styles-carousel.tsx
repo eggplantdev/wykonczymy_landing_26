@@ -5,6 +5,7 @@ import 'swiper/css'
 
 import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
 import { cn } from '@/lib/cn'
+import { childPath } from '@/lib/routing'
 import type { InteriorStyleT } from '@/lib/content/interior-styles'
 import { SectionTitle } from '@/components/layout/section-title'
 import { ButtonLink } from '@/components/ui/button-link'
@@ -14,6 +15,7 @@ export type InteriorStylesSectionT = {
   sectionTitle: string
   ctaLabel: string
   ctaHref: string
+  basePath: string
   styles: InteriorStyleT[]
 }
 
@@ -23,7 +25,7 @@ type PropsT = {
 }
 
 export function InteriorStylesCarousel({ container, data }: PropsT) {
-  const { sectionTitle, ctaLabel, ctaHref, styles } = data
+  const { sectionTitle, ctaLabel, ctaHref, basePath, styles } = data
   const carousel = useCarouselReady()
 
   if (styles.length < 1) return null
@@ -37,11 +39,9 @@ export function InteriorStylesCarousel({ container, data }: PropsT) {
         className="xlg:mb-10 mb-8"
         onSwiper={carousel.onSwiper}
       >
-        {/* The home teaser sends every card to the listing; a style's own page is reached
-            from there, not from here. */}
         {styles.map((style) => (
           <SwiperSlide key={style.id} className="w-auto!">
-            <InteriorStyleSlide style={style} href={ctaHref} />
+            <InteriorStyleSlide style={style} href={childPath(basePath, style.slug)} />
           </SwiperSlide>
         ))}
       </Swiper>

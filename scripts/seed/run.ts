@@ -25,8 +25,8 @@ import { projectSeeds } from './data/projects'
 // identifies it (a page's type, a project's Polish slug) and updated in place, so running
 // it twice does not duplicate anything and does not undo photos attached in the admin.
 //
-// Images are deliberately not seeded. Media has to be uploaded through the admin, and a
-// missing photo renders as a placeholder rather than breaking the page.
+// Images are deliberately left alone here so this stays safe to re-run over a populated
+// admin; `pnpm seed:photos` is the one that writes them.
 
 /** Payload writes one locale at a time, and `fallback: false` means both are required. */
 const locales = i18n.locales as readonly Locale[]

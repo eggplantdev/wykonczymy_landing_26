@@ -24,7 +24,7 @@ read there, write here. Roles and the rules for copying from each →
 | ----------------- | ---------------------------- | --------------------------------------------------------------------------- |
 | **Chaos Kitchen** | `/workspace/nomad_chef`      | Live site on this exact stack — the default answer to "how do we do X here" |
 | **tdg**           | `/workspace/_old_repos/tdg`  | The agency's WordPress template — the only real built markup for this site  |
-| **leads app**     | `/workspace/yolo/wykonczymy` | Where quote requests land — a separate product with its own roadmap         |
+| **leads app**     | `/workspace/yolo/wykonczymy` | Where contact form submissions land — a separate product with its own roadmap |
 | **fest**          | `/workspace/fest`            | Next + WP, PL/EN. The only working locale routing + dictionary on any repo  |
 
 fest's i18n module is `fest-frontend/lib/i18n/` — typed JSON dictionary, `useTranslation`,
@@ -94,7 +94,12 @@ site.
 - **Content is seeded, not typed into the admin twice.** `pnpm seed` upserts every page, project,
   interior style and the footer global in both locales from `scripts/seed/data/`; it is idempotent
   and never touches uploads, so photos attached in the admin survive it. `pnpm seed:prod` points the
-  same script at production — **a human runs it, never an agent.**
+  same script at production — **a human runs it, never an agent.** It writes rows and nothing else:
+  the revalidation hooks need a request context the CLI has no way to provide, so **production keeps
+  serving the previous copy until the next deploy** — redeploy after seeding prod.
+- **Photos are seeded separately, by `pnpm seed:photos`.** It uploads
+  `public/images/styles/` into Media and wires each shot into the interior style it belongs to.
+  Kept out of `pnpm seed` because it *does* overwrite what an editor arranged by hand.
 - **Read env through `src/lib/env.ts` / `env.server.ts`, never raw `process.env`** — ESLint rejects
   it in `src/**`. `payload.config.ts` is the one exception, and parses `serverSchema` itself.
 
@@ -128,8 +133,8 @@ Nothing is owed on the documentation; it was completed 2026-09-02.
 
 Read `@context/foundation/project-state.md` first — decisions taken, what was rejected and why, and
 the ordered next steps. Then `@context/foundation/prd.md` (11-section brownfield PRD; its
-`## Open Questions` holds the eleven open items — only "where do quote requests land today" blocks
-cutover, none block building) and `@context/foundation/references.md`.
+`## Open Questions` holds the eleven open items — only "where do contact form submissions land
+today" blocks cutover, none block building) and `@context/foundation/references.md`.
 
 Content for populating early versions: `@context/foundation/live-site-snapshot/scraped-content.md`
 — scraped 2026-03-04, so **spot-check against the live site before trusting it for cutover**;

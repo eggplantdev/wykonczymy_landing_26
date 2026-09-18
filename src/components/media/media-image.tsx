@@ -18,7 +18,17 @@ export function MediaImage({ image, sizes, priority, className }: PropsT) {
       alt={image.alt}
       sizes={sizes}
       priority={priority}
+      // Every source photo is already a lossy WebP, so Next's default 75 re-encodes a
+      // re-encode and smears the smooth walls and soft daylight this material is mostly
+      // made of. 90 lands back at roughly the original file's weight. Allowed values are
+      // pinned in `next.config.ts`.
+      quality={90}
       className={cn('object-cover', className)}
+      style={
+        image.focalPoint && {
+          objectPosition: `${image.focalPoint.x}% ${image.focalPoint.y}%`,
+        }
+      }
     />
   )
 }

@@ -24,6 +24,8 @@ const nextConfig: NextConfig = {
     { source: '/en/price-list', destination: '/en/home/', permanent: true },
   ],
   images: {
+    // Next refuses any quality not listed here.
+    qualities: [75, 90],
     localPatterns: [
       {
         pathname: '/api/media/file/**',

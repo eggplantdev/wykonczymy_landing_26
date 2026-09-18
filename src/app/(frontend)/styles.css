@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+/* Tailwind scans every non-gitignored file, markdown included, so a class name quoted in prose
+   becomes a real rule — and an unparseable one fails the build. These two trees are prose only. */
+@source not '../../../context';
+@source not '../../../.review-gate';
+
 /* Ported from tdg's `tailwind.config.js` + `styles/globals.css`. tdg declared `fontFamily`
    and `fontSize` at the top level of `theme`, which in v3 REPLACED the default scales — v4
    merges instead, so both namespaces are cleared to `initial` first. Everything tdg kept

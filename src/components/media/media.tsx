@@ -13,7 +13,6 @@ type PropsT = {
   className?: string
 }
 
-// Video wins when both are set, matching tdg.
 export function Media({
   image,
   video,

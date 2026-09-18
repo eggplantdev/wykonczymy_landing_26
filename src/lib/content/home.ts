@@ -4,7 +4,13 @@ import type { InteriorStyleT } from '@/lib/content/interior-styles'
 import type { ProjectT } from '@/lib/content/projects'
 import { CONTACT_FORM_ANCHOR } from '@/lib/anchors'
 import type { Locale } from '@/lib/i18n/i18n'
-import { childPath, localeRoot, PROJECTS_PAGE_TYPE, type PageTypeT } from '@/lib/routing'
+import {
+  childPath,
+  INTERIOR_STYLES_PAGE_TYPE,
+  localeRoot,
+  PROJECTS_PAGE_TYPE,
+  type PageTypeT,
+} from '@/lib/routing'
 import { toImage, toVideo } from './media'
 
 type SourcesT = {
@@ -110,6 +116,9 @@ export function toHomeData(
           sectionTitle: home.interiorStyles?.sectionTitle ?? '',
           ctaLabel: home.interiorStyles?.ctaLabel ?? '',
           ctaHref: link(home.interiorStyles?.ctaLink),
+          // Not `ctaHref`: that one is an editor's choice of where the button goes, while a
+          // style's own address is always under the interior styles page.
+          basePath: link(INTERIOR_STYLES_PAGE_TYPE),
           styles,
         }
       : undefined,

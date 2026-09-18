@@ -24,6 +24,7 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "prepare": "husky",
     "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run scripts/seed.ts",
+    "seed:photos": "cross-env NODE_OPTIONS=--no-deprecation payload run scripts/seed-photos.ts",
     "seed:prod": "pnpm db:dump && set -a && source .env && set +a && POSTGRES_URL=\"$PROD_POSTGRES_URL\" pnpm seed",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",

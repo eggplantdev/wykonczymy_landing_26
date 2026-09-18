@@ -14,9 +14,9 @@ export const findPage = cache(async (locale: Locale, slug: string | null) => {
   const { docs } = await payload.find({
     collection: 'pages',
     locale,
-    // Two levels: the page's own media and its featured-project relationship, then that
-    // project's photos.
-    depth: 2,
+    // One level: the page's own uploads. Nothing on a page relates to a document that
+    // itself carries media.
+    depth: 1,
     limit: 1,
     where: {
       _status: { equals: 'published' },
