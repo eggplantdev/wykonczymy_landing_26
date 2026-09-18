@@ -41,11 +41,14 @@ export const Projects: CollectionConfig = {
     specListField('scope', 'The work carried out, one row per trade.'),
     specListField('materials', 'Materials and finishes, one row per category.'),
     {
-      name: 'image',
+      name: 'gallery',
       type: 'upload',
       relationTo: 'media',
-      admin: { description: 'The card and hero photo. Falls back to the first gallery image.' },
+      hasMany: true,
+      admin: {
+        description:
+          'The first photo is the card and hero shot; drag a different one to the top to change it.',
+      },
     },
-    { name: 'gallery', type: 'upload', relationTo: 'media', hasMany: true },
   ],
 }

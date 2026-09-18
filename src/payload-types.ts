@@ -393,9 +393,8 @@ export interface Project {
       }[]
     | null
   /**
-   * The card and hero photo. Falls back to the first gallery image.
+   * The first photo is the card and hero shot; drag a different one to the top to change it.
    */
-  image?: (number | null) | Media
   gallery?: (number | Media)[] | null
   meta?: {
     title?: string | null
@@ -712,7 +711,6 @@ export interface ProjectsSelect<T extends boolean = true> {
         value?: T
         id?: T
       }
-  image?: T
   gallery?: T
   meta?:
     | T

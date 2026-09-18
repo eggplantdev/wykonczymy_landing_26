@@ -6,7 +6,7 @@ import type { Project } from '@/payload-types'
 import type { Locale } from '@/lib/i18n/i18n'
 import type { MediaImageT } from '@/components/media/types'
 import type { SpecItemT } from '@/components/ui/spec-item'
-import { toImage, toImages } from './media'
+import { toImages } from './media'
 import { toSpecs } from './specs'
 import { isTranslated } from './translated'
 
@@ -27,7 +27,9 @@ export type ProjectT = {
 }
 
 export const toProject = (doc: Project): ProjectT => {
-  const gallery = toImages(doc.gallery)
+  // The cover is the first photo rather than a field of its own, so an editor picks it by
+  // dragging it to the top of the one list the admin already shows.
+  const [image, ...gallery] = toImages(doc.gallery)
 
   return {
     id: doc.id,
@@ -40,7 +42,7 @@ export const toProject = (doc: Project): ProjectT => {
     description: doc.description ?? '',
     scope: toSpecs(doc.scope),
     materials: toSpecs(doc.materials),
-    image: toImage(doc.image) ?? gallery[0] ?? null,
+    image: image ?? null,
     gallery,
   }
 }
