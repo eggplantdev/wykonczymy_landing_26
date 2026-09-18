@@ -7,9 +7,9 @@ import 'swiper/css'
 
 import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
 import { SectionTitle } from '@/components/layout/section-title'
+import { CarouselNav } from '@/components/ui/carousel-nav'
 import { RatingBadge, type RatingT } from '@/components/ui/rating-badge'
 import { cn } from '@/lib/cn'
-import { TestimonialControls } from './testimonial-controls'
 import { TestimonialSlide, type TestimonialT } from './testimonial-slide'
 
 export type TestimonialsSectionT = {
@@ -89,7 +89,7 @@ export function TestimonialsCarousel({ container, data, ratings }: PropsT) {
                 the arrows reach the instance without riding a slide. */}
             {quotes.length > 1 && (
               <div slot="container-end">
-                <TestimonialControls current={current} total={quotes.length} />
+                <CarouselNav current={current} total={quotes.length} className="pt-8 md:pt-10" />
               </div>
             )}
           </Swiper>
