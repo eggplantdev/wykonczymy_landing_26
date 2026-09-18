@@ -28,7 +28,7 @@ export function StyleGallery({ title, images }: PropsT) {
   if (images.length < 1) return null
 
   return (
-    <section className="paddings pt-16 md:pt-20 lg:pt-30">
+    <section className="paddings pt-20 md:pt-24 xl:pt-40">
       <SectionTitle title={title} className="mb-6 md:mb-8" />
 
       <div className="grid grid-flow-row-dense grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-5">

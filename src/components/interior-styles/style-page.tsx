@@ -47,7 +47,7 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
               </p>
             ))}
 
-            <div className="relative my-10 aspect-312/238 overflow-hidden md:my-8 md:aspect-523/342 lg:my-12 lg:aspect-661/432">
+            <div className="relative mt-10 aspect-312/238 overflow-hidden md:mt-8 md:aspect-523/342 lg:mt-12 lg:aspect-661/432">
               <PhotoButton
                 image={contentImage}
                 sizes="(max-width: 767px) 100vw, (max-width: 1023px) 72vw, 48vw"
@@ -55,7 +55,7 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
             </div>
 
             {rest.slice(split).map((paragraph) => (
-              <p key={paragraph.slice(0, 40)} className="pb-8">
+              <p key={paragraph.slice(0, 40)} className="pt-8">
                 {paragraph}
               </p>
             ))}
@@ -66,7 +66,7 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
       </PhotoLightbox>
 
       <ObjectCarousel
-        container="lg:pt-30 pt-16 md:pt-20"
+        container="pt-20 md:pt-24 xl:pt-40"
         sectionTitle={common.moreInteriorStyles}
         items={related.map((item) => ({
           key: item.slug,
