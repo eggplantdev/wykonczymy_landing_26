@@ -32,10 +32,9 @@ export const Projects: CollectionConfig = {
     {
       type: 'row',
       fields: [
-        { name: 'price', type: 'text', localized: true, admin: { width: '25%' } },
-        { name: 'area', type: 'text', localized: true, admin: { width: '25%' } },
-        { name: 'duration', type: 'text', localized: true, admin: { width: '25%' } },
-        { name: 'address', type: 'text', localized: true, admin: { width: '25%' } },
+        { name: 'area', type: 'text', localized: true, admin: { width: '33%' } },
+        { name: 'duration', type: 'text', localized: true, admin: { width: '33%' } },
+        { name: 'address', type: 'text', localized: true, admin: { width: '33%' } },
       ],
     },
     { name: 'description', type: 'textarea', localized: true },

@@ -368,7 +368,6 @@ export interface Project {
    * One sentence. Doubles as the hero lead and the card blurb.
    */
   summary: string
-  price?: string | null
   area?: string | null
   duration?: string | null
   address?: string | null
@@ -695,7 +694,6 @@ export interface ProjectsSelect<T extends boolean = true> {
   title?: T
   slug?: T
   summary?: T
-  price?: T
   area?: T
   duration?: T
   address?: T

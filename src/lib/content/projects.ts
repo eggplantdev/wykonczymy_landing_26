@@ -16,7 +16,6 @@ export type ProjectT = {
   title: string
   /** One-sentence summary. Doubles as the hero lead and the card blurb. */
   summary: string
-  price: string
   area: string
   duration: string
   address: string
@@ -35,7 +34,6 @@ export const toProject = (doc: Project): ProjectT => {
     slug: doc.slug,
     title: doc.title,
     summary: doc.summary,
-    price: doc.price ?? '',
     area: doc.area ?? '',
     duration: doc.duration ?? '',
     address: doc.address ?? '',
