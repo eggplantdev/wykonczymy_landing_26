@@ -28,9 +28,11 @@ export function RatingBadge({ data }: PropsT) {
 
   const badge = (
     <>
-      <Mark className="h-6 w-auto shrink-0" />
+      <Mark className="h-7 w-auto shrink-0" />
       <StarRating rating={rating} label={`${platform}: ${score} / 5`} />
-      <span className="text-16 md:text-18 font-medium">{score}</span>
+      {/* The badges land on the same line as the testimonials counter, so the score is set
+          like that figure rather than as a second, louder one. */}
+      <span className="text-14 md:text-16 leading-140">{score}</span>
     </>
   )
 
