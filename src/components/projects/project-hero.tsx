@@ -17,11 +17,11 @@ export function ProjectHero({ project }: PropsT) {
 
       <div className="paddings relative flex h-full w-full flex-col items-start justify-end pb-5 text-white md:pb-12 xl:pb-10">
         <h1 className="text-18 xl:text-24 mb-6 md:leading-[111%] xl:leading-normal">{title}</h1>
-        <div className="w-full justify-between xl:flex">
-          <p className={`mb-4 max-w-100.5 md:mb-10 xl:mb-0 xl:max-w-221.75 ${textStyle}`}>
-            {summary}
+        <div className="gridContainer w-full">
+          <p className={`col-span-6 mb-4 md:mb-10 xl:mb-0 ${textStyle}`}>{summary}</p>
+          <p className={`col-span-full xl:col-span-2 xl:col-start-11 xl:text-right ${textStyle}`}>
+            {area}
           </p>
-          <p className={textStyle}>{area}</p>
         </div>
       </div>
     </section>
