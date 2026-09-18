@@ -179,7 +179,10 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
             >
               <span
                 aria-hidden
-                className={cn(buttonLabelClasses({ disabled: isSubmitting }), 'flex h-3')}
+                className={cn(
+                  buttonLabelClasses({ disabled: isSubmitting }),
+                  'flex h-3 group-hover:translate-x-0.5',
+                )}
               >
                 <Arrow />
               </span>
