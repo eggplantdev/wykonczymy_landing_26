@@ -1,14 +1,15 @@
 'use client'
 
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { LanguageSwitcher } from '@/components/layout/language-switcher'
 import { MenuToggle } from '@/components/layout/menu-toggle'
 import { SiteNav } from '@/components/layout/site-nav'
 import { buttonClasses, buttonLabelClasses } from '@/components/ui/button'
+import { Sheet } from '@/components/ui/sheet'
 import type { Locale } from '@/lib/i18n/i18n'
 import { useTranslation } from '@/lib/i18n/use-translation'
+import { useMediaQuery } from '@/lib/use-media-query'
 import type { Page } from '@/payload-types'
 
 type PropsT = {
@@ -19,84 +20,55 @@ type PropsT = {
 
 const MENU_ID = 'mobile-menu'
 
-// The toggle morphs into the close icon, so it stays above the menu and is the only
-// way to dismiss it — no second close button inside.
+// Mirrors `--breakpoint-md` in styles.css, where the toggle and the panel both stop
+// being rendered.
+const MD_AND_UP = '(min-width: 768px)'
+
 export function MobileMenu({ paths, typePaths, phone }: PropsT) {
   const { t } = useTranslation('nav')
-  const shouldReduceMotion = useReducedMotion()
   const [isOpen, setIsOpen] = useState(false)
+  const toggleRef = useRef<HTMLButtonElement>(null)
 
-  // The menu covers the viewport, so a scrolling page behind it would silently move the
-  // reader somewhere else before they close it. Driven by an effect rather than by the
-  // toggle handler so the cleanup restores `overflow` even when the menu unmounts while
-  // open — a route change or a resize past the md breakpoint would otherwise leave the
-  // whole page unscrollable.
-  useEffect(() => {
-    if (!isOpen) return
-
-    const { overflow } = document.body.style
-    document.body.style.overflow = 'hidden'
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setIsOpen(false)
-    }
-    document.addEventListener('keydown', onKeyDown)
-
-    return () => {
-      document.body.style.overflow = overflow
-      document.removeEventListener('keydown', onKeyDown)
-    }
-  }, [isOpen])
+  // Hiding the panel with `md:hidden` would leave the dialog open behind it: the scroll
+  // lock, the focus trap and the page's `aria-hidden` would all survive a rotation into
+  // landscape, with the toggle gone too and no key to press on a phone.
+  const isDesktop = useMediaQuery(MD_AND_UP)
+  if (isDesktop && isOpen) setIsOpen(false)
 
   return (
     <>
       <MenuToggle
+        ref={toggleRef}
         label={isOpen ? t('closeMenu') : t('menu')}
         isOpen={isOpen}
         onClick={() => setIsOpen(!isOpen)}
         aria-controls={MENU_ID}
       />
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            id={MENU_ID}
-            className="bg-white fixed inset-0 z-40 flex h-lvh w-full flex-col items-center justify-center gap-8 overflow-y-auto p-6 md:hidden"
-            initial={{ x: '100%' }}
-            animate={{
-              x: 0,
-              transition: shouldReduceMotion
-                ? { duration: 0 }
-                : { type: 'spring', stiffness: 400, damping: 28 },
-            }}
-            exit={{
-              x: '100%',
-              transition: shouldReduceMotion
-                ? { duration: 0 }
-                : { type: 'tween', duration: 0.15, ease: 'easeOut' },
-            }}
-          >
-            <SiteNav paths={typePaths} variant="mobile-menu" onNavigate={() => setIsOpen(false)} />
+      <Sheet
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        triggerRef={toggleRef}
+        label={t('menu')}
+        closeLabel={t('closeMenu')}
+        id={MENU_ID}
+        className="bg-white items-center justify-center gap-8 p-6"
+      >
+        <SiteNav paths={typePaths} variant="mobile-menu" onNavigate={() => setIsOpen(false)} />
 
-            <LanguageSwitcher
-              paths={paths}
-              variant="mobile-menu"
-              onNavigate={() => setIsOpen(false)}
-            />
+        <LanguageSwitcher paths={paths} variant="mobile-menu" onNavigate={() => setIsOpen(false)} />
 
-            {/* The pill is worn by the link itself: a <button> inside an <a> is invalid
-                markup and announces two controls where the reader sees one. */}
-            <a
-              href={`tel:${phone.replace(/\s/g, '')}`}
-              aria-label={`${t('callUs')} ${phone}`}
-              onClick={() => setIsOpen(false)}
-              className={buttonClasses({ size: 'xl' })}
-            >
-              <span className={buttonLabelClasses({})}>{phone}</span>
-            </a>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* The pill is worn by the link itself: a <button> inside an <a> is invalid
+            markup and announces two controls where the reader sees one. */}
+        <a
+          href={`tel:${phone.replace(/\s/g, '')}`}
+          aria-label={`${t('callUs')} ${phone}`}
+          onClick={() => setIsOpen(false)}
+          className={buttonClasses({ size: 'xl' })}
+        >
+          <span className={buttonLabelClasses({})}>{phone}</span>
+        </a>
+      </Sheet>
     </>
   )
 }

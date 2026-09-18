@@ -1,3 +1,5 @@
+import type { Ref } from 'react'
+
 import { cn } from '@/lib/cn'
 
 type PropsT = {
@@ -5,6 +7,9 @@ type PropsT = {
   isOpen: boolean
   onClick: () => void
   className?: string
+  // The menu hands this back the focus it took, so closing does not drop the reader on
+  // the body with the next Tab restarting from the top of the document.
+  ref?: Ref<HTMLButtonElement>
   'aria-controls'?: string
 }
 
@@ -27,11 +32,12 @@ const CLOSE_DURATION_MS = 820
 // on white page sections and on the menu it slides over. Difference only sees the
 // backdrop of the nearest stacking-context ancestor, which is why the button positions
 // itself instead of sitting inside the fixed header.
-export function MenuToggle({ label, isOpen, onClick, className, ...ariaProps }: PropsT) {
+export function MenuToggle({ label, isOpen, onClick, className, ref, ...ariaProps }: PropsT) {
   const durationMs = isOpen ? OPEN_DURATION_MS : CLOSE_DURATION_MS
 
   return (
     <button
+      ref={ref}
       type="button"
       onClick={onClick}
       aria-label={label}
@@ -39,6 +45,9 @@ export function MenuToggle({ label, isOpen, onClick, className, ...ariaProps }: 
       {...ariaProps}
       className={cn(
         'fixed top-4 right-6 z-50 text-white mix-blend-difference md:hidden',
+        // The open menu is a modal dialog, and Radix kills pointer events on everything
+        // outside it. This button is outside it and is the only way to shut it.
+        isOpen && 'pointer-events-auto',
         className,
       )}
     >
