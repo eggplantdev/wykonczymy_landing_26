@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Media } from '@/components/media/media'
 import type { ObjectCarouselItemT } from '@/components/object-carousel/types'
 import { SpecStrip } from '@/components/ui/spec-strip'
+import { cn } from '@/lib/cn'
 
 type PropsT = {
   item: ObjectCarouselItemT
@@ -26,7 +27,17 @@ export function ObjectSlideContent({ item, sectionTitle }: PropsT) {
         <h3 className="text-20 md:text-22 lg:text-28 mb-6 line-clamp-1 md:mb-9 lg:mb-12">
           {title}
         </h3>
-        <p className="text-12 md:text-14 leading-130 mb-8 line-clamp-3 md:h-14 lg:mb-12">{text}</p>
+        {/* The height is pinned, not just clamped: the arrows sit below this block on
+            mobile, so a short blurb followed by a long one would walk them up and down the
+            page as the carousel advances. */}
+        <p
+          className={cn(
+            'text-12 md:text-14 leading-130 line-clamp-3 h-12 md:h-14',
+            details && 'mb-8 lg:mb-12',
+          )}
+        >
+          {text}
+        </p>
         {details && <SpecStrip items={details} className="mt-auto" />}
       </div>
     </Link>
