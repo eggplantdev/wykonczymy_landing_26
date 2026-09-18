@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import { Fragment } from 'react'
 
 import { NavGroup } from '@/components/layout/nav-group'
-import { NavItem } from '@/components/layout/nav-item'
+import { mobileMenuGap, NavItem } from '@/components/layout/nav-item'
 import { NavSeparator } from '@/components/layout/nav-separator'
 import type { Page } from '@/payload-types'
 import { useTranslation } from '@/lib/i18n/use-translation'
@@ -45,19 +45,17 @@ export function SiteNav({ paths, variant = 'header', onNavigate }: PropsT) {
   return (
     <nav>
       <NavGroup
-        className={isMobileMenu ? 'w-full flex-col border-transparent bg-transparent p-0' : ''}
+        className={
+          isMobileMenu
+            ? mobileMenuGap + ' w-full flex-col border-transparent bg-transparent p-0'
+            : ''
+        }
       >
         {links.map(({ pageType, href }, index) => (
           <Fragment key={pageType}>
             <NavItem
               href={href}
-              // No hover state on a touch screen: it only ever fires as a sticky
-              // highlight left behind after a tap.
-              className={
-                isMobileMenu
-                  ? 'text-24 hover:text-shwarz min-h-12 w-full justify-center hover:bg-transparent'
-                  : ''
-              }
+              variant={isMobileMenu ? 'mobile' : 'bar'}
               aria-current={pathname === href ? 'page' : undefined}
               onClick={onNavigate}
             >
