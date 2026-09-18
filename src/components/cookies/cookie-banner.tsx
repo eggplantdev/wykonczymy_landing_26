@@ -42,7 +42,7 @@ export function CookieBanner({ privacyPolicyHref }: PropsT) {
 
       {/* Accept and refuse wear the same pill: a refusal in a quieter style is not a free
           choice under the GDPR. */}
-      <div className="mt-5 flex flex-col gap-2">
+      <div className="mt-5 flex flex-wrap gap-2">
         <Button size="sm" label={t('acceptAll')} onClick={() => saveConsents('all')} />
         <Button size="sm" label={t('rejectAll')} onClick={() => saveConsents('necessary')} />
         <Button
