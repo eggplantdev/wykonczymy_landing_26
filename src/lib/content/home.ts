@@ -83,7 +83,7 @@ export function toHomeData(
           slides: projects.map((project) => ({
             image: project.image,
             video: null,
-            caption: `${project.title} — ${project.summary}`,
+            caption: project.title,
             href: childPath(link(PROJECTS_PAGE_TYPE), project.slug),
           })),
         }
