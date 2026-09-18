@@ -16,7 +16,9 @@ export function TextSection({ data, container }: PropsT) {
       <p
         className={cn(
           'text-18 leading-125 md:text-20 md:leading-130 lg:text-32 lg:leading-normal col-span-full lg:col-span-9',
-          data.position === 'right' && 'ml-auto',
+          // Not `ml-auto`: a paragraph this long already fills its nine columns, so the auto
+          // margin has no slack to absorb. Moving it right means moving the grid area.
+          data.position === 'right' && 'lg:col-start-4',
         )}
       >
         {data.text}

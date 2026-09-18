@@ -15,6 +15,18 @@ const ctaFields = (): Field[] => [
   },
 ]
 
+// A standalone paragraph between two sections. `position` is which half of the grid it hangs
+// off — the width is fixed, so left and right are the only choices there are.
+const textSectionFields = (): Field[] => [
+  { name: 'text', type: 'textarea', localized: true },
+  {
+    name: 'position',
+    type: 'select',
+    defaultValue: 'left',
+    options: ['left', 'right'],
+  },
+]
+
 const mediaFields = (): Field[] => [
   { name: 'image', type: 'upload', relationTo: 'media' },
   {
@@ -41,15 +53,8 @@ export const homeGroup: Field = {
     {
       name: 'intro',
       type: 'group',
-      fields: [
-        { name: 'text', type: 'textarea', localized: true },
-        {
-          name: 'position',
-          type: 'select',
-          defaultValue: 'left',
-          options: ['left', 'right'],
-        },
-      ],
+      label: 'Text above the services carousel',
+      fields: textSectionFields(),
     },
     {
       name: 'services',
@@ -69,6 +74,12 @@ export const homeGroup: Field = {
           ],
         },
       ],
+    },
+    {
+      name: 'afterServices',
+      type: 'group',
+      label: 'Text under the services carousel',
+      fields: textSectionFields(),
     },
     {
       name: 'projects',

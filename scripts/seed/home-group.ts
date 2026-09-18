@@ -27,6 +27,10 @@ export const homeGroup = (copy: HomeCopyT, rowIds: RowIdsT) => ({
     ctaLink: homeShared.heroCtaLink,
   },
   intro: { text: copy.intro, position: homeShared.introPosition },
+  afterServices: {
+    text: copy.afterServices,
+    position: homeShared.afterServicesPosition,
+  },
   services: {
     sectionTitle: copy.services.sectionTitle,
     cards: copy.services.cards.map((card, index) => ({ id: rowIds.services[index], ...card })),

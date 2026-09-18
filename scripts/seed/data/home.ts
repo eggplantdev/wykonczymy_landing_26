@@ -5,6 +5,7 @@ type SectionCopyT = { sectionTitle: string; ctaLabel: string }
 export type HomeCopyT = {
   hero: { title: string; ctaLabel: string }
   intro: string
+  afterServices: string
   services: { sectionTitle: string; cards: { title: string; text: string }[] }
   projects: SectionCopyT
   numbers: { sectionTitle: string; cards: { unit: string; description: string }[] }
@@ -23,6 +24,7 @@ export const homeShared = {
   projectsCtaLink: 'completed-works',
   interiorStylesCtaLink: 'interior-styles',
   introPosition: 'left',
+  afterServicesPosition: 'right',
   numberValues: [16, 70, 120, 250],
 } as const
 
@@ -33,21 +35,59 @@ export const homeCopy: LocalizedT<HomeCopyT> = {
       ctaLabel: 'Umów bezpłatną wycenę',
     },
     intro:
-      'Solidne wykończenia i remonty w rozsądnej cenie, dopasowane do każdego budżetu. Gwarantujemy jakość wykonania i zadowolenie klienta, a nasza ekipa pomoże niezależnie od skali zlecenia. Zajmujemy się też drobiazgami, bo zależy nam na kliencie na każdym etapie prac.',
+      'Wykończymy to zespół profesjonalistów od ponad 8 lat gwarantujący najwyższą jakość i satysfakcję. Specjalizujemy się w kompleksowych remontach domów, mieszkań, biur, klatek schodowych oraz lokali usługowych. Dbamy o swoich Klientów na każdym etapie realizacji, a nasi doświadczeni specjaliści zawsze służą pomocą i doradztwem, niezależnie od skali zlecenia czy budżetu.',
+    afterServices:
+      'Specjalizujemy się w kompleksowych remontach domów, mieszkań, biur, klatek schodowych oraz lokali usługowych.',
     services: {
       sectionTitle: 'Czym się zajmujemy',
       cards: [
         {
           title: 'Remonty',
-          text: 'Kompleksowe remonty mieszkań, domów, biur i lokali usługowych — od jednego pokoju po wykończenie pod klucz, wycenione pozycja po pozycji przed startem.',
+          text: 'Kompleksowe remonty dopasowane do Twoich potrzeb — odświeżamy wygląd i funkcjonalność biur, mieszkań oraz lokali usługowych.',
         },
         {
-          title: 'Instalacje',
-          text: 'Elektryka, instalacje wodno-kanalizacyjne, centralne ogrzewanie i klimatyzacja — zaprojektowane, wykonane i sprawdzone przez naszą ekipę.',
+          title: 'Modernizacje',
+          text: 'Doprowadzamy istniejące pomieszczenia i instalacje do nowoczesnych standardów. Każde miejsce, niezależnie od wieku, może zyskać nowe życie.',
         },
         {
-          title: 'Wykończenia',
-          text: 'Malowanie, podłogi, tynki dekoracyjne i usługi projektowe. Etap, na którym plac budowy zaczyna wreszcie wyglądać jak miejsce do życia.',
+          title: 'Malowanie',
+          text: 'Malowanie ścian, gładzie gipsowe, tapetowanie i dekorowanie wnętrz. Każda praca malarska wykonana w standardzie, z którego jesteśmy znani.',
+        },
+        {
+          title: 'Naprawy',
+          text: 'Małe i duże naprawy traktujemy tak samo poważnie. Szybko i skutecznie usuwamy usterki, żeby wszystko w domu i biurze działało bez zarzutu.',
+        },
+        {
+          title: 'Prace elektryczne',
+          text: 'Pełen zakres prac elektrycznych — od projektu instalacji po biały montaż. Bezpieczeństwo i funkcjonalność są tu najważniejsze.',
+        },
+        {
+          title: 'Prace hydrauliczne',
+          text: 'Montaż sieci wodno-kanalizacyjnej i centralnego ogrzewania. Działamy szybko, sprawnie i z dbałością o szczegóły.',
+        },
+        {
+          title: 'Klimatyzacja',
+          text: 'Montaż i serwis klimatyzatorów typu split. Serwisujemy szybko i skutecznie, żeby zapewnić komfort w każdych warunkach.',
+        },
+        {
+          title: 'Montaż podłóg',
+          text: 'Wykładziny, panele drewniane, podłogi winylowe i parkiet. Dbamy o precyzję i estetykę, żeby podłogi były trwałe i piękne.',
+        },
+        {
+          title: 'Adaptacje',
+          text: 'Adaptacje kuchni, łazienek, loftów i garaży zgodnie z Twoją wizją. Transformacja, która zadowoli najbardziej wymagających.',
+        },
+        {
+          title: 'Tarasy i domki',
+          text: 'Budujemy tarasy wentylowane i kompozytowe oraz drewniane domki. Nasze realizacje łączą solidność, estetykę i trwałość.',
+        },
+        {
+          title: 'Tynki dekoracyjne',
+          text: 'Mikrocement, tynk gliniany i inne tynki dekoracyjne. Staranne wykonanie i unikalne efekty wizualne, które wyróżniają wnętrze.',
+        },
+        {
+          title: 'Usługi projektowe',
+          text: 'Funkcjonalne i estetyczne rozwiązania dla domu lub biura. Nasz projektant pomoże zrealizować wizję idealnego wnętrza.',
         },
       ],
     },
@@ -133,21 +173,59 @@ export const homeCopy: LocalizedT<HomeCopyT> = {
       ctaLabel: 'Schedule a free estimate',
     },
     intro:
-      'Quality finishing, affordable renovations for every budget. We guarantee top-quality workmanship and customer satisfaction, and our team is here to help no matter the size of the project. We handle even the small things, because we care about our clients at every stage of the job.',
+      'Wykończymy is a team of professionals who have guaranteed the highest quality and satisfaction for over 8 years. We specialise in comprehensive renovations of houses, flats, offices, stairwells and commercial premises. We look after our clients at every stage of the project, and our experienced specialists are always on hand with advice and support, whatever the scale of the job or the budget.',
+    afterServices:
+      'We specialise in comprehensive renovations of houses, flats, offices, stairwells and commercial premises.',
     services: {
       sectionTitle: 'What we do',
       cards: [
         {
           title: 'Renovations',
-          text: 'Comprehensive renovations of apartments, houses, offices and commercial premises — from a single room to turnkey finishing, priced line by line before we start.',
+          text: 'Comprehensive renovations tailored to what you need — refreshing both the look and the function of offices, flats and commercial premises.',
         },
         {
-          title: 'Installations',
-          text: 'Electrical work, water and sewage networks, central heating and air conditioning — designed, fitted and tested by our own team.',
+          title: 'Modernisation',
+          text: 'We bring existing rooms and installations up to modern standards. Any space, whatever its age, can be given a new lease of life.',
         },
         {
-          title: 'Finishing',
-          text: 'Painting, floors, decorative plaster and design services. The stage where a building site finally starts looking like somewhere you live.',
+          title: 'Painting',
+          text: 'Wall painting, plaster skimming, wallpapering and decorative finishes. Every job done to the standard we are known for.',
+        },
+        {
+          title: 'Repairs',
+          text: 'Small and large repairs get the same attention. We deal with faults quickly and properly, so everything at home or in the office simply works.',
+        },
+        {
+          title: 'Electrical work',
+          text: 'The full range of electrical work — from designing the installation to fitting the final sockets and switches. Safety and function come first.',
+        },
+        {
+          title: 'Plumbing',
+          text: 'Water, sewage and central heating installations. We work quickly, cleanly and with an eye for detail.',
+        },
+        {
+          title: 'Air conditioning',
+          text: 'Fitting and servicing split air-conditioning units. Servicing is quick and thorough, to keep you comfortable whatever the weather.',
+        },
+        {
+          title: 'Flooring',
+          text: 'Carpet, wooden panels, vinyl flooring and parquet. We work precisely and neatly, so your floors are both hard-wearing and handsome.',
+        },
+        {
+          title: 'Conversions',
+          text: 'Kitchens, bathrooms, lofts and garages converted to your vision. A transformation that satisfies even the most demanding clients.',
+        },
+        {
+          title: 'Decking and cabins',
+          text: 'We build ventilated and composite decking as well as timber cabins. Our work combines solidity, good looks and durability.',
+        },
+        {
+          title: 'Decorative plaster',
+          text: 'Microcement, clay plaster and other decorative renders. Careful workmanship and distinctive visual effects that set a room apart.',
+        },
+        {
+          title: 'Design services',
+          text: 'Practical, good-looking solutions for your home or office. Our designer will help you realise your idea of the perfect interior.',
         },
       ],
     },

@@ -34,7 +34,10 @@ export function toHomeData(
   const link = (pageType?: PageTypeT | null) =>
     (pageType && typePaths[pageType]) || localeRoot(locale)
 
-  const { hero, intro, services, numbers, testimonials } = home
+  const { hero, intro, services, afterServices, numbers, testimonials } = home
+
+  const toTextSection = (section?: { text?: string | null; position?: 'left' | 'right' | null }) =>
+    section?.text ? { text: section.text, position: section.position ?? 'left' } : undefined
 
   // `localization.fallback` is off, so a row added in one locale comes back with a null
   // `quote` in the other — the generated type says `string` because the field is required
@@ -67,7 +70,9 @@ export function toHomeData(
         }
       : undefined,
 
-    intro: intro?.text ? { text: intro.text, position: intro.position ?? 'left' } : undefined,
+    intro: toTextSection(intro),
+
+    afterServices: toTextSection(afterServices),
 
     services: services?.cards?.length
       ? {

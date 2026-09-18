@@ -230,6 +230,10 @@ export interface Page {
           }[]
         | null
     }
+    afterServices?: {
+      text?: string | null
+      position?: ('left' | 'right') | null
+    }
     /**
      * Teases every published project — the slides are not curated here.
      */
@@ -613,6 +617,12 @@ export interface PagesSelect<T extends boolean = true> {
                     video?: T
                     id?: T
                   }
+            }
+        afterServices?:
+          | T
+          | {
+              text?: T
+              position?: T
             }
         projects?:
           | T

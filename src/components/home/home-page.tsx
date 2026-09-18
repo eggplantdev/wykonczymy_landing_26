@@ -18,6 +18,7 @@ export type HomePageDataT = {
   hero?: HeroT
   intro?: TextSectionT
   services?: ServicesSectionT
+  afterServices?: TextSectionT
   projects?: ProjectsSectionT
   numbers?: NumbersSectionT
   interiorStyles?: InteriorStylesSectionT
@@ -33,7 +34,8 @@ type PropsT = {
 // Section order and the vertical rhythm between them are the layout, so they live here
 // rather than in a CMS field: an editor fills each section, never rearranges them.
 export function HomePage({ data, ratings }: PropsT) {
-  const { hero, intro, services, projects, numbers, interiorStyles, testimonials } = data
+  const { hero, intro, services, afterServices, projects, numbers, interiorStyles, testimonials } =
+    data
 
   return (
     <PageWrapper>
@@ -43,6 +45,12 @@ export function HomePage({ data, ratings }: PropsT) {
       )}
       {services && (
         <ServicesCarousel container="paddings pt-20 md:pt-24 xl:pt-30" data={services} />
+      )}
+      {afterServices && (
+        <TextSection
+          container="gridContainer paddings pt-20 md:pt-24 xl:pt-30"
+          data={afterServices}
+        />
       )}
       {numbers && <NumbersSection container="paddings pt-20 md:pt-24 xl:pt-40" data={numbers} />}
       {projects && (
