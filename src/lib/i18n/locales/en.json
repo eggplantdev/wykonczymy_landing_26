@@ -41,6 +41,7 @@
     "errorBody": "An unexpected error occurred. Please try again in a moment.",
     "retry": "Try again",
     "goBack": "Go back",
+    "loading": "Loading",
     "previousSlide": "Previous slide",
     "nextSlide": "Next slide",
     "gallery": "Gallery",
