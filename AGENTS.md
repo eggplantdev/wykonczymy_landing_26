@@ -97,6 +97,16 @@ site.
   `pnpm payload migrate` all write to the live database — there is no undo but the dump.
 - **Take a dump before anything destructive.** `pnpm db:dump` pulls production down to
   `dumps/`; `db:migrate:prod`, `db:restore:prod` and `seed:prod` each run it first.
+- **Never point `psql` or `pg_dump` at the `-pooler` host.** Neon's pooler runs PgBouncer in
+  transaction mode, so a session-level `SET` issued outside a transaction outlives the client and is
+  handed to whoever gets that backend next. Every `pg_dump` script opens with
+  `SELECT pg_catalog.set_config('search_path', '', false)`, so one restore through the pooler left
+  the shared backend with an empty `search_path` and **every** unqualified query afterwards failed
+  `42P01 undefined_table` — the whole site 500ed and `test:int` went red, while the data was
+  untouched. `db:dump`, `db:restore:prod` and `db:migrate:prod` now strip `-pooler` from
+  `PROD_POSTGRES_URL` themselves. If it happens again the cure is
+  `select pg_terminate_backend(<pid>)` from the direct host against the backend whose
+  `application_name` is `psql`.
 - **The Docker Postgres on port 5436 must keep running even though nothing reads it.** It stopped
   being the dev database, but every `db:*` script still shells into it for `psql` and `pg_dump`:
   Neon is on **18.6** and the Homebrew client on this machine is 17.10, which refuses the version
