@@ -15,3 +15,14 @@ export const ENTRANCE_OFFSET_Y = 20
 export function entranceTransition(shouldReduceMotion: boolean | null): Transition {
   return shouldReduceMotion ? { duration: 0 } : { duration: ENTRANCE_DURATION, ease: ENTRANCE_EASE }
 }
+
+// The hero's two scroll-linked movements, both spent over its exit: the photo pushes toward the
+// viewer while the copy runs ahead of the scroll and leaves through the top of the frame. Negative
+// because it leads rather than lags, and in viewport heights because it is a share of the distance
+// the page moved, not a size — `svh`, because the hero is `h-svh` and that is exactly how much
+// scrolling the movement is spent over.
+export const HERO_PARALLAX_SCALE = 1.5
+export const HERO_PARALLAX_TRAVEL = '-40svh'
+// Where in the hero's exit the copy has finished fading. Well short of 1: the text stack has to be
+// gone before it drifts under the fixed header, not still fading when it gets there.
+export const HERO_FADE_OUT_AT = 0.5
