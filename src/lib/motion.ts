@@ -29,7 +29,10 @@ export const ENTRANCE_STAGGER = 0.08
 // scrolling the movement is spent over.
 export const HERO_PARALLAX_SCALE = 1.5
 export const HERO_PARALLAX_TRAVEL = '-40svh'
-// Where in the hero's exit the copy has finished fading. Short of 1 because the text stack has to be
-// gone before it drifts under the fixed header rather than still fading when it gets there — and no
-// shorter: at 0.5 it was invisible while the CTA still sat two thirds of the way down the frame.
-export const HERO_FADE_OUT_AT = 0.65
+// The window the copy fades across, as a share of the hero's exit. Both ends were found by
+// overshooting them: keyed to 0 the text read as bailing out the moment the page was touched, and
+// held to 0.5 it slid off the top still solid, because between the page scroll and the `y` lead the
+// stack travels 140svh and so clears the top of the screen around 0.6. A quarter in is late enough
+// to feel deliberate, and 0.75 leaves the copy at roughly a third of its strength as it goes.
+export const HERO_FADE_START_AT = 0.25
+export const HERO_FADE_OUT_AT = 0.75

@@ -7,7 +7,12 @@ import { Media } from '@/components/media/media'
 import type { MediaImageT, MediaVideoT } from '@/components/media/types'
 import { ButtonArrow } from '@/components/ui/button-arrow'
 import { ButtonLink } from '@/components/ui/button-link'
-import { HERO_FADE_OUT_AT, HERO_PARALLAX_SCALE, HERO_PARALLAX_TRAVEL } from '@/lib/motion'
+import {
+  HERO_FADE_OUT_AT,
+  HERO_FADE_START_AT,
+  HERO_PARALLAX_SCALE,
+  HERO_PARALLAX_TRAVEL,
+} from '@/lib/motion'
 
 export type HeroT = {
   title: string
@@ -52,10 +57,11 @@ export function Hero({ data }: PropsT) {
   // of it is over the light page behind the hero.
   const opacity = useTransform(
     scrollYProgress,
-    // The tail is pinned with a third stop rather than left to the transform's own clamping: the
-    // copy came back into view once already, and this is the shape that cannot do that.
-    [0, HERO_FADE_OUT_AT, 1],
-    [1, shouldReduceMotion ? 1 : 0, shouldReduceMotion ? 1 : 0],
+    // Four stops, not two: the first pair holds full strength through the start of the exit, and the
+    // tail is pinned rather than left to the transform's own clamping — the copy came back into view
+    // once already, and this is the shape that cannot do that.
+    [0, HERO_FADE_START_AT, HERO_FADE_OUT_AT, 1],
+    [1, 1, shouldReduceMotion ? 1 : 0, shouldReduceMotion ? 1 : 0],
   )
 
   // Invisible has to mean gone: at `opacity: 0` the CTA pill still sat under the cursor and still
