@@ -52,8 +52,8 @@ export function ContactFormAttachments({ className }: PropsT) {
 
       {fileNames.length > 0 && (
         <ul className="text-10 text-grau_200 mt-2 flex flex-wrap gap-x-4 gap-y-1">
-          {fileNames.map((fileName) => (
-            <li key={fileName}>{fileName}</li>
+          {fileNames.map((fileName, index) => (
+            <li key={index}>{fileName}</li>
           ))}
         </ul>
       )}

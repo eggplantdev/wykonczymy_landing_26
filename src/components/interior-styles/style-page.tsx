@@ -36,13 +36,17 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
       <PhotoLightbox images={photos}>
         <article className="gridContainer paddings">
           <div className="relative col-span-full mb-8 h-80 overflow-hidden md:mb-12 md:h-88 lg:col-span-10 lg:col-start-2 xl:h-140">
-            <PhotoButton image={image} priority sizes="(max-width: 1023px) 100vw, 80vw" />
+            <PhotoButton
+              image={image}
+              priority
+              sizes="(max-width: 1023px) 100vw, (max-width: 1919px) 80vw, 1536px"
+            />
           </div>
 
           <div className="text-14 lg:text-16 col-span-full md:col-span-6 md:col-start-2 lg:col-span-6 lg:col-start-4 lg:row-start-2">
             <p className="border-b-grau_300 border-b pb-8 font-medium">{lead}</p>
-            {rest.slice(0, split).map((paragraph) => (
-              <p key={paragraph.slice(0, 40)} className="pt-8">
+            {rest.slice(0, split).map((paragraph, index) => (
+              <p key={index} className="pt-8">
                 {paragraph}
               </p>
             ))}
@@ -50,12 +54,12 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
             <div className="relative mt-10 aspect-312/238 overflow-hidden md:mt-8 md:aspect-523/342 lg:mt-12 lg:aspect-661/432">
               <PhotoButton
                 image={contentImage}
-                sizes="(max-width: 767px) 100vw, (max-width: 1023px) 72vw, 48vw"
+                sizes="(max-width: 767px) 100vw, (max-width: 1023px) 72vw, (max-width: 1919px) 48vw, 922px"
               />
             </div>
 
-            {rest.slice(split).map((paragraph) => (
-              <p key={paragraph.slice(0, 40)} className="pt-8">
+            {rest.slice(split).map((paragraph, index) => (
+              <p key={index} className="pt-8">
                 {paragraph}
               </p>
             ))}

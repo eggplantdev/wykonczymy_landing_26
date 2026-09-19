@@ -5,6 +5,9 @@ import type { MediaImageT, MediaVideoT } from '@/components/media/types'
 import { CarouselControls } from './carousel-controls'
 
 export type ProjectSlideT = {
+  // The project's own id, and the only thing on a slide that is unique: two projects in the
+  // same district share a title, and the broken seed rows share a slug.
+  id: number
   image: MediaImageT | null
   video: MediaVideoT | null
   caption?: string | null

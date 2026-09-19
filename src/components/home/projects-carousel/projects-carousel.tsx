@@ -4,14 +4,15 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 
 import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
+import { useTranslation } from '@/lib/i18n/use-translation'
 import { SectionTitle } from '@/components/layout/section-title'
+import { ButtonArrow } from '@/components/ui/button-arrow'
 import { ButtonLink } from '@/components/ui/button-link'
 import { cn } from '@/lib/cn'
 import { ProjectSlide, type ProjectSlideT } from './project-slide'
 
 export type ProjectsSectionT = {
   sectionTitle?: string
-  ctaLabel?: string
   ctaHref: string
   slides: ProjectSlideT[]
 }
@@ -22,7 +23,8 @@ type PropsT = {
 }
 
 export function ProjectsCarousel({ container, data }: PropsT) {
-  const { slides, ctaLabel, ctaHref, sectionTitle } = data
+  const { slides, ctaHref, sectionTitle } = data
+  const { t } = useTranslation('common')
   const carousel = useCarouselReady()
 
   if (slides.length < 1) return null
@@ -32,7 +34,14 @@ export function ProjectsCarousel({ container, data }: PropsT) {
       <div className="gridContainer mb-4 items-center justify-between md:mb-6 xl:mb-10">
         <SectionTitle title={sectionTitle} className="col-span-4 lg:col-span-5 lg:col-start-3" />
         <div className="col-span-3">
-          <ButtonLink label={ctaLabel} href={ctaHref} className="ml-auto hidden md:flex" />
+          <ButtonLink
+            label={t('more')}
+            href={ctaHref}
+            icon="trailing"
+            className="ml-auto hidden md:flex"
+          >
+            <ButtonArrow />
+          </ButtonLink>
         </div>
       </div>
       <Swiper
@@ -41,6 +50,9 @@ export function ProjectsCarousel({ container, data }: PropsT) {
         // and runs out, parking the track with a hole beside whichever side came up short.
         // A bounded track puts that space where it belongs — before the first, after the last.
         loop={false}
+        // The track moves only when a visitor moves it. Drag and the arrows both stay; what goes
+        // is the rotation that advanced it on its own.
+        autoplay={false}
         spaceBetween={24}
         slidesPerView={1}
         breakpoints={{
@@ -50,12 +62,19 @@ export function ProjectsCarousel({ container, data }: PropsT) {
         onSwiper={carousel.onSwiper}
       >
         {slides.map((slide) => (
-          <SwiperSlide key={slide.caption}>
+          <SwiperSlide key={slide.id}>
             <ProjectSlide slide={slide} total={slides.length} />
           </SwiperSlide>
         ))}
       </Swiper>
-      <ButtonLink label={ctaLabel} href={ctaHref} className="mx-auto mt-8 md:hidden" />
+      <ButtonLink
+        label={t('more')}
+        href={ctaHref}
+        icon="trailing"
+        className="mx-auto mt-8 md:hidden"
+      >
+        <ButtonArrow />
+      </ButtonLink>
     </section>
   )
 }

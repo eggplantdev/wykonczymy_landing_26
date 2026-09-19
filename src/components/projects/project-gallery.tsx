@@ -29,9 +29,9 @@ export function ProjectGallery({ container, title, images }: PropsT) {
       <div className="grid gap-6 md:gap-4 xl:gap-y-16">
         {rows.map(([large, small], rowIndex) =>
           small ? (
-            <GalleryPair key={large.url} large={large} small={small} flipped={rowIndex % 2 === 0} />
+            <GalleryPair key={rowIndex} large={large} small={small} flipped={rowIndex % 2 === 0} />
           ) : (
-            <GallerySingle key={large.url} image={large} index={rowIndex} />
+            <GallerySingle key={rowIndex} image={large} index={rowIndex} />
           ),
         )}
       </div>

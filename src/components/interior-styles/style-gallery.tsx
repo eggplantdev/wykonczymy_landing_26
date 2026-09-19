@@ -14,7 +14,7 @@ type PropsT = {
 const sizes =
   '(max-width: 767px) calc(50vw - 2rem), (max-width: 1023px) calc(50vw - 2.5rem), (max-width: 1439px) calc(25vw - 1.94rem), calc(25vw - 2.44rem)'
 const wideSizes =
-  '(max-width: 767px) calc(100vw - 3rem), (max-width: 1023px) calc(100vw - 4rem), (max-width: 1439px) calc(50vw - 2.63rem), calc(50vw - 3.63rem)'
+  '(max-width: 767px) calc(100vw - 3rem), (max-width: 1023px) calc(100vw - 4rem), (max-width: 1439px) calc(50vw - 2.63rem), (max-width: 1919px) calc(50vw - 3.63rem), 902px'
 
 // The photo sets are not one orientation: `modern` is twelve 2:1 shots, `klasyczny` six 3:4
 // ones, `industrialny` all square. A single cell shape means one of those loses most of its
@@ -32,12 +32,12 @@ export function StyleGallery({ title, images }: PropsT) {
       <SectionTitle title={title} className="mb-6 md:mb-8" />
 
       <div className="grid grid-flow-row-dense grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-5">
-        {images.map((image) => {
+        {images.map((image, index) => {
           const wide = isWide(image)
 
           return (
             <div
-              key={image.url}
+              key={index}
               className={cn(
                 'relative overflow-hidden',
                 wide ? 'col-span-2 aspect-2/1' : 'aspect-square',

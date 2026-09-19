@@ -44,7 +44,7 @@ export function ServicesCarousel({ container, data }: PropsT) {
         onSlideChange={(instance) => setCurrent(instance.realIndex + 1)}
       >
         {cards.map((card) => (
-          <SwiperSlide key={card.title}>
+          <SwiperSlide key={card.id}>
             <ServiceSlide card={card} />
           </SwiperSlide>
         ))}

@@ -2,6 +2,8 @@ import { Media } from '@/components/media/media'
 import type { MediaImageT, MediaVideoT } from '@/components/media/types'
 
 export type ServiceCardT = {
+  /** The CMS row's own id — a title is not unique and does not survive a rename. */
+  id: string
   title: string
   text: string
   image: MediaImageT | null
@@ -29,9 +31,10 @@ export function ServiceSlide({ card }: PropsT) {
       <header className="text-18 md:text-20 mb-3 line-clamp-1 pt-4 font-medium md:mb-4 md:pt-8">
         {title}
       </header>
-      <div className="text-12 md:text-14 md:leading-130 line-clamp-7 h-24.5 overflow-hidden md:h-22.5">
-        {text}
-      </div>
+      {/* Clamped rather than given a fixed height: Swiper's track stretches every slide to
+          the tallest, so the section already ends where the longest copy does. The clamp is
+          only the ceiling that stops one runaway paragraph from setting it. */}
+      <div className="text-12 md:text-14 md:leading-130 line-clamp-5">{text}</div>
     </div>
   )
 }

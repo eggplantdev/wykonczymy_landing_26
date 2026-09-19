@@ -5,15 +5,16 @@ import 'swiper/css'
 
 import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
 import { cn } from '@/lib/cn'
+import { useTranslation } from '@/lib/i18n/use-translation'
 import { childPath } from '@/lib/routing'
 import type { InteriorStyleT } from '@/lib/content/interior-styles'
 import { SectionTitle } from '@/components/layout/section-title'
+import { ButtonArrow } from '@/components/ui/button-arrow'
 import { ButtonLink } from '@/components/ui/button-link'
 import { InteriorStyleSlide } from './interior-style-slide'
 
 export type InteriorStylesSectionT = {
   sectionTitle: string
-  ctaLabel: string
   ctaHref: string
   basePath: string
   styles: InteriorStyleT[]
@@ -25,7 +26,8 @@ type PropsT = {
 }
 
 export function InteriorStylesCarousel({ container, data }: PropsT) {
-  const { sectionTitle, ctaLabel, ctaHref, basePath, styles } = data
+  const { sectionTitle, ctaHref, basePath, styles } = data
+  const { t } = useTranslation('common')
   const carousel = useCarouselReady()
 
   if (styles.length < 1) return null
@@ -45,7 +47,9 @@ export function InteriorStylesCarousel({ container, data }: PropsT) {
           </SwiperSlide>
         ))}
       </Swiper>
-      <ButtonLink label={ctaLabel} href={ctaHref} className="mx-auto" />
+      <ButtonLink label={t('more')} href={ctaHref} icon="trailing" className="mx-auto">
+        <ButtonArrow />
+      </ButtonLink>
     </section>
   )
 }

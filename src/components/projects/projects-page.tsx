@@ -26,7 +26,7 @@ export function ProjectsPage({ locale, title, basePath, data }: PropsT) {
       <div className="divide-grau_300 border-grau_300 grid divide-y border-b">
         {data.projects.map((project) => (
           <ProjectRow
-            key={project.slug}
+            key={project.id}
             href={childPath(basePath, project.slug)}
             title={project.title}
             summary={project.summary}

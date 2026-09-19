@@ -67,8 +67,8 @@ export function PhotoLightboxDialog({ images, initialIndex, onClose }: PropsT) {
             keyboard={{ enabled: true }}
             onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           >
-            {images.map((image) => (
-              <SwiperSlide key={image.url} className="px-6 pt-16 pb-24 md:px-10">
+            {images.map((image, index) => (
+              <SwiperSlide key={index} className="px-6 pt-16 pb-24 md:px-10">
                 <div className="relative h-full w-full">
                   {/* `Media` crops to the focal point, exactly wrong here: this is the one
                       place the photo is shown whole, portrait or landscape alike. */}

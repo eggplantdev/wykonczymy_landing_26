@@ -77,7 +77,8 @@ export function toHomeData(
     services: services?.cards?.length
       ? {
           sectionTitle: services.sectionTitle ?? '',
-          cards: services.cards.map((card) => ({
+          cards: services.cards.map((card, index) => ({
+            id: card.id ?? String(index),
             title: card.title,
             text: card.text ?? '',
             image: toImage(card.image),
@@ -89,9 +90,9 @@ export function toHomeData(
     projects: projects.length
       ? {
           sectionTitle: home.projects?.sectionTitle ?? undefined,
-          ctaLabel: home.projects?.ctaLabel ?? undefined,
           ctaHref: link(home.projects?.ctaLink),
           slides: projects.map((project) => ({
+            id: project.id,
             image: project.image,
             video: null,
             caption: project.title,
@@ -119,7 +120,6 @@ export function toHomeData(
     interiorStyles: styles.length
       ? {
           sectionTitle: home.interiorStyles?.sectionTitle ?? '',
-          ctaLabel: home.interiorStyles?.ctaLabel ?? '',
           ctaHref: link(home.interiorStyles?.ctaLink),
           // Not `ctaHref`: that one is an editor's choice of where the button goes, while a
           // style's own address is always under the interior styles page.
