@@ -29,6 +29,7 @@ export const ENTRANCE_STAGGER = 0.08
 // scrolling the movement is spent over.
 export const HERO_PARALLAX_SCALE = 1.5
 export const HERO_PARALLAX_TRAVEL = '-40svh'
-// Where in the hero's exit the copy has finished fading. Well short of 1: the text stack has to be
-// gone before it drifts under the fixed header, not still fading when it gets there.
-export const HERO_FADE_OUT_AT = 0.5
+// Where in the hero's exit the copy has finished fading. Short of 1 because the text stack has to be
+// gone before it drifts under the fixed header rather than still fading when it gets there — and no
+// shorter: at 0.5 it was invisible while the CTA still sat two thirds of the way down the frame.
+export const HERO_FADE_OUT_AT = 0.65

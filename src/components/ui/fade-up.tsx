@@ -37,7 +37,7 @@ export function FadeUp({ className, delay, children }: PropsT) {
       // 1300px on a 390px-wide phone, so there is margin — but wrapper height comes from CMS copy
       // and photo counts, which is why `tests/e2e/entrance-animation.e2e.spec.ts` scrolls real pages
       // instead of trusting this number.
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true, amount: 0.2 }}
       transition={entranceTransition(shouldReduceMotion, delay)}
     >
       {children}
