@@ -5,7 +5,7 @@ import { useRef, useState } from 'react'
 import { LanguageSwitcher } from '@/components/layout/language-switcher'
 import { MenuToggle } from '@/components/layout/menu-toggle'
 import { SiteNav } from '@/components/layout/site-nav'
-import { buttonClasses, buttonLabelClasses } from '@/components/ui/button'
+import { PhoneCta } from '@/components/ui/phone-cta'
 import { Sheet } from '@/components/ui/sheet'
 import type { Locale } from '@/lib/i18n/i18n'
 import { useTranslation } from '@/lib/i18n/use-translation'
@@ -52,22 +52,13 @@ export function MobileMenu({ paths, typePaths, phone }: PropsT) {
         label={t('menu')}
         closeLabel={t('closeMenu')}
         id={MENU_ID}
-        className="bg-white items-center justify-center gap-8 p-6"
+        className="items-center justify-center gap-4 bg-white p-6"
       >
         <SiteNav paths={typePaths} variant="mobile-menu" onNavigate={() => setIsOpen(false)} />
 
         <LanguageSwitcher paths={paths} variant="mobile-menu" onNavigate={() => setIsOpen(false)} />
 
-        {/* The pill is worn by the link itself: a <button> inside an <a> is invalid
-            markup and announces two controls where the reader sees one. */}
-        <a
-          href={`tel:${phone.replace(/\s/g, '')}`}
-          aria-label={`${t('callUs')} ${phone}`}
-          onClick={() => setIsOpen(false)}
-          className={buttonClasses({ size: 'xl' })}
-        >
-          <span className={buttonLabelClasses({})}>{phone}</span>
-        </a>
+        <PhoneCta phone={phone} callLabel={t('callUs')} onClick={() => setIsOpen(false)} />
       </Sheet>
     </>
   )

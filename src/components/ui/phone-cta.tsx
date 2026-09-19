@@ -5,15 +5,17 @@ type PropsT = {
   phone: string
   // Names the action for a reader who only hears the number.
   callLabel: string
+  onClick?: () => void
 }
 
 // The pill is worn by the link itself: a <button> inside an <a> is invalid markup and
-// announces two controls where the reader sees one — same as the mobile menu's CTA.
-export function PhoneCta({ phone, callLabel }: PropsT) {
+// announces two controls where the reader sees one.
+export function PhoneCta({ phone, callLabel, onClick }: PropsT) {
   return (
     <a
       href={`tel:${phone.replace(/\s/g, '')}`}
       aria-label={`${callLabel} ${phone}`}
+      onClick={onClick}
       className={buttonClasses({ size: 'xl' })}
     >
       <span aria-hidden className="text-shwarz group-hover:text-grau_900 duration-200">
