@@ -31,3 +31,6 @@ tools/page-board/.shots/
 
 # page-board is a local audit tool — regenerate with `pnpm board`, never committed
 public/page-board/
+
+# slice-review-gate ledgers — local audit records, like the page-board captures above
+.review-gate/
