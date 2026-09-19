@@ -29,14 +29,14 @@ export function ContactFormAttachments({ className }: PropsT) {
         className={buttonClasses({
           variant: 'outline',
           size: 'sm',
-          icon: 'leading',
+          icon: 'trailing',
           className: 'mt-3 cursor-pointer',
         })}
       >
+        <span className={buttonLabelClasses({ variant: 'outline' })}>{t('attachmentsCta')}</span>
         <span aria-hidden className={cn(buttonLabelClasses({ variant: 'outline' }), 'flex')}>
           <Paperclip />
         </span>
-        <span className={buttonLabelClasses({ variant: 'outline' })}>{t('attachmentsCta')}</span>
         <input
           id={id}
           name="attachments"

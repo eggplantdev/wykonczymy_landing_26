@@ -174,13 +174,15 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
           {(isSubmitting) => (
             <Button
               type="submit"
+              variant="solid"
+              size="sm"
               icon="trailing"
               label={isSubmitting ? t('sending') : t('send')}
               disabled={isSubmitting}
               isBusy={isSubmitting}
               className="md:ml-auto"
             >
-              <ButtonArrow disabled={isSubmitting} />
+              <ButtonArrow variant="solid" disabled={isSubmitting} />
             </Button>
           )}
         </form.Subscribe>

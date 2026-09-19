@@ -26,13 +26,17 @@ type ErrorPropsT = {
 // witness — without the live region a screen reader user presses Send and hears nothing
 // at all. The element is always rendered: a region that only appears along with its text
 // is not announced.
+//
+// Taken out of flow and hung under the control it belongs to: every message appears at
+// once on submit, and in flow each one would push the rest of the form down the page
+// under the visitor's cursor.
 export function FieldError({ id, error, className }: ErrorPropsT) {
   return (
     <span
       id={id}
       role="status"
       aria-live="polite"
-      className={cn('text-10 text-error block', className)}
+      className={cn('text-10 text-error absolute top-full left-0 block', className)}
     >
       {error}
     </span>
@@ -50,7 +54,7 @@ type PropsT = {
 
 export function ContactFormField({ id, errorId, label, error, className, children }: PropsT) {
   return (
-    <div className={className}>
+    <div className={cn('relative', className)}>
       <label htmlFor={id}>
         <span className="sr-only">{label}</span>
       </label>
