@@ -14,8 +14,8 @@ EUR-Lex. Mapa „wymóg → sekcja" i lista źródeł są na końcu pliku.
 
 - `[[NAZWA FIRMY]]` — pełna nazwa działalności (Bartłomiej Antonik, `[[NAZWA]]`?)
 - `[[NIP]]` — wciąż nieustalony; to samo pole, które czeka puste na stronie Kontakt
-- `[[E-MAIL KONTAKTOWY]]` — do rozstrzygnięcia: `biuro@wykonczymy.com.pl` (tak jest na żywej
-  stronie) czy `bartekantonik@gmail.com` (tak jest w seedzie stopki)
+- `[[E-MAIL KONTAKTOWY]]` — `biuro@wykonczymy.com.pl`, rozstrzygnięte; seed stopki też już
+  ten adres nosi
 - **Sekcja 6** (odbiorcy) zakłada, że zgłoszenia z formularza trafiają do osobnej aplikacji obsługi
   leadów. Na dziś `submitContactForm` nie ma jeszcze żadnego odbiornika — zaktualizuj tę
   sekcję, kiedy sink powstanie, i dopisz, czy aplikacja leadów jest osobnym administratorem,

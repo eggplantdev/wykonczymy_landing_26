@@ -6,7 +6,7 @@ type FooterCopyT = { title: string; intro: string; role: string }
 export const footerContact = {
   name: 'Bartosz Antonik',
   phone: '+48 505 805 425',
-  mail: 'bartekantonik@gmail.com',
+  mail: 'biuro@wykonczymy.com.pl',
 }
 
 // Read off each profile by hand — Fixly has no API, and Google's costs money per page view.
