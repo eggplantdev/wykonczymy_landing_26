@@ -1,5 +1,8 @@
-import { Star } from '@/components/ui/icons/star'
+import { faStar } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import { cn } from '@/lib/cn'
+import '@/lib/fontawesome'
 
 const STAR_COUNT = 5
 
@@ -16,7 +19,7 @@ export function StarRating({ rating, label }: PropsT) {
   const stars = (className: string) => (
     <div className={cn('flex w-max gap-x-0.5', className)}>
       {Array.from({ length: STAR_COUNT }, (_, index) => (
-        <Star key={index} />
+        <FontAwesomeIcon key={index} icon={faStar} className="size-6" />
       ))}
     </div>
   )

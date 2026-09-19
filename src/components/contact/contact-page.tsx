@@ -1,10 +1,8 @@
-import { faPhoneVolume } from '@fortawesome/free-solid-svg-icons'
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import { faEnvelope, faLocationDot, faPhoneVolume } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import type { ReactNode } from 'react'
 
 import { PageWrapper } from '@/components/layout/page-wrapper'
-import { Envelope } from '@/components/ui/icons/envelope'
-import { Pin } from '@/components/ui/icons/pin'
 import { getTranslations, type Locale } from '@/lib/i18n/i18n'
 import '@/lib/fontawesome'
 
@@ -20,7 +18,7 @@ type RowT = {
   label: string
   text: string
   href: string
-  icon: ReactNode
+  icon: IconDefinition
 }
 
 type PropsT = {
@@ -53,30 +51,34 @@ export function ContactPage({ locale, title, data }: PropsT) {
             label: contact.address,
             text: address,
             href: mapsHref(address),
-            icon: <Pin />,
+            icon: faLocationDot,
           },
         ]
       : []),
-    { key: 'mail', label: contact.email, text: mail, href: `mailto:${mail}`, icon: <Envelope /> },
+    {
+      key: 'mail',
+      label: contact.email,
+      text: mail,
+      href: `mailto:${mail}`,
+      icon: faEnvelope,
+    },
     // Still, unlike `phone-cta.tsx`'s ringing mark: this row sits between two motionless icons.
     {
       key: 'phone',
       label: contact.phone,
       text: phone,
       href: telHref(phone),
-      icon: <FontAwesomeIcon icon={faPhoneVolume} className="size-5" />,
+      icon: faPhoneVolume,
     },
   ]
 
   return (
     <PageWrapper hasHero={false} title={title}>
-      <div className="flex flex-col items-center pb-12 text-center md:pb-20">
+      <div className="flex flex-col items-center text-center">
         <ul className="text-14 md:text-18 flex flex-col items-start gap-y-4">
           {rows.map(({ key, label, text, href, icon }) => (
             <li key={key} className="flex items-center gap-x-4">
-              <span className="shrink-0" aria-hidden>
-                {icon}
-              </span>
+              <FontAwesomeIcon icon={icon} className="size-5 shrink-0" aria-hidden />
               <a
                 href={href}
                 aria-label={`${label}: ${text}`}

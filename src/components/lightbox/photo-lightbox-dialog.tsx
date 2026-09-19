@@ -1,5 +1,7 @@
 'use client'
 
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as RadixDialog from '@radix-ui/react-dialog'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -11,6 +13,7 @@ import type { MediaImageT } from '@/components/media/types'
 import { CarouselArrow } from '@/components/ui/carousel-arrow'
 import { CarouselCounter } from '@/components/ui/carousel-counter'
 import { useTranslation } from '@/lib/i18n/use-translation'
+import '@/lib/fontawesome'
 
 type PropsT = {
   images: MediaImageT[]
@@ -49,16 +52,14 @@ export function PhotoLightboxDialog({ images, initialIndex, onClose }: PropsT) {
 
           <RadixDialog.Close
             aria-label={t('close')}
-            className="bg-card hover:bg-muted absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-md md:top-6 md:right-6"
+            className="bg-card hover:bg-muted absolute top-4 right-4 z-10 flex size-8 items-center justify-center rounded-md md:top-6 md:right-6"
           >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" strokeLinecap="round" />
-            </svg>
+            <FontAwesomeIcon icon={faXmark} className="size-3.5" />
           </RadixDialog.Close>
 
           <Swiper
             modules={[Keyboard]}
-            className="h-full w-full"
+            className="size-full"
             slidesPerView={1}
             initialSlide={initialIndex}
             loop={!isAlone}
@@ -69,7 +70,7 @@ export function PhotoLightboxDialog({ images, initialIndex, onClose }: PropsT) {
           >
             {images.map((image, index) => (
               <SwiperSlide key={index} className="px-6 pt-16 pb-24 md:px-10">
-                <div className="relative h-full w-full">
+                <div className="relative size-full">
                   {/* `Media` crops to the focal point, exactly wrong here: this is the one
                       place the photo is shown whole, portrait or landscape alike. */}
                   <Image

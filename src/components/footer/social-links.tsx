@@ -1,5 +1,4 @@
 import { cn } from '@/lib/cn'
-// TRIAL: swap these two back to `facebook`/`instagram` to undo.
 import { FacebookFlat } from '@/components/ui/icons/facebook-flat'
 import { InstagramFlat } from '@/components/ui/icons/instagram-flat'
 

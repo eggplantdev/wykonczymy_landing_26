@@ -1,9 +1,11 @@
 'use client'
 
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { ReactNode } from 'react'
 
-import { Checkmark } from '@/components/ui/icons/checkmark'
 import { cn } from '@/lib/cn'
+import '@/lib/fontawesome'
 
 type PropsT = {
   id: string
@@ -68,7 +70,7 @@ export function Checkbox({
             : 'bg-subtle text-muted-foreground',
         )}
       >
-        {checked && <Checkmark />}
+        {checked && <FontAwesomeIcon icon={faCheck} className="size-3" />}
       </span>
       <span className={cn(invalid ? 'text-error' : 'text-muted-foreground', labelClassName)}>
         {label}
