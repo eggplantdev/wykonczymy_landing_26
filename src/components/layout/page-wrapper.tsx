@@ -11,23 +11,33 @@ type PropsT = {
   // whole section lower than the rest. The home page is the exception: its hero is the
   // heading.
   title?: string
+  // The 1920 column. Home opts out and runs the full width of the screen: it is the page built
+  // out of carousels, and a track that stops at a margin looks cut rather than continued.
+  hasColumn?: boolean
   className?: string
 }
 
-// Two boxes, because the thing that trims the carousel tracks and the thing that lines the
-// sections up are not the same width. The outer one is the trim and is as wide as the page, so a
-// `bleed-right` section runs off it rather than being cut back at the column. The inner one is
-// the column, so every section still measures its `paddings` against the same 1920.
-//
 // `overflow-x-clip`, never `overflow-x-hidden`: `hidden` on one axis forces the other to `auto`,
 // which turns this wrapper into a vertical scroll container. The sections' entrance transform sits
 // 20px below the content box until it plays, so the wrapper really has those 20px to scroll and
 // Chrome latches the whole wheel gesture to it — the page stops dead until you scroll somewhere
 // else. `clip` leaves `overflow-y: visible`.
-export function PageWrapper({ children, hasHero = true, title, className }: PropsT) {
+export function PageWrapper({
+  children,
+  hasHero = true,
+  hasColumn = true,
+  title,
+  className,
+}: PropsT) {
   return (
     <div className="w-full overflow-x-clip">
-      <div className={cn('site-container', className, !hasHero && 'pt-20 md:pt-30 lg:pt-40')}>
+      <div
+        className={cn(
+          hasColumn ? 'site-container' : 'w-full',
+          className,
+          !hasHero && 'pt-20 md:pt-30 lg:pt-40',
+        )}
+      >
         {title && (
           <h1 className="paddings text-32 md:text-40 lg:text-58 mb-12 text-center md:mb-24 lg:mb-20">
             {title}

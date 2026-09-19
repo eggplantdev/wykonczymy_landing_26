@@ -48,6 +48,7 @@ export function HomePage({ data, ratings }: PropsT) {
           carries its own spacing only knows what comes before it in the one order it was
           written for, and each of these renders conditionally. */}
       <PageWrapper
+        hasColumn={false}
         className={cn(
           'flex flex-col gap-20 md:gap-36',
           // The hero left the column, so the one gap it used to take from it is restated here
@@ -63,13 +64,12 @@ export function HomePage({ data, ratings }: PropsT) {
             <TextSection container="gridContainer paddings" data={intro} />
           </FadeUp>
         )}
-        {/* `pr-0 bleed-right` is the opt-in, and only the two tracks that peek take it: a slide
-            cut off by the edge of the screen reads as "there is more", and cut off by a margin it
-            reads as a bug. The projects and testimonials tracks are bounded on purpose and stay on
-            the column. */}
+        {/* `pr-0` on the two tracks that peek, so the slide at the end is cut off by the edge of
+            the screen — which reads as "there is more" — rather than by a margin, which reads as a
+            bug. The projects and testimonials tracks are bounded on purpose and keep theirs. */}
         {services && (
           <FadeUp>
-            <ServicesCarousel container="paddings pr-0 bleed-right" data={services} />
+            <ServicesCarousel container="paddings pr-0" data={services} />
           </FadeUp>
         )}
         {afterServices && (
@@ -94,7 +94,7 @@ export function HomePage({ data, ratings }: PropsT) {
         )}
         {interiorStyles && (
           <FadeUp>
-            <InteriorStylesCarousel container="paddings pr-0 bleed-right" data={interiorStyles} />
+            <InteriorStylesCarousel container="paddings pr-0" data={interiorStyles} />
           </FadeUp>
         )}
       </PageWrapper>
