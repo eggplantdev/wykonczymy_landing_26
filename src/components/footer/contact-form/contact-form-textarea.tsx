@@ -1,6 +1,8 @@
 'use client'
 
-import { ContactFormField, fieldControlClasses, useFieldIds } from './contact-form-field'
+import { ContactFormField } from './contact-form-field'
+import { fieldControlClasses } from './field-control-classes'
+import { useFieldIds } from './use-field-ids'
 import { cn } from '@/lib/cn'
 
 type PropsT = {

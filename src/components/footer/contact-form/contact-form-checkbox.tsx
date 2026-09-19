@@ -4,7 +4,8 @@ import type { ReactNode } from 'react'
 
 import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/cn'
-import { FieldError, useFieldIds } from './contact-form-field'
+import { FieldError } from './field-error'
+import { useFieldIds } from './use-field-ids'
 
 type PropsT = {
   name: string
