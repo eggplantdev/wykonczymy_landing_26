@@ -1,7 +1,6 @@
-// TRIAL: flat monochrome alternative to the full-colour `instagram.tsx`, kept alongside it.
 // The stroke is heavier than Lucide's default 2 so the outline holds its weight against the
 // solid Facebook letter beside it.
-export function InstagramFlat() {
+export function Instagram() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

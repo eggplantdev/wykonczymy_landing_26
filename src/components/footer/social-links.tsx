@@ -1,17 +1,17 @@
 import { cn } from '@/lib/cn'
-import { FacebookFlat } from '@/components/ui/icons/facebook-flat'
-import { InstagramFlat } from '@/components/ui/icons/instagram-flat'
+import { Facebook } from '@/components/ui/icons/facebook'
+import { Instagram } from '@/components/ui/icons/instagram'
 
 const SOCIALS = [
   {
     label: 'Facebook',
     href: 'https://www.facebook.com/people/Warsaw-Handyman/100085905117915/',
-    Icon: FacebookFlat,
+    Icon: Facebook,
   },
   {
     label: 'Instagram',
     href: 'https://www.instagram.com/handyman_warsaw_/',
-    Icon: InstagramFlat,
+    Icon: Instagram,
   },
 ]
 

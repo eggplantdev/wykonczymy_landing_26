@@ -1,7 +1,6 @@
-// TRIAL: flat monochrome alternative to the full-colour `facebook.tsx`, kept alongside it.
 // Font Awesome's bare `facebook-f` glyph — no container, so it reads as a letter next to
 // the outlined Instagram camera rather than as a second filled badge.
-export function FacebookFlat() {
+export function Facebook() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
