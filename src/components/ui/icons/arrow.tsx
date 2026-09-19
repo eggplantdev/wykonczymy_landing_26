@@ -1,8 +1,4 @@
-type PropsT = {
-  color?: string
-}
-
-export function Arrow({ color = 'currentColor' }: PropsT) {
+export function Arrow() {
   return (
     <svg
       className="h-full"
@@ -13,11 +9,11 @@ export function Arrow({ color = 'currentColor' }: PropsT) {
     >
       <path
         d="M1 5C0.723858 5 0.5 5.22386 0.5 5.5C0.5 5.77614 0.723858 6 1 6L1 5ZM1 6H14.6111V5H1L1 6Z"
-        fill={color}
+        fill="currentColor"
       />
       <path
         d="M10.7227 0.5L14.8892 5.36998C14.9532 5.44483 14.9532 5.55517 14.8892 5.63002L10.7227 10.5"
-        stroke={color}
+        stroke="currentColor"
         strokeLinecap="round"
       />
     </svg>

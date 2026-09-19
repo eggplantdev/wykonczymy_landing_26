@@ -1,6 +1,5 @@
 import Link from 'next/link'
 
-import { Arrow } from '@/components/ui/icons/arrow'
 import { Media } from '@/components/media/media'
 import { SpecStrip } from '@/components/ui/spec-strip'
 import type { MediaImageT } from '@/components/media/types'
@@ -30,12 +29,7 @@ export function ProjectRow({ href, title, summary, image, details }: PropsT) {
       </div>
 
       <div className="col-span-full flex flex-col md:col-span-4 lg:col-span-5">
-        <div className="mb-6 flex items-center justify-between gap-4 md:mb-9 lg:mb-12">
-          <h2 className="text-20 md:text-22 lg:text-28">{title}</h2>
-          <div className="h-2.5 shrink-0 opacity-0 delay-100 duration-1000 group-hover:opacity-100">
-            <Arrow color="#1B1B1B" />
-          </div>
-        </div>
+        <h2 className="text-20 md:text-22 lg:text-28 mb-6 md:mb-9 lg:mb-12">{title}</h2>
         <p className="text-12 md:text-14 leading-130 mb-8 lg:mb-12">{summary}</p>
         <SpecStrip items={details} className="mt-auto grid-cols-1" />
       </div>
