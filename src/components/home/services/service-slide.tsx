@@ -20,7 +20,7 @@ export function ServiceSlide({ card }: PropsT) {
     // Full height, because Swiper stretches every slide to the tallest: the copy then sits
     // under an icon row of one shared height instead of floating mid-card.
     <div className="flex h-full flex-col">
-      <ServiceIcon className="text-shwarz size-12 self-center" icon={icon} />
+      <ServiceIcon className="text-foreground size-12 self-center" icon={icon} />
       <header className="text-18 md:text-20 pt-6 pb-3 text-center font-medium md:pb-4">
         {title}
       </header>

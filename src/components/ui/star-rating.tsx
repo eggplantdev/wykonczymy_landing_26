@@ -23,7 +23,7 @@ export function StarRating({ rating, label }: PropsT) {
 
   return (
     <div className="relative" role="img" aria-label={label}>
-      {stars('text-grau_700')}
+      {stars('text-subtle')}
       <div
         className="absolute inset-y-0 left-0 overflow-hidden"
         style={{ width: `${(clamped / STAR_COUNT) * 100}%` }}

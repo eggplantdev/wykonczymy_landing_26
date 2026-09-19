@@ -39,38 +39,49 @@ export function SiteFooter({ container, data, locale, typePaths }: PropsT) {
         {intro}
       </p>
 
-      {/* The header is fixed, so the anchored block keeps its own offset from the top. */}
+      {/* TRIAL: everything under the intro claims the dark role tokens — the same
+          re-pointing the theme toggle does, scoped to this band. The negative margins
+          cancel the footer's own padding so the band reaches the edges of the viewport
+          and then puts that padding back on itself. */}
       <div
-        id={CONTACT_FORM_ANCHOR}
-        className="col-span-full scroll-mt-24 justify-between md:scroll-mt-28 lg:grid lg:grid-cols-12 lg:gap-x-5 lg:pt-8"
+        data-theme="dark"
+        className="bg-background text-foreground col-span-full -mx-6 -mb-6 px-6 pt-12 pb-6 md:-mx-8 md:px-8 xl:-mx-12 xl:px-12"
       >
-        <SectionTitle title={title} className="mb-8 md:mb-11 lg:col-span-full lg:mb-10" />
+        {/* The header is fixed, so the anchored block keeps its own offset from the top. */}
+        <div
+          id={CONTACT_FORM_ANCHOR}
+          className="col-span-full scroll-mt-24 justify-between md:scroll-mt-28 lg:grid lg:grid-cols-12 lg:gap-x-5 lg:pt-8"
+        >
+          <SectionTitle title={title} className="mb-8 md:mb-11 lg:col-span-full lg:mb-10" />
 
-        <ContactPerson {...person} />
-        <div className="lg:col-span-8 lg:col-start-5">
-          <ContactForm privacyPolicyHref={typePaths[PRIVACY_POLICY_PAGE_TYPE]} />
+          <ContactPerson {...person} />
+          <div className="lg:col-span-8 lg:col-start-5">
+            <ContactForm privacyPolicyHref={typePaths[PRIVACY_POLICY_PAGE_TYPE]} />
+          </div>
         </div>
-      </div>
 
-      <div className="border-grau_700 col-span-full mt-10 border-t pt-4 md:mt-12">
-        <LegalLinks typePaths={typePaths} nav={nav} className="mb-4" />
+        <div className="border-border col-span-full mt-10 border-t pt-4 md:mt-12">
+          <LegalLinks typePaths={typePaths} nav={nav} className="mb-4" />
 
-        {/* The socials stay centred on the row whatever the phone number and credit
-            measure. Held back to lg because a third of the tablet row cannot hold the
-            credit line. */}
-        <div className="flex flex-col items-center gap-y-7 lg:grid lg:grid-cols-3 lg:items-center lg:gap-x-5">
-          <PhoneCta phone={data.phone} callLabel={nav.callUs} />
+          <div className="flex flex-col items-center gap-y-7 lg:grid lg:grid-cols-2 lg:items-center lg:gap-x-5">
+            <PhoneCta phone={data.phone} callLabel={nav.callUs} />
 
-          <SocialLinks className="lg:justify-self-center" />
+            <SocialLinks className="lg:justify-self-end" />
+          </div>
+        </div>
 
+        {/* The credit sits on its own strip, flush to the bottom of the band: the negative
+            margins cancel the band's padding so the rule above it reaches both edges, then
+            put that padding back inside. */}
+        <div className="border-border -mx-6 -mb-6 mt-8 flex h-10 items-center border-t px-6 md:-mx-8 md:px-8 xl:-mx-12 xl:px-12">
           <a
             href="https://eggplantdev.com"
             target="_blank"
             rel="noreferrer"
-            className="text-10 hover:text-grau_100 inline-flex items-center gap-x-2 transition-colors lg:justify-self-end"
+            className="text-12 hover:text-muted-foreground inline-flex items-center gap-x-2 font-semibold transition-colors"
           >
             <span>© 2026 eggplantdev.com</span>
-            <BrandLogo className="h-8 w-auto" />
+            <BrandLogo className="h-6 w-auto" />
           </a>
         </div>
       </div>

@@ -38,12 +38,12 @@ export function CookiePreferences() {
       // The backdrop is a pseudo-element with no node of its own, so a click on it
       // reports the dialog as its target.
       onClick={(event) => event.target === event.currentTarget && setActiveUI('none')}
-      className="bg-white text-shwarz backdrop:bg-shwarz/50 m-auto w-[calc(100%-2rem)] max-w-lg rounded-md p-6 md:p-8"
+      className="bg-card text-foreground backdrop:bg-scrim/50 m-auto w-[calc(100%-2rem)] max-w-lg rounded-md p-6 md:p-8"
     >
       <h2 id={`${dialogId}-title`} className="text-16 mb-2 md:text-18">
         {t('settingsTitle')}
       </h2>
-      <p className="text-12 text-grau_100 leading-150">{t('settingsDescription')}</p>
+      <p className="text-12 text-muted-foreground leading-150">{t('settingsDescription')}</p>
 
       <ul className="mt-6 flex flex-col gap-4">
         {CONSENT_CATEGORIES.map(({ id, title, body }) => {
@@ -63,8 +63,10 @@ export function CookiePreferences() {
                 className="items-start"
                 label={
                   <span className="flex flex-col gap-y-1">
-                    <span className="text-12 text-shwarz md:text-14">{t(title)}</span>
-                    <span className="text-10 text-grau_100 leading-150 md:text-12">{t(body)}</span>
+                    <span className="text-12 text-foreground md:text-14">{t(title)}</span>
+                    <span className="text-10 text-muted-foreground leading-150 md:text-12">
+                      {t(body)}
+                    </span>
                   </span>
                 }
               />

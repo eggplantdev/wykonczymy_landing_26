@@ -18,7 +18,7 @@ export function ContactFormAttachments({ className }: PropsT) {
 
   return (
     <div className={cn('pt-8', className)}>
-      <p className="text-12 text-grau_300">{t('attachments')}</p>
+      <p className="text-12 text-subtle-foreground">{t('attachments')}</p>
 
       {/* A <label> rather than a <button>: a file input opens only from its own label or
           from a scripted click, so the control that looks like a button has to be the
@@ -51,7 +51,7 @@ export function ContactFormAttachments({ className }: PropsT) {
       </label>
 
       {fileNames.length > 0 && (
-        <ul className="text-10 text-grau_100 mt-2 flex flex-wrap gap-x-4 gap-y-1">
+        <ul className="text-10 text-muted-foreground mt-2 flex flex-wrap gap-x-4 gap-y-1">
           {fileNames.map((fileName, index) => (
             <li key={index}>{fileName}</li>
           ))}

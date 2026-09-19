@@ -28,11 +28,11 @@ export function buttonClasses({
     // w-fit because a <button> shrink-wraps on its own but an <a> wearing this pill
     // does not — without it the link stretches across its row.
     'group flex w-fit items-center justify-center gap-2.5 rounded-md text-nowrap duration-200',
-    variant === 'light' && 'bg-grau_800 hover:bg-grau_100 focus-visible:outline-grau_300',
+    variant === 'light' && 'bg-muted hover:bg-muted-foreground focus-visible:outline-ring',
     variant === 'dark' &&
-      'bg-white hover:bg-grau_100 focus-visible:bg-grau_800 focus-visible:outline-grau_300 disabled:bg-grau_800 disabled:text-grau_300',
+      'bg-card hover:bg-muted-foreground focus-visible:bg-muted focus-visible:outline-ring disabled:bg-muted disabled:text-subtle-foreground',
     variant === 'outline' &&
-      'border-grau_300 hover:border-shwarz focus-visible:bg-grau_800 focus-visible:outline-grau_300 disabled:border-grau_700 border bg-transparent',
+      'border-border hover:border-foreground focus-visible:bg-muted focus-visible:outline-ring disabled:border-border-muted border bg-transparent',
     size === 'responsive' && 'h-8 px-4.5 text-12 md:h-9 md:text-14',
     size === 'sm' && 'h-8 px-4.5 text-12',
     size === 'xl' && 'text-18 h-12 px-6',
@@ -49,10 +49,10 @@ export function buttonLabelClasses({
 }: Pick<StyleT, 'variant' | 'disabled'>) {
   return cn(
     'duration-200',
-    variant === 'light' && 'text-shwarz group-hover:text-white',
-    variant === 'dark' && 'text-shwarz group-hover:text-white',
-    variant === 'outline' && 'text-grau_100 group-hover:text-shwarz',
-    disabled && 'text-grau_300',
+    variant === 'light' && 'text-foreground group-hover:text-background',
+    variant === 'dark' && 'text-foreground group-hover:text-background',
+    variant === 'outline' && 'text-muted-foreground group-hover:text-foreground',
+    disabled && 'text-subtle-foreground',
   )
 }
 

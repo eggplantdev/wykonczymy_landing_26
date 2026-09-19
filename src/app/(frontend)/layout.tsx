@@ -3,6 +3,7 @@ import React from 'react'
 import './styles.css'
 
 import { DebugTools } from '@/components/debug/debug-tools'
+import { ThemeProvider } from '@/components/theme/theme-provider'
 import { siteFont, titleFont } from './fonts'
 // Every route renders through this layout, so a missing or malformed public var fails
 // `next build` here instead of surfacing as undefined in the browser.
@@ -25,12 +26,21 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     // `body` is capped at 1920 and centred, so past that width the page stops short of the
     // screen edges. Painting `html` fills the gutters by propagating to the canvas, and
     // leaves the segment layout's own painted wrapper as what the menu toggle blends against.
-    <html lang="pl" className={`bg-white ${siteFont.variable} ${titleFont.variable}`}>
+    // suppressHydrationWarning is required, not defensive: next-themes resolves the theme
+    // in a blocking script before paint, so the `data-theme` the browser has by hydration
+    // is one the server could not have known to render.
+    <html
+      lang="pl"
+      suppressHydrationWarning
+      className={`bg-background ${siteFont.variable} ${titleFont.variable}`}
+    >
       <body>
-        <main>{children}</main>
-        {/* Gated here, not inside the component: an early return still ships the whole
-            client module to production browsers. */}
-        {process.env.NODE_ENV !== 'production' && <DebugTools />}
+        <ThemeProvider>
+          <main>{children}</main>
+          {/* Gated here, not inside the component: an early return still ships the whole
+              client module to production browsers. */}
+          {process.env.NODE_ENV !== 'production' && <DebugTools />}
+        </ThemeProvider>
       </body>
     </html>
   )

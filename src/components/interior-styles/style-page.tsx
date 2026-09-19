@@ -44,7 +44,7 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
           </div>
 
           <div className="text-14 lg:text-16 col-span-full md:col-span-6 md:col-start-2 lg:col-span-6 lg:col-start-4 lg:row-start-2">
-            <p className="border-b-grau_300 border-b pb-8 font-medium">{lead}</p>
+            <p className="border-b-border border-b pb-8 font-medium">{lead}</p>
             {rest.slice(0, split).map((paragraph, index) => (
               <p key={index} className="pt-8">
                 {paragraph}

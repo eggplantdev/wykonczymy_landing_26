@@ -39,17 +39,17 @@ export function PhotoLightboxDialog({ images, initialIndex, onClose }: PropsT) {
       <RadixDialog.Portal>
         {/* Radix mounts the scroll lock on the overlay, so it is required even though the
             content paints over all of it. */}
-        <RadixDialog.Overlay className="bg-white fixed inset-0 z-50" />
+        <RadixDialog.Overlay className="bg-card fixed inset-0 z-50" />
 
         <RadixDialog.Content
           aria-describedby={undefined}
-          className="bg-white fixed inset-0 z-50 flex flex-col outline-none"
+          className="bg-card fixed inset-0 z-50 flex flex-col outline-hidden"
         >
           <RadixDialog.Title className="sr-only">{t('gallery')}</RadixDialog.Title>
 
           <RadixDialog.Close
             aria-label={t('close')}
-            className="bg-white hover:bg-grau_800 absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-md md:top-6 md:right-6"
+            className="bg-card hover:bg-muted absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-md md:top-6 md:right-6"
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" strokeLinecap="round" />

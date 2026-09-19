@@ -15,11 +15,13 @@ export function SpecTable({ items, namesOnly, className }: PropsT) {
         <li
           key={item.id}
           className={cn(
-            'border-grau_300 text-12 grid min-h-10 grid-cols-2 items-center gap-x-5 border-b py-2',
+            'border-border text-12 grid min-h-10 grid-cols-2 items-center gap-x-5 border-b py-2',
             namesOnly && 'grid-cols-1',
           )}
         >
-          <span className={cn(!namesOnly && 'text-grau_300 font-medium')}>{item.name}</span>
+          <span className={cn(!namesOnly && 'text-subtle-foreground font-medium')}>
+            {item.name}
+          </span>
           {!namesOnly && <span>{item.value}</span>}
         </li>
       ))}

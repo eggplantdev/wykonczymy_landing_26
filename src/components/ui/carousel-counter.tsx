@@ -14,8 +14,8 @@ const pad = (value: number) => (value < 10 ? `0${value}` : String(value))
 
 export function CarouselCounter({ current, total, className }: PropsT) {
   return (
-    <div className={cn('text-grau_300 flex items-center justify-center', className)}>
-      <span className="text-shwarz">{pad(current)}</span>
+    <div className={cn('text-subtle-foreground flex items-center justify-center', className)}>
+      <span className="text-foreground">{pad(current)}</span>
       <span className="mx-2 h-3 w-px bg-current" />
       <span>{pad(total)}</span>
     </div>

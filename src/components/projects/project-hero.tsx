@@ -15,7 +15,7 @@ export function ProjectHero({ project }: PropsT) {
         <Media image={image} priority sizes="(max-width: 1919px) 100vw, 1920px" />
       </div>
 
-      <div className="paddings relative flex h-full w-full flex-col items-start justify-end pb-5 text-white md:pb-12 xl:pb-10">
+      <div className="paddings relative flex h-full w-full flex-col items-start justify-end pb-5 text-on-media md:pb-12 xl:pb-10">
         <h1 className="text-18 xl:text-24 mb-6 md:leading-[111%] xl:leading-normal">{title}</h1>
         <div className="gridContainer w-full">
           <p className={`col-span-6 mb-4 md:mb-10 xl:mb-0 ${textStyle}`}>{summary}</p>

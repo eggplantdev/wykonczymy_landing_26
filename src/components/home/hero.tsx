@@ -25,10 +25,10 @@ export function Hero({ data }: PropsT) {
       </div>
       {/* Covers the whole frame rather than fading in from an edge: the photo is editable in
           the admin, so nothing here can assume where its bright areas fall. */}
-      <div className="bg-shwarz/20 absolute inset-0" />
+      <div className="bg-scrim/20 absolute inset-0" />
       {/* No measure on the title: the field is a textarea so the editor owns where the line
           breaks, and a width cap would re-break it on the next copy change. */}
-      <div className="paddings relative flex h-full w-full flex-col justify-end pb-12 text-white md:pb-16">
+      <div className="paddings relative flex h-full w-full flex-col justify-end pb-12 text-on-media md:pb-16">
         <p
           data-display
           className="text-32 md:text-40 xl:text-hero text-shadow-lg leading-105 whitespace-pre-line"

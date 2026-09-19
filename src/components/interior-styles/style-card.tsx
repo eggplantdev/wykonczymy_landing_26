@@ -17,7 +17,7 @@ export function StyleCard({ style, href, index }: PropsT) {
     <Link
       href={href}
       className={cn(
-        'group border-grau_300 relative pt-6 md:px-6 md:even:border-l lg:border-r lg:px-6.5 lg:even:border-l-0',
+        'group border-border relative pt-6 md:px-6 md:even:border-l lg:border-r lg:px-6.5 lg:even:border-l-0',
         isLastInRow && 'lg:border-r-0',
       )}
     >

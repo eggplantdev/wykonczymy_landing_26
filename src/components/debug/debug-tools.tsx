@@ -32,7 +32,7 @@ function GridOverlay() {
     <div className="gridContainer paddings pointer-events-none fixed inset-0 z-10000 gap-4 md:gap-5">
       {GRID_COLUMNS.map((className, index) => (
         <div key={index} className={className}>
-          <div className="h-full bg-red-500/10" />
+          <div className="h-full bg-error/10" />
         </div>
       ))}
     </div>
@@ -58,7 +58,7 @@ export function DebugTools() {
   return (
     <>
       {enabled.grid && <GridOverlay />}
-      <div className="text-10 shadow-header fixed right-4 bottom-4 z-10001 flex flex-col gap-2 rounded bg-white/90 p-2 md:flex-row md:gap-4">
+      <div className="text-10 shadow-header fixed right-4 bottom-4 z-10001 flex flex-col gap-2 rounded bg-card/90 p-2 md:flex-row md:gap-4">
         {TOGGLES.map(({ key, label }) => (
           <label key={key} className="flex items-center gap-2">
             <span>{label}</span>

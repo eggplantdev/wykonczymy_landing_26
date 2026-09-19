@@ -47,6 +47,11 @@
   --text-hero--letter-spacing: -0.02em;
   --text-hero: 4.028vw;
 
+  /* Hero-lab only, for judging a much larger title: 6.6vw is 95px at 1440 against
+     `text-hero`'s 58px. Not used by the shipped hero. */
+  --text-hero-lg--letter-spacing: -0.025em;
+  --text-hero-lg: 6.6vw;
+
   /* tdg's `sm` is 12px, not Tailwind's 14px — lifted markup depends on the smaller value. */
   --text-sm: 0.75rem;
   --text-base: 1rem;
@@ -77,30 +82,6 @@
      stretch the gutters, and the fixed header has to be capped alongside it. */
   --container-site: 1920px;
 
-  /* Five greys, one job each. The nine-step tdg ramp had five shades nothing could read:
-     `grau_500` set the privacy link at 1.58:1 on the canvas, so prose and links collapsed
-     onto `grau_100`. Two faint tiers survive below it because neither is prose — `grau_200`
-     for marks that are not content at all, like the carousel glass, `grau_300` for the
-     label a value sits under, which is found by its position and read through the value.
-     Both are under AA deliberately; nothing a visitor has to read belongs in either. */
-  --color-grau_100: #565656;
-  --color-grau_200: #848484;
-  --color-grau_300: #a3a3a3;
-  --color-grau_700: #dfdfdf;
-  --color-grau_800: #ebebeb;
-
-  /* Review stars, sampled from the Fixly badge this mirrors. */
-  --color-rating: #ffd739;
-
-  /* The logo's petrol blue, sampled off public/images/logo-wykonczymy.png. */
-  --color-brand: #12465a;
-
-  /* TRIAL: spline's neutrals — ivoryBlack #0d0d0d over #1b1b1b, splineWhite #f8f8f8 over
-     #fdfdfd. Revert these two values to undo. */
-  --color-shwarz: #0d0d0d;
-  --color-white: #f8f8f8;
-  --color-error: #d45d5c;
-
   --leading-normal: 120%;
 
   /* The tight end of the scale, for a display title set over two lines. Not 100%: Polish
@@ -114,7 +95,160 @@
   --leading-140: 140%;
   --leading-150: 150%;
 
-  --shadow-header: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+  --shadow-header: 0px 2px 2px 0px var(--wk-shadow);
+  --shadow-panel: 0 10px 15px -3px var(--wk-shadow), 0 4px 6px -4px var(--wk-shadow);
+}
+
+/* ---------------------------------------------------------------------------
+   Colour is two layers, and the split is the whole point: a palette experiment
+   or a theme edits values here and nothing else in the repo moves.
+
+   Tier 1, the palette — raw values, named for what they ARE. The only hexes in
+   the project.
+   Tier 2, the roles — named for what a value is FOR. Components only ever say
+   these, via the utilities `@theme inline` generates below.
+
+   `@theme` cannot live inside a selector, so it cannot hold a value that
+   changes per theme. Hence the indirection: the vars live in `:root`, the theme
+   blocks reassign them, and `@theme inline` points the utilities at the vars
+   rather than baking today's value in. A plain `@theme` here would freeze the
+   light values and leave every theme block below silently doing nothing.
+   --------------------------------------------------------------------------- */
+:root {
+  --wk-ink: #0d0d0d;
+  --wk-canvas: #f8f8f8;
+
+  /* Five greys, one job each. The nine-step tdg ramp had five shades nothing could read:
+     `grau_500` set the privacy link at 1.58:1 on the canvas, so prose and links collapsed
+     onto `grey-100`. Two faint tiers survive below it because neither is prose — `grey-200`
+     for marks that are not content at all, `grey-300` for the label a value sits under,
+     which is found by its position and read through the value. Both are under AA
+     deliberately; nothing a visitor has to read belongs in either. */
+  --wk-grey-100: #565656;
+  --wk-grey-200: #848484;
+  --wk-grey-300: #a3a3a3;
+  --wk-grey-700: #dfdfdf;
+  --wk-grey-800: #ebebeb;
+
+  /* Below `grey-100`, for the dark theme's panels: a page that is already near-black
+     cannot separate a card from it by going darker, so these five are what "lifted"
+     means when the background is `ink`. They have no light-theme use. */
+  --wk-grey-10: #1a1a1a;
+  --wk-grey-30: #242424;
+  --wk-grey-40: #2b2b2b;
+  --wk-grey-50: #343434;
+
+  /* The logo's petrol blue, sampled off public/images/logo-wykonczymy.png. */
+  --wk-petrol: #12465a;
+
+  /* Review stars, sampled from the Fixly badge this mirrors. */
+  --wk-amber: #ffd739;
+  /* Two reds, because error type is small and has to carry on a white field and on the
+     dark footer alike: one value clears 4.5:1 against the first and fails the second. */
+  --wk-red: #d11f1a;
+  --wk-red-lifted: #ff5a52;
+
+  /* Roles. A pair named `x` / `x-foreground` is a contract: put the second on
+     anything sitting on the first, and the pair inverts together per theme. */
+  --wk-background: var(--wk-canvas);
+  --wk-foreground: var(--wk-ink);
+
+  /* A panel lifted off the page — the nav bar, a dialog, the cookie banner. Equal
+     to the background in light, which is why it looks like nothing today; it
+     earns its keep in a dark theme, where a panel has to sit *above* the page
+     rather than dissolve into it. */
+  --wk-card: var(--wk-canvas);
+
+  /* The inverted surface — a selected nav pill, a solid button. Reading it as a
+     pair is what makes it survive a theme flip: `surface` follows the text
+     colour and `surface-foreground` follows the page, so the swatch stays the
+     opposite of whatever the page currently is. */
+  --wk-surface: var(--wk-ink);
+  --wk-surface-foreground: var(--wk-canvas);
+
+  /* Raised-but-quiet: hover and pressed fills, the disabled pill. */
+  --wk-muted: var(--wk-grey-800);
+  --wk-muted-foreground: var(--wk-grey-100);
+
+  /* Fainter still, and never load-bearing: an unlit star, a checkbox box, a
+     placeholder, a label. `subtle-foreground` is under AA by design. */
+  --wk-subtle: var(--wk-grey-700);
+  --wk-subtle-foreground: var(--wk-grey-300);
+
+  --wk-border: var(--wk-grey-300);
+  --wk-border-muted: var(--wk-grey-700);
+  --wk-ring: var(--wk-grey-100);
+
+  /* The three roles that must NOT follow the theme. All describe something laid over a
+     photograph, and a photograph is the same picture in every theme: a scrim darkens it,
+     type on it stays light, and tinted glass takes its contrast from the shot behind it
+     rather than from either floor. Flipping any of them with the theme is how a dark mode
+     ends up with black text on a dark image. */
+  --wk-scrim: var(--wk-ink);
+  --wk-on-media: var(--wk-canvas);
+  --wk-glass: var(--wk-grey-200);
+
+  --wk-brand: var(--wk-petrol);
+  --wk-rating: var(--wk-amber);
+  --wk-error: var(--wk-red);
+
+  /* A drop shadow is a darkening, so on a near-black page it has nothing left to darken —
+     the dark theme lifts the edge with light instead of sinking it with black. */
+  --wk-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Only the role assignments are restated — the palette above is shared, so a
+   theme is a re-pointing, not a second set of values. */
+[data-theme='dark'] {
+  --wk-background: var(--wk-ink);
+  --wk-foreground: var(--wk-canvas);
+
+  --wk-card: var(--wk-grey-10);
+
+  --wk-surface: var(--wk-canvas);
+  --wk-surface-foreground: var(--wk-ink);
+
+  /* Two steps off `card`, not one: at one step a muted track on a card came to 1.06:1 and
+     the segmented control read as three loose labels with no groove behind them. */
+  --wk-muted: var(--wk-grey-40);
+  --wk-muted-foreground: var(--wk-grey-300);
+
+  --wk-subtle: var(--wk-grey-50);
+  --wk-subtle-foreground: var(--wk-grey-100);
+
+  --wk-border: var(--wk-grey-50);
+  --wk-border-muted: var(--wk-grey-30);
+  --wk-error: var(--wk-red-lifted);
+  /* The ring inverts with the theme. A single value cannot clear 3:1 on both a near-white
+     and a near-black panel, and a focus indicator that fails it is invisible to the
+     keyboard users who are the only ones who ever see it. */
+  --wk-ring: var(--wk-grey-300);
+  --wk-shadow: rgba(255, 255, 255, 0.08);
+}
+
+/* For the handful of things a token cannot reach — a raster logo is a picture, not a
+   colour, so the dark theme swaps the file rather than recolouring it. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme inline {
+  --color-background: var(--wk-background);
+  --color-foreground: var(--wk-foreground);
+  --color-card: var(--wk-card);
+  --color-surface: var(--wk-surface);
+  --color-surface-foreground: var(--wk-surface-foreground);
+  --color-muted: var(--wk-muted);
+  --color-muted-foreground: var(--wk-muted-foreground);
+  --color-subtle: var(--wk-subtle);
+  --color-subtle-foreground: var(--wk-subtle-foreground);
+  --color-border: var(--wk-border);
+  --color-border-muted: var(--wk-border-muted);
+  --color-ring: var(--wk-ring);
+  --color-glass: var(--wk-glass);
+  --color-brand: var(--wk-brand);
+  --color-rating: var(--wk-rating);
+  --color-scrim: var(--wk-scrim);
+  --color-on-media: var(--wk-on-media);
+  --color-error: var(--wk-error);
 }
 
 @layer base {
@@ -124,12 +258,12 @@
     line-height: normal;
   }
 
-  /* v3's `borderColor.DEFAULT`, which v4 removed: an unqualified `border` is black here,
-     not `currentColor`. */
+  /* v3's `borderColor.DEFAULT`, which v4 removed: an unqualified `border` takes the
+     foreground here, not `currentColor`. */
   *,
   ::after,
   ::before {
-    border-color: #000;
+    border-color: var(--wk-foreground);
   }
 
   /* v3's preflight set this and v4's dropped it. */
@@ -144,17 +278,17 @@
   }
 
   body {
-    @apply max-w-site mx-auto flex w-full flex-col overscroll-none scroll-smooth text-shwarz;
+    @apply max-w-site bg-background text-foreground mx-auto flex w-full flex-col overscroll-none scroll-smooth;
   }
 
   input,
   textarea {
-    @apply resize-none outline-none;
+    @apply resize-none outline-hidden;
   }
 
   input:-webkit-autofill,
   textarea:-webkit-autofill {
-    box-shadow: inset 0 0 0 2000px rgb(242 242 242);
+    box-shadow: inset 0 0 0 2000px var(--wk-muted);
   }
 }
 
@@ -165,14 +299,14 @@
 /* The legal pages are one rich-text field, so their headings, lists and links carry no
    classes of their own — the rhythm has to come from the wrapper. */
 @utility legal-prose {
-  @apply text-14 md:text-16 text-grau_100 leading-150;
+  @apply text-14 md:text-16 text-muted-foreground leading-150;
 
   & h2 {
-    @apply text-20 md:text-24 text-shwarz mt-10 mb-4 first:mt-0;
+    @apply text-20 md:text-24 text-foreground mt-10 mb-4 first:mt-0;
   }
 
   & h3 {
-    @apply text-16 md:text-18 text-shwarz mt-8 mb-3;
+    @apply text-16 md:text-18 text-foreground mt-8 mb-3;
   }
 
   & p {
@@ -193,11 +327,11 @@
   }
 
   & a {
-    @apply text-shwarz underline underline-offset-4 transition-colors hover:text-grau_100;
+    @apply text-foreground underline underline-offset-4 transition-colors hover:text-muted-foreground;
   }
 
   & strong {
-    @apply text-shwarz;
+    @apply text-foreground;
   }
 }
 
@@ -230,10 +364,10 @@
    panel and the grid overlay, which are siblings of it, stay legible. */
 @layer utilities {
   [data-debug-outlines] main * {
-    outline: 1px solid var(--color-error);
+    outline: 1px solid var(--wk-error);
   }
 
   [data-debug-layers] main * {
-    background-color: color-mix(in oklab, var(--color-error) 10%, transparent);
+    background-color: color-mix(in oklab, var(--wk-error) 10%, transparent);
   }
 }

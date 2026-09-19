@@ -31,7 +31,7 @@ export function ConsentLabel({ href }: PropsT) {
         href={href}
         target="_blank"
         onClick={(event) => event.stopPropagation()}
-        className="hover:text-shwarz underline underline-offset-2 transition-colors"
+        className="hover:text-foreground underline underline-offset-2 transition-colors"
       >
         {linkText}
       </Link>

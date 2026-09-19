@@ -19,7 +19,7 @@ export function ProjectRow({ href, title, summary, image, details }: PropsT) {
   return (
     <Link
       href={href}
-      className="gridContainer paddings group bg-transparent py-8 delay-100 duration-1000 hover:bg-grau_800 lg:py-12"
+      className="gridContainer paddings group bg-transparent py-8 delay-100 duration-1000 hover:bg-muted lg:py-12"
     >
       <div className="relative col-span-full mb-6 aspect-3/2 overflow-hidden md:order-2 md:col-span-4 md:col-start-5 md:mb-0 lg:col-span-4 lg:col-start-9">
         <Media

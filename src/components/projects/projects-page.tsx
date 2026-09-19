@@ -23,7 +23,7 @@ export function ProjectsPage({ locale, title, basePath, data }: PropsT) {
 
   return (
     <PageWrapper hasHero={false} title={title}>
-      <div className="divide-grau_300 border-grau_300 grid divide-y border-b">
+      <div className="divide-border border-border grid divide-y border-b">
         {data.projects.map((project) => (
           <ProjectRow
             key={project.id}

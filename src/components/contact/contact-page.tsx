@@ -72,7 +72,7 @@ export function ContactPage({ locale, title, data }: PropsT) {
                 href={href}
                 aria-label={`${label}: ${text}`}
                 {...(key === 'address' ? { target: '_blank', rel: 'noreferrer' } : {})}
-                className="hover:text-grau_100 transition-colors"
+                className="hover:text-muted-foreground transition-colors"
               >
                 {text}
               </a>
@@ -81,7 +81,7 @@ export function ContactPage({ locale, title, data }: PropsT) {
         </ul>
 
         {nip && (
-          <p className="text-10 md:text-14 text-grau_100 mt-8">
+          <p className="text-10 md:text-14 text-muted-foreground mt-8">
             {contact.nip} {nip}
           </p>
         )}

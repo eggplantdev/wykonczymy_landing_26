@@ -16,7 +16,7 @@ type ParamsT = { segments?: string[] }
 // block for the logo's `position: fixed` and drag it along for the animation.
 //
 // A layout on the catch-all segment still receives `params`, which is what lets the
-// language switcher's hrefs stay server-resolved.
+// settings panel's locale hrefs stay server-resolved.
 export default async function SegmentLayout({
   children,
   params,
@@ -38,7 +38,7 @@ export default async function SegmentLayout({
       <ConsentProvider privacyPolicyHref={typePaths[PRIVACY_POLICY_PAGE_TYPE]}>
         <SiteHeader paths={paths} typePaths={typePaths} />
         <MobileMenu paths={paths} typePaths={typePaths} phone={footer.phone} />
-        <div className="bg-white flex min-h-lvh flex-col">
+        <div className="bg-background flex min-h-lvh flex-col">
           <div className="grow">{children}</div>
           <SiteFooter
             container="paddings pt-20 pb-6 md:pt-30 xl:pt-40"

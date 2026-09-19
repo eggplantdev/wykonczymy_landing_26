@@ -27,14 +27,14 @@ export function HeroFrame({ label, note, source, children }: FramePropsT) {
       <div className="absolute inset-0 flex">
         <Media image={source.image} video={source.video} sizes="100vw" />
       </div>
-      <div className="bg-shwarz/20 absolute inset-0" />
+      <div className="bg-scrim/20 absolute inset-0" />
 
-      <div className="text-12 bg-shwarz/70 absolute top-4 left-4 z-10 rounded-full px-4 py-2 text-white">
+      <div className="text-12 bg-scrim/70 absolute top-4 left-4 z-10 rounded-full px-4 py-2 text-on-media">
         <span className="font-medium">{label}</span>
-        <span className="text-grau_100"> — {note}</span>
+        <span className="text-muted-foreground"> — {note}</span>
       </div>
 
-      <div className="relative h-full w-full text-white">{children}</div>
+      <div className="relative h-full w-full text-on-media">{children}</div>
     </section>
   )
 }
@@ -53,4 +53,4 @@ export function HeroCta({ label, href }: { label: string; href: string }) {
   )
 }
 
-export const titleClasses = 'text-32 md:text-40 xl:text-hero leading-105 whitespace-pre-line'
+export const titleClasses = 'text-52 md:text-72 xl:text-hero-lg leading-105 whitespace-pre-line'
