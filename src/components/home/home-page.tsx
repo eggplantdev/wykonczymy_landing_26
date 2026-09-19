@@ -61,7 +61,7 @@ export function HomePage({ data, ratings }: PropsT) {
             moment its top edge cleared the fold. */}
         {intro && (
           <FadeUp>
-            <TextSection container="gridContainer paddings" data={intro} />
+            <TextSection container="site-container gridContainer paddings" data={intro} />
           </FadeUp>
         )}
         {/* `pr-0` on the two tracks that peek, so the slide at the end is cut off by the edge of
@@ -74,12 +74,12 @@ export function HomePage({ data, ratings }: PropsT) {
         )}
         {afterServices && (
           <FadeUp>
-            <TextSection container="gridContainer paddings" data={afterServices} />
+            <TextSection container="site-container gridContainer paddings" data={afterServices} />
           </FadeUp>
         )}
         {numbers && (
           <FadeUp>
-            <NumbersSection container="paddings" data={numbers} />
+            <NumbersSection container="site-container paddings" data={numbers} />
           </FadeUp>
         )}
         {projects && (
@@ -89,7 +89,11 @@ export function HomePage({ data, ratings }: PropsT) {
         )}
         {testimonials && (
           <FadeUp>
-            <TestimonialsCarousel container="paddings" data={testimonials} ratings={ratings} />
+            <TestimonialsCarousel
+              container="site-container paddings"
+              data={testimonials}
+              ratings={ratings}
+            />
           </FadeUp>
         )}
         {interiorStyles && (

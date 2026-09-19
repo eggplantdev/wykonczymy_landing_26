@@ -11,8 +11,9 @@ type PropsT = {
   // whole section lower than the rest. The home page is the exception: its hero is the
   // heading.
   title?: string
-  // The 1920 column. Home opts out and runs the full width of the screen: it is the page built
-  // out of carousels, and a track that stops at a margin looks cut rather than continued.
+  // The 1920 column. Home opts out and takes it per section instead: it is the page built out of
+  // carousels, and a track that stops at a margin looks cut rather than continued, so the reading
+  // sections ask for the column and the tracks run the width of the screen.
   hasColumn?: boolean
   className?: string
 }
