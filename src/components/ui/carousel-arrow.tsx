@@ -34,7 +34,7 @@ export function CarouselArrow({
       onClick={handleClick}
       className={cn(
         'h-5.5 rounded-md px-4',
-        variant === 'default' && 'bg-grau_900 hover:bg-grau_800',
+        variant === 'default' && 'bg-white hover:bg-grau_800',
         variant === 'transparent' && 'bg-grau_200/30 hover:bg-grau_200/50',
         disabled && 'opacity-30',
         className,

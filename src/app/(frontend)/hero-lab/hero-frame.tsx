@@ -31,7 +31,7 @@ export function HeroFrame({ label, note, source, children }: FramePropsT) {
 
       <div className="text-12 bg-shwarz/70 absolute top-4 left-4 z-10 rounded-full px-4 py-2 text-white">
         <span className="font-medium">{label}</span>
-        <span className="text-grau_500"> — {note}</span>
+        <span className="text-grau_100"> — {note}</span>
       </div>
 
       <div className="relative h-full w-full text-white">{children}</div>

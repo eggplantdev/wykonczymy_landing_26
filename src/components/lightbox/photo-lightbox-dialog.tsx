@@ -49,7 +49,7 @@ export function PhotoLightboxDialog({ images, initialIndex, onClose }: PropsT) {
 
           <RadixDialog.Close
             aria-label={t('close')}
-            className="bg-grau_900 hover:bg-grau_800 absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-md md:top-6 md:right-6"
+            className="bg-white hover:bg-grau_800 absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-md md:top-6 md:right-6"
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" strokeLinecap="round" />

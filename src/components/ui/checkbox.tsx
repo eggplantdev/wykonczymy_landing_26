@@ -36,7 +36,7 @@ export function Checkbox({
     <label
       htmlFor={id}
       className={cn(
-        'text-12 text-grau_300 flex items-center gap-x-2',
+        'text-12 text-grau_100 flex items-center gap-x-2',
         !disabled && 'cursor-pointer',
         className,
       )}
@@ -55,12 +55,10 @@ export function Checkbox({
         aria-describedby={describedBy}
         className="peer sr-only"
       />
-      <span className="bg-grau_600 text-grau_200 peer-focus-visible:outline-offset-2 peer-disabled:opacity-60 flex size-4.5 shrink-0 items-center justify-center rounded-[1px] peer-focus-visible:outline">
+      <span className="bg-grau_700 text-grau_100 peer-focus-visible:outline-offset-2 peer-disabled:opacity-60 flex size-4.5 shrink-0 items-center justify-center rounded-[1px] peer-focus-visible:outline">
         {checked && <Checkmark />}
       </span>
-      <span className={cn(checked ? 'text-grau_200' : 'text-grau_500', labelClassName)}>
-        {label}
-      </span>
+      <span className={cn('text-grau_100', labelClassName)}>{label}</span>
     </label>
   )
 }

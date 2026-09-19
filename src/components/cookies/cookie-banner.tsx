@@ -34,7 +34,7 @@ export function CookieBanner({ privacyPolicyHref }: PropsT) {
       {privacyPolicyHref && (
         <Link
           href={privacyPolicyHref}
-          className="text-10 text-grau_100 hover:text-grau_200 mt-2 inline-block underline underline-offset-2 transition-colors"
+          className="text-10 text-grau_100 hover:text-shwarz mt-2 inline-block underline underline-offset-2 transition-colors"
         >
           {tNav('privacyPolicy')}
         </Link>

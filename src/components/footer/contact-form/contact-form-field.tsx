@@ -5,7 +5,7 @@ import { cn } from '@/lib/cn'
 // `::placeholder`, so without it the fields show the UA's own grey instead of `grau_300`.
 export const fieldControlClasses = cn(
   'border-grau_300 text-12 text-grau_100 w-full pt-8 pb-2',
-  'focus:border-grau_100 aria-invalid:border-error placeholder:text-grau_300 border-0 border-b bg-transparent pl-0',
+  'focus:border-grau_300 aria-invalid:border-error placeholder:text-grau_100 border-0 border-b bg-transparent pl-0',
 )
 
 // The control's `aria-describedby` and the id `FieldError` renders have to be the same

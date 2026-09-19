@@ -187,7 +187,7 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
       </div>
 
       <p role="status" aria-live="polite" className="text-12 md:col-span-2">
-        {isSent && <span className="text-grau_200">{t('success')}</span>}
+        {isSent && <span className="text-grau_100">{t('success')}</span>}
       </p>
       <p role="alert" className="text-12 text-error md:col-span-2">
         {serverError}

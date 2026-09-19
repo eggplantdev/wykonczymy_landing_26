@@ -30,9 +30,9 @@ export function buttonClasses({
     'group flex w-fit items-center justify-center gap-2.5 rounded-md text-nowrap duration-200',
     variant === 'light' && 'bg-grau_800 hover:bg-grau_100 focus-visible:outline-grau_300',
     variant === 'dark' &&
-      'bg-white hover:bg-grau_100 focus-visible:bg-grau_800 focus-visible:outline-grau_300 disabled:bg-grau_800 disabled:text-grau_600',
+      'bg-white hover:bg-grau_100 focus-visible:bg-grau_800 focus-visible:outline-grau_300 disabled:bg-grau_800 disabled:text-grau_300',
     variant === 'outline' &&
-      'border-grau_200 hover:border-shwarz focus-visible:bg-grau_900 focus-visible:outline-grau_200 disabled:border-grau_800 border bg-transparent',
+      'border-grau_300 hover:border-shwarz focus-visible:bg-grau_800 focus-visible:outline-grau_300 disabled:border-grau_700 border bg-transparent',
     size === 'responsive' && 'h-8 px-4.5 text-12 md:h-9 md:text-14',
     size === 'sm' && 'h-8 px-4.5 text-12',
     size === 'xl' && 'text-18 h-12 px-6',
@@ -49,10 +49,10 @@ export function buttonLabelClasses({
 }: Pick<StyleT, 'variant' | 'disabled'>) {
   return cn(
     'duration-200',
-    variant === 'light' && 'text-shwarz group-hover:text-grau_900',
-    variant === 'dark' && 'text-shwarz group-hover:text-grau_900',
+    variant === 'light' && 'text-shwarz group-hover:text-white',
+    variant === 'dark' && 'text-shwarz group-hover:text-white',
     variant === 'outline' && 'text-grau_100 group-hover:text-shwarz',
-    disabled && 'text-grau_600',
+    disabled && 'text-grau_300',
   )
 }
 

@@ -18,7 +18,7 @@ export function PhoneCta({ phone, callLabel, onClick }: PropsT) {
       onClick={onClick}
       className={buttonClasses({ size: 'xl' })}
     >
-      <span aria-hidden className="text-shwarz group-hover:text-grau_900 duration-200">
+      <span aria-hidden className="text-shwarz group-hover:text-white duration-200">
         <Phone />
       </span>
       <span className={buttonLabelClasses({})}>{phone}</span>

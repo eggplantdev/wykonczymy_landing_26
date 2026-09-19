@@ -10,9 +10,9 @@ type PropsT = {
 }
 
 const GRADIENTS: Record<PlaceholderTypeT, string> = {
-  default: 'bg-linear-to-r from-grau_400 via-grau_600 to-grau_600',
-  dark: 'bg-linear-to-r from-grau_400/0 via-grau_600/50 to-grau_400',
-  light: 'bg-linear-to-r from-grau_600/0 via-grau_900/50 to-grau_400',
+  default: 'bg-linear-to-r from-grau_300 via-grau_700 to-grau_700',
+  dark: 'bg-linear-to-r from-grau_300/0 via-grau_700/50 to-grau_300',
+  light: 'bg-linear-to-r from-grau_700/0 via-grau_800/50 to-grau_300',
 }
 
 // Sits behind the image rather than swapping with it, so a slow photo never leaves a
