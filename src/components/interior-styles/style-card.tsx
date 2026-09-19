@@ -34,7 +34,7 @@ export function StyleCard({ style, href, index }: PropsT) {
         // Five lines, not the slide's two: these cells are a third of the page wide, and the
         // reserved height is what keeps every photo in a row starting at the same y.
         textClassName="md:leading-135 xlg:line-clamp-4 xlg:h-16 line-clamp-5 h-17.5 md:h-20"
-        sizes="(max-width: 767px) 100vw, (max-width: 1023px) 45vw, (max-width: 1279px) 30vw, (max-width: 1919px) 25vw, 480px"
+        sizes="(max-width: 767px) 100vw, (max-width: 1023px) 45vw, (max-width: 1279px) 30vw, (max-width: 2399px) 25vw, 600px"
       />
     </Link>
   )

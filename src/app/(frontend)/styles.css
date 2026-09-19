@@ -45,8 +45,8 @@
 
   /* The hero title, and the only fluid size in the scale. 6.6vw is 95px at exactly 1440,
      so it picks up where `text-72` leaves off and keeps growing instead of stopping there —
-     the hero is the one section that bleeds past the 1920 cap, so it scales on the viewport
-     rather than on the page. The tracking tightens past the rest of the scale because at
+     the hero runs the full width of the screen rather than the column, so it scales on the
+     viewport rather than on the page. The tracking tightens past the rest of the scale because at
      this size -0.02em still reads loose. */
   --text-hero--letter-spacing: -0.025em;
   --text-hero: 6.6vw;
@@ -77,10 +77,11 @@
   --breakpoint-xl: 1440px;
   --breakpoint-xxl: 1920px;
 
-  /* The page stops growing at the widest breakpoint: past 1920 the layout would only stretch
-     the gutters. What the cap holds is the reading column — the header, the footer bar and the
-     peeking carousel tracks all reach past it on purpose. */
-  --container-site: 1920px;
+  /* What the cap holds is the reading column — the header, the footer bar and the peeking
+     carousel tracks all reach past it on purpose. Deliberately above `--breakpoint-xxl`, which
+     it used to match: stopping the column at 1920 left visible gutters on a 2560 screen and the
+     page read as boxed. Past 2400 the layout would only stretch those gutters. */
+  --container-site: 2400px;
 
   --leading-normal: 120%;
 
@@ -375,7 +376,7 @@
   @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
 }
 
-/* The 1920 cap belongs to the reading column, not to the page, so `body` runs the full width of
+/* The cap belongs to the reading column, not to the page, so `body` runs the full width of
    the screen and whatever has to line up takes this. Carried the other way round — the cap on
    `body` — the header, the footer bar and every full-width photo had to break back out of it, and
    the only way out was a `100vw` box, which is wider than the page whenever the scrollbar is a

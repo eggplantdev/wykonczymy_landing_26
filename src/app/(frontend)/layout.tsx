@@ -26,9 +26,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     // The root layout cannot see route params, so this is the default locale, not the
     // current one — `/en/` knowingly declares itself Polish until the locale moves into
     // a real route segment.
-    // `body` is capped at 1920 and centred, so past that width the page stops short of the
-    // screen edges. Painting `html` fills the gutters by propagating to the canvas, and
-    // leaves the segment layout's own painted wrapper as what the menu toggle blends against.
+    // Painting `html` rather than `body` leaves the segment layout's own painted wrapper as
+    // what the menu toggle blends against.
     // suppressHydrationWarning is required, not defensive: next-themes resolves the theme
     // in a blocking script before paint, so the `data-theme` the browser has by hydration
     // is one the server could not have known to render.

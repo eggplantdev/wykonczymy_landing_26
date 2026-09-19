@@ -16,7 +16,7 @@ export function GalleryPair({ large, small, flipped }: PairPropsT) {
           flipped ? 'lg:col-span-8' : 'lg:order-2 lg:col-span-8 lg:col-start-5'
         }`}
       >
-        <Media image={large} sizes="(max-width: 1023px) 100vw, (max-width: 1919px) 67vw, 1286px" />
+        <Media image={large} sizes="(max-width: 1023px) 100vw, (max-width: 2399px) 67vw, 1608px" />
       </div>
       <div
         className={`relative col-span-6 aspect-312/436 overflow-hidden md:col-span-5 md:aspect-495/432 lg:col-span-4 lg:aspect-493/430 ${
@@ -25,7 +25,7 @@ export function GalleryPair({ large, small, flipped }: PairPropsT) {
       >
         <Media
           image={small}
-          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 62vw, (max-width: 1919px) 33vw, 634px"
+          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 62vw, (max-width: 2399px) 33vw, 792px"
         />
       </div>
     </div>

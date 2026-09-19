@@ -11,7 +11,7 @@ export function GallerySingle({ image, index }: SinglePropsT) {
   if (index === 0) {
     return (
       <div className="relative aspect-312/208 overflow-hidden md:aspect-704/395 lg:aspect-1346/757">
-        <Media image={image} sizes="(max-width: 1919px) 100vw, 1920px" />
+        <Media image={image} sizes="(max-width: 2399px) 100vw, 2400px" />
       </div>
     )
   }
@@ -27,7 +27,7 @@ export function GallerySingle({ image, index }: SinglePropsT) {
       >
         <Media
           image={image}
-          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 62vw, (max-width: 1919px) 67vw, 1286px"
+          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 62vw, (max-width: 2399px) 67vw, 1608px"
         />
       </div>
     </div>

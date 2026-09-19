@@ -31,7 +31,7 @@ export function ProjectSlide({ slide, total }: PropsT) {
         <Media
           image={image}
           video={video}
-          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 87vw, (max-width: 1919px) 67vw, 1240px"
+          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 87vw, 67vw"
         />
       </Link>
       <CarouselControls title={caption} total={total} />
