@@ -1,5 +1,6 @@
 import coreWebVitals from 'eslint-config-next/core-web-vitals'
 import typescript from 'eslint-config-next/typescript'
+import betterTailwindcss from 'eslint-plugin-better-tailwindcss'
 
 const eslintConfig = [
   ...coreWebVitals,
@@ -41,6 +42,21 @@ const eslintConfig = [
         },
       ],
     },
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    plugins: { 'better-tailwindcss': betterTailwindcss },
+    settings: {
+      // The plugin resolves every class against the real compiled theme, so an invented
+      // utility is a lint error rather than a class that silently emits nothing. That is the
+      // whole reason it is here: `mb-` and `text-hero-lg` both shipped and both compiled to
+      // nothing at all.
+      'better-tailwindcss': { entryPoint: 'src/app/(frontend)/styles.css' },
+    },
+    // Correctness only. The stylistic half (class order, line wrapping) is Prettier's job
+    // via `prettier-plugin-tailwindcss`, and enabling both makes them fight over the same
+    // attribute.
+    rules: betterTailwindcss.configs['correctness-error'].rules,
   },
   {
     ignores: ['.next/', 'src/migrations/', 'src/payload-types.ts'],
