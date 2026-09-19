@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn'
 // same way in the settings panel as it does in the bar above it.
 export function segmentClasses(isActive: boolean) {
   return cn(
-    'text-12 inline-flex min-h-7 flex-1 items-center justify-center rounded-md px-2 duration-200',
+    'text-12 inline-flex min-h-7 flex-1 items-center justify-center rounded-full px-2 duration-200',
     isActive ? 'bg-surface text-surface-foreground' : 'text-muted-foreground hover:text-foreground',
   )
 }
@@ -19,7 +19,10 @@ export function SegmentedControl({ children, className, ...groupProps }: Compone
     <div
       role="group"
       {...groupProps}
-      className={cn('bg-muted flex gap-1 rounded-lg p-1', className)}
+      // Tray and segment are both fully round, as on the nav group and the pill inside it:
+      // this is the same tray-holding-a-pill shape, and a softened rectangle beside a round
+      // one is the three-radii problem that pass was closing.
+      className={cn('bg-muted flex gap-1 rounded-full p-1', className)}
     >
       {children}
     </div>
