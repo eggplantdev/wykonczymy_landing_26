@@ -18,7 +18,7 @@ export function ContactFormAttachments({ className }: PropsT) {
 
   return (
     <div className={cn('pt-8', className)}>
-      <p className="text-12 text-grau_100">{t('attachments')}</p>
+      <p className="text-12 text-grau_300">{t('attachments')}</p>
 
       {/* A <label> rather than a <button>: a file input opens only from its own label or
           from a scripted click, so the control that looks like a button has to be the

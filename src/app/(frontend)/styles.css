@@ -78,10 +78,11 @@
   --container-site: 1920px;
 
   /* Five greys, one job each. The nine-step tdg ramp had five shades nothing could read:
-     `grau_500` set the privacy link at 1.58:1 on the canvas, so every grey carrying text a
-     visitor has to read collapsed onto `grau_100`. `grau_200` is the exception that proves
-     the split — it is the faint tier for marks that are not content, like the carousel
-     glass, and so carries no contrast floor. */
+     `grau_500` set the privacy link at 1.58:1 on the canvas, so prose and links collapsed
+     onto `grau_100`. Two faint tiers survive below it because neither is prose — `grau_200`
+     for marks that are not content at all, like the carousel glass, `grau_300` for the
+     label a value sits under, which is found by its position and read through the value.
+     Both are under AA deliberately; nothing a visitor has to read belongs in either. */
   --color-grau_100: #565656;
   --color-grau_200: #848484;
   --color-grau_300: #a3a3a3;

@@ -19,7 +19,7 @@ export function SpecTable({ items, namesOnly, className }: PropsT) {
             namesOnly && 'grid-cols-1',
           )}
         >
-          <span className={cn(!namesOnly && 'text-grau_100 font-medium')}>{item.name}</span>
+          <span className={cn(!namesOnly && 'text-grau_300 font-medium')}>{item.name}</span>
           {!namesOnly && <span>{item.value}</span>}
         </li>
       ))}
