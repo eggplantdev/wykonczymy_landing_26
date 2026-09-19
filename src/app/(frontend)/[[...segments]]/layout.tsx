@@ -42,7 +42,7 @@ export default async function SegmentLayout({
   return (
     <TranslationsProvider locale={locale}>
       <ConsentProvider privacyPolicyHref={typePaths[PRIVACY_POLICY_PAGE_TYPE]}>
-        <SiteHeader paths={paths} typePaths={typePaths} />
+        <SiteHeader paths={paths} typePaths={typePaths} phone={footer.phone} locale={locale} />
         <MobileMenu paths={paths} typePaths={typePaths} phone={footer.phone} />
         <div className="bg-background flex min-h-lvh flex-col">
           <div className="grow">
