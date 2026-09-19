@@ -28,6 +28,8 @@ const eslintConfig = [
     files: ['src/**/*.{ts,tsx}'],
     ignores: [
       'src/lib/env.ts',
+      // Listed although no server-side reader exists yet: the first one re-adds this file,
+      // and having to edit the lint config to do it is how it ends up in `clientSchema`.
       'src/lib/env.server.ts',
       'src/lib/env-schema.ts',
       'src/payload.config.ts',
@@ -38,7 +40,8 @@ const eslintConfig = [
         {
           selector:
             "MemberExpression[object.object.name='process'][object.property.name='env']:not([property.name='NODE_ENV'])",
-          message: 'Read env through src/lib/env.ts or env.server.ts, never raw process.env.',
+          message:
+            'Read env through a module that parses env-schema.ts — env.ts for NEXT_PUBLIC_*, a server-only module for the rest.',
         },
       ],
     },
