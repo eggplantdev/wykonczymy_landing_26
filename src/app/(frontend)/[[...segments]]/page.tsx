@@ -9,11 +9,12 @@ import { ProjectPage } from '@/components/projects/project-page'
 import { ProjectsPage } from '@/components/projects/projects-page'
 import { toHomeData } from '@/lib/content/home'
 import { findChildren } from '@/lib/content/children'
+import { resolveRoute } from '@/lib/content/route'
 import { findInteriorStyles, relatedStyles } from '@/lib/content/interior-styles'
 import { findProjects, relatedProjects } from '@/lib/content/projects'
 import { getTranslations, i18n } from '@/lib/i18n/i18n'
 import { findFooter } from '@/lib/content/footer'
-import { findPage, findPublishedPages, pathsByType, pathsForPage } from '@/lib/content/pages'
+import { findPublishedPages, pathsByType, pathsForPage } from '@/lib/content/pages'
 import {
   CONTACT_PAGE_TYPE,
   HOME_PAGE_TYPE,
@@ -21,7 +22,6 @@ import {
   PROJECTS_PAGE_TYPE,
   PRIVACY_POLICY_PAGE_TYPE,
   pathForPage,
-  resolveSegments,
   segmentsForPage,
 } from '@/lib/routing'
 
@@ -75,16 +75,10 @@ export async function generateMetadata({
 }: {
   params: Promise<ParamsT>
 }): Promise<Metadata> {
-  const { locale, slug, childSlug, isMiss } = resolveSegments((await params).segments)
-  const page = isMiss ? null : await findPage(locale, slug)
-  const child =
-    page && childSlug
-      ? (await findChildren(page.pageType, locale)).find((item) => item.slug === childSlug)
-      : undefined
+  const { locale, childSlug, page, child, isMiss } = await resolveRoute((await params).segments)
 
-  // The route notFound()s an unresolvable child, so the metadata has to agree — otherwise
-  // the 404 ships a real title and a canonical pointing at itself.
-  if (!page || (childSlug && !child)) return { title: getTranslations(locale).common.notFoundTitle }
+  // Otherwise the 404 ships a real title and a canonical pointing at itself.
+  if (isMiss || !page) return { title: getTranslations(locale).common.notFoundTitle }
 
   // Twelve indexed addresses with translated slugs: without an explicit canonical the
   // trailing-slash and www variants each look like a separate document, and without
@@ -104,21 +98,17 @@ export async function generateMetadata({
 }
 
 export default async function CatchAllPage({ params }: { params: Promise<ParamsT> }) {
-  const { locale, slug, childSlug, isMiss } = resolveSegments((await params).segments)
-  if (isMiss) notFound()
-
-  // `/en/` is a redirect to `/en/home/`; only the default locale has a root page.
-  if (slug === null && locale !== i18n.defaultLocale) notFound()
-
-  const page = await findPage(locale, slug)
-  if (!page) notFound()
+  // The layout has already run this and 404ed on a miss — which is where the response status
+  // is still settable. This call is free (the finders behind it are request-cached) and is
+  // what gives the render a non-null page.
+  const { locale, childSlug, page, isMiss } = await resolveRoute((await params).segments)
+  if (isMiss || !page) notFound()
 
   const basePath = pathForPage(page, locale)
 
   if (page.pageType === INTERIOR_STYLES_PAGE_TYPE) {
     const styles = await findInteriorStyles(locale)
     const style = childSlug ? styles.find((item) => item.slug === childSlug) : undefined
-    if (childSlug && !style) notFound()
 
     return style ? (
       <StylePage
@@ -135,7 +125,6 @@ export default async function CatchAllPage({ params }: { params: Promise<ParamsT
   if (page.pageType === PROJECTS_PAGE_TYPE) {
     const projects = await findProjects(locale)
     const project = childSlug ? projects.find((item) => item.slug === childSlug) : undefined
-    if (childSlug && !project) notFound()
 
     return project ? (
       <ProjectPage
@@ -148,9 +137,6 @@ export default async function CatchAllPage({ params }: { params: Promise<ParamsT
       <ProjectsPage locale={locale} title={page.title} basePath={basePath} data={{ projects }} />
     )
   }
-
-  // Only the two listing types own a second segment; anywhere else it is not an address.
-  if (childSlug) notFound()
 
   if (page.pageType === HOME_PAGE_TYPE) {
     // The rating badges are stored on the footer global; `findFooter` is request-cached, so

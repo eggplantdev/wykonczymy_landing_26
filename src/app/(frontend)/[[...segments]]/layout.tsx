@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
 
 import { ConsentProvider } from '@/components/cookies/consent-provider'
@@ -7,7 +8,8 @@ import { SiteHeader } from '@/components/layout/site-header'
 import { SiteFooter } from '@/components/footer/site-footer'
 import { findFooter } from '@/lib/content/footer'
 import { TranslationsProvider } from '@/lib/i18n/translations-provider'
-import { findPage, pathsByType, pathsForPage } from '@/lib/content/pages'
+import { pathsByType, pathsForPage } from '@/lib/content/pages'
+import { resolveRoute } from '@/lib/content/route'
 import { PRIVACY_POLICY_PAGE_TYPE, resolveSegments } from '@/lib/routing'
 
 type ParamsT = { segments?: string[] }
@@ -30,14 +32,21 @@ export default async function SegmentLayout({
   children: ReactNode
   params: Promise<ParamsT>
 }) {
-  const { locale, slug } = resolveSegments((await params).segments)
-  const [page, typePaths, footer] = await Promise.all([
-    findPage(locale, slug),
+  const { segments } = await params
+  const { locale } = resolveSegments(segments)
+
+  // Above the Suspense boundary `loading.tsx` puts around the page, which is the only place
+  // left where a miss can still set the response status — see resolveRoute. The chrome's own
+  // two reads do not depend on it, so they still go out together with it rather than behind.
+  const [route, typePaths, footer] = await Promise.all([
+    resolveRoute(segments),
     pathsByType(locale),
     findFooter(locale),
   ])
+  if (route.isMiss || !route.page) notFound()
+
   // The only dependent lookup — it needs the page's id.
-  const paths = page ? await pathsForPage(page.id) : {}
+  const paths = await pathsForPage(route.page.id)
 
   return (
     <TranslationsProvider locale={locale}>
