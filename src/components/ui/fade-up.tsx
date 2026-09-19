@@ -25,9 +25,12 @@ export function FadeUp({ className, children }: PropsT) {
       initial={{ opacity: 0, y: ENTRANCE_OFFSET_Y }}
       whileInView={{ opacity: 1, y: 0 }}
       // `once`: an entrance that replays every time the visitor scrolls back up reads as a glitch
-      // rather than an effect. `amount` and `margin` are left at their defaults on purpose — any
-      // raised threshold is unreachable on a section taller than the viewport, and section length
-      // is the editor's.
+      // rather than an effect.
+      //
+      // `amount` has a ceiling worth knowing: the intersection ratio caps at `viewport / element`,
+      // so 0.3 is unreachable on a section past ~3.3 viewports (~2400px at 720) and it would sit at
+      // `opacity: 0` for good. Section length is the editor's, so a section that grows that far is
+      // where to look first. Every section on the site today is under 600px.
       viewport={{ once: true, amount: 0.3 }}
       transition={
         shouldReduceMotion ? { duration: 0 } : { duration: ENTRANCE_DURATION, ease: ENTRANCE_EASE }
