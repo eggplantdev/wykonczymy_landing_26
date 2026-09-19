@@ -4,9 +4,11 @@
 lead-generation site for a Warsaw renovation contractor, from WordPress to Payload + Next on Vercel.
 Canonical, cross-tool agent onboarding file.
 
-> **The scaffold is in and production is live**; there are no page components yet. See **Where
-> things stand** at the bottom. Conventions (structure, testing, commands) get written here once
-> there is real application code to describe, not invented in advance.
+> **The scaffold is in, production is live, and the site is built** — home, projects (listing +
+> detail), interior styles (listing + detail), contact and the legal pages all render from the CMS,
+> behind a footer contact form that validates but has no sink yet. See **Where things stand** at the
+> bottom; the per-slice statuses in `@context/foundation/roadmap.md` lag the code and want an
+> owner's pass.
 
 ## STOP if you can't run what this file references
 
@@ -73,6 +75,12 @@ anything bilingual.
   **in that repo**, which is a separate product this project does not own.
 
 ## Conventions
+
+- **Dev-only surfaces live under `src/app/(frontend)/(lab)/`** — the group's `layout.tsx` carries
+  the `NODE_ENV === 'production'` 404 and the `robots` noindex for everything beneath it. A route
+  group does not appear in the URL, so `/hero-lab/`, `/footer-lab/` and `/page-board/` are
+  unchanged. Placement is the guard: put a new lab page anywhere else and it ships to production,
+  which is how `page-board` came to be publicly reachable while its two siblings were not.
 
 - **`src/components/ui/icons/` holds marks we draw** — hand-authored SVG components. A Font Awesome
   glyph is used **inline at the point of use**, never wrapped into a named file there. A wrapper in
@@ -142,8 +150,13 @@ site.
   Production/Preview, so `POSTGRES_URL` still cannot be read back — compare hosts in Neon's console
   instead. `blob:upload` passes no token so the SDK can resolve either `BLOB_READ_WRITE_TOKEN` or the
   `VERCEL_OIDC_TOKEN` + `BLOB_STORE_ID` pair, whichever `.env.local` happens to hold.
-- **Read env through `src/lib/env.ts` / `env.server.ts`, never raw `process.env`** — ESLint rejects
-  it in `src/**`. `payload.config.ts` is the one exception, and parses `serverSchema` itself.
+- **Read env through a module that parses `env-schema.ts`, never raw `process.env`** — ESLint
+  rejects it in `src/**`. `env.ts` is the **client** module and parses `clientSchema`, so it is
+  the wrong home for a secret: putting one there inlines it into the browser bundle. A
+  server-side reader belongs in `env.server.ts`, which the ESLint ignore list already names
+  although the file does not exist yet — that entry is what stops the next person re-adding it
+  from having to edit the lint config, and reaching for `clientSchema` instead.
+  `payload.config.ts` is the one exception, and parses `serverSchema` itself.
 
 ## Claude Code workflow
 
