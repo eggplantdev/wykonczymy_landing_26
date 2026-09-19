@@ -1,7 +1,7 @@
 import { BrandLogo } from '@/components/brand/brand-logo'
 import type { Page } from '@/payload-types'
 import { CONTACT_FORM_ANCHOR } from '@/lib/anchors'
-import { SectionTitle } from '@/components/layout/section-title'
+import { SectionTitle } from '@/components/ui/section-title'
 import type { MediaImageT } from '@/components/media/types'
 import { FadeUp } from '@/components/ui/fade-up'
 import { getTranslations, type Locale } from '@/lib/i18n/i18n'

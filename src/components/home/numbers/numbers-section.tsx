@@ -1,4 +1,4 @@
-import { SectionTitle } from '@/components/layout/section-title'
+import { SectionTitle } from '@/components/ui/section-title'
 import { NumberCard, type NumberCardT } from './number-card'
 
 export type NumbersSectionT = {

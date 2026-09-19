@@ -1,6 +1,6 @@
 import type { MediaImageT } from '@/components/media/types'
 import { FadeUp } from '@/components/ui/fade-up'
-import { SectionTitle } from '@/components/layout/section-title'
+import { SectionTitle } from '@/components/ui/section-title'
 import { cn } from '@/lib/cn'
 import { ENTRANCE_STAGGER } from '@/lib/motion'
 import { PhotoButton } from '@/components/lightbox/photo-button'

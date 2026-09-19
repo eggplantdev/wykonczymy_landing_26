@@ -2,7 +2,7 @@ import type { MediaImageT } from '@/components/media/types'
 import { FadeUp } from '@/components/ui/fade-up'
 import { GalleryPair } from './gallery-pair'
 import { GallerySingle } from './gallery-single'
-import { SectionTitle } from '@/components/layout/section-title'
+import { SectionTitle } from '@/components/ui/section-title'
 
 type PropsT = {
   container: string

@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 
 import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
-import { SectionTitle } from '@/components/layout/section-title'
+import { SectionTitle } from '@/components/ui/section-title'
 import { CarouselNav } from '@/components/ui/carousel-nav'
 import { RatingBadge, type RatingT } from '@/components/ui/rating-badge'
 import { cn } from '@/lib/cn'

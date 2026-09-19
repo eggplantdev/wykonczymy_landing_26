@@ -1,5 +1,5 @@
 import { FadeUp } from '@/components/ui/fade-up'
-import { SpecTable } from '@/components/ui/spec-table'
+import { SpecTable } from './spec-table'
 import { SpecGroupHeading } from './spec-group-heading'
 import { ScopeList } from './scope-list'
 import type { ScopeItemT, SpecItemT } from '@/lib/content/spec-item'

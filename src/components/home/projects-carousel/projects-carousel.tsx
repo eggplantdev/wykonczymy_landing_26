@@ -5,7 +5,7 @@ import 'swiper/css'
 
 import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
 import { useTranslation } from '@/lib/i18n/use-translation'
-import { SectionTitle } from '@/components/layout/section-title'
+import { SectionTitle } from '@/components/ui/section-title'
 import { ButtonLink } from '@/components/ui/button-link'
 import { cn } from '@/lib/cn'
 import { ProjectSlide, type ProjectSlideT } from './project-slide'
