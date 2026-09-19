@@ -77,8 +77,9 @@
   --breakpoint-xl: 1440px;
   --breakpoint-xxl: 1920px;
 
-  /* The page stops growing at the widest breakpoint: past 1920 the layout would only
-     stretch the gutters, and the fixed header has to be capped alongside it. */
+  /* The page stops growing at the widest breakpoint: past 1920 the layout would only stretch
+     the gutters. What the cap holds is the reading column — the header, the footer bar and the
+     peeking carousel tracks all reach past it on purpose. */
   --container-site: 1920px;
 
   --leading-normal: 120%;

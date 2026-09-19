@@ -11,15 +11,18 @@ type PropsT = {
 }
 
 // The bar spans the page but only its controls take pointer events, so the empty space
-// either side of the nav does not swallow clicks on the page beneath. It is
-// fixed, so the viewport — not `body` — is its containing block: it has to be capped and
-// centred itself or it would sit flush to the screen edges above 1920.
+// either side of the nav does not swallow clicks on the page beneath.
+//
+// It is fixed, so the viewport — not `body` — is its containing block, and it deliberately
+// does not take the `max-w-site` cap: the logo belongs at the edge of the screen, like the
+// footer bar and the carousel tracks. The nav does not move for it — the cap is centred, so
+// the column's axis and the viewport's are the same point.
 export function SiteHeader({ paths, typePaths }: PropsT) {
   return (
     // The outer columns are equal fractions, so the nav lands on the page's own axis
     // whatever the logo happens to measure — a flex row would only centre it in the space
     // left over, and it would drift as the labels change length in EN.
-    <header className="paddings max-w-site pointer-events-none fixed inset-x-0 top-0 z-50 mx-auto grid grid-cols-[1fr_auto_1fr] items-center gap-4 py-4 md:py-6">
+    <header className="paddings pointer-events-none fixed inset-x-0 top-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center gap-4 py-4 md:py-6">
       <div className="pointer-events-auto justify-self-start">
         <SiteLogo homeHref={typePaths[HOME_PAGE_TYPE] ?? '/'} />
       </div>
