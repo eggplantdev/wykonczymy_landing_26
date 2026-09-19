@@ -285,7 +285,7 @@ export const projectSeeds: LocalizedT<ProjectCopyT>[] = [
       slug: 'holzera-4',
       summary:
         'Wnętrze zbudowane światłem: zamiast lamp sufitowych linie LED we wnękach, kinkiety i podświetlone lustro.',
-      area: 'do uzupełnienia',
+      area: '120 m2',
       duration: 'do uzupełnienia',
       address: 'Wilanów, Warszawa',
       description:
@@ -310,7 +310,7 @@ export const projectSeeds: LocalizedT<ProjectCopyT>[] = [
       slug: 'holzera-4',
       summary:
         'An interior built out of light: LED lines in ceiling recesses, wall sconces and a backlit mirror instead of ceiling fittings.',
-      area: 'to be confirmed',
+      area: '120 m2',
       duration: 'to be confirmed',
       address: 'Wilanów, Warsaw',
       description:

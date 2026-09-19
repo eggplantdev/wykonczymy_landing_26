@@ -25,19 +25,19 @@ export const homeShared = {
   interiorStylesCtaLink: 'interior-styles',
   introPosition: 'left',
   afterServicesPosition: 'right',
-  numberValues: ['16', '70', '120', '250'],
+  numberValues: ['8+', '30+', '250+', '400+'],
 } as const
 
 export const homeCopy: LocalizedT<HomeCopyT> = {
   pl: {
     hero: {
-      title: 'Twój dom\nnasze wykończenie',
+      title: 'Twój dom,\nnasze wykończenie',
       ctaLabel: 'Umów się na bezpłatną wycenę',
     },
     intro:
-      'Wykończymy to zespół profesjonalistów od ponad 8 lat gwarantujący najwyższą jakość i satysfakcję. Specjalizujemy się w kompleksowych remontach domów, mieszkań, biur, klatek schodowych oraz lokali usługowych. Dbamy o swoich Klientów na każdym etapie realizacji, a nasi doświadczeni specjaliści zawsze służą pomocą i doradztwem, niezależnie od skali zlecenia czy budżetu.',
+      'Wykończymy to zespół profesjonalistów od ponad 8 lat gwarantujący najwyższą jakość i satysfakcję. Dbamy o swoich Klientów na każdym etapie realizacji, a nasi specjaliści służą pomocą niezależnie od skali zlecenia czy budżetu.',
     afterServices:
-      'Specjalizujemy się w kompleksowych remontach domów, mieszkań, biur, klatek schodowych oraz lokali usługowych.',
+      'Specjalizujemy się w kompleksowych remontach i wykończeniach domów, mieszkań, biur oraz lokali usługowych.',
     services: {
       sectionTitle: 'Czym się zajmujemy',
       cards: [
@@ -96,12 +96,12 @@ export const homeCopy: LocalizedT<HomeCopyT> = {
       ctaLabel: 'Zobacz wszystkie realizacje',
     },
     numbers: {
-      sectionTitle: 'Od ilu zaczynają się nasze ceny',
+      sectionTitle: 'O nas',
       cards: [
-        { unit: 'zł / m²', description: 'Malowanie wnętrz' },
-        { unit: 'zł / m²', description: 'Wylewka samopoziomująca' },
-        { unit: 'zł / m²', description: 'Układanie płytek' },
-        { unit: 'zł / m²', description: 'Mikrocement' },
+        { unit: '', description: 'lat doświadczenia w branży' },
+        { unit: '', description: 'doświadczonych specjalistów' },
+        { unit: '', description: 'zadowolonych klientów' },
+        { unit: '', description: 'zrealizowanych zleceń' },
       ],
     },
     testimonials: {
@@ -169,7 +169,7 @@ export const homeCopy: LocalizedT<HomeCopyT> = {
   },
   en: {
     hero: {
-      title: 'Your home\nour finishing touch',
+      title: 'Your home,\nour finishing touch',
       ctaLabel: 'Schedule a free estimate',
     },
     intro:
@@ -234,12 +234,12 @@ export const homeCopy: LocalizedT<HomeCopyT> = {
       ctaLabel: 'See all projects',
     },
     numbers: {
-      sectionTitle: 'Where our prices start',
+      sectionTitle: 'About us',
       cards: [
-        { unit: 'PLN / m²', description: 'Interior painting' },
-        { unit: 'PLN / m²', description: 'Self-levelling compound' },
-        { unit: 'PLN / m²', description: 'Tile installation' },
-        { unit: 'PLN / m²', description: 'Microcement' },
+        { unit: '', description: 'years in the trade' },
+        { unit: '', description: 'experienced specialists' },
+        { unit: '', description: 'happy clients' },
+        { unit: '', description: 'completed jobs' },
       ],
     },
     testimonials: {

@@ -28,13 +28,13 @@ export const footerRatings = [
 
 export const footerCopy: LocalizedT<FooterCopyT> = {
   pl: {
-    title: 'Twoja wiadomość do nas',
+    title: 'Twoja wiadomość',
     intro:
       'Napisz, co jest do zrobienia i jak duże jest wnętrze. Odeślemy wycenę z rozbiciem na pozycje, a jeśli zakres na to zasługuje — umówimy się na oględziny.',
     role: 'Wykończymy',
   },
   en: {
-    title: 'Your message to us',
+    title: 'Your message',
     intro:
       'Tell us what needs doing and roughly how big the space is. You will get an itemised estimate back, and if the job is worth a look in person we will arrange a site visit.',
     role: 'Wykończymy',
