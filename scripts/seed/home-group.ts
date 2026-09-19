@@ -8,21 +8,33 @@ import { toLexical } from './lexical'
  * to a services card. Both passes therefore carry the ids already in the database, the Polish
  * one included; otherwise re-seeding rebuilds the rows from scratch on every run.
  */
-export type RowIdsT = {
+export type CarriedT = {
   services: (string | undefined)[]
   numbers: (string | undefined)[]
   testimonials: (string | undefined)[]
+  // The hero photo is attached by `pnpm seed:photos`, which this pass knows nothing about.
+  // Writing the group without it would blank the field on every copy re-seed.
+  heroImage: number | null
+  heroVideo: number | null
 }
 
-export const rowIdsOf = (doc: Page | undefined): RowIdsT => ({
+/** Depth varies between the two passes: the second reads back a document Payload populated. */
+const idOf = (value: number | { id: number } | null | undefined): number | null =>
+  typeof value === 'object' && value !== null ? value.id : (value ?? null)
+
+export const carriedFrom = (doc: Page | undefined): CarriedT => ({
   services: (doc?.home?.services?.cards ?? []).map((card) => card.id ?? undefined),
   numbers: (doc?.home?.numbers?.cards ?? []).map((card) => card.id ?? undefined),
   testimonials: (doc?.home?.testimonials?.quotes ?? []).map((row) => row.id ?? undefined),
+  heroImage: idOf(doc?.home?.hero?.image),
+  heroVideo: idOf(doc?.home?.hero?.video),
 })
 
-export const homeGroup = (copy: HomeCopyT, rowIds: RowIdsT) => ({
+export const homeGroup = (copy: HomeCopyT, carried: CarriedT) => ({
   hero: {
     title: copy.hero.title,
+    image: carried.heroImage,
+    video: carried.heroVideo,
     ctaLabel: copy.hero.ctaLabel,
     ctaLink: homeShared.heroCtaLink,
   },
@@ -33,7 +45,7 @@ export const homeGroup = (copy: HomeCopyT, rowIds: RowIdsT) => ({
   },
   services: {
     sectionTitle: copy.services.sectionTitle,
-    cards: copy.services.cards.map((card, index) => ({ id: rowIds.services[index], ...card })),
+    cards: copy.services.cards.map((card, index) => ({ id: carried.services[index], ...card })),
   },
   projects: {
     sectionTitle: copy.projects.sectionTitle,
@@ -43,7 +55,7 @@ export const homeGroup = (copy: HomeCopyT, rowIds: RowIdsT) => ({
   numbers: {
     sectionTitle: copy.numbers.sectionTitle,
     cards: copy.numbers.cards.map((card, index) => ({
-      id: rowIds.numbers[index],
+      id: carried.numbers[index],
       value: homeShared.numberValues[index],
       ...card,
     })),
@@ -52,7 +64,7 @@ export const homeGroup = (copy: HomeCopyT, rowIds: RowIdsT) => ({
     sectionTitle: copy.testimonials.sectionTitle,
     quotes: copy.testimonials.quotes.map((row, index) => ({
       ...row,
-      id: rowIds.testimonials[index],
+      id: carried.testimonials[index],
       quote: toLexical(row.quote),
     })),
   },

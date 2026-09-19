@@ -16,7 +16,7 @@ import { legalBodySeeds } from './data/legal'
 import { footerContact, footerCopy, footerRatings } from './data/footer'
 import { interiorStyleSeeds } from './data/interior-styles'
 import { homeCopy } from './data/home'
-import { homeGroup, rowIdsOf } from './home-group'
+import { carriedFrom, homeGroup } from './home-group'
 import { pageSeeds } from './data/pages'
 import { projectSeeds } from './data/projects'
 
@@ -112,7 +112,8 @@ function groupFor(
   existing: Page | undefined,
   editorConfig: SanitizedServerEditorConfig,
 ): Record<string, unknown> {
-  if (pageType === HOME_PAGE_TYPE) return { home: homeGroup(homeCopy[locale], rowIdsOf(existing)) }
+  if (pageType === HOME_PAGE_TYPE)
+    return { home: homeGroup(homeCopy[locale], carriedFrom(existing)) }
   if (pageType === CONTACT_PAGE_TYPE) return { contact: contactCopy[locale] }
   if (pageType === PRIVACY_POLICY_PAGE_TYPE) {
     return {
