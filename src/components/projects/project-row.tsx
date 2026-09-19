@@ -22,8 +22,11 @@ export function ProjectRow({ href, title, summary, image, details }: PropsT) {
       href={href}
       className="gridContainer paddings group bg-transparent py-8 delay-100 duration-1000 hover:bg-grau_900 lg:py-12"
     >
-      <div className="relative col-span-full mb-6 aspect-3/2 overflow-hidden md:order-2 md:col-span-4 md:col-start-5 md:mb-0 lg:col-span-6 lg:col-start-7">
-        <Media image={image} sizes="(max-width: 767px) 100vw, 50vw" />
+      <div className="relative col-span-full mb-6 aspect-3/2 overflow-hidden md:order-2 md:col-span-4 md:col-start-5 md:mb-0 lg:col-span-4 lg:col-start-9">
+        <Media
+          image={image}
+          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, (max-width: 1919px) 33vw, 600px"
+        />
       </div>
 
       <div className="col-span-full flex flex-col md:col-span-4 lg:col-span-5">

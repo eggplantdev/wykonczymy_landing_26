@@ -24,7 +24,7 @@ export function StyleCard({ style, href, index }: PropsT) {
       <StyleCardBody
         style={style}
         imageClassName="h-50 md:h-51.5 lg:aspect-287/190 lg:h-auto"
-        sizes="(max-width: 767px) 100vw, (max-width: 1023px) 45vw, (max-width: 1279px) 30vw, 25vw"
+        sizes="(max-width: 767px) 100vw, (max-width: 1023px) 45vw, (max-width: 1279px) 30vw, (max-width: 1919px) 25vw, 480px"
       />
     </Link>
   )

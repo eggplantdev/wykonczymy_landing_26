@@ -11,7 +11,7 @@ export function GallerySingle({ image, index }: SinglePropsT) {
   if (index === 0) {
     return (
       <div className="relative aspect-312/208 overflow-hidden md:aspect-704/395 lg:aspect-1346/757">
-        <Media image={image} sizes="100vw" />
+        <Media image={image} sizes="(max-width: 1919px) 100vw, 1920px" />
       </div>
     )
   }
@@ -25,7 +25,10 @@ export function GallerySingle({ image, index }: SinglePropsT) {
           alignRight ? 'md:col-start-4 lg:col-start-5' : 'col-start-1'
         }`}
       >
-        <Media image={image} sizes="(max-width: 767px) 100vw, (max-width: 1023px) 62vw, 67vw" />
+        <Media
+          image={image}
+          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 62vw, (max-width: 1919px) 67vw, 1286px"
+        />
       </div>
     </div>
   )
