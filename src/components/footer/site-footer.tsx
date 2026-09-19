@@ -61,11 +61,12 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
       {/* The form stays on the page's own canvas and only this block claims the dark role
           tokens — the same re-pointing the theme toggle does, scoped to a subtree. The
           colour change is what separates it from the form above, so it carries no hairline.
-          The negative margins cancel the footer's padding so the black reaches the edges of
-          the viewport, then put that padding back on itself. */}
+          `full-bleed` rather than margins that just cancel `paddings`: those reach the edge of the
+          column `body` caps at `max-w-site`, so past 1920 the black stopped short and sat in white
+          gutters. `paddings` then puts the inset back on the bar itself. */}
       <div
         data-theme="dark"
-        className="bg-background text-foreground col-span-full -mx-6 mt-6 px-6 py-4 md:-mx-8 md:px-8 xl:-mx-12 xl:px-12"
+        className="bg-background text-foreground full-bleed paddings col-span-full mt-6 py-4"
       >
         {/* Three equal tracks, not `justify-between`: the latter equalises the gaps, so the
             middle item lands on the page's centre only when the two outer ones happen to be
