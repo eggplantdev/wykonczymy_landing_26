@@ -1,7 +1,6 @@
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { FadeUp } from '@/components/ui/fade-up'
 import type { RatingT } from '@/components/ui/rating-badge'
-import { cn } from '@/lib/cn'
 import { Hero, type HeroT } from './hero'
 import {
   InteriorStylesCarousel,
@@ -41,27 +40,25 @@ export function HomePage({ data, ratings }: PropsT) {
 
   return (
     <>
-      {/* Outside the wrapper on purpose: the wrapper opens the column with a gap the hero must
-          not take, and it is the one section that starts flush under the fixed header. */}
+      {/* Outside the wrapper on purpose: it is the one section that starts flush under the
+          fixed header. */}
       {hero && <Hero data={hero} />}
-      {/* The rhythm is one gap on the column, not a top padding per section: a section that
-          carries its own spacing only knows what comes before it in the one order it was
-          written for, and each of these renders conditionally. */}
-      <PageWrapper
-        hasColumn={false}
-        className={cn(
-          'flex flex-col gap-20 md:gap-36',
-          // The hero left the column, so the one gap it used to take from it is restated here
-          // — same scale, so nothing about the spacing moves.
-          hero && 'pt-20 md:pt-36',
-        )}
-      >
+      {/* Each section owns the space above it, rather than the column owning one gap between
+          all of them: an even rhythm is not what the page wants — a carousel and a paragraph
+          need different air — and a single `gap` can only be changed for every section at once.
+          `pt` and not `py` so the spacing between two sections is stated in one place, on the
+          lower one, and the section that happens to render first sets the distance from the
+          hero without knowing it is first. */}
+      <PageWrapper hasColumn={false} className="flex flex-col">
         {/* Each section rises into view on its own, so the wrapper is per section rather than
             one around the column — a single wrapper would reveal the whole page at once the
             moment its top edge cleared the fold. */}
         {intro && (
           <FadeUp>
-            <TextSection container="site-container gridContainer paddings" data={intro} />
+            <TextSection
+              container="site-container gridContainer paddings pt-20 md:pt-28"
+              data={intro}
+            />
           </FadeUp>
         )}
         {/* `pr-0` on the two tracks that peek, so the slide at the end is cut off by the edge of
@@ -69,28 +66,31 @@ export function HomePage({ data, ratings }: PropsT) {
             bug. The projects and testimonials tracks are bounded on purpose and keep theirs. */}
         {services && (
           <FadeUp>
-            <ServicesCarousel container="paddings pr-0" data={services} />
+            <ServicesCarousel container="paddings pr-0 pt-20 md:pt-40" data={services} />
           </FadeUp>
         )}
         {afterServices && (
           <FadeUp>
-            <TextSection container="site-container gridContainer paddings" data={afterServices} />
+            <TextSection
+              container="site-container gridContainer paddings pt-20 md:pt-28"
+              data={afterServices}
+            />
           </FadeUp>
         )}
         {numbers && (
           <FadeUp>
-            <NumbersSection container="site-container paddings" data={numbers} />
+            <NumbersSection container="site-container paddings pt-20 md:pt-28" data={numbers} />
           </FadeUp>
         )}
         {projects && (
           <FadeUp>
-            <ProjectsCarousel container="paddings" data={projects} />
+            <ProjectsCarousel container="paddings pt-20 md:pt-28" data={projects} />
           </FadeUp>
         )}
         {testimonials && (
           <FadeUp>
             <TestimonialsCarousel
-              container="site-container paddings"
+              container="site-container paddings pt-20 md:pt-28"
               data={testimonials}
               ratings={ratings}
             />
@@ -98,7 +98,10 @@ export function HomePage({ data, ratings }: PropsT) {
         )}
         {interiorStyles && (
           <FadeUp>
-            <InteriorStylesCarousel container="paddings pr-0" data={interiorStyles} />
+            <InteriorStylesCarousel
+              container="paddings pr-0 pt-20 md:pt-28"
+              data={interiorStyles}
+            />
           </FadeUp>
         )}
       </PageWrapper>
