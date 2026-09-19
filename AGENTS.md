@@ -91,24 +91,52 @@ Layer table, rationale, and the two tdg migration frictions (Tailwind 3→4 clas
 up on Vercel. It is the seed for a reusable starter, so keep it free of anything specific to this
 site.
 
-- Local Postgres runs in Docker on **port 5436** — 5433/5434/5435 are taken by other projects on this
-  machine. Wired in `@docker-compose.yml` / `@.env.example`.
+- **`POSTGRES_URL` points at production, in every environment including your laptop.** There is one
+  database and one blob store; the site is not published yet, so there was no production content to
+  protect and keeping a second copy in sync cost more than it returned. `pnpm dev`, `pnpm seed` and
+  `pnpm payload migrate` all write to the live database — there is no undo but the dump.
+- **Take a dump before anything destructive.** `pnpm db:dump` pulls production down to
+  `dumps/`; `db:migrate:prod`, `db:restore:prod` and `seed:prod` each run it first.
+- **The Docker Postgres on port 5436 must keep running even though nothing reads it.** It stopped
+  being the dev database, but every `db:*` script still shells into it for `psql` and `pg_dump`:
+  Neon is on **18.6** and the Homebrew client on this machine is 17.10, which refuses the version
+  gap outright. The container ships 18.6, so it is the only working client here — stop it and
+  `db:dump` and `db:restore:prod` both break, taking the backup path with them. `brew install
+  postgresql@18` is what would actually free it. 5433/5434/5435 are taken by other projects; wired
+  in `@docker-compose.yml` / `@.env.example`.
+- **Schema still only moves by migration.** `push: false` in `payload.config.ts` keeps the adapter
+  from reshaping the database under `pnpm dev`, which is the only reason pointing dev at production
+  is survivable.
 - Deployed to Vercel on the **same account as the leads app** — deliberate, removes cross-org access
   problems. Use the `vercel:*` skills to talk to Vercel rather than guessing its API.
 - `create-payload-app` **needs a TTY and cannot be run by an agent.** The owner runs it; the exact
   command is in `tech-stack.md`.
-- **`build` never migrates the database.** `POSTGRES_URL` on Vercel points at production for every
-  deployment, previews included. Schema is applied by hand with `pnpm db:migrate:prod` — **a human
-  runs it, never an agent** — and it goes up _before_ the code that needs it.
+- **`build` never migrates the database.** Schema is applied by hand with `pnpm db:migrate:prod` —
+  **a human runs it, never an agent** — and it goes up _before_ the code that needs it. Plain
+  `pnpm payload migrate` reaches the same database without taking a dump first; prefer the `:prod`
+  script for the backup.
 - **Content is seeded, not typed into the admin twice.** `pnpm seed` upserts every page, project,
   interior style and the footer global in both locales from `scripts/seed/data/`; it is idempotent
-  and never touches uploads, so photos attached in the admin survive it. `pnpm seed:prod` points the
-  same script at production — **a human runs it, never an agent.** It writes rows and nothing else:
-  the revalidation hooks need a request context the CLI has no way to provide, so **production keeps
-  serving the previous copy until the next deploy** — redeploy after seeding prod.
+  and never touches uploads, so photos attached in the admin survive it. **It now overwrites live
+  copy** — an editor's wording loses to `scripts/seed/data/` on every run, so fold admin edits back
+  into the seed data before running it. **A human runs it, never an agent.** It writes rows and
+  nothing else: the revalidation hooks need a request context the CLI has no way to provide, so
+  **production keeps serving the previous copy until the next deploy** — redeploy after seeding.
 - **Photos are seeded separately, by `pnpm seed:photos`.** It uploads
   `public/images/styles/` into Media and wires each shot into the interior style it belongs to.
   Kept out of `pnpm seed` because it *does* overwrite what an editor arranged by hand.
+- **`pnpm blob:upload` copies `media/` into the blob store** under each file's exact name, because
+  the adapter resolves a row by building `<store>/<filename>` from the `filename` column. It was
+  written for the one-way clone of the local database into production and is the way a restored
+  database gets its images back — not part of seeding.
+- **`vercel env pull` reads the Development target only**, and both stores were connected to
+  Production and Preview alone — which is why a pull returned every value empty and looked like the
+  variables were unreadable. The fix is on the store, not the project: Storage → the store →
+  **Projects** → `⋯` → **Update Project Connection** → tick **Development**. The same dialog carries
+  the `Sensitive` toggle and the environment-variable prefix. Neon is deliberately left on
+  Production/Preview, so `POSTGRES_URL` still cannot be read back — compare hosts in Neon's console
+  instead. `blob:upload` passes no token so the SDK can resolve either `BLOB_READ_WRITE_TOKEN` or the
+  `VERCEL_OIDC_TOKEN` + `BLOB_STORE_ID` pair, whichever `.env.local` happens to hold.
 - **Read env through `src/lib/env.ts` / `env.server.ts`, never raw `process.env`** — ESLint rejects
   it in `src/**`. `payload.config.ts` is the one exception, and parses `serverSchema` itself.
 

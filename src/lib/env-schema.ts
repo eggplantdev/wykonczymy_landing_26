@@ -16,8 +16,10 @@ export const serverSchema = z
   .object({
     POSTGRES_URL: z.string().min(1),
     PAYLOAD_SECRET: z.string().min(32),
-    // Required on Vercel, absent locally: without it the blob adapter stays off and Payload
-    // stores uploads on disk, so dev never writes into the production blob store.
+    // Optional only so the schema parses in a checkout that has no credentials yet; the
+    // superRefine below makes it mandatory on Vercel. Left empty, the blob adapter stays off
+    // and Payload writes uploads to disk, where the deployed site cannot read them — dev and
+    // production share the one store.
     BLOB_READ_WRITE_TOKEN: optional(z.string().min(1)),
     VERCEL: optional(z.string().min(1)),
 
