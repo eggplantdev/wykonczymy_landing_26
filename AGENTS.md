@@ -115,13 +115,24 @@ site.
   `PROD_POSTGRES_URL` themselves. If it happens again the cure is
   `select pg_terminate_backend(<pid>)` from the direct host against the backend whose
   `application_name` is `psql`.
-- **The Docker Postgres on port 5436 must keep running even though nothing reads it.** It stopped
-  being the dev database, but every `db:*` script still shells into it for `psql` and `pg_dump`:
+- **The Docker Postgres on port 5436 is the test database, and the only `psql` client here.** It
+  stopped being the dev database, but `pnpm test` runs against it and every `db:*` script still
+  shells into it for `psql` and `pg_dump`:
   Neon is on **18.6** and the Homebrew client on this machine is 17.10, which refuses the version
   gap outright. The container ships 18.6, so it is the only working client here — stop it and
   `db:dump` and `db:restore:prod` both break, taking the backup path with them. `brew install
   postgresql@18` is what would actually free it. 5433/5434/5435 are taken by other projects; wired
   in `@docker-compose.yml` / `@.env.example`.
+- **The test suites refuse to run against production.** `POSTGRES_URL` names production, and the
+  suites create and delete rows — a full-CRUD admin, a published project — so they overwrite it
+  from `TEST_POSTGRES_URL` before anything opens a pool and abort if that resolves to the
+  production host, `-pooler` stripped. `pnpm test:db:refresh` reloads the container from a
+  production dump. Point `TEST_POSTGRES_URL` at a Neon branch and nothing else changes; the
+  container is only what this machine already had. (EX-815)
+- **`test:e2e` runs its own dev server on 3100, with its own dist directory.** Next locks one dev
+  server per dist dir, so `NEXT_DIST_DIR=.next-e2e` is what lets the suite run while your own
+  `pnpm dev` is up — and the separate port is what stops Playwright reusing that server, which
+  reads production. The specs address it through `baseURL`, never a hardcoded host.
 - **Schema still only moves by migration.** `push: false` in `payload.config.ts` keeps the adapter
   from reshaping the database under `pnpm dev`, which is the only reason pointing dev at production
   is survivable.
@@ -194,3 +205,13 @@ today" blocks cutover, none block building) and `@context/foundation/references.
 Content for populating early versions: `@context/foundation/live-site-snapshot/scraped-content.md`
 — scraped 2026-03-04, so **spot-check against the live site before trusting it for cutover**;
 prices in particular may have moved.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
