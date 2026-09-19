@@ -1,10 +1,13 @@
 'use client'
 
+import { faLightbulb } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useId, useState } from 'react'
 
 import { buttonClasses, buttonLabelClasses } from '@/components/ui/button'
 import { Paperclip } from '@/components/ui/icons/paperclip'
 import { cn } from '@/lib/cn'
+import '@/lib/fontawesome'
 import { useTranslation } from '@/lib/i18n/use-translation'
 
 type PropsT = {
@@ -18,7 +21,18 @@ export function ContactFormAttachments({ className }: PropsT) {
 
   return (
     <div className={cn('pt-8', className)}>
-      <p className="text-12 text-subtle-foreground">{t('attachments')}</p>
+      {/* `items-start` and not `items-center`: the hint runs to two or three lines on a phone,
+          and a centred mark would drift to the middle of the block instead of sitting on the
+          line the sentence starts on. */}
+      <p className="text-12 flex items-start gap-2 text-black">
+        {/* `1lh` is one line box of the text beside it, so a mark centred inside this span
+            lands on that first line's optical middle exactly. A hand-tuned `mt-*` only holds
+            for the one font size and line height it was eyeballed against. */}
+        <span aria-hidden className="flex h-[1lh] shrink-0 items-center">
+          <FontAwesomeIcon icon={faLightbulb} className="size-3.5" />
+        </span>
+        {t('attachments')}
+      </p>
 
       {/* A <label> rather than a <button>: a file input opens only from its own label or
           from a scripted click, so the control that looks like a button has to be the
