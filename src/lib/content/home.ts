@@ -81,8 +81,7 @@ export function toHomeData(
             id: card.id ?? String(index),
             title: card.title,
             text: card.text ?? '',
-            image: toImage(card.image),
-            video: toVideo(card.video),
+            icon: card.icon,
           })),
         }
       : undefined,

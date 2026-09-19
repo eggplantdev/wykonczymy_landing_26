@@ -33,12 +33,14 @@ export function ServicesCarousel({ container, data }: PropsT) {
 
       <Swiper
         {...carouselDefaults}
-        spaceBetween={16}
-        slidesPerView={1.29}
+        // A slide is only as wide as its paragraph wants to be: nothing here sets a width of
+        // its own, so the counts are tuned to the copy rather than to an image.
+        spaceBetween={32}
+        slidesPerView={1.35}
         breakpoints={{
-          768: { spaceBetween: 20, slidesPerView: 1.67 },
-          1024: { spaceBetween: 22, slidesPerView: 2.2 },
-          1280: { spaceBetween: 24, slidesPerView: 2.5 },
+          768: { spaceBetween: 40, slidesPerView: 2.4 },
+          1024: { spaceBetween: 48, slidesPerView: 3.3 },
+          1280: { spaceBetween: 56, slidesPerView: 4.2 },
         }}
         onSwiper={carousel.onSwiper}
         onSlideChange={(instance) => setCurrent(instance.realIndex + 1)}
@@ -57,7 +59,7 @@ export function ServicesCarousel({ container, data }: PropsT) {
             <CarouselNav
               current={current}
               total={cards.length}
-              className="pt-8 pr-6 md:pt-10 md:pr-8 xl:pr-12"
+              className="pt-4 pr-6 md:pr-8 xl:pr-12"
             />
           </div>
         )}

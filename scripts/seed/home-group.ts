@@ -1,12 +1,12 @@
+import { SEEDED_SERVICE_ICONS } from '@/lib/service-icons'
 import type { Page } from '@/payload-types'
 import { homeShared, type HomeCopyT } from './data/home'
 import { toLexical } from './lexical'
 
 /**
- * Payload matches array rows by id: a row written without one is a new row, so the old row
- * is deleted along with every field the seed does not supply — the photos an editor attached
- * to a services card. Both passes therefore carry the ids already in the database, the Polish
- * one included; otherwise re-seeding rebuilds the rows from scratch on every run.
+ * Payload matches array rows by id: a row written without one is a new row, so the old row is
+ * deleted and rebuilt on every run. Both passes therefore carry the ids already in the database,
+ * the Polish one included.
  */
 export type CarriedT = {
   services: (string | undefined)[]
@@ -45,7 +45,11 @@ export const homeGroup = (copy: HomeCopyT, carried: CarriedT) => ({
   },
   services: {
     sectionTitle: copy.services.sectionTitle,
-    cards: copy.services.cards.map((card, index) => ({ id: carried.services[index], ...card })),
+    cards: copy.services.cards.map((card, index) => ({
+      id: carried.services[index],
+      icon: SEEDED_SERVICE_ICONS[index],
+      ...card,
+    })),
   },
   projects: {
     sectionTitle: copy.projects.sectionTitle,

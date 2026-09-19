@@ -14,6 +14,8 @@ import * as migration_20260918_143125_drop_project_price from './20260918_143125
 import * as migration_20260918_161801_after_services_text from './20260918_161801_after_services_text'
 import * as migration_20260918_163821_numbers_value_text from './20260918_163821_numbers_value_text'
 import * as migration_20260918_190000_project_cover_from_gallery from './20260918_190000_project_cover_from_gallery'
+import * as migration_20260919_092650_services_card_drop_media from './20260919_092650_services_card_drop_media'
+import * as migration_20260919_093410_services_card_icon from './20260919_093410_services_card_icon'
 
 export const migrations = [
   {
@@ -95,5 +97,15 @@ export const migrations = [
     up: migration_20260918_190000_project_cover_from_gallery.up,
     down: migration_20260918_190000_project_cover_from_gallery.down,
     name: '20260918_190000_project_cover_from_gallery',
+  },
+  {
+    up: migration_20260919_092650_services_card_drop_media.up,
+    down: migration_20260919_092650_services_card_drop_media.down,
+    name: '20260919_092650_services_card_drop_media',
+  },
+  {
+    up: migration_20260919_093410_services_card_icon.up,
+    down: migration_20260919_093410_services_card_icon.down,
+    name: '20260919_093410_services_card_icon',
   },
 ]

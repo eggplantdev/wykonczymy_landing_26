@@ -1,6 +1,7 @@
 import type { Field } from 'payload'
 
 import { HOME_PAGE_TYPE, pageTypes } from '@/lib/routing'
+import { SERVICE_ICONS } from '@/lib/service-icons'
 
 // Copy links to a *page*, not to a string: PL and EN slugs differ, so an href written
 // into a field is right in at most one locale. There is one page per type, so the type
@@ -76,7 +77,15 @@ export const homeGroup: Field = {
           fields: [
             { name: 'title', type: 'text', localized: true, required: true },
             { name: 'text', type: 'textarea', localized: true },
-            ...mediaFields(),
+            // The card draws an icon rather than a photo. Not localized: one drawing stands
+            // for the service in both languages.
+            {
+              name: 'icon',
+              type: 'select',
+              required: true,
+              options: [...SERVICE_ICONS],
+              admin: { description: 'The drawing above the title.' },
+            },
           ],
         },
       ],

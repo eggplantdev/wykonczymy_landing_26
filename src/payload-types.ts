@@ -221,11 +221,22 @@ export interface Page {
         | {
             title: string
             text?: string | null
-            image?: (number | null) | Media
             /**
-             * Plays over the image when set.
+             * The drawing above the title.
              */
-            video?: (number | null) | Media
+            icon:
+              | 'hammer'
+              | 'arrow-up-right-dots'
+              | 'paint-roller'
+              | 'screwdriver-wrench'
+              | 'lightbulb'
+              | 'faucet-drip'
+              | 'fan'
+              | 'ruler-combined'
+              | 'door-open'
+              | 'house-chimney'
+              | 'brush'
+              | 'compass-drafting'
             id?: string | null
           }[]
         | null
@@ -611,8 +622,7 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     title?: T
                     text?: T
-                    image?: T
-                    video?: T
+                    icon?: T
                     id?: T
                   }
             }
