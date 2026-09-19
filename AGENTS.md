@@ -72,6 +72,15 @@ anything bilingual.
   is a fact about the existing contract, not a preference — delivering the requirement needs work
   **in that repo**, which is a separate product this project does not own.
 
+## Conventions
+
+- **`src/components/ui/icons/` holds marks we draw** — hand-authored SVG components. A Font Awesome
+  glyph is used **inline at the point of use**, never wrapped into a named file there. A wrapper in
+  that directory reads as "the one place this mark lives" and stops being true the moment a second
+  consumer imports the glyph directly; that is exactly how `icons/phone.tsx` came to carry a comment
+  claiming the site had one phone mark while `phone-cta.tsx` imported `faPhoneVolume` itself.
+  Pattern to copy: `@src/components/ui/phone-cta.tsx`.
+
 ## Stack, deploy, local DB
 
 Layer table, rationale, and the two tdg migration frictions (Tailwind 3→4 class migration;
