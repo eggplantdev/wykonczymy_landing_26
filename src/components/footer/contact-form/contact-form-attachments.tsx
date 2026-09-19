@@ -20,7 +20,7 @@ export function ContactFormAttachments({ className }: PropsT) {
   const [fileNames, setFileNames] = useState<string[]>([])
 
   return (
-    <div className={cn('pt-8', className)}>
+    <div className={cn('pt-5 md:pt-8', className)}>
       {/* `items-start` and not `items-center`: the hint runs to two or three lines on a phone,
           and a centred mark would drift to the middle of the block instead of sitting on the
           line the sentence starts on. */}

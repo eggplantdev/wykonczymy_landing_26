@@ -165,7 +165,7 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
               onChange={field.handleChange}
               onBlur={field.handleBlur}
               error={errorFor(field.state.meta.errors)}
-              className="mt-8 mb-8"
+              className="my-5 md:my-8"
             />
           )}
         </form.Field>
