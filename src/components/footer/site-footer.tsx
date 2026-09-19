@@ -60,24 +60,8 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
         </FadeUp>
       </div>
 
-      {/* The form stays on the page's own canvas and only this block claims the dark role
-          tokens — the same re-pointing the theme toggle does, scoped to a subtree. The colour
-          change is what separates it from the form above, so it carries no hairline. It takes
-          `paddings` without the column, so the black runs the width of the screen while its
-          contents sit as far in from the edge as the header's logo.
-
-          From `md` up only: on a phone the bar sits on the page's own canvas, so the roles have
-          to stay the page's too — re-pointing them there painted the light theme's text on the
-          light theme's background and the whole bar vanished. */}
       <div className="md:theme-dark md:bg-background text-foreground paddings py-4">
-        {/* Three equal tracks, not `justify-between`: the latter equalises the gaps, so the
-            middle item lands on the page's centre only when the two outer ones happen to be
-            the same width. They are not — a pill against a credit line — and it sat off centre
-            by half their difference. */}
         <div className="flex w-full flex-col items-center gap-y-2 md:grid md:grid-cols-3 md:justify-items-start md:gap-x-5">
-          {/* No pill height down here: the bar is a credit line and the number reads as part
-              of it, so the link is as tall as the type it is set in. `xl`'s h-12 made it a
-              48px band on a phone, which looked like a button with its fill missing. */}
           <PhoneCta
             phone={data.phone}
             callLabel={nav.callUs}
