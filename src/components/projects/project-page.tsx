@@ -21,11 +21,11 @@ export function ProjectPage({ locale, project, basePath, related }: PropsT) {
   const { title, description, area, duration, address, scope, gallery } = project
 
   return (
-    <PageWrapper>
+    <PageWrapper hasColumn={false}>
       <ProjectHero project={project} />
 
       <ProjectDescription
-        container="gridContainer paddings pt-12 md:pt-30 xl:pt-24"
+        container="site-container gridContainer paddings pt-12 md:pt-30 xl:pt-24"
         description={description}
         detailsTitle={projects.details}
         scopeTitle={projects.scopeOfWork}
@@ -39,13 +39,13 @@ export function ProjectPage({ locale, project, basePath, related }: PropsT) {
       />
 
       <ProjectGallery
-        container="paddings pt-20 md:pt-24 xl:pt-40"
+        container="site-container paddings pt-20 md:pt-24 xl:pt-40"
         title={common.gallery}
         images={gallery}
       />
 
       <ObjectCarousel
-        container="pt-20 md:pt-24 xl:pt-40"
+        container="site-container pt-20 md:pt-24 xl:pt-40"
         sectionTitle={projects.otherProjects}
         items={related.map((item) => ({
           key: item.slug,
