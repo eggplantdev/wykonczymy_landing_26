@@ -2,8 +2,8 @@
 
 import { useRef, useState } from 'react'
 
-import { LanguageSwitcher } from '@/components/layout/language-switcher'
 import { MenuToggle } from '@/components/layout/menu-toggle'
+import { SettingsMenu } from '@/components/layout/settings-menu'
 import { SiteNav } from '@/components/layout/site-nav'
 import { PhoneCta } from '@/components/ui/phone-cta'
 import { Sheet } from '@/components/ui/sheet'
@@ -52,11 +52,11 @@ export function MobileMenu({ paths, typePaths, phone }: PropsT) {
         label={t('menu')}
         closeLabel={t('closeMenu')}
         id={MENU_ID}
-        className="items-center justify-center gap-4 bg-white p-6"
+        className="items-center justify-center gap-4 bg-card p-6"
       >
         <SiteNav paths={typePaths} variant="mobile-menu" onNavigate={() => setIsOpen(false)} />
 
-        <LanguageSwitcher paths={paths} variant="mobile-menu" onNavigate={() => setIsOpen(false)} />
+        <SettingsMenu paths={paths} variant="mobile-menu" onNavigate={() => setIsOpen(false)} />
 
         <PhoneCta phone={phone} callLabel={t('callUs')} onClick={() => setIsOpen(false)} />
       </Sheet>

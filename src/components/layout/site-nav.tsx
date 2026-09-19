@@ -2,10 +2,12 @@
 
 import { motion, useReducedMotion } from 'motion/react'
 import { usePathname } from 'next/navigation'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 
 import { NavGroup } from '@/components/layout/nav-group'
 import { NavItemPill } from '@/components/layout/nav-item-pill'
+import { NavSeparator } from '@/components/layout/nav-separator'
+import { useNavPill } from '@/components/layout/use-nav-pill'
 import type { Page } from '@/payload-types'
 import { useTranslation } from '@/lib/i18n/use-translation'
 import { HOME_PAGE_TYPE } from '@/lib/routing'
@@ -24,27 +26,24 @@ const labelKeys = {
 
 const PILL_SPRING = { type: 'spring', stiffness: 400, damping: 30 } as const
 
-type PillT = { x: number; y: number; width: number; height: number }
-
-// The bar lives in `[[...segments]]/layout.tsx`, and Next keys a layout by its dynamic
-// segment — so the whole nav remounts on every navigation and no component state can
-// carry the pill's last position across. Module scope can: it lives exactly as long as
-// the client session, so a fresh page load correctly has nothing to slide from.
-let lastPill: PillT | null = null
-
 type PropsT = {
   paths: Partial<Record<Page['pageType'], string>>
   variant?: 'header' | 'mobile-menu'
   onNavigate?: () => void
+  // Rendered as the last item of the bar rather than beside it, so the settings gear reads
+  // as part of the nav group instead of a second card floating next to it. The mobile menu
+  // stacks its own controls as siblings, so it passes nothing and keeps the gear outside.
+  trailing?: ReactNode
 }
 
 // The header gathers the links into a pill; in the mobile menu they stack full width,
 // where that pill's chrome would only draw a box around the whole overlay.
-export function SiteNav({ paths, variant = 'header', onNavigate }: PropsT) {
+export function SiteNav({ paths, variant = 'header', onNavigate, trailing }: PropsT) {
   const { t } = useTranslation('nav')
   const pathname = usePathname()
   const shouldReduceMotion = useReducedMotion()
   const isMobileMenu = variant === 'mobile-menu'
+  const { pill, enterFrom, attach } = useNavPill({ enabled: !isMobileMenu })
 
   // A project or an interior style has no nav entry of its own — it lives under its
   // section's address, so the bar marks the section it came from rather than going blank.
@@ -63,65 +62,13 @@ export function SiteNav({ paths, variant = 'header', onNavigate }: PropsT) {
     return href ? [{ pageType, href }] : []
   })
 
-  const listRef = useRef<HTMLUListElement | null>(null)
-  const [pill, setPill] = useState<PillT | null>(null)
-
-  // The pill is measured rather than animated by `layoutId`: a layout animation snapshots
-  // the outgoing item in page coordinates, and the router resets the scroll to the top
-  // between that snapshot and the incoming measurement, so the pill flew in from however
-  // far down the page you had been. `offsetLeft`/`offsetTop` cannot see the scroll at all.
-  const measure = useCallback(() => {
-    const active = listRef.current?.querySelector<HTMLElement>('[aria-current="page"]')
-    const next = active
-      ? {
-          x: active.offsetLeft,
-          y: active.offsetTop,
-          width: active.offsetWidth,
-          height: active.offsetHeight,
-        }
-      : null
-
-    lastPill = next
-    setPill(next)
-  }, [])
-
-  // Captured at mount, before the ref callback below overwrites it — this is where the
-  // pill was sitting in the copy of the bar that the navigation just destroyed.
-  const [enterFrom] = useState(lastPill)
-
-  // A callback ref rather than an effect, per TestimonialSlide: it runs before paint with
-  // the items already mounted, and the observer that re-measures after a breakpoint or a
-  // font swap lives and dies with the node.
-  const attach = useCallback(
-    (node: HTMLUListElement | null) => {
-      listRef.current = node
-      if (!node || isMobileMenu) return
-
-      measure()
-      const observer = new ResizeObserver(measure)
-      observer.observe(node)
-
-      return () => {
-        observer.disconnect()
-        listRef.current = null
-      }
-    },
-    [isMobileMenu, measure],
-  )
-
-  // The bar survives navigation, so nothing remounts when the active item changes — only
-  // `aria-current` moves, and this is what notices.
-  useEffect(() => {
-    if (!isMobileMenu) measure()
-  }, [isMobileMenu, measure, pathname])
-
   return (
     <nav>
       <NavGroup
         ref={attach}
-        // The links sit one flex container deeper than the language switcher and the
-        // phone CTA, so the panel's rhythm only stays even while this gap matches the
-        // one the Sheet spaces its own children by.
+        // The links sit one flex container deeper than the settings gear and the phone CTA,
+        // so the panel's rhythm only stays even while this gap matches the one the Sheet
+        // spaces its own children by.
         className={
           isMobileMenu ? 'w-full flex-col gap-4 border-transparent bg-transparent p-0' : ''
         }
@@ -131,7 +78,7 @@ export function SiteNav({ paths, variant = 'header', onNavigate }: PropsT) {
           // positioning keeps it out of the flex row it would otherwise join.
           <motion.li
             aria-hidden
-            className="bg-shwarz absolute top-0 left-0 rounded-md"
+            className="bg-surface absolute top-0 left-0 rounded-md"
             // On a fresh load there is nowhere to come from, so the pill simply appears
             // under the current item; after a navigation it slides from where the previous
             // copy of the bar left it.
@@ -153,6 +100,13 @@ export function SiteNav({ paths, variant = 'header', onNavigate }: PropsT) {
             {t(labelKeys[pageType])}
           </NavItemPill>
         ))}
+
+        {!isMobileMenu && trailing && (
+          <>
+            <NavSeparator />
+            <li className="flex">{trailing}</li>
+          </>
+        )}
       </NavGroup>
     </nav>
   )

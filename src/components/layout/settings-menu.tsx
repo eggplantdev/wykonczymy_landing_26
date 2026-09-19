@@ -4,8 +4,8 @@ import * as Popover from '@radix-ui/react-popover'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useState } from 'react'
 
-import { LanguageMenu } from '@/components/layout/language-menu'
-import { LanguageTrigger } from '@/components/layout/language-trigger'
+import { SettingsPanel } from '@/components/layout/settings-panel'
+import { SettingsTrigger } from '@/components/layout/settings-trigger'
 import type { Locale } from '@/lib/i18n/i18n'
 import { useTranslation } from '@/lib/i18n/use-translation'
 
@@ -15,37 +15,34 @@ type PropsT = {
   onNavigate?: () => void
 }
 
-// Both locales are listed rather than a single toggle to the other one: the trigger has
-// to say which language you are currently reading, which a bare "EN" cannot.
-export function LanguageSwitcher({ paths, variant = 'header', onNavigate }: PropsT) {
-  const { t, locale } = useTranslation('common')
+export function SettingsMenu({ paths, variant = 'header', onNavigate }: PropsT) {
+  const { t } = useTranslation('common')
   const shouldReduceMotion = useReducedMotion()
   const [isOpen, setIsOpen] = useState(false)
   const isMobileMenu = variant === 'mobile-menu'
 
-  const labelFor = (candidate: Locale) => t(candidate === 'en' ? 'languageEn' : 'languagePl')
-
   return (
     <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
       <Popover.Trigger asChild>
-        <LanguageTrigger
-          locale={locale}
-          label={labelFor(locale)}
-          isOpen={isOpen}
-          isMobileMenu={isMobileMenu}
-        />
+        <SettingsTrigger label={t('settings')} isOpen={isOpen} isMobileMenu={isMobileMenu} />
       </Popover.Trigger>
 
       <AnimatePresence>
         {isOpen && (
           <Popover.Content
             forceMount
-            align="start"
-            sideOffset={0}
-            // Links, so tabbing off the last one should carry on into the page instead of
-            // cycling back to the first.
+            // The panel is wider than the gear, so it cannot hang off the trigger's own edge:
+            // in the bar it is pinned to the right so it opens inward, and in the sheet it is
+            // centred on the column everything else in there is centred on.
+            align={isMobileMenu ? 'center' : 'end'}
+            // Measured from the gear, which in the bar sits inside the group's padding — so
+            // the gap the panel actually shows below the bar is this minus that padding.
+            sideOffset={12}
+            // Focus stays on the gear, so the next Tab walks into the panel and the one after
+            // that leaves it. Radix would otherwise move focus onto the panel itself, which
+            // lands a keyboard user past the language control they most likely opened it for.
             onOpenAutoFocus={(event) => event.preventDefault()}
-            className="w-[var(--radix-popover-trigger-width)] overflow-hidden"
+            className="overflow-hidden"
           >
             <motion.div
               initial={{ height: 0, opacity: 0 }}
@@ -53,15 +50,12 @@ export function LanguageSwitcher({ paths, variant = 'header', onNavigate }: Prop
               exit={{ height: 0, opacity: 0 }}
               transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.2, ease: 'easeOut' }}
             >
-              <LanguageMenu
+              <SettingsPanel
                 paths={paths}
-                locale={locale}
-                labelFor={labelFor}
-                onSelect={() => {
+                onNavigate={() => {
                   setIsOpen(false)
                   onNavigate?.()
                 }}
-                isMobileMenu={isMobileMenu}
               />
             </motion.div>
           </Popover.Content>

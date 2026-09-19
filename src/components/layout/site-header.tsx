@@ -1,4 +1,4 @@
-import { LanguageSwitcher } from '@/components/layout/language-switcher'
+import { SettingsMenu } from '@/components/layout/settings-menu'
 import { SiteLogo } from '@/components/layout/site-logo'
 import { SiteNav } from '@/components/layout/site-nav'
 import type { Locale } from '@/lib/i18n/i18n'
@@ -24,9 +24,8 @@ export function SiteHeader({ paths, typePaths }: PropsT) {
         <SiteLogo homeHref={typePaths[HOME_PAGE_TYPE] ?? '/'} />
       </div>
 
-      <div className="pointer-events-auto hidden items-center gap-1 md:flex">
-        <SiteNav paths={typePaths} />
-        <LanguageSwitcher paths={paths} />
+      <div className="pointer-events-auto hidden md:block">
+        <SiteNav paths={typePaths} trailing={<SettingsMenu paths={paths} />} />
       </div>
 
       {/* Nothing renders into the third track, but it is load-bearing: it is the fraction
