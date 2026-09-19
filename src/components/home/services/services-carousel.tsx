@@ -27,18 +27,22 @@ export function ServicesCarousel({ container, data }: PropsT) {
 
   return (
     <section className={cn(container, 'col-span-full pr-0', carousel.className)}>
-      <SectionTitle title={sectionTitle} className="smd:w-full w-1/2 pb-6 md:pb-8 lg:pb-10" />
+      <SectionTitle title={sectionTitle} className="pb-6 md:pb-8 lg:pb-10" />
 
       <Swiper
         {...carouselDefaults}
         // A slide is only as wide as its paragraph wants to be: nothing here sets a width of
         // its own, so the counts are tuned to the copy rather than to an image.
         spaceBetween={32}
-        slidesPerView={1.35}
+        slidesPerView={1.5}
+        // Raw min-width px, not Tailwind names — Swiper's default `breakpointsBase` is
+        // `'window'`, so these are matched against `window.innerWidth` (scrollbar included),
+        // not against a media query. They mirror `--breakpoint-smd/md/xlg` so the track steps
+        // where the section's own padding and type do.
         breakpoints={{
-          768: { spaceBetween: 40, slidesPerView: 2.4 },
-          1024: { spaceBetween: 48, slidesPerView: 3.3 },
-          1280: { spaceBetween: 56, slidesPerView: 4.2 },
+          480: { slidesPerView: 2.6 },
+          768: { spaceBetween: 48, slidesPerView: 3.6 },
+          1280: { spaceBetween: 56, slidesPerView: 4.6 },
         }}
         onSwiper={carousel.onSwiper}
       >

@@ -6,7 +6,6 @@ import 'swiper/css'
 import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
 import { useTranslation } from '@/lib/i18n/use-translation'
 import { SectionTitle } from '@/components/layout/section-title'
-import { ButtonArrow } from '@/components/ui/button-arrow'
 import { ButtonLink } from '@/components/ui/button-link'
 import { cn } from '@/lib/cn'
 import { ProjectSlide, type ProjectSlideT } from './project-slide'
@@ -37,11 +36,10 @@ export function ProjectsCarousel({ container, data }: PropsT) {
           <ButtonLink
             label={t('more')}
             href={ctaHref}
-            icon="trailing"
+            variant="solid"
+            size="sm"
             className="ml-auto hidden md:flex"
-          >
-            <ButtonArrow />
-          </ButtonLink>
+          />
         </div>
       </div>
       <Swiper
@@ -70,11 +68,10 @@ export function ProjectsCarousel({ container, data }: PropsT) {
       <ButtonLink
         label={t('more')}
         href={ctaHref}
-        icon="trailing"
-        className="mx-auto mt-8 md:hidden"
-      >
-        <ButtonArrow />
-      </ButtonLink>
+        variant="solid"
+        size="sm"
+        className="mx-auto mt-4 md:hidden"
+      />
     </section>
   )
 }

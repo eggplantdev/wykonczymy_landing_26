@@ -9,8 +9,8 @@ import { useTranslation } from '@/lib/i18n/use-translation'
 import { childPath } from '@/lib/routing'
 import type { InteriorStyleT } from '@/lib/content/interior-styles'
 import { SectionTitle } from '@/components/layout/section-title'
-import { ButtonArrow } from '@/components/ui/button-arrow'
 import { ButtonLink } from '@/components/ui/button-link'
+import { CarouselNav } from '@/components/ui/carousel-nav'
 import { InteriorStyleSlide } from './interior-style-slide'
 
 export type InteriorStylesSectionT = {
@@ -46,10 +46,25 @@ export function InteriorStylesCarousel({ container, data }: PropsT) {
             <InteriorStyleSlide style={style} href={childPath(basePath, style.slug)} />
           </SwiperSlide>
         ))}
+
+        {/* `container-end` renders after the track but still inside Swiper's context, which
+            is where the arrows read the instance from — so the link comes in here too rather
+            than the arrows going out, which is what puts both on one row. Three columns so
+            the link stays centred on the section whatever width the arrows take. No count
+            beside them: the row is `slidesPerView="auto"`, so "3 of 12" would be counting
+            something the visitor cannot see the edges of. */}
+        <div slot="container-end" className="grid grid-cols-3 items-center pt-4">
+          <ButtonLink
+            label={t('more')}
+            href={ctaHref}
+            variant="solid"
+            size="sm"
+            className="col-start-2 justify-self-center"
+          />
+
+          {styles.length > 1 && <CarouselNav className="col-start-3 justify-self-end" />}
+        </div>
       </Swiper>
-      <ButtonLink label={t('more')} href={ctaHref} icon="trailing" className="mx-auto">
-        <ButtonArrow />
-      </ButtonLink>
     </section>
   )
 }

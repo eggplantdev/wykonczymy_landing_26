@@ -20,17 +20,16 @@ export function CarouselControls({ title, total }: PropsT) {
   return (
     <div
       className={cn(
-        'text-14 md:text-16 *:leading-140 flex items-center justify-between transition-opacity duration-300 md:justify-start',
-        swiperSlide?.isActive ? 'opacity-100' : 'opacity-0',
+        'text-14 md:text-16 *:leading-140 flex items-center transition-opacity duration-300',
+        // `invisible` and not `opacity-0` alone: a transparent element still takes focus and
+        // clicks, and `loop: true` duplicates every slide — so the faded copies put two full
+        // sets of unreachable arrows in the tab order.
+        swiperSlide?.isActive ? 'visible opacity-100' : 'invisible opacity-0',
       )}
     >
-      <h6 className="max-md:min-w-0 max-md:flex-1 max-md:pr-6 md:order-2 md:px-14.5">{title}</h6>
-      <CarouselCounter
-        current={swiper.realIndex + 1}
-        total={total}
-        className="max-md:shrink-0 md:order-1"
-      />
-      <div className="order-3 ml-auto hidden gap-x-2.5 md:flex">
+      <h6 className="order-2 min-w-0 flex-1 truncate px-4 md:px-14.5">{title}</h6>
+      <CarouselCounter current={swiper.realIndex + 1} total={total} className="order-1 shrink-0" />
+      <div className="order-3 ml-auto flex gap-x-1.5">
         <CarouselArrow direction="left" disabled={swiper.isBeginning} />
         <CarouselArrow direction="right" disabled={swiper.isEnd} />
       </div>

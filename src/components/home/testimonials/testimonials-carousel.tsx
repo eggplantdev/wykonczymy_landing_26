@@ -89,7 +89,7 @@ export function TestimonialsCarousel({ container, data, ratings }: PropsT) {
                 the arrows reach the instance without riding a slide. */}
             {quotes.length > 1 && (
               <div slot="container-end">
-                <CarouselNav current={current} total={quotes.length} className="pt-8 md:pt-10" />
+                <CarouselNav current={current} total={quotes.length} className="pt-4" />
               </div>
             )}
           </Swiper>
