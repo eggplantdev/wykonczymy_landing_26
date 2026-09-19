@@ -16,7 +16,7 @@ export function ButtonArrow({ variant, disabled }: PropsT) {
       aria-hidden
       className={cn(
         buttonLabelClasses({ variant, disabled }),
-        'flex h-3 group-hover:translate-x-0.5',
+        'flex h-3 ease-out group-hover:translate-x-2',
       )}
     >
       <Arrow />

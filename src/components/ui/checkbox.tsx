@@ -55,10 +55,24 @@ export function Checkbox({
         aria-describedby={describedBy}
         className="peer sr-only"
       />
-      <span className="bg-subtle text-muted-foreground peer-focus-visible:outline-offset-2 peer-disabled:opacity-60 flex size-4.5 shrink-0 items-center justify-center rounded-[1px] peer-focus-visible:outline">
+      {/* The message under it is two lines lower and ten pixels tall, so on its own it reads
+          as a stray note rather than as this checkbox being what stopped the send — the control
+          has to carry the signal itself. The focus ring goes to two pixels because the invalid
+          state already paints a one-pixel outline in the same colour: at one pixel each, focus
+          on an invalid box changed nothing but the offset. */}
+      <span
+        className={cn(
+          'peer-focus-visible:outline-offset-2 peer-focus-visible:outline-2 peer-focus-visible:outline-ring peer-disabled:opacity-60 flex size-4.5 shrink-0 items-center justify-center rounded-md',
+          invalid
+            ? 'bg-error/15 text-error outline-error outline'
+            : 'bg-subtle text-muted-foreground',
+        )}
+      >
         {checked && <Checkmark />}
       </span>
-      <span className={cn('text-muted-foreground', labelClassName)}>{label}</span>
+      <span className={cn(invalid ? 'text-error' : 'text-muted-foreground', labelClassName)}>
+        {label}
+      </span>
     </label>
   )
 }

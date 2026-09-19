@@ -1,12 +1,13 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 
-import { buttonClasses, buttonLabelClasses, type ButtonVariantT } from './button'
+import { buttonClasses, buttonLabelClasses, type ButtonSizeT, type ButtonVariantT } from './button'
 
 type PropsT = {
   href: string
   label?: string
   variant?: ButtonVariantT
+  size?: ButtonSizeT
   // Same two props `Button` takes: `icon` only retunes the padding, so the icon itself is
   // passed as a child and the caller decides which one and at what size.
   icon?: 'leading' | 'trailing'
@@ -14,7 +15,15 @@ type PropsT = {
   className?: string
 }
 
-export function ButtonLink({ href, label, variant = 'light', icon, children, className }: PropsT) {
+export function ButtonLink({
+  href,
+  label,
+  variant = 'light',
+  size,
+  icon,
+  children,
+  className,
+}: PropsT) {
   if (!label) return null
 
   const content = (
@@ -23,7 +32,7 @@ export function ButtonLink({ href, label, variant = 'light', icon, children, cla
       {children}
     </>
   )
-  const classes = buttonClasses({ variant, icon, className })
+  const classes = buttonClasses({ variant, size, icon, className })
 
   // A bare fragment is not a navigation, and `next/link` treats it as one: the first click
   // writes the hash, and every click after it resolves to the route already showing and is

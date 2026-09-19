@@ -28,7 +28,7 @@ export function CarouselNav({ current, total, className }: PropsT) {
         )}
       >
         {hasCounter && <CarouselCounter current={current} total={total} />}
-        <div className="flex gap-x-2.5">
+        <div className="flex gap-x-1.5">
           <CarouselArrow direction="left" />
           <CarouselArrow direction="right" />
         </div>
