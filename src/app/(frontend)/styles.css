@@ -87,36 +87,6 @@
   --color-grau_800: #ebebeb;
   --color-grau_900: #f5f5f5;
 
-  --color-finance_100: #202c42;
-  --color-finance_200: #2e4061;
-  --color-finance_300: #3e5682;
-  --color-finance_400: #597aba;
-  --color-finance_500: #658bd4;
-  --color-finance_600: #84a3dd;
-  --color-finance_700: #a3bae5;
-  --color-finance_800: #c2d1ee;
-  --color-finance_900: #e0e8f6;
-
-  --color-optimum_100: #525e43;
-  --color-optimum_200: #677755;
-  --color-optimum_300: #809469;
-  --color-optimum_400: #96ad7b;
-  --color-optimum_500: #9eb782;
-  --color-optimum_600: #b2c69b;
-  --color-optimum_700: #c5d4b4;
-  --color-optimum_800: #d8e2cd;
-  --color-optimum_900: #ecf1e6;
-
-  --color-living_100: #3f495e;
-  --color-living_200: #5e6f91;
-  --color-living_300: #8191b0;
-  --color-living_400: #aab7d1;
-  --color-living_500: #b7c5e1;
-  --color-living_600: #c5d1e7;
-  --color-living_700: #d4dced;
-  --color-living_800: #e2e8f3;
-  --color-living_900: #f1f3f9;
-
   /* Review stars, sampled from the Fixly badge this mirrors. */
   --color-rating: #ffd739;
 
@@ -258,7 +228,7 @@
    panel and the grid overlay, which are siblings of it, stay legible. */
 @layer utilities {
   [data-debug-outlines] main * {
-    outline: 1px solid var(--color-optimum_400);
+    outline: 1px solid var(--color-error);
   }
 
   [data-debug-layers] main * {
