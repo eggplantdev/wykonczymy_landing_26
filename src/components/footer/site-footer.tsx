@@ -1,9 +1,9 @@
 import { BrandLogo } from '@/components/brand/brand-logo'
 import type { Page } from '@/payload-types'
 import { CONTACT_FORM_ANCHOR } from '@/lib/anchors'
+import { SectionTitle } from '@/components/layout/section-title'
 import type { MediaImageT } from '@/components/media/types'
 import { FadeUp } from '@/components/ui/fade-up'
-import { SectionTitle } from '@/components/layout/section-title'
 import { getTranslations, type Locale } from '@/lib/i18n/i18n'
 import { PRIVACY_POLICY_PAGE_TYPE } from '@/lib/routing'
 import { PhoneCta } from '@/components/ui/phone-cta'
@@ -33,17 +33,17 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
 
   return (
     <footer className="md:grid md:grid-cols-8 md:gap-x-5 lg:grid-cols-12 paddings pt-20 md:pt-36">
-      {/* The grid placement rides on the wrapper, not the paragraph: the wrapper is what the
-          footer's grid lays out once it sits between them. */}
+      {/* Placement rides on the wrapper: once it sits between the grid and its item, the wrapper
+          is the grid item, and classes left on the paragraph would be laid out against nothing. */}
       <FadeUp className="mb-20 md:col-span-6 md:mb-36 lg:col-span-8 lg:col-start-5">
-        <p className="text-18 leading-125 md:text-20 lg:text-32 max-w-4xl lg:leading-normal">
+        <p className="text-18 leading-125 max-w-4xl md:text-20 lg:text-32 lg:leading-normal">
           {intro}
         </p>
       </FadeUp>
 
-      {/* The header is fixed, so the anchored block keeps its own offset from the top. The id and
-          that offset stay on the inner element — an anchor that moves onto an animated wrapper
-          would be scrolled to while the wrapper is still 20px out of place. */}
+      {/* The header is fixed, so the anchored block carries its own offset from the top. Landing on
+          the anchor mid-entrance still resolves ~20px high — the wrapper's transform moves the
+          target with it — so the offset is sized to survive that rather than to be exact. */}
       <FadeUp className="col-span-full">
         <div
           id={CONTACT_FORM_ANCHOR}
