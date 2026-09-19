@@ -7,7 +7,7 @@ import { cn } from '@/lib/cn'
 const ARROW_HEIGHT = {
   sm: 'h-3',
   responsive: 'h-3',
-  xl: 'h-4.5',
+  xl: 'h-4',
 } as const satisfies Record<ButtonSizeT, string>
 
 type PropsT = {

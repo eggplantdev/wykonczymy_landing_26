@@ -39,7 +39,7 @@ export function buttonClasses({
     variant === 'ghost' && 'bg-transparent focus-visible:outline-ring',
     size === 'responsive' && 'h-8 px-4.5 text-12 md:h-9 md:text-14',
     size === 'sm' && 'h-7 px-3 text-12',
-    size === 'xl' && 'text-18 h-12 px-6',
+    size === 'xl' && 'text-16 h-12 px-6',
     icon === 'trailing' && 'pr-3 pl-4',
     icon === 'leading' && 'pl-3 pr-4',
     // Last, and that position is the whole point: ghost has no fill to set in from an edge,
