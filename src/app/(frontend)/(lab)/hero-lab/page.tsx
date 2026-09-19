@@ -10,7 +10,6 @@ import { CentredBottomCta, CentredStack, LeftCentred, LeftFoot, SplitFoot } from
 
 export const metadata: Metadata = {
   description: 'Hero layouts, stacked, on the real photo and copy.',
-  robots: { follow: false, index: false },
   title: 'Hero lab',
 }
 
@@ -19,8 +18,6 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic'
 
 export default async function HeroLabPage() {
-  if (process.env.NODE_ENV === 'production') notFound()
-
   const page = await findPage(i18n.defaultLocale, null)
   const hero = page?.home?.hero
   if (!hero?.title) notFound()

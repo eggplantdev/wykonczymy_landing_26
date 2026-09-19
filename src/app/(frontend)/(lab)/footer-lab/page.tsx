@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 
 import { ConsentProvider } from '@/components/cookies/consent-provider'
 import { SiteFooter } from '@/components/footer/site-footer'
@@ -11,7 +10,6 @@ import { TranslationsProvider } from '@/lib/i18n/translations-provider'
 
 export const metadata: Metadata = {
   description: 'The footer on its own, with no page above it.',
-  robots: { follow: false, index: false },
   title: 'Footer lab',
 }
 
@@ -19,8 +17,6 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic'
 
 export default async function FooterLabPage() {
-  if (process.env.NODE_ENV === 'production') notFound()
-
   const locale = i18n.defaultLocale
   const [footer, typePaths] = await Promise.all([findFooter(locale), pathsByType(locale)])
 

@@ -10,7 +10,6 @@ import { Board } from './board'
 
 export const metadata: Metadata = {
   description: 'Every route the tdg reference site serves, captured at three breakpoints.',
-  robots: { follow: false, index: false },
   title: 'tdg page board',
 }
 
