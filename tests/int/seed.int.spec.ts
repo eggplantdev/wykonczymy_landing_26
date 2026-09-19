@@ -18,23 +18,31 @@ const serviceCardIds = async () => {
   return (docs[0]?.home?.services?.cards ?? []).map((card) => card.id)
 }
 
+// A full seed writes every page, project and interior style in both locales and runs ~40s, so
+// both the hook and the re-run test need far more than vitest's 10s default.
+const SEED_TIMEOUT = 120_000
+
 describe('seed', () => {
   beforeAll(async () => {
     payload = await getPayload({ config: await config })
     await seedAll(payload)
-  })
+  }, SEED_TIMEOUT)
 
   // Payload matches array rows by id, so a row rewritten without one is a *new* row: the old
   // one is deleted along with the photos an editor attached to it. Re-seeding must therefore
   // leave the row ids alone, which is what AGENTS.md promises about uploads surviving.
-  it('keeps the home page array rows across a re-run', async () => {
-    const before = await serviceCardIds()
-    expect(before.length).toBeGreaterThan(0)
+  it(
+    'keeps the home page array rows across a re-run',
+    async () => {
+      const before = await serviceCardIds()
+      expect(before.length).toBeGreaterThan(0)
 
-    await seedAll(payload)
+      await seedAll(payload)
 
-    expect(await serviceCardIds()).toEqual(before)
-  })
+      expect(await serviceCardIds()).toEqual(before)
+    },
+    SEED_TIMEOUT,
+  )
 
   it('writes both locales of a shared array row', async () => {
     const [pl, en] = await Promise.all(
