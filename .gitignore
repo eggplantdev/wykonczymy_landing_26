@@ -34,3 +34,4 @@ public/page-board/
 
 # slice-review-gate ledgers — local audit records, like the page-board captures above
 .review-gate/
+.env*

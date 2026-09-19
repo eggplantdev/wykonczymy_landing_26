@@ -74,12 +74,8 @@
           "name": "users_sessions_parent_id_fk",
           "tableFrom": "users_sessions",
           "tableTo": "users",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -453,12 +449,8 @@
           "name": "pages_home_services_cards_image_id_media_id_fk",
           "tableFrom": "pages_home_services_cards",
           "tableTo": "media",
-          "columnsFrom": [
-            "image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -466,12 +458,8 @@
           "name": "pages_home_services_cards_video_id_media_id_fk",
           "tableFrom": "pages_home_services_cards",
           "tableTo": "media",
-          "columnsFrom": [
-            "video_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["video_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -479,12 +467,8 @@
           "name": "pages_home_services_cards_parent_id_fk",
           "tableFrom": "pages_home_services_cards",
           "tableTo": "pages",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -559,12 +543,8 @@
           "name": "pages_home_services_cards_locales_parent_id_fk",
           "tableFrom": "pages_home_services_cards_locales",
           "tableTo": "pages_home_services_cards",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -641,12 +621,8 @@
           "name": "pages_home_numbers_cards_parent_id_fk",
           "tableFrom": "pages_home_numbers_cards",
           "tableTo": "pages",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -721,12 +697,8 @@
           "name": "pages_home_numbers_cards_locales_parent_id_fk",
           "tableFrom": "pages_home_numbers_cards_locales",
           "tableTo": "pages_home_numbers_cards",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -803,12 +775,8 @@
           "name": "pages_home_testimonials_quotes_parent_id_fk",
           "tableFrom": "pages_home_testimonials_quotes",
           "tableTo": "pages",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -883,12 +851,8 @@
           "name": "pages_home_testimonials_quotes_locales_parent_id_fk",
           "tableFrom": "pages_home_testimonials_quotes_locales",
           "tableTo": "pages_home_testimonials_quotes",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1068,12 +1032,8 @@
           "name": "pages_home_hero_image_id_media_id_fk",
           "tableFrom": "pages",
           "tableTo": "media",
-          "columnsFrom": [
-            "home_hero_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["home_hero_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1081,12 +1041,8 @@
           "name": "pages_home_hero_video_id_media_id_fk",
           "tableFrom": "pages",
           "tableTo": "media",
-          "columnsFrom": [
-            "home_hero_video_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["home_hero_video_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1293,12 +1249,8 @@
           "name": "pages_locales_meta_image_id_media_id_fk",
           "tableFrom": "pages_locales",
           "tableTo": "media",
-          "columnsFrom": [
-            "meta_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["meta_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1306,12 +1258,8 @@
           "name": "pages_locales_parent_id_fk",
           "tableFrom": "pages_locales",
           "tableTo": "pages",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1430,12 +1378,8 @@
           "name": "_pages_v_version_home_services_cards_image_id_media_id_fk",
           "tableFrom": "_pages_v_version_home_services_cards",
           "tableTo": "media",
-          "columnsFrom": [
-            "image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1443,12 +1387,8 @@
           "name": "_pages_v_version_home_services_cards_video_id_media_id_fk",
           "tableFrom": "_pages_v_version_home_services_cards",
           "tableTo": "media",
-          "columnsFrom": [
-            "video_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["video_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1456,12 +1396,8 @@
           "name": "_pages_v_version_home_services_cards_parent_id_fk",
           "tableFrom": "_pages_v_version_home_services_cards",
           "tableTo": "_pages_v",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1536,12 +1472,8 @@
           "name": "_pages_v_version_home_services_cards_locales_parent_id_fk",
           "tableFrom": "_pages_v_version_home_services_cards_locales",
           "tableTo": "_pages_v_version_home_services_cards",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1624,12 +1556,8 @@
           "name": "_pages_v_version_home_numbers_cards_parent_id_fk",
           "tableFrom": "_pages_v_version_home_numbers_cards",
           "tableTo": "_pages_v",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1704,12 +1632,8 @@
           "name": "_pages_v_version_home_numbers_cards_locales_parent_id_fk",
           "tableFrom": "_pages_v_version_home_numbers_cards_locales",
           "tableTo": "_pages_v_version_home_numbers_cards",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1792,12 +1716,8 @@
           "name": "_pages_v_version_home_testimonials_quotes_parent_id_fk",
           "tableFrom": "_pages_v_version_home_testimonials_quotes",
           "tableTo": "_pages_v",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1872,12 +1792,8 @@
           "name": "_pages_v_version_home_testimonials_quotes_locales_parent__fk",
           "tableFrom": "_pages_v_version_home_testimonials_quotes_locales",
           "tableTo": "_pages_v_version_home_testimonials_quotes",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2184,12 +2100,8 @@
           "name": "_pages_v_parent_id_pages_id_fk",
           "tableFrom": "_pages_v",
           "tableTo": "pages",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2197,12 +2109,8 @@
           "name": "_pages_v_version_home_hero_image_id_media_id_fk",
           "tableFrom": "_pages_v",
           "tableTo": "media",
-          "columnsFrom": [
-            "version_home_hero_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["version_home_hero_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2210,12 +2118,8 @@
           "name": "_pages_v_version_home_hero_video_id_media_id_fk",
           "tableFrom": "_pages_v",
           "tableTo": "media",
-          "columnsFrom": [
-            "version_home_hero_video_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["version_home_hero_video_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -2422,12 +2326,8 @@
           "name": "_pages_v_locales_version_meta_image_id_media_id_fk",
           "tableFrom": "_pages_v_locales",
           "tableTo": "media",
-          "columnsFrom": [
-            "version_meta_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["version_meta_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2435,12 +2335,8 @@
           "name": "_pages_v_locales_parent_id_fk",
           "tableFrom": "_pages_v_locales",
           "tableTo": "_pages_v",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2545,12 +2441,8 @@
           "name": "projects_scope_parent_id_fk",
           "tableFrom": "projects_scope",
           "tableTo": "projects",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2655,12 +2547,8 @@
           "name": "projects_materials_parent_id_fk",
           "tableFrom": "projects_materials",
           "tableTo": "projects",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2777,12 +2665,8 @@
           "name": "projects_image_id_media_id_fk",
           "tableFrom": "projects",
           "tableTo": "media",
-          "columnsFrom": [
-            "image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -2947,12 +2831,8 @@
           "name": "projects_locales_meta_image_id_media_id_fk",
           "tableFrom": "projects_locales",
           "tableTo": "media",
-          "columnsFrom": [
-            "meta_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["meta_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2960,12 +2840,8 @@
           "name": "projects_locales_parent_id_fk",
           "tableFrom": "projects_locales",
           "tableTo": "projects",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3078,12 +2954,8 @@
           "name": "projects_rels_parent_fk",
           "tableFrom": "projects_rels",
           "tableTo": "projects",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -3091,12 +2963,8 @@
           "name": "projects_rels_media_fk",
           "tableFrom": "projects_rels",
           "tableTo": "media",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3207,12 +3075,8 @@
           "name": "_projects_v_version_scope_parent_id_fk",
           "tableFrom": "_projects_v_version_scope",
           "tableTo": "_projects_v",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3323,12 +3187,8 @@
           "name": "_projects_v_version_materials_parent_id_fk",
           "tableFrom": "_projects_v_version_materials",
           "tableTo": "_projects_v",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3572,12 +3432,8 @@
           "name": "_projects_v_parent_id_projects_id_fk",
           "tableFrom": "_projects_v",
           "tableTo": "projects",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -3585,12 +3441,8 @@
           "name": "_projects_v_version_image_id_media_id_fk",
           "tableFrom": "_projects_v",
           "tableTo": "media",
-          "columnsFrom": [
-            "version_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["version_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -3755,12 +3607,8 @@
           "name": "_projects_v_locales_version_meta_image_id_media_id_fk",
           "tableFrom": "_projects_v_locales",
           "tableTo": "media",
-          "columnsFrom": [
-            "version_meta_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["version_meta_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -3768,12 +3616,8 @@
           "name": "_projects_v_locales_parent_id_fk",
           "tableFrom": "_projects_v_locales",
           "tableTo": "_projects_v",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3886,12 +3730,8 @@
           "name": "_projects_v_rels_parent_fk",
           "tableFrom": "_projects_v_rels",
           "tableTo": "_projects_v",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -3899,12 +3739,8 @@
           "name": "_projects_v_rels_media_fk",
           "tableFrom": "_projects_v_rels",
           "tableTo": "media",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4003,12 +3839,8 @@
           "name": "interior_styles_body_parent_id_fk",
           "tableFrom": "interior_styles_body",
           "tableTo": "interior_styles",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4146,12 +3978,8 @@
           "name": "interior_styles_image_id_media_id_fk",
           "tableFrom": "interior_styles",
           "tableTo": "media",
-          "columnsFrom": [
-            "image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4159,12 +3987,8 @@
           "name": "interior_styles_content_image_id_media_id_fk",
           "tableFrom": "interior_styles",
           "tableTo": "media",
-          "columnsFrom": [
-            "content_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["content_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -4305,12 +4129,8 @@
           "name": "interior_styles_locales_meta_image_id_media_id_fk",
           "tableFrom": "interior_styles_locales",
           "tableTo": "media",
-          "columnsFrom": [
-            "meta_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["meta_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4318,12 +4138,8 @@
           "name": "interior_styles_locales_parent_id_fk",
           "tableFrom": "interior_styles_locales",
           "tableTo": "interior_styles",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4436,12 +4252,8 @@
           "name": "interior_styles_rels_parent_fk",
           "tableFrom": "interior_styles_rels",
           "tableTo": "interior_styles",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -4449,12 +4261,8 @@
           "name": "interior_styles_rels_media_fk",
           "tableFrom": "interior_styles_rels",
           "tableTo": "media",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4559,12 +4367,8 @@
           "name": "_interior_styles_v_version_body_parent_id_fk",
           "tableFrom": "_interior_styles_v_version_body",
           "tableTo": "_interior_styles_v",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4829,12 +4633,8 @@
           "name": "_interior_styles_v_parent_id_interior_styles_id_fk",
           "tableFrom": "_interior_styles_v",
           "tableTo": "interior_styles",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4842,12 +4642,8 @@
           "name": "_interior_styles_v_version_image_id_media_id_fk",
           "tableFrom": "_interior_styles_v",
           "tableTo": "media",
-          "columnsFrom": [
-            "version_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["version_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4855,12 +4651,8 @@
           "name": "_interior_styles_v_version_content_image_id_media_id_fk",
           "tableFrom": "_interior_styles_v",
           "tableTo": "media",
-          "columnsFrom": [
-            "version_content_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["version_content_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -5001,12 +4793,8 @@
           "name": "_interior_styles_v_locales_version_meta_image_id_media_id_fk",
           "tableFrom": "_interior_styles_v_locales",
           "tableTo": "media",
-          "columnsFrom": [
-            "version_meta_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["version_meta_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -5014,12 +4802,8 @@
           "name": "_interior_styles_v_locales_parent_id_fk",
           "tableFrom": "_interior_styles_v_locales",
           "tableTo": "_interior_styles_v",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5132,12 +4916,8 @@
           "name": "_interior_styles_v_rels_parent_fk",
           "tableFrom": "_interior_styles_v_rels",
           "tableTo": "_interior_styles_v",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -5145,12 +4925,8 @@
           "name": "_interior_styles_v_rels_media_fk",
           "tableFrom": "_interior_styles_v_rels",
           "tableTo": "media",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5479,12 +5255,8 @@
           "name": "payload_locked_documents_rels_parent_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "payload_locked_documents",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -5492,12 +5264,8 @@
           "name": "payload_locked_documents_rels_users_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "users",
-          "columnsFrom": [
-            "users_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["users_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -5505,12 +5273,8 @@
           "name": "payload_locked_documents_rels_media_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "media",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -5518,12 +5282,8 @@
           "name": "payload_locked_documents_rels_pages_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "pages",
-          "columnsFrom": [
-            "pages_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["pages_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -5531,12 +5291,8 @@
           "name": "payload_locked_documents_rels_projects_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "projects",
-          "columnsFrom": [
-            "projects_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["projects_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -5544,12 +5300,8 @@
           "name": "payload_locked_documents_rels_interior_styles_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "interior_styles",
-          "columnsFrom": [
-            "interior_styles_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["interior_styles_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5753,12 +5505,8 @@
           "name": "payload_preferences_rels_parent_fk",
           "tableFrom": "payload_preferences_rels",
           "tableTo": "payload_preferences",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -5766,12 +5514,8 @@
           "name": "payload_preferences_rels_users_fk",
           "tableFrom": "payload_preferences_rels",
           "tableTo": "users",
-          "columnsFrom": [
-            "users_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["users_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5943,12 +5687,8 @@
           "name": "footer_ratings_parent_id_fk",
           "tableFrom": "footer_ratings",
           "tableTo": "footer",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -6028,12 +5768,8 @@
           "name": "footer_avatar_id_media_id_fk",
           "tableFrom": "footer",
           "tableTo": "media",
-          "columnsFrom": [
-            "avatar_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["avatar_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -6114,12 +5850,8 @@
           "name": "footer_locales_parent_id_fk",
           "tableFrom": "footer_locales",
           "tableTo": "footer",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -6135,10 +5867,7 @@
     "public._locales": {
       "name": "_locales",
       "schema": "public",
-      "values": [
-        "pl",
-        "en"
-      ]
+      "values": ["pl", "en"]
     },
     "public.enum_pages_page_type": {
       "name": "enum_pages_page_type",
@@ -6167,10 +5896,7 @@
     "public.enum_pages_home_intro_position": {
       "name": "enum_pages_home_intro_position",
       "schema": "public",
-      "values": [
-        "left",
-        "right"
-      ]
+      "values": ["left", "right"]
     },
     "public.enum_pages_home_projects_cta_link": {
       "name": "enum_pages_home_projects_cta_link",
@@ -6199,10 +5925,7 @@
     "public.enum_pages_status": {
       "name": "enum_pages_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "published"
-      ]
+      "values": ["draft", "published"]
     },
     "public.enum__pages_v_version_page_type": {
       "name": "enum__pages_v_version_page_type",
@@ -6231,10 +5954,7 @@
     "public.enum__pages_v_version_home_intro_position": {
       "name": "enum__pages_v_version_home_intro_position",
       "schema": "public",
-      "values": [
-        "left",
-        "right"
-      ]
+      "values": ["left", "right"]
     },
     "public.enum__pages_v_version_home_projects_cta_link": {
       "name": "enum__pages_v_version_home_projects_cta_link",
@@ -6263,74 +5983,47 @@
     "public.enum__pages_v_version_status": {
       "name": "enum__pages_v_version_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "published"
-      ]
+      "values": ["draft", "published"]
     },
     "public.enum__pages_v_published_locale": {
       "name": "enum__pages_v_published_locale",
       "schema": "public",
-      "values": [
-        "pl",
-        "en"
-      ]
+      "values": ["pl", "en"]
     },
     "public.enum_projects_status": {
       "name": "enum_projects_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "published"
-      ]
+      "values": ["draft", "published"]
     },
     "public.enum__projects_v_version_status": {
       "name": "enum__projects_v_version_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "published"
-      ]
+      "values": ["draft", "published"]
     },
     "public.enum__projects_v_published_locale": {
       "name": "enum__projects_v_published_locale",
       "schema": "public",
-      "values": [
-        "pl",
-        "en"
-      ]
+      "values": ["pl", "en"]
     },
     "public.enum_interior_styles_status": {
       "name": "enum_interior_styles_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "published"
-      ]
+      "values": ["draft", "published"]
     },
     "public.enum__interior_styles_v_version_status": {
       "name": "enum__interior_styles_v_version_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "published"
-      ]
+      "values": ["draft", "published"]
     },
     "public.enum__interior_styles_v_published_locale": {
       "name": "enum__interior_styles_v_published_locale",
       "schema": "public",
-      "values": [
-        "pl",
-        "en"
-      ]
+      "values": ["pl", "en"]
     },
     "public.enum_footer_ratings_platform": {
       "name": "enum_footer_ratings_platform",
       "schema": "public",
-      "values": [
-        "fixly",
-        "google"
-      ]
+      "values": ["fixly", "google"]
     }
   },
   "schemas": {},
