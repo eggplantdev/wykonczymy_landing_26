@@ -92,24 +92,19 @@ export function Hero({ data }: PropsT) {
           breaks, and a width cap would re-break it on the next copy change. */}
       <motion.div
         style={{ y, opacity, visibility }}
-        className="paddings text-on-media relative flex h-full w-full flex-col md:justify-end md:pb-16"
+        className="paddings text-on-media relative flex h-full w-full flex-col justify-end pb-12 md:pb-16"
       >
-        {/* Mobile only: the CTA is pinned to the foot of the frame, so the title claims the
-            space it leaves and centres inside that. From md the stack goes back to sitting
-            together at the bottom, which is why the growth stops there. */}
-        <div className="flex flex-1 flex-col justify-center md:flex-none">
-          <p
-            data-display
-            className="text-40 md:text-72 leading-105 font-bold break-words whitespace-pre-line"
-          >
-            {title}
-          </p>
-        </div>
+        <p
+          data-display
+          className="text-40 md:text-72 leading-105 font-bold break-words whitespace-pre-line"
+        >
+          {title}
+        </p>
         {/* The photo is a dark surface whatever the page's theme is, so the CTA claims the
             dark role tokens the way the footer band does — `solid` then resolves to the same
             white pill here as it does down there, instead of going black on the light theme. */}
         {ctaLabel && ctaHref && (
-          <div data-theme="dark" className="flex pb-12 md:pt-10 md:pb-0">
+          <div data-theme="dark" className="flex pt-6 md:pt-10">
             <ButtonLink href={ctaHref} label={ctaLabel} variant="solid" size="xl" icon="trailing">
               <ButtonArrow variant="solid" size="xl" />
             </ButtonLink>
