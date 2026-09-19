@@ -49,10 +49,10 @@ export function HomePage({ data, ratings }: PropsT) {
           written for, and each of these renders conditionally. */}
       <PageWrapper
         className={cn(
-          'flex flex-col gap-20 md:gap-40',
+          'flex flex-col gap-20 md:gap-36',
           // The hero left the column, so the one gap it used to take from it is restated here
           // — same scale, so nothing about the spacing moves.
-          hero && 'pt-20 md:pt-40',
+          hero && 'pt-20 md:pt-36',
         )}
       >
         {intro && <TextSection container="gridContainer paddings" data={intro} />}

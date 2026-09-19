@@ -86,7 +86,7 @@ export function PhotoLightboxDialog({ images, initialIndex, onClose }: PropsT) {
 
             <div className="text-14 md:text-16 *:leading-140 absolute inset-x-0 bottom-0 z-10 flex items-center justify-between px-6 pb-6 md:px-10">
               <CarouselCounter current={activeIndex + 1} total={images.length} />
-              <div className="flex gap-x-2.5">
+              <div className="flex gap-x-1.5">
                 <CarouselArrow direction="left" disabled={isAlone} />
                 <CarouselArrow direction="right" disabled={isAlone} />
               </div>
