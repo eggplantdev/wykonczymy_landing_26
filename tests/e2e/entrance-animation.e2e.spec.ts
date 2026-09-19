@@ -65,6 +65,9 @@ test('the page body becomes visible without being scrolled to', async ({ page })
 
 for (const viewport of VIEWPORTS) {
   test(`no section stays hidden after scrolling at ${viewport.width}px`, async ({ page }) => {
+    // Three full page sweeps at 300px a step, each waiting on the entrance to settle — this is a
+    // slow test by construction, not a hanging one.
+    test.setTimeout(120_000)
     await page.setViewportSize(viewport)
 
     await page.goto('http://localhost:3000/')

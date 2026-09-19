@@ -12,9 +12,15 @@ export const ENTRANCE_OFFSET_Y = 20
 // is serialised into the DOM hands React a hydration mismatch, and it answers by throwing the
 // server's HTML away and client-rendering the whole page. At `duration: 0` the offset never shows
 // anyway. Shared so the rule is enforced in one place rather than restated at each motion component.
-export function entranceTransition(shouldReduceMotion: boolean | null): Transition {
-  return shouldReduceMotion ? { duration: 0 } : { duration: ENTRANCE_DURATION, ease: ENTRANCE_EASE }
+export function entranceTransition(shouldReduceMotion: boolean | null, delay = 0): Transition {
+  return shouldReduceMotion
+    ? { duration: 0 }
+    : { duration: ENTRANCE_DURATION, ease: ENTRANCE_EASE, delay }
 }
+
+// One step of a staggered entrance. Short on purpose: a row of four lands inside a quarter second,
+// so it reads as one movement crossing the row rather than as items queuing up.
+export const ENTRANCE_STAGGER = 0.08
 
 // The hero's two scroll-linked movements, both spent over its exit: the photo pushes toward the
 // viewer while the copy runs ahead of the scroll and leaves through the top of the frame. Negative

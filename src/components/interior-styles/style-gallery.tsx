@@ -2,6 +2,7 @@ import type { MediaImageT } from '@/components/media/types'
 import { FadeUp } from '@/components/ui/fade-up'
 import { SectionTitle } from '@/components/layout/section-title'
 import { cn } from '@/lib/cn'
+import { ENTRANCE_STAGGER } from '@/lib/motion'
 import { PhotoButton } from '@/components/lightbox/photo-button'
 
 type PropsT = {
@@ -40,8 +41,13 @@ export function StyleGallery({ title, images }: PropsT) {
             // The span and the ratio ride on the wrapper: `grid-flow-row-dense` packs by what the
             // grid items claim, and left on the inner element they would be measured against a
             // box the grid never sees — every wide shot would drop back to one column.
+            // A whole row crosses the 30% threshold in the same frame, so without a step every
+            // tile in it lands at once and the section reads as having no entrance at all. Stepping
+            // by position in a row of four cascades left to right on the wide grid and still splits
+            // the pair on the two-column one.
             <FadeUp
               key={index}
+              delay={(index % 4) * ENTRANCE_STAGGER}
               className={cn(
                 'relative overflow-hidden',
                 wide ? 'col-span-2 aspect-2/1' : 'aspect-square',

@@ -7,6 +7,9 @@ import { ENTRANCE_OFFSET_Y, entranceTransition } from '@/lib/motion'
 
 type PropsT = {
   className?: string
+  // Offsets the start, for a group that would otherwise enter in one frame. The caller owns the
+  // step, because only it knows what the group is — a row, a column, a whole list.
+  delay?: number
   children?: ReactNode
 }
 
@@ -17,7 +20,7 @@ type PropsT = {
 // parent laid out — a grid span, or the blockification a bare `<a>` got for free as a grid item —
 // is being read off a box the parent no longer sees. Move both onto `className` here, or derive
 // the position from an index, as `style-card.tsx` does.
-export function FadeUp({ className, children }: PropsT) {
+export function FadeUp({ className, delay, children }: PropsT) {
   const shouldReduceMotion = useReducedMotion()
 
   return (
@@ -35,7 +38,7 @@ export function FadeUp({ className, children }: PropsT) {
       // and photo counts, which is why `tests/e2e/entrance-animation.e2e.spec.ts` scrolls real pages
       // instead of trusting this number.
       viewport={{ once: true, amount: 0.3 }}
-      transition={entranceTransition(shouldReduceMotion)}
+      transition={entranceTransition(shouldReduceMotion, delay)}
     >
       {children}
     </motion.div>
