@@ -40,12 +40,7 @@ export default async function SegmentLayout({
         <MobileMenu paths={paths} typePaths={typePaths} phone={footer.phone} />
         <div className="bg-background flex min-h-lvh flex-col">
           <div className="grow">{children}</div>
-          <SiteFooter
-            container="paddings pt-20 pb-6 md:pt-30 xl:pt-40"
-            data={footer}
-            locale={locale}
-            typePaths={typePaths}
-          />
+          <SiteFooter data={footer} locale={locale} typePaths={typePaths} />
         </div>
       </ConsentProvider>
     </TranslationsProvider>

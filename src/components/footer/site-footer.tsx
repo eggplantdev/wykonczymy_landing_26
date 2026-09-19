@@ -23,67 +23,64 @@ export type SiteFooterT = {
 }
 
 type PropsT = {
-  container?: string
   data: SiteFooterT
   locale: Locale
   typePaths: Partial<Record<Page['pageType'], string>>
 }
 
-export function SiteFooter({ container, data, locale, typePaths }: PropsT) {
+export function SiteFooter({ data, locale, typePaths }: PropsT) {
   const { intro, title, ...person } = data
   const { nav } = getTranslations(locale)
 
   return (
-    <footer className={cn('md:grid md:grid-cols-8 md:gap-x-5 lg:grid-cols-12', container)}>
-      <p className="text-18 leading-125 md:text-20 lg:text-32 mb-12 md:col-span-6 md:mb-16 lg:col-span-8 lg:col-start-5 lg:leading-normal max-w-4xl">
+    <footer
+      className={cn('md:grid md:grid-cols-8 md:gap-x-5 lg:grid-cols-12 paddings pt-20 md:pt-36 ')}
+    >
+      <p className="text-18 leading-125 md:text-20 lg:text-32 mb-  md:col-span-6 md:mb-36 lg:col-span-8 lg:col-start-5 lg:leading-normal max-w-4xl">
         {intro}
       </p>
 
-      {/* TRIAL: everything under the intro claims the dark role tokens — the same
-          re-pointing the theme toggle does, scoped to this band. The negative margins
-          cancel the footer's own padding so the band reaches the edges of the viewport
-          and then puts that padding back on itself. */}
+      {/* The header is fixed, so the anchored block keeps its own offset from the top. */}
+      <div
+        id={CONTACT_FORM_ANCHOR}
+        className="col-span-full scroll-mt-24 md:scroll-mt-28 lg:grid lg:grid-cols-12 lg:gap-x-5"
+      >
+        <SectionTitle title={title} className="mb-6 md:mb-8 lg:col-span-full lg:mb-10" />
+
+        <ContactPerson {...person} />
+        <div className="lg:col-span-8 lg:col-start-5">
+          <ContactForm privacyPolicyHref={typePaths[PRIVACY_POLICY_PAGE_TYPE]} />
+        </div>
+      </div>
+
+      {/* The form stays on the page's own canvas and only this block claims the dark role
+          tokens — the same re-pointing the theme toggle does, scoped to a subtree. The
+          colour change is what separates it from the form above, so it carries no hairline.
+          The negative margins cancel the footer's padding so the black reaches the edges of
+          the viewport, then put that padding back on itself. */}
       <div
         data-theme="dark"
-        className="bg-background text-foreground col-span-full -mx-6 -mb-6 px-6 pt-12 pb-6 md:-mx-8 md:px-8 xl:-mx-12 xl:px-12"
+        className="bg-background text-foreground col-span-full -mx-6 mt-6 px-6 py-4 md:-mx-8 md:px-8 xl:-mx-12 xl:px-12"
       >
-        {/* The header is fixed, so the anchored block keeps its own offset from the top. */}
-        <div
-          id={CONTACT_FORM_ANCHOR}
-          className="col-span-full scroll-mt-24 justify-between md:scroll-mt-28 lg:grid lg:grid-cols-12 lg:gap-x-5 lg:pt-8"
+        {/* Three equal tracks, not `justify-between`: the latter equalises the gaps, so the
+            middle item lands on the page's centre only when the two outer ones happen to be
+            the same width. They are not, and it sat off centre by half their difference. */}
+        <div className="flex w-full flex-col items-center gap-y-7 lg:grid lg:grid-cols-3 lg:justify-items-start lg:gap-x-5">
+          <PhoneCta phone={data.phone} callLabel={nav.callUs} />
+
+          <SocialLinks className="lg:justify-self-center" />
+          <LegalLinks typePaths={typePaths} nav={nav} className="lg:justify-self-end" />
+        </div>
+
+        <a
+          href="https://eggplantdev.com"
+          target="_blank"
+          rel="noreferrer"
+          className="text-10 hover:text-muted-foreground mt-2  flex items-center justify-center gap-x-2 font-semibold transition-colors  w-fit mx-auto"
         >
-          <SectionTitle title={title} className="mb-8 md:mb-11 lg:col-span-full lg:mb-10" />
-
-          <ContactPerson {...person} />
-          <div className="lg:col-span-8 lg:col-start-5">
-            <ContactForm privacyPolicyHref={typePaths[PRIVACY_POLICY_PAGE_TYPE]} />
-          </div>
-        </div>
-
-        <div className="border-border col-span-full mt-10 border-t pt-4 md:mt-12">
-          <LegalLinks typePaths={typePaths} nav={nav} className="mb-4" />
-
-          <div className="flex flex-col items-center gap-y-7 lg:grid lg:grid-cols-2 lg:items-center lg:gap-x-5">
-            <PhoneCta phone={data.phone} callLabel={nav.callUs} />
-
-            <SocialLinks className="lg:justify-self-end" />
-          </div>
-        </div>
-
-        {/* The credit sits on its own strip, flush to the bottom of the band: the negative
-            margins cancel the band's padding so the rule above it reaches both edges, then
-            put that padding back inside. */}
-        <div className="border-border -mx-6 -mb-6 mt-8 flex h-10 items-center border-t px-6 md:-mx-8 md:px-8 xl:-mx-12 xl:px-12">
-          <a
-            href="https://eggplantdev.com"
-            target="_blank"
-            rel="noreferrer"
-            className="text-12 hover:text-muted-foreground inline-flex items-center gap-x-2 font-semibold transition-colors"
-          >
-            <span>© 2026 eggplantdev.com</span>
-            <BrandLogo className="h-6 w-auto" />
-          </a>
-        </div>
+          <span>© 2026 eggplantdev.com</span>
+          <BrandLogo className="h-8 w-auto" />
+        </a>
       </div>
     </footer>
   )
