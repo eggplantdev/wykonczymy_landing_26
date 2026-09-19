@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
 import {
-  MESSAGE_MAX_LENGTH,
+  LONG_FIELD_MAX_LENGTH,
+  SHORT_FIELD_MAX_LENGTH,
   contactSchema,
   emptyContactValues,
   firstIssueKey,
@@ -15,6 +16,15 @@ function issuesFor(values: Record<string, unknown>) {
 }
 
 const validValues = { ...emptyContactValues(), email: 'jan@example.com', acceptsTerms: true }
+
+const CAPS = {
+  name: SHORT_FIELD_MAX_LENGTH,
+  email: SHORT_FIELD_MAX_LENGTH,
+  phone: SHORT_FIELD_MAX_LENGTH,
+  scope: LONG_FIELD_MAX_LENGTH,
+  area: SHORT_FIELD_MAX_LENGTH,
+  message: LONG_FIELD_MAX_LENGTH,
+} as const
 
 describe('contactSchema', () => {
   it('accepts an e-mail address and consent with every other field empty', () => {
@@ -43,9 +53,22 @@ describe('contactSchema', () => {
     expect(issues.some((issue) => issue.path[0] === 'acceptsTerms')).toBe(true)
   })
 
-  it('rejects a message past the maximum length', () => {
-    const issues = issuesFor({ ...validValues, message: 'a'.repeat(MESSAGE_MAX_LENGTH + 1) })
+  // Nothing caps these on the way in, so the schema is the only ceiling that holds against
+  // a direct POST to the server action.
+  it.each(Object.entries(CAPS))('rejects an over-long %s', (field, max) => {
+    const issues = issuesFor({ ...validValues, [field]: 'a'.repeat(max + 1) })
     expect(issues.map((issue) => issue.message)).toContain('tooLong')
+  })
+
+  // Enumerating the fields above is what lets each one assert its own cap, and it is also
+  // how a newly added field silently ships uncapped. This walks the value shape instead, so
+  // the omission is a red test rather than an unbounded public endpoint.
+  it('caps every string field the schema carries', () => {
+    const stringFields = Object.entries(emptyContactValues())
+      .filter(([, value]) => typeof value === 'string')
+      .map(([field]) => field)
+
+    expect(Object.keys(CAPS).sort()).toEqual(stringFields.sort())
   })
 
   // The schema carries translation keys rather than sentences, so the contract that
@@ -57,7 +80,7 @@ describe('contactSchema', () => {
       ...issuesFor({ ...validValues, email: '' }),
       ...issuesFor({ ...validValues, email: 'jan@' }),
       ...issuesFor({ ...validValues, acceptsTerms: false }),
-      ...issuesFor({ ...validValues, message: 'a'.repeat(MESSAGE_MAX_LENGTH + 1) }),
+      ...issuesFor({ ...validValues, message: 'a'.repeat(LONG_FIELD_MAX_LENGTH + 1) }),
     ].map((issue) => issue.message)
 
     expect(emitted.length).toBeGreaterThan(0)

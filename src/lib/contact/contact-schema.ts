@@ -19,20 +19,28 @@ const MESSAGE_KEYS = getTranslations(i18n.defaultLocale).form
 // instead of a raw key rendered at the visitor.
 const messageKey = (key: FormMessageKeyT): string => key
 
-export const MESSAGE_MAX_LENGTH = 5000
+// A server action is a public endpoint and no control sets `maxlength`, so these are the
+// only ceiling on field length — nothing caps a direct POST on the way in.
+export const LONG_FIELD_MAX_LENGTH = 5000
+export const SHORT_FIELD_MAX_LENGTH = 200
+
+// Every field is trimmed and capped and only the ceiling differs — and Prettier breaks a
+// three-call chain carrying an object argument across three lines, so spelling it out per
+// field costs eighteen lines to say one thing six times.
+const cappedText = (max: number) =>
+  string()
+    .trim()
+    .max(max, { error: messageKey('tooLong') })
 
 export const contactSchema = object({
-  name: string().trim(),
-  email: string()
-    .trim()
+  name: cappedText(SHORT_FIELD_MAX_LENGTH),
+  email: cappedText(SHORT_FIELD_MAX_LENGTH)
     .min(1, { error: messageKey('required') })
     .pipe(email({ error: messageKey('invalidEmail') })),
-  phone: string().trim(),
-  scope: string().trim(),
-  area: string().trim(),
-  message: string()
-    .trim()
-    .max(MESSAGE_MAX_LENGTH, { error: messageKey('tooLong') }),
+  phone: cappedText(SHORT_FIELD_MAX_LENGTH),
+  scope: cappedText(LONG_FIELD_MAX_LENGTH),
+  area: cappedText(SHORT_FIELD_MAX_LENGTH),
+  message: cappedText(LONG_FIELD_MAX_LENGTH),
   // `.refine` rather than `literal(true)` so the schema's input type stays `boolean`:
   // the form holds an unticked box as `false`, and a schema that only accepts `true`
   // would not type-check against those values.
