@@ -43,6 +43,7 @@ export function ServicesCarousel({ container, data }: PropsT) {
           480: { slidesPerView: 2.6 },
           768: { spaceBetween: 48, slidesPerView: 3.6 },
           1280: { spaceBetween: 56, slidesPerView: 4.6 },
+          1920: { spaceBetween: 56, slidesPerView: 6.6 },
         }}
         onSwiper={carousel.onSwiper}
       >

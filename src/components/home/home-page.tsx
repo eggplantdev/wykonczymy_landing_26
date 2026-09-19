@@ -56,7 +56,7 @@ export function HomePage({ data, ratings }: PropsT) {
         {intro && (
           <FadeUp>
             <TextSection
-              container="site-container gridContainer paddings pt-20 md:pt-28"
+              container="site-container gridContainer paddings pt-20 md:pt-40"
               data={intro}
             />
           </FadeUp>
