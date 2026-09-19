@@ -25,7 +25,7 @@ export function Media({
   return (
     <MediaPlaceholder type={placeholderType} className={placeholderClassName}>
       {video ? (
-        <MediaVideo video={video} />
+        <MediaVideo video={video} className={className} />
       ) : (
         image && (
           <MediaImage image={image} sizes={sizes} priority={priority} className={className} />
