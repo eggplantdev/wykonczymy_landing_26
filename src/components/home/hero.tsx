@@ -110,8 +110,8 @@ export function Hero({ data }: PropsT) {
             white pill here as it does down there, instead of going black on the light theme. */}
         {ctaLabel && ctaHref && (
           <div data-theme="dark" className="flex pb-12 md:pt-10 md:pb-0">
-            <ButtonLink href={ctaHref} label={ctaLabel} variant="solid" size="sm" icon="trailing">
-              <ButtonArrow variant="solid" />
+            <ButtonLink href={ctaHref} label={ctaLabel} variant="solid" size="xl" icon="trailing">
+              <ButtonArrow variant="solid" size="xl" />
             </ButtonLink>
           </div>
         )}
