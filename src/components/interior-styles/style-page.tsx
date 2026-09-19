@@ -4,6 +4,7 @@ import { ObjectCarousel } from '@/components/object-carousel/object-carousel'
 import { PhotoButton } from '@/components/lightbox/photo-button'
 import { PhotoLightbox } from '@/components/lightbox/photo-lightbox'
 import { StyleGallery } from './style-gallery'
+import { FadeUp } from '@/components/ui/fade-up'
 import type { InteriorStyleT } from '@/lib/content/interior-styles'
 import { childPath } from '@/lib/routing'
 
@@ -43,7 +44,10 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
             />
           </div>
 
-          <div className="text-14 lg:text-16 col-span-full md:col-span-6 md:col-start-2 lg:col-span-6 lg:col-start-4 lg:row-start-2">
+          {/* The column is one reading unit, so it rises as one: splitting the prose would pop the
+              second half while it is already being read. The hero above stays still, as on a
+              project page — an entrance on something already in view reads as a load glitch. */}
+          <FadeUp className="text-14 lg:text-16 col-span-full md:col-span-6 md:col-start-2 lg:col-span-6 lg:col-start-4 lg:row-start-2">
             <p className="border-b-border border-b pb-8 font-medium">{lead}</p>
             {rest.slice(0, split).map((paragraph, index) => (
               <p key={index} className="pt-8">
@@ -63,7 +67,7 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
                 {paragraph}
               </p>
             ))}
-          </div>
+          </FadeUp>
         </article>
 
         <StyleGallery title={common.gallery} images={gallery} />

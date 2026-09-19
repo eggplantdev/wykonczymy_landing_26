@@ -11,6 +11,12 @@ type PropsT = {
 }
 
 // Fade-and-rise as the element is scrolled to, the one entrance this site uses.
+//
+// Inserting one re-parents whatever it wraps, and two kinds of class stop working silently: a
+// positional selector (`even:`, `first:`, `divide-*`) now sees an only child, and anything the
+// parent laid out — a grid span, or the blockification a bare `<a>` got for free as a grid item —
+// is being read off a box the parent no longer sees. Move both onto `className` here, or derive
+// the position from an index, as `style-card.tsx` does.
 export function FadeUp({ className, children }: PropsT) {
   const shouldReduceMotion = useReducedMotion()
 

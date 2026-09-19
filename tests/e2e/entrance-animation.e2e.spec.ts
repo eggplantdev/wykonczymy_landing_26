@@ -10,6 +10,15 @@ const VIEWPORTS = [
   { width: 1440, height: 900 },
 ]
 
+// Both halves of a section carry wrappers, so both get swept: a listing has one per card, and the
+// detail page behind it has the most of any page — copy, then gallery rows or a photo grid. The
+// selector is the card's own root class rather than the href, because the header nav links to the
+// listing too and `first()` would pick that up and sweep the listing a second time.
+const LISTINGS = [
+  { path: '/realizacje/', card: 'a.gridContainer[href*="/realizacje/"]' },
+  { path: '/wykonczenia/', card: 'a.border-border[href*="/wykonczenia/"]' },
+]
+
 // The page grows while it is scrolled — below-the-fold images only start loading as they approach
 // the viewport — so the end has to be re-read every step. Sampling `scrollHeight` once stops the
 // sweep short of the sections added since, and they are reported hidden because they were never
@@ -23,6 +32,25 @@ async function scrollThrough(page: Page) {
     if (y >= end) break
   }
   await page.waitForTimeout(800)
+
+  // Back to the top before anything is read: `FadeUp` is `once`, so a wrapper that fired stays
+  // visible up here, while the hero's scroll-linked fade is only at zero *because* the page is
+  // scrolled past it. Sweeping from the bottom would report that as a stuck section.
+  await page.evaluate(() => window.scrollTo(0, 0))
+  await page.waitForTimeout(800)
+}
+
+async function sweep(page: Page, label: string) {
+  await scrollThrough(page)
+
+  const hidden = await page.evaluate(() =>
+    [...document.querySelectorAll('[style*="opacity"]')]
+      .filter((element) => getComputedStyle(element).opacity === '0')
+      .map(
+        (element) => `${element.tagName} h=${Math.round(element.getBoundingClientRect().height)}`,
+      ),
+  )
+  expect(hidden, `left hidden on ${label}`).toEqual([])
 }
 
 // The page transition fades the whole body in on mount rather than on scroll, so it must be visible
@@ -39,33 +67,18 @@ for (const viewport of VIEWPORTS) {
   test(`no section stays hidden after scrolling at ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport)
 
-    for (const path of ['/', '/realizacje/']) {
-      await page.goto(`http://localhost:3000${path}`)
+    await page.goto('http://localhost:3000/')
+    await sweep(page, '/')
 
-      // The project detail page carries the most wrappers — description, details and one per
-      // gallery row — and its rows are the tallest, so it is reached through the listing.
-      // `gridContainer` is `ProjectRow`'s own root class: a bare href match would take the header
-      // nav's link back to the listing and this would silently test `/realizacje/` twice.
-      if (path === '/realizacje/') {
-        const href = await page
-          .locator('a.gridContainer[href*="/realizacje/"]')
-          .first()
-          .getAttribute('href')
-        expect(href, 'no project row on the listing').toBeTruthy()
-        await page.goto(`http://localhost:3000${href}`)
-      }
+    for (const listing of LISTINGS) {
+      await page.goto(`http://localhost:3000${listing.path}`)
+      await sweep(page, listing.path)
 
-      await scrollThrough(page)
+      const href = await page.locator(listing.card).first().getAttribute('href')
+      expect(href, `no card on ${listing.path}`).toBeTruthy()
 
-      const hidden = await page.evaluate(() =>
-        [...document.querySelectorAll('[style*="opacity"]')]
-          .filter((element) => getComputedStyle(element).opacity === '0')
-          .map(
-            (element) =>
-              `${element.tagName} h=${Math.round(element.getBoundingClientRect().height)}`,
-          ),
-      )
-      expect(hidden, `left hidden on ${path}`).toEqual([])
+      await page.goto(`http://localhost:3000${href}`)
+      await sweep(page, href!)
     }
   })
 }

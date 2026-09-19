@@ -12,12 +12,19 @@ type PropsT = {
 
 export function StyleCard({ style, href, index }: PropsT) {
   const isLastInRow = (index + 1) % 3 === 0
+  // The two-column rule used to be `md:even:border-l`, but the entrance wrapper the listing puts
+  // around each card makes this link an only child, so `:nth-child(even)` never matches again.
+  // `index` already drives the three-column rule next to it and does not care what nests the card.
+  const isSecondInPair = index % 2 === 1
 
   return (
     <Link
       href={href}
+      // `block`: as a grid item the link was blockified for free; inside the wrapper it is an
+      // ordinary inline box, and the padding and borders below would hang off a line of text.
       className={cn(
-        'group border-border relative pt-6 md:px-6 md:even:border-l lg:border-r lg:px-6.5 lg:even:border-l-0',
+        'group border-border relative block pt-6 md:px-6 lg:border-r lg:px-6.5',
+        isSecondInPair && 'md:border-l lg:border-l-0',
         isLastInRow && 'lg:border-r-0',
       )}
     >

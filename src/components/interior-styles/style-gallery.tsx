@@ -1,4 +1,5 @@
 import type { MediaImageT } from '@/components/media/types'
+import { FadeUp } from '@/components/ui/fade-up'
 import { SectionTitle } from '@/components/layout/section-title'
 import { cn } from '@/lib/cn'
 import { PhotoButton } from '@/components/lightbox/photo-button'
@@ -36,7 +37,10 @@ export function StyleGallery({ title, images }: PropsT) {
           const wide = isWide(image)
 
           return (
-            <div
+            // The span and the ratio ride on the wrapper: `grid-flow-row-dense` packs by what the
+            // grid items claim, and left on the inner element they would be measured against a
+            // box the grid never sees — every wide shot would drop back to one column.
+            <FadeUp
               key={index}
               className={cn(
                 'relative overflow-hidden',
@@ -44,7 +48,7 @@ export function StyleGallery({ title, images }: PropsT) {
               )}
             >
               <PhotoButton image={image} sizes={wide ? wideSizes : sizes} />
-            </div>
+            </FadeUp>
           )
         })}
       </div>
