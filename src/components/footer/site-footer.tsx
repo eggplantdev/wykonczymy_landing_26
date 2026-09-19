@@ -50,7 +50,7 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
         <FadeUp className="col-span-full">
           <div
             id={CONTACT_FORM_ANCHOR}
-            className="scroll-mt-24 md:scroll-mt-28 lg:grid lg:grid-cols-12 lg:gap-x-5"
+            className="scroll-mt-24 md:scroll-mt-28 lg:grid lg:grid-cols-12 lg:gap-x-5 mb-20 md:mb-36"
           >
             <SectionTitle title={title} className="mb-6 md:mb-8 lg:col-span-full lg:mb-10" />
 
@@ -67,7 +67,7 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
           change is what separates it from the form above, so it carries no hairline. It takes
           `paddings` without the column, so the black runs the width of the screen while its
           contents sit as far in from the edge as the header's logo. */}
-      <div data-theme="dark" className="bg-background text-foreground paddings mt-6 py-4">
+      <div data-theme="dark" className="bg-background text-foreground paddings py-4">
         {/* Three equal tracks, not `justify-between`: the latter equalises the gaps, so the
             middle item lands on the page's centre only when the two outer ones happen to be
             the same width. They are not — a pill against a credit line — and it sat off centre
