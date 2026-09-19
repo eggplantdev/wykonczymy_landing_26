@@ -11,7 +11,8 @@
    under `extend` merges here as-is. */
 @theme {
   --font-*: initial;
-  --font-sans: var(--font-riforma), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
 
   --text-*: initial;
   --text-8: 0.5rem;
@@ -24,13 +25,27 @@
   --text-22: 1.375rem;
   --text-24: 1.5rem;
   --text-28: 1.75rem;
+  --text-32--letter-spacing: -0.02em;
   --text-32: 2rem;
+  --text-36--letter-spacing: -0.02em;
   --text-36: 2.25rem;
+  --text-40--letter-spacing: -0.02em;
   --text-40: 2.5rem;
+  --text-52--letter-spacing: -0.02em;
   --text-52: 3.25rem;
+  --text-58--letter-spacing: -0.02em;
   --text-58: 3.625rem;
+  --text-60--letter-spacing: -0.02em;
   --text-60: 3.75rem;
+  --text-72--letter-spacing: -0.02em;
   --text-72: 4.5rem;
+
+  /* The hero title, and the only fluid size in the scale. 4.028vw is 58px at exactly 1440,
+     so it picks up where `text-58` leaves off and keeps growing instead of stopping there —
+     the hero is the one section that bleeds past the 1920 cap, so it scales on the viewport
+     rather than on the page. */
+  --text-hero--letter-spacing: -0.02em;
+  --text-hero: 4.028vw;
 
   /* tdg's `sm` is 12px, not Tailwind's 14px — lifted markup depends on the smaller value. */
   --text-sm: 0.75rem;
@@ -57,6 +72,10 @@
   --breakpoint-xlg: 1280px;
   --breakpoint-xl: 1440px;
   --breakpoint-xxl: 1920px;
+
+  /* The page stops growing at the widest breakpoint: past 1920 the layout would only
+     stretch the gutters, and the fixed header has to be capped alongside it. */
+  --container-site: 1920px;
 
   --color-grau_100: #565656;
   --color-grau_200: #848484;
@@ -101,11 +120,21 @@
   /* Review stars, sampled from the Fixly badge this mirrors. */
   --color-rating: #ffd739;
 
-  --color-shwarz: #1b1b1b;
-  --color-white: #fdfdfd;
+  /* The logo's petrol blue, sampled off public/images/logo-wykonczymy.png. */
+  --color-brand: #12465a;
+
+  /* TRIAL: spline's neutrals — ivoryBlack #0d0d0d over #1b1b1b, splineWhite #f8f8f8 over
+     #fdfdfd. Revert these two values to undo. */
+  --color-shwarz: #0d0d0d;
+  --color-white: #f8f8f8;
   --color-error: #d45d5c;
 
   --leading-normal: 120%;
+
+  /* The tight end of the scale, for a display title set over two lines. Not 100%: Polish
+     stacks a descender over an accent — `Twój` above `wykończenie` — and they meet. */
+  --leading-105: 105%;
+
   --leading-120: 120%;
   --leading-125: 125%;
   --leading-130: 130%;
@@ -136,8 +165,14 @@
     cursor: pointer;
   }
 
+  /* The title face. Set here rather than per component so a heading gets it by being a
+     heading; the hero title is a `p`, hence the `data-display` hook it carries. */
+  :is(h1, h2, [data-display]) {
+    font-family: var(--font-display);
+  }
+
   body {
-    @apply flex flex-col overscroll-none scroll-smooth text-shwarz;
+    @apply max-w-site mx-auto flex w-full flex-col overscroll-none scroll-smooth text-shwarz;
   }
 
   input,
@@ -196,6 +231,13 @@
 
 @utility center-absolute {
   @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+}
+
+/* Breaks out of the `max-w-site` cap `body` carries: above 1920 that cap turns into gutters
+   either side, and a full-bleed photo must not stop at them. The symmetric negative margins
+   re-centre the 100vw box on the capped one. */
+@utility full-bleed {
+  @apply mx-[calc(50%-50vw)] w-screen;
 }
 
 /* tdg's `.gridContainerLg` was byte-identical to `.gridContainer`; only one survives. */

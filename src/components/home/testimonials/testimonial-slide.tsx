@@ -53,7 +53,7 @@ export function TestimonialSlide({ testimonial, isExpanded, onToggle }: PropsT) 
       <blockquote
         ref={measure}
         className={cn(
-          'text-16 md:text-20 lg:text-24 leading-140 text-balance [&>p+p]:pt-4',
+          'text-14 md:text-16 lg:text-20 leading-140 text-balance [&>p+p]:pt-4 max-w-3xl',
           !isExpanded && 'line-clamp-8',
         )}
       >

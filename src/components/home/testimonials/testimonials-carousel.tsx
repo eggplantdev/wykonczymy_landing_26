@@ -49,7 +49,7 @@ export function TestimonialsCarousel({ container, data, ratings }: PropsT) {
       <div className="gridContainer">
         <SectionTitle
           title={sectionTitle}
-          className="col-span-full pb-6 md:pb-8 lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:self-start lg:pb-0"
+          className="col-span-full pb-6 md:pb-8 lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:self-start lg:pb-0 -mt-1.5"
         />
 
         <div className="col-span-full lg:col-span-7 lg:col-start-6 lg:row-start-1">
