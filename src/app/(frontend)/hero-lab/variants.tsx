@@ -9,10 +9,9 @@ const hasCta = (
 ): source is HeroSourceT & { ctaLabel: string; ctaHref: string } =>
   Boolean(source.ctaLabel && source.ctaHref)
 
-/** What ships today: title and button stacked dead centre. */
 export function CentredStack({ source }: PropsT) {
   return (
-    <HeroFrame label="1 · Centred stack" note="what ships today" source={source}>
+    <HeroFrame label="1 · Centred stack" note="everything on the centre axis" source={source}>
       <div className="flex h-full flex-col items-center justify-center">
         <p className={cn(titleClasses, 'mx-10 text-center')}>{source.title}</p>
         {hasCta(source) && (
@@ -49,14 +48,9 @@ export function CentredBottomCta({ source }: PropsT) {
   )
 }
 
-/** Title left, vertically centred — the centring broken on one axis only. */
 export function LeftCentred({ source }: PropsT) {
   return (
-    <HeroFrame
-      label="3 · Left, centred"
-      note="off the centre axis, still mid-frame"
-      source={source}
-    >
+    <HeroFrame label="3 · Left, centred" note="what ships today" source={source}>
       <div className="paddings flex h-full flex-col justify-center">
         <p className={cn(titleClasses, 'max-w-[18ch]')}>{source.title}</p>
         {hasCta(source) && (
@@ -69,12 +63,11 @@ export function LeftCentred({ source }: PropsT) {
   )
 }
 
-/** Title and button together in the bottom-left corner — the asymmetric read. */
 export function LeftFoot({ source }: PropsT) {
   return (
     <HeroFrame
       label="4 · Bottom-left block"
-      note="asymmetric, title and CTA together"
+      note="the block sat on the floor of the frame"
       source={source}
     >
       <div className="paddings flex h-full flex-col justify-end pb-12 md:pb-16">

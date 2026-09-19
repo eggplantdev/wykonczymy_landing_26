@@ -32,7 +32,7 @@ export const homeCopy: LocalizedT<HomeCopyT> = {
   pl: {
     hero: {
       title: 'Twój dom\nnasze wykończenie',
-      ctaLabel: 'Umów bezpłatną wycenę',
+      ctaLabel: 'Umów się na bezpłatną wycenę',
     },
     intro:
       'Wykończymy to zespół profesjonalistów od ponad 8 lat gwarantujący najwyższą jakość i satysfakcję. Specjalizujemy się w kompleksowych remontach domów, mieszkań, biur, klatek schodowych oraz lokali usługowych. Dbamy o swoich Klientów na każdym etapie realizacji, a nasi doświadczeni specjaliści zawsze służą pomocą i doradztwem, niezależnie od skali zlecenia czy budżetu.',

@@ -53,4 +53,5 @@ export function HeroCta({ label, href }: { label: string; href: string }) {
   )
 }
 
-export const titleClasses = 'text-52 md:text-72 xl:text-hero-lg leading-105 whitespace-pre-line'
+export const titleClasses =
+  'text-52 md:text-72 xl:text-hero leading-105 font-bold whitespace-pre-line'

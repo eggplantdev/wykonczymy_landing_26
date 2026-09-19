@@ -25,28 +25,29 @@ export function Hero({ data }: PropsT) {
       </div>
       {/* Covers the whole frame rather than fading in from an edge: the photo is editable in
           the admin, so nothing here can assume where its bright areas fall. */}
-      <div className="bg-scrim/20 absolute inset-0" />
+      <div className="bg-scrim/10 absolute inset-0" />
+
       {/* No measure on the title: the field is a textarea so the editor owns where the line
           breaks, and a width cap would re-break it on the next copy change. */}
-      <div className="paddings relative flex h-full w-full flex-col justify-end pb-12 text-on-media md:pb-16">
-        <p
-          data-display
-          className="text-32 md:text-40 xl:text-hero text-shadow-lg leading-105 whitespace-pre-line"
-        >
-          {title}
-        </p>
+      <div className="paddings text-on-media relative flex h-full w-full flex-col md:justify-end md:pb-16">
+        {/* Mobile only: the CTA is pinned to the foot of the frame, so the title claims the
+            space it leaves and centres inside that. From md the stack goes back to sitting
+            together at the bottom, which is why the growth stops there. */}
+        <div className="flex flex-1 flex-col justify-center md:flex-none">
+          <p
+            data-display
+            className="text-40 md:text-72 xl:text-hero leading-105 font-bold break-words whitespace-pre-line"
+          >
+            {title}
+          </p>
+        </div>
+        {/* The photo is a dark surface whatever the page's theme is, so the CTA claims the
+            dark role tokens the way the footer band does — `solid` then resolves to the same
+            white pill here as it does down there, instead of going black on the light theme. */}
         {ctaLabel && ctaHref && (
-          <div className="flex pt-6 md:pt-10">
-            {/* Same lift as the nav pill: both float over an editable photo, so both need
-                an edge the photo cannot supply. */}
-            <ButtonLink
-              href={ctaHref}
-              label={ctaLabel}
-              variant="light"
-              icon="trailing"
-              className="shadow-lg h-16"
-            >
-              <ButtonArrow />
+          <div data-theme="dark" className="flex pb-12 md:pt-10 md:pb-0">
+            <ButtonLink href={ctaHref} label={ctaLabel} variant="solid" size="sm" icon="trailing">
+              <ButtonArrow variant="solid" />
             </ButtonLink>
           </div>
         )}
