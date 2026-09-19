@@ -39,7 +39,7 @@ export function NavItemPill({ href, children, isActive, hasPill, variant, onClic
           !isBar && 'text-24 hover:text-foreground min-h-12 w-full justify-center',
           // Positioned so it paints over the pill, which is a preceding sibling inside the
           // same stacking context.
-          'relative rounded-md',
+          'relative rounded-full',
           isActive &&
             isBar &&
             (hasPill

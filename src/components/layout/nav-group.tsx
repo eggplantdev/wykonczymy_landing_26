@@ -14,7 +14,7 @@ export function NavGroup({ children, className, ref }: PropsT) {
   return (
     <ul
       ref={ref}
-      className={cn('relative flex gap-1 rounded-lg bg-card p-1 lg:shadow-panel-sm', className)}
+      className={cn('relative flex gap-1 rounded-full bg-card p-1 lg:shadow-panel-sm', className)}
     >
       {children}
     </ul>

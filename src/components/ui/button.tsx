@@ -28,7 +28,7 @@ export function buttonClasses({
   return cn(
     // w-fit because a <button> shrink-wraps on its own but an <a> wearing this pill
     // does not — without it the link stretches across its row.
-    'group flex w-fit items-center justify-center gap-2.5 rounded-md text-nowrap duration-500',
+    'group flex w-fit items-center justify-center gap-2.5 rounded-full text-nowrap duration-500',
     variant === 'light' && 'bg-muted hover:bg-muted-foreground focus-visible:outline-ring',
     variant === 'dark' &&
       'bg-card hover:bg-muted-foreground focus-visible:bg-muted focus-visible:outline-ring disabled:bg-muted disabled:text-subtle-foreground',
