@@ -36,7 +36,7 @@ export function Hero({ data }: PropsT) {
         <div className="flex flex-1 flex-col justify-center md:flex-none">
           <p
             data-display
-            className="text-40 md:text-72 xl:text-hero leading-105 font-bold break-words whitespace-pre-line"
+            className="text-40 md:text-72 leading-105 font-bold break-words whitespace-pre-line"
           >
             {title}
           </p>
