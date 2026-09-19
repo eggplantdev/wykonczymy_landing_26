@@ -32,13 +32,14 @@ type PropsT = {
   onNavigate?: () => void
   // Rendered as the last item of the bar rather than beside it, so the settings gear reads
   // as part of the nav group instead of a second card floating next to it. The mobile menu
-  // stacks its own controls as siblings, so it passes nothing and keeps the gear outside.
+  // has no gear — it shows the settings outright, as a sibling — so it passes nothing.
   trailing?: ReactNode
+  className?: string
 }
 
 // The header gathers the links into a pill; in the mobile menu they stack full width,
 // where that pill's chrome would only draw a box around the whole overlay.
-export function SiteNav({ paths, variant = 'header', onNavigate, trailing }: PropsT) {
+export function SiteNav({ paths, variant = 'header', onNavigate, trailing, className }: PropsT) {
   const { t } = useTranslation('nav')
   const pathname = usePathname()
   const shouldReduceMotion = useReducedMotion()
@@ -63,12 +64,11 @@ export function SiteNav({ paths, variant = 'header', onNavigate, trailing }: Pro
   })
 
   return (
-    <nav>
+    <nav className={className}>
       <NavGroup
         ref={attach}
-        // The links sit one flex container deeper than the settings gear and the phone CTA,
-        // so the panel's rhythm only stays even while this gap matches the one the Sheet
-        // spaces its own children by.
+        // The links are their own flex container, so the sheet's rhythm only stays even while
+        // this gap matches the one the Sheet spaces its own children by.
         className={
           isMobileMenu ? 'w-full flex-col gap-4 border-transparent bg-transparent p-0' : ''
         }
@@ -78,7 +78,7 @@ export function SiteNav({ paths, variant = 'header', onNavigate, trailing }: Pro
           // positioning keeps it out of the flex row it would otherwise join.
           <motion.li
             aria-hidden
-            className="bg-surface absolute top-0 left-0 rounded-md"
+            className="bg-surface absolute top-0 left-0 rounded-full"
             // On a fresh load there is nowhere to come from, so the pill simply appears
             // under the current item; after a navigation it slides from where the previous
             // copy of the bar left it.
