@@ -38,14 +38,10 @@ export default async function SegmentLayout({
       <ConsentProvider privacyPolicyHref={typePaths[PRIVACY_POLICY_PAGE_TYPE]}>
         <SiteHeader paths={paths} typePaths={typePaths} />
         <MobileMenu paths={paths} typePaths={typePaths} phone={footer.phone} />
-        {/* The background is painted here rather than on body: a background on html/body
-            propagates to the browser canvas, which is not part of the root group's
-            backdrop, so the menu toggle's mix-blend-difference would have nothing to
-            invert against on plain sections. */}
         <div className="bg-white flex min-h-lvh flex-col">
           <div className="grow">{children}</div>
           <SiteFooter
-            container="paddings pt-20 pb-10 md:pt-30  xl:pt-40"
+            container="paddings pt-20 pb-6 md:pt-30 xl:pt-40"
             data={footer}
             locale={locale}
             typePaths={typePaths}

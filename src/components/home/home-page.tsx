@@ -1,5 +1,6 @@
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import type { RatingT } from '@/components/ui/rating-badge'
+import { cn } from '@/lib/cn'
 import { Hero, type HeroT } from './hero'
 import {
   InteriorStylesCarousel,
@@ -38,20 +39,32 @@ export function HomePage({ data, ratings }: PropsT) {
     data
 
   return (
-    // The rhythm is one gap on the column, not a top padding per section: a section that
-    // carries its own spacing only knows what comes before it in the one order it was
-    // written for, and each of these renders conditionally.
-    <PageWrapper className="flex flex-col gap-20 md:gap-24 xl:gap-40">
+    <>
+      {/* Outside the wrapper on purpose: the wrapper clips horizontally — that clip is what
+          contains the carousel tracks — and the hero is the one thing on the page that has to
+          bleed past the 1920 cap rather than be trimmed back to it. */}
       {hero && <Hero data={hero} />}
-      {intro && <TextSection container="gridContainer paddings" data={intro} />}
-      {services && <ServicesCarousel container="paddings" data={services} />}
-      {afterServices && <TextSection container="gridContainer paddings" data={afterServices} />}
-      {numbers && <NumbersSection container="paddings" data={numbers} />}
-      {projects && <ProjectsCarousel container="paddings" data={projects} />}
-      {testimonials && (
-        <TestimonialsCarousel container="paddings" data={testimonials} ratings={ratings} />
-      )}
-      {interiorStyles && <InteriorStylesCarousel container="paddings" data={interiorStyles} />}
-    </PageWrapper>
+      {/* The rhythm is one gap on the column, not a top padding per section: a section that
+          carries its own spacing only knows what comes before it in the one order it was
+          written for, and each of these renders conditionally. */}
+      <PageWrapper
+        className={cn(
+          'flex flex-col gap-20 md:gap-40',
+          // The hero left the column, so the one gap it used to take from it is restated here
+          // — same scale, so nothing about the spacing moves.
+          hero && 'pt-20 md:pt-40',
+        )}
+      >
+        {intro && <TextSection container="gridContainer paddings" data={intro} />}
+        {services && <ServicesCarousel container="paddings" data={services} />}
+        {afterServices && <TextSection container="gridContainer paddings" data={afterServices} />}
+        {numbers && <NumbersSection container="paddings" data={numbers} />}
+        {projects && <ProjectsCarousel container="paddings" data={projects} />}
+        {testimonials && (
+          <TestimonialsCarousel container="paddings" data={testimonials} ratings={ratings} />
+        )}
+        {interiorStyles && <InteriorStylesCarousel container="paddings" data={interiorStyles} />}
+      </PageWrapper>
+    </>
   )
 }

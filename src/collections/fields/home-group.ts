@@ -48,7 +48,13 @@ export const homeGroup: Field = {
     {
       name: 'hero',
       type: 'group',
-      fields: [{ name: 'title', type: 'text', localized: true }, ...mediaFields(), ...ctaFields()],
+      fields: [
+        // Textarea, not text: the title is two lines and where it breaks is editorial —
+        // a width that happens to wrap it would re-break itself on the next copy change.
+        { name: 'title', type: 'textarea', localized: true },
+        ...mediaFields(),
+        ...ctaFields(),
+      ],
     },
     {
       name: 'intro',

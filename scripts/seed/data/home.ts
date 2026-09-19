@@ -31,7 +31,7 @@ export const homeShared = {
 export const homeCopy: LocalizedT<HomeCopyT> = {
   pl: {
     hero: {
-      title: 'Twój dom, nasze wykończenie',
+      title: 'Twój dom\nnasze wykończenie',
       ctaLabel: 'Umów bezpłatną wycenę',
     },
     intro:
@@ -169,7 +169,7 @@ export const homeCopy: LocalizedT<HomeCopyT> = {
   },
   en: {
     hero: {
-      title: 'Your home, our finishing touch',
+      title: 'Your home\nour finishing touch',
       ctaLabel: 'Schedule a free estimate',
     },
     intro:
