@@ -43,6 +43,7 @@
     "@payloadcms/translations": "3.88.0",
     "@payloadcms/ui": "3.88.0",
     "@radix-ui/react-dialog": "^1.1.23",
+    "@radix-ui/react-popover": "^1.1.23",
     "@tanstack/react-form": "^1.33.5",
     "@vercel/analytics": "^2.0.1",
     "cross-env": "^7.0.3",

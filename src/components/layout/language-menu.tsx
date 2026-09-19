@@ -9,17 +9,16 @@ type PropsT = {
   locale: Locale
   labelFor: (candidate: Locale) => string
   onSelect: () => void
-  id: string
   isMobileMenu: boolean
 }
 
-export function LanguageMenu({ paths, locale, labelFor, onSelect, id, isMobileMenu }: PropsT) {
+export function LanguageMenu({ paths, locale, labelFor, onSelect, isMobileMenu }: PropsT) {
   return (
+    // The list and the trigger read as one shape, so the lift leaves both or neither.
     <NavGroup
-      id={id}
       className={cn(
         'w-full flex-col rounded-t-none border-t-transparent p-1 pt-0',
-        isMobileMenu && 'bg-grau_800',
+        isMobileMenu && 'shadow-none',
       )}
     >
       {i18n.locales.map((candidate) => (

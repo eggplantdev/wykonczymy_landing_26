@@ -1,21 +1,17 @@
-'use client'
-
-import { motion, useReducedMotion } from 'motion/react'
 import Link from 'next/link'
 import type { ComponentProps, ReactNode } from 'react'
 
 import { navItemClasses, type NavVariantT } from '@/components/layout/nav-item'
 import { cn } from '@/lib/cn'
 
-// Chaos Kitchen's nav pill (`src/components/sections/nav/nav-desktop.tsx`), carried over as
-// a swap-in for NavItem: one pill exists at a time and Motion matches the outgoing and
-// incoming copies by `layoutId`, so it travels between items instead of blinking across.
-const PILL_LAYOUT_ID = 'nav-pill'
-
 type PropsT = {
   href: string
   children: ReactNode
   isActive: boolean
+  // Whether the bar is drawing its own sliding pill behind this item. When it is not —
+  // before the first measurement, or with JS off — the item paints its own fill, so the
+  // white label always has something dark underneath it.
+  hasPill?: boolean
   variant?: NavVariantT
   className?: string
   onClick?: () => void
@@ -25,11 +21,12 @@ export function NavItemPill({
   href,
   children,
   isActive,
+  hasPill = false,
   variant,
   className,
   ...linkProps
 }: PropsT) {
-  const shouldReduceMotion = useReducedMotion()
+  const isBar = variant !== 'mobile'
 
   return (
     <li>
@@ -39,27 +36,23 @@ export function NavItemPill({
         {...linkProps}
         className={navItemClasses({
           variant,
+          // Positioned so it paints over the pill, which is a preceding sibling inside the
+          // same stacking context.
           className: cn(
             'relative rounded-md',
-            // The pill is opaque and covers the link, so only the label has to change
-            // colour — and it must not fall back to the hover colour over the fill.
-            isActive && 'text-white hover:text-white',
+            isActive &&
+              isBar &&
+              (hasPill
+                ? 'text-white hover:text-white'
+                : 'bg-shwarz text-white hover:bg-shwarz hover:text-white'),
+            // A fill across a full-width row in the mobile menu reads as a block, not a
+            // marker, so the panel keeps the underline it always had.
+            isActive && !isBar && 'underline underline-offset-4',
             className,
           ),
         })}
       >
-        {isActive && (
-          <motion.span
-            aria-hidden
-            layoutId={PILL_LAYOUT_ID}
-            className="bg-blau absolute inset-0 rounded-md"
-            transition={
-              shouldReduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 400, damping: 30 }
-            }
-          />
-        )}
-        {/* Above the pill, which is painted over the link's own box. */}
-        <span className="relative z-10">{children}</span>
+        {children}
       </Link>
     </li>
   )
