@@ -1,4 +1,5 @@
 import { PageWrapper } from '@/components/layout/page-wrapper'
+import { FadeUp } from '@/components/ui/fade-up'
 import { getTranslations, type Locale } from '@/lib/i18n/i18n'
 import type { ProjectT } from '@/lib/content/projects'
 import { ProjectRow } from './project-row'
@@ -25,18 +26,19 @@ export function ProjectsPage({ locale, title, basePath, data }: PropsT) {
     <PageWrapper hasHero={false} title={title}>
       <div className="divide-border border-border grid divide-y border-b">
         {data.projects.map((project) => (
-          <ProjectRow
-            key={project.id}
-            href={childPath(basePath, project.slug)}
-            title={project.title}
-            summary={project.summary}
-            image={project.image}
-            details={[
-              { id: 1, name: strings.location, value: project.address },
-              { id: 2, name: strings.area, value: project.area },
-              { id: 3, name: strings.duration, value: project.duration },
-            ]}
-          />
+          <FadeUp key={project.id}>
+            <ProjectRow
+              href={childPath(basePath, project.slug)}
+              title={project.title}
+              summary={project.summary}
+              image={project.image}
+              details={[
+                { id: 1, name: strings.location, value: project.address },
+                { id: 2, name: strings.area, value: project.area },
+                { id: 3, name: strings.duration, value: project.duration },
+              ]}
+            />
+          </FadeUp>
         ))}
       </div>
     </PageWrapper>

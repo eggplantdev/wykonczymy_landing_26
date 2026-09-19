@@ -1,3 +1,4 @@
+import { FadeUp } from '@/components/ui/fade-up'
 import { SpecTable } from '@/components/ui/spec-table'
 import { SpecGroupHeading } from './spec-group-heading'
 import { ScopeList } from './scope-list'
@@ -24,22 +25,26 @@ export function ProjectDescription({
 }: PropsT) {
   return (
     <section className={container}>
-      <p className="text-18 md:text-20 lg:text-32 leading-125 col-span-full mb-20 md:col-span-6 md:mb-24 lg:col-span-8 lg:leading-normal xl:mb-40">
-        {description}
-      </p>
+      {/* The grid placement rides on each wrapper — the wrapper is what the section's grid lays
+          out once it sits between them. */}
+      <FadeUp className="col-span-full mb-20 md:col-span-6 md:mb-24 lg:col-span-8 xl:mb-40">
+        <p className="text-18 md:text-20 lg:text-32 leading-125 lg:leading-normal">{description}</p>
+      </FadeUp>
 
-      <div className="col-span-full grid gap-x-5 gap-y-10 md:grid-cols-2 md:gap-x-16 lg:grid-cols-12 lg:gap-x-5">
-        <div className="lg:col-span-4">
-          <SpecGroupHeading title={detailsTitle} />
-          <SpecTable items={details} />
-        </div>
+      <FadeUp className="col-span-full">
+        <div className="grid gap-x-5 gap-y-10 md:grid-cols-2 md:gap-x-16 lg:grid-cols-12 lg:gap-x-5">
+          <div className="lg:col-span-4">
+            <SpecGroupHeading title={detailsTitle} />
+            <SpecTable items={details} />
+          </div>
 
-        {/* Starting a column late: the two lists read as one block otherwise. */}
-        <div className="lg:col-span-4 lg:col-start-6">
-          <SpecGroupHeading title={scopeTitle} />
-          <ScopeList items={scope} />
+          {/* Starting a column late: the two lists read as one block otherwise. */}
+          <div className="lg:col-span-4 lg:col-start-6">
+            <SpecGroupHeading title={scopeTitle} />
+            <ScopeList items={scope} />
+          </div>
         </div>
-      </div>
+      </FadeUp>
     </section>
   )
 }

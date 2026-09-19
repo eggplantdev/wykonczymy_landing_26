@@ -1,4 +1,5 @@
 import type { MediaImageT } from '@/components/media/types'
+import { FadeUp } from '@/components/ui/fade-up'
 import { GalleryPair } from './gallery-pair'
 import { GallerySingle } from './gallery-single'
 import { SectionTitle } from '@/components/layout/section-title'
@@ -27,13 +28,15 @@ export function ProjectGallery({ container, title, images }: PropsT) {
       <SectionTitle title={title} className="mb-6 md:mb-8" />
 
       <div className="grid gap-6 md:gap-4 xl:gap-y-16">
-        {rows.map(([large, small], rowIndex) =>
-          small ? (
-            <GalleryPair key={rowIndex} large={large} small={small} flipped={rowIndex % 2 === 0} />
-          ) : (
-            <GallerySingle key={rowIndex} image={large} index={rowIndex} />
-          ),
-        )}
+        {rows.map(([large, small], rowIndex) => (
+          <FadeUp key={rowIndex}>
+            {small ? (
+              <GalleryPair large={large} small={small} flipped={rowIndex % 2 === 0} />
+            ) : (
+              <GallerySingle image={large} index={rowIndex} />
+            )}
+          </FadeUp>
+        ))}
       </div>
     </section>
   )
