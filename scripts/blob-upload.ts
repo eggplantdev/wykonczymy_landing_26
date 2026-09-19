@@ -9,8 +9,7 @@ import { list, put } from '@vercel/blob'
 // `addRandomSuffix` the plugin uses for new uploads would leave every restored row pointing
 // at nothing.
 //
-// One-way and one-off: this is how a database restored from elsewhere gets its images, not
-// part of `pnpm seed`.
+// One-way and one-off: this is how a database restored from elsewhere gets its images back.
 
 const uploadDir = path.resolve(process.cwd(), 'media')
 

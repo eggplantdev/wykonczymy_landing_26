@@ -93,10 +93,10 @@ site.
 
 - **`POSTGRES_URL` points at production, in every environment including your laptop.** There is one
   database and one blob store; the site is not published yet, so there was no production content to
-  protect and keeping a second copy in sync cost more than it returned. `pnpm dev`, `pnpm seed` and
-  `pnpm payload migrate` all write to the live database — there is no undo but the dump.
+  protect and keeping a second copy in sync cost more than it returned. `pnpm dev` and
+  `pnpm payload migrate` both write to the live database — there is no undo but the dump.
 - **Take a dump before anything destructive.** `pnpm db:dump` pulls production down to
-  `dumps/`; `db:migrate:prod`, `db:restore:prod` and `seed:prod` each run it first.
+  `dumps/`; `db:migrate:prod` and `db:restore:prod` each run it first.
 - **Never point `psql` or `pg_dump` at the `-pooler` host.** Neon's pooler runs PgBouncer in
   transaction mode, so a session-level `SET` issued outside a transaction outlives the client and is
   handed to whoever gets that backend next. Every `pg_dump` script opens with
@@ -125,20 +125,15 @@ site.
   **a human runs it, never an agent** — and it goes up _before_ the code that needs it. Plain
   `pnpm payload migrate` reaches the same database without taking a dump first; prefer the `:prod`
   script for the backup.
-- **Content is seeded, not typed into the admin twice.** `pnpm seed` upserts every page, project,
-  interior style and the footer global in both locales from `scripts/seed/data/`; it is idempotent
-  and never touches uploads, so photos attached in the admin survive it. **It now overwrites live
-  copy** — an editor's wording loses to `scripts/seed/data/` on every run, so fold admin edits back
-  into the seed data before running it. **A human runs it, never an agent.** It writes rows and
-  nothing else: the revalidation hooks need a request context the CLI has no way to provide, so
-  **production keeps serving the previous copy until the next deploy** — redeploy after seeding.
-- **Photos are seeded separately, by `pnpm seed:photos`.** It uploads
-  `public/images/styles/` into Media and wires each shot into the interior style it belongs to.
-  Kept out of `pnpm seed` because it *does* overwrite what an editor arranged by hand.
+- **The database is the only copy of the content.** Seeding is gone — the scripts, the fixtures
+  under `scripts/seed/` and the source photos in `public/images/{styles,home,footer}` were all
+  removed on 2026-09-19 once the content was in and the admin became the place it is edited. What
+  that costs: there is no version-controlled source to rebuild from, so a restored-but-empty
+  database is repopulated from `dumps/`, not by re-running anything. Take the dump.
 - **`pnpm blob:upload` copies `media/` into the blob store** under each file's exact name, because
-  the adapter resolves a row by building `<store>/<filename>` from the `filename` column. It was
-  written for the one-way clone of the local database into production and is the way a restored
-  database gets its images back — not part of seeding.
+  the adapter resolves a row by building `<store>/<filename>` from the `filename` column. It is how
+  a database restored from elsewhere gets its images back — which makes the untracked `media/`
+  directory the only offline copy of the photo bytes. Do not delete it.
 - **`vercel env pull` reads the Development target only**, and both stores were connected to
   Production and Preview alone — which is why a pull returned every value empty and looked like the
   variables were unreadable. The fix is on the store, not the project: Storage → the store →

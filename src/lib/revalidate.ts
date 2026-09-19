@@ -8,9 +8,9 @@ export function revalidateAllPages() {
   try {
     revalidatePath('/', 'layout')
   } catch (error) {
-    // Hooks also run outside a request (seed script, `payload run`), where revalidatePath
-    // throws. Logged rather than swallowed so a genuine cache failure is not silent — and
-    // see AGENTS.md: a `seed:prod` run therefore leaves production serving the old copy.
+    // Hooks also run outside a request (`payload run`, a migration), where revalidatePath
+    // throws. Logged rather than swallowed so a genuine cache failure is not silent — a write
+    // from the CLI therefore leaves production serving the old copy until the next deploy.
     console.warn('revalidatePath skipped', error)
   }
 }

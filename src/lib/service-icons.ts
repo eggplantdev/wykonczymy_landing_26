@@ -20,11 +20,3 @@ export const SERVICE_ICONS = [
 ] as const
 
 export type ServiceIconKeyT = (typeof SERVICE_ICONS)[number]['value']
-
-/**
- * What the twelve seeded cards start out with, in row order. The seed writes these once; from
- * then on the field is the editor's, so this list is a starting point rather than the mapping.
- */
-export const SEEDED_SERVICE_ICONS: readonly ServiceIconKeyT[] = SERVICE_ICONS.map(
-  (icon) => icon.value,
-)

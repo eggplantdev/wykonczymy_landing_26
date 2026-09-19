@@ -69,8 +69,7 @@ export const homeGroup: Field = {
       fields: [
         { name: 'sectionTitle', type: 'text', localized: true },
         {
-          // Not localized: one row set with shared photos, translated field by field. The
-          // seed has to carry the existing row ids or a re-run replaces the rows.
+          // Not localized: one row set with shared photos, translated field by field.
           name: 'cards',
           type: 'array',
           admin: { initCollapsed: true },
@@ -129,8 +128,7 @@ export const homeGroup: Field = {
       fields: [
         { name: 'sectionTitle', type: 'text', localized: true },
         {
-          // Same shape as `services.cards`: one non-localized row set, translated field by
-          // field, so the seed has to carry the existing row ids or a re-run replaces them.
+          // Same shape as `services.cards`: one non-localized row set, translated field by field.
           name: 'quotes',
           type: 'array',
           admin: { initCollapsed: true },
