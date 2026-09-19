@@ -23,8 +23,8 @@ export function NumbersSection({ container, data }: PropsT) {
           className="xlg:col-span-6 pr-4 pb-6 md:pr-5 md:pb-8 lg:col-span-4"
         />
         <ul className="xlg:col-span-6 grid pr-4 md:grid-cols-2 md:pr-5 lg:col-span-8">
-          {cards.map((card, index) => (
-            <NumberCard key={card.id} card={card} index={index} />
+          {cards.map((card) => (
+            <NumberCard key={card.id} card={card} />
           ))}
         </ul>
       </div>
