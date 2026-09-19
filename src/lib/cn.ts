@@ -8,7 +8,7 @@ import { extendTailwindMerge, validators, type ClassNameValue } from 'tailwind-m
 const twMerge = extendTailwindMerge({
   extend: {
     classGroups: {
-      'font-size': [{ text: [validators.isNumber, 'md', 'xxl', 'hero', 'hero-lg'] }],
+      'font-size': [{ text: [validators.isNumber, 'md', 'xxl', 'hero'] }],
     },
   },
 })

@@ -12,7 +12,10 @@
 @theme {
   --font-*: initial;
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  /* Not from tdg — `--font-*: initial` above also wiped Tailwind's own `font-mono`, which
+     `page-board` had been using all along and silently getting nothing from. */
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --text-*: initial;
   --text-8: 0.5rem;
@@ -40,17 +43,13 @@
   --text-72--letter-spacing: -0.02em;
   --text-72: 4.5rem;
 
-  /* The hero title, and the only fluid size in the scale. 4.028vw is 58px at exactly 1440,
-     so it picks up where `text-58` leaves off and keeps growing instead of stopping there —
+  /* The hero title, and the only fluid size in the scale. 6.6vw is 95px at exactly 1440,
+     so it picks up where `text-72` leaves off and keeps growing instead of stopping there —
      the hero is the one section that bleeds past the 1920 cap, so it scales on the viewport
-     rather than on the page. */
-  --text-hero--letter-spacing: -0.02em;
-  --text-hero: 4.028vw;
-
-  /* Hero-lab only, for judging a much larger title: 6.6vw is 95px at 1440 against
-     `text-hero`'s 58px. Not used by the shipped hero. */
-  --text-hero-lg--letter-spacing: -0.025em;
-  --text-hero-lg: 6.6vw;
+     rather than on the page. The tracking tightens past the rest of the scale because at
+     this size -0.02em still reads loose. */
+  --text-hero--letter-spacing: -0.025em;
+  --text-hero: 6.6vw;
 
   /* tdg's `sm` is 12px, not Tailwind's 14px — lifted markup depends on the smaller value. */
   --text-sm: 0.75rem;
@@ -97,6 +96,42 @@
 
   --shadow-header: 0px 2px 2px 0px var(--wk-shadow);
   --shadow-panel: 0 10px 15px -3px var(--wk-shadow), 0 4px 6px -4px var(--wk-shadow);
+  --shadow-panel-sm: 0 4px 6px -1px var(--wk-shadow), 0 2px 4px -2px var(--wk-shadow);
+
+  /* Pairs with `origin-top`, set on the icon itself, so it pivots where a handset hangs.
+
+     The rest between rings is written into the keyframes, not into a delay: the shake
+     occupies the first 12% of a 5s cycle and the remaining 88% holds still. `animation-delay`
+     only postpones the first run, so it cannot space out a loop. */
+  --animate-ring: ring 5s ease-in-out infinite;
+
+  @keyframes ring {
+    0% {
+      rotate: 0deg;
+    }
+    1.8% {
+      rotate: -15deg;
+    }
+    3.6% {
+      rotate: 15deg;
+    }
+    5.4% {
+      rotate: -10deg;
+    }
+    7.2% {
+      rotate: 10deg;
+    }
+    9% {
+      rotate: -5deg;
+    }
+    10.8% {
+      rotate: 5deg;
+    }
+    12%,
+    100% {
+      rotate: 0deg;
+    }
+  }
 }
 
 /* ---------------------------------------------------------------------------
