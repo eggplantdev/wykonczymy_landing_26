@@ -11,7 +11,7 @@ test('reduced motion does not cost a hydration mismatch', async ({ page }) => {
   })
 
   await page.emulateMedia({ reducedMotion: 'reduce' })
-  await page.goto('http://localhost:3000/')
+  await page.goto('/')
 
   const sections = page.locator('div.overflow-x-clip.flex > div')
   const count = await sections.count()

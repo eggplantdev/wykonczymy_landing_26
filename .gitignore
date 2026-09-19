@@ -5,6 +5,8 @@
 
 node_modules/
 .next/
+# the e2e run's own dist dir — Next locks one dev server per dist dir, see next.config.ts
+.next-e2e/
 build/
 dist/
 

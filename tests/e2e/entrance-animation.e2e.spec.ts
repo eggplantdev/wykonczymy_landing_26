@@ -58,7 +58,7 @@ async function sweep(page: Page, label: string) {
 // would be past the ratio cliff above and would leave the page blank under a header and footer that
 // render fine — which is exactly what happened once.
 test('the page body becomes visible without being scrolled to', async ({ page }) => {
-  await page.goto('http://localhost:3000/')
+  await page.goto('/')
 
   await expect(page.locator('div.grow > div').first()).toHaveCSS('opacity', '1')
 })
@@ -70,17 +70,17 @@ for (const viewport of VIEWPORTS) {
     test.setTimeout(120_000)
     await page.setViewportSize(viewport)
 
-    await page.goto('http://localhost:3000/')
+    await page.goto('/')
     await sweep(page, '/')
 
     for (const listing of LISTINGS) {
-      await page.goto(`http://localhost:3000${listing.path}`)
+      await page.goto(listing.path)
       await sweep(page, listing.path)
 
       const href = await page.locator(listing.card).first().getAttribute('href')
       expect(href, `no card on ${listing.path}`).toBeTruthy()
 
-      await page.goto(`http://localhost:3000${href}`)
+      await page.goto(href!)
       await sweep(page, href!)
     }
   })

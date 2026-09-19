@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-const STYLE_PAGE = 'http://localhost:3000/wykonczenia/klasyczny/'
+const STYLE_PAGE = '/wykonczenia/klasyczny/'
 const TILE = 'Powiększ zdjęcie'
 
 test.describe('Photo lightbox', () => {

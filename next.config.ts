@@ -7,6 +7,11 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
+  // Next holds a lock inside the dist directory and refuses a second `next dev` on the same
+  // one — whatever port it is given. The e2e run needs its own server, on its own database,
+  // so it passes NEXT_DIST_DIR and gets its own lock; without this you would have to stop
+  // your dev server to run the suite.
+  distDir: process.env.NEXT_DIST_DIR ?? '.next',
   // Every indexed address ends in a slash; Next strips it by default, which
   // would break all twelve at once. See context/foundation/url-map.md.
   trailingSlash: true,

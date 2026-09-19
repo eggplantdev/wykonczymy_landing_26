@@ -4,32 +4,32 @@ import { test, expect } from '@playwright/test'
 // contract from context/foundation/url-map.md rather than any particular copy.
 test.describe('Frontend routing', () => {
   test('serves the Polish home page at /', async ({ page }) => {
-    await page.goto('http://localhost:3000/')
+    await page.goto('/')
 
     await expect(page.locator('h1')).toBeVisible()
   })
 
   test('adds the trailing slash rather than 404ing', async ({ page }) => {
-    const response = await page.goto('http://localhost:3000/oferta')
+    const response = await page.goto('/oferta')
 
     expect(response?.status()).toBe(200)
-    expect(page.url()).toBe('http://localhost:3000/oferta/')
+    await expect(page).toHaveURL('/oferta/')
   })
 
   test('redirects /en to the English home page', async ({ page }) => {
-    await page.goto('http://localhost:3000/en')
+    await page.goto('/en')
 
-    expect(page.url()).toBe('http://localhost:3000/en/home/')
+    await expect(page).toHaveURL('/en/home/')
   })
 
   test('404s on a path deeper than <locale>/<slug>', async ({ page }) => {
-    const response = await page.goto('http://localhost:3000/oferta/anything/at/all/')
+    const response = await page.goto('/oferta/anything/at/all/')
 
     expect(response?.status()).toBe(404)
   })
 
   test('404s on an unknown slug', async ({ page }) => {
-    const response = await page.goto('http://localhost:3000/nie-ma-takiej-strony/')
+    const response = await page.goto('/nie-ma-takiej-strony/')
 
     expect(response?.status()).toBe(404)
   })

@@ -1,30 +1,25 @@
 import { defineConfig, devices } from '@playwright/test'
-
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
 import 'dotenv/config'
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
+import { requireTestDatabase } from './tests/helpers/test-database'
+
+// At module scope so it runs before the web server is spawned: the specs write rows, and the
+// dev server behind them reads whatever `POSTGRES_URL` holds when the child process starts.
+requireTestDatabase()
+
+// Not 3000: that is where your own `pnpm dev` lives, pointed at production, and Playwright would
+// happily reuse it — the browser would then read production while the fixtures wrote to the test
+// database. A port of its own means the run always owns the server it is asserting against.
+const PORT = 3100
+
 export default defineConfig({
   testDir: './tests/e2e',
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://localhost:3000',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    baseURL: `http://localhost:${PORT}`,
     trace: 'on-first-retry',
   },
   projects: [
@@ -34,8 +29,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm dev',
+    command: `pnpm dev --port ${PORT}`,
     reuseExistingServer: true,
-    url: 'http://localhost:3000',
+    url: `http://localhost:${PORT}`,
+    env: { NEXT_DIST_DIR: '.next-e2e' },
   },
 })

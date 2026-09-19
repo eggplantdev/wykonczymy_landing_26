@@ -62,7 +62,7 @@ const eslintConfig = [
     rules: betterTailwindcss.configs['correctness-error'].rules,
   },
   {
-    ignores: ['.next/', 'src/migrations/', 'src/payload-types.ts'],
+    ignores: ['.next/', '.next-e2e/', 'src/migrations/', 'src/payload-types.ts'],
   },
 ]
 
