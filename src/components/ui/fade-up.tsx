@@ -32,7 +32,7 @@ export function FadeUp({ className, delay, children }: PropsT) {
       // rather than an effect.
       //
       // `amount` has a ceiling worth knowing: the intersection ratio caps at `viewport / element`,
-      // so 0.3 is unreachable on a wrapper past ~3.3 viewports (~2800px at 844) and it would sit at
+      // so 0.2 is unreachable on a wrapper past 5 viewports (~4200px at 844) and it would sit at
       // `opacity: 0` for good. The tallest wrapper today is the footer's contact block at roughly
       // 1300px on a 390px-wide phone, so there is margin — but wrapper height comes from CMS copy
       // and photo counts, which is why `tests/e2e/entrance-animation.e2e.spec.ts` scrolls real pages

@@ -30,8 +30,7 @@ const nextConfig: NextConfig = {
       {
         pathname: '/api/media/file/**',
       },
-      // Placeholder photos under public/, until the home field group puts them in the
-      // media library — see src/lib/placeholder/home.ts.
+      // The brand logos are files in public/, not media-library rows.
       {
         pathname: '/images/**',
       },

@@ -23,9 +23,13 @@ type OptionsT = ConsentManagerOptions & {
 // The country is pinned rather than resolved: the audience is Polish, so everyone gets
 // the European opt-in pack. The expiry only shortens the cookie — c15t keeps a second
 // copy in localStorage, which never expires and is written back over the cookie, so this
-// is not a periodic re-ask. Left to their defaults, `colorScheme` installs a permanent
-// MutationObserver on <html> for a dark mode this site doesn't have, and the iframe
-// blocker installs another on <body> for the iframes this site doesn't have either.
+// is not a periodic re-ask.
+//
+// `colorScheme` and the iframe blocker are both pinned so c15t's defaults don't install
+// permanent MutationObservers on <html> and <body>. Pinning it light costs nothing visible:
+// the setting only toggles a `c15t-dark` class that styles c15t's own components, and every
+// import here is from `@c15t/nextjs/headless` — the banner and the preferences dialog are
+// built from this site's own tokens, which already follow `data-theme`.
 const OPTIONS: OptionsT = {
   mode: 'offline',
   consentCategories: CONSENT_CATEGORIES.map(({ id }) => id),
