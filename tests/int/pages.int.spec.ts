@@ -23,9 +23,12 @@ describe('Pages', () => {
     payload = await getPayload({ config: await config })
   })
 
+  // A swallowed failure here is not harmless: these run against the shared dev database, and a
+  // leaked draft shadows the real page of its type in every later `draft: true` lookup — which is
+  // how one crashed run silently broke the seed and this suite until the row was found by hand.
   afterAll(async () => {
     for (const id of created) {
-      await payload.delete({ collection: 'pages', id }).catch(() => undefined)
+      await payload.delete({ collection: 'pages', id })
     }
   })
 
