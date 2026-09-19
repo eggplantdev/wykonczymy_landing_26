@@ -24,13 +24,16 @@ export function ProjectSlide({ slide, total }: PropsT) {
 
   return (
     <>
+      {/* `overflow-hidden` earns its place only now: the photo used to fill the link exactly, and
+          a scaled one with nothing to clip it would spill over the slide beside it. */}
       <Link
         href={href}
-        className="relative mb-3 block h-117 w-full md:mb-4 md:aspect-614/345 md:h-auto lg:mb-5 lg:aspect-888/500"
+        className="group relative mb-3 block h-117 w-full overflow-hidden md:mb-4 md:aspect-614/345 md:h-auto lg:mb-5 lg:aspect-888/500"
       >
         <Media
           image={image}
           video={video}
+          className="delay-100 duration-1000 group-hover:scale-105"
           sizes="(max-width: 767px) 100vw, (max-width: 1023px) 87vw, 67vw"
         />
       </Link>

@@ -12,7 +12,13 @@ export function InteriorStyleSlide({ style, href }: PropsT) {
   return (
     <Link
       href={href}
-      className="group border-r-border relative block shrink-0 border-r px-2 md:px-2.5"
+      // The fill needs vertical room the slide never had: with no `py` the black would start at
+      // the cap height of the title and stop at the foot of the photo, reading as a crop rather
+      // than a card. It stays behind `md` because Tailwind gates `hover:` behind
+      // `@media (hover: hover)`, so a touch device never paints the fill the padding is for.
+      // `surface` is the pair that tracks the opposite of the page, so this stays an inversion in
+      // the dark theme instead of a black fill the dark page swallows.
+      className="group border-r-border hover:bg-surface hover:text-surface-foreground relative block shrink-0 border-r px-2 delay-100 duration-1000 md:px-2.5 md:py-5"
     >
       <div className="w-80 px-2 md:w-108 md:px-4">
         <StyleCardBody

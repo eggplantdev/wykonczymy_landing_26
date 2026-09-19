@@ -19,11 +19,20 @@ export function ProjectRow({ href, title, summary, image, details }: PropsT) {
   return (
     <Link
       href={href}
-      className="gridContainer paddings group bg-transparent py-8 delay-100 duration-1000 hover:bg-muted lg:py-12"
+      // The row inverts on hover rather than taking a grey fill: `surface` is the pair that
+      // tracks the opposite of the page, so this is black-on-white in the light theme and
+      // white-on-black in the dark one, instead of a literal black that the dark page swallows.
+      // The children carry no colour of their own, so they follow the animating `color` for free.
+      className="gridContainer paddings group hover:bg-surface hover:text-surface-foreground bg-transparent py-8 delay-100 duration-1000 lg:py-12"
     >
       <div className="relative col-span-full mb-6 aspect-3/2 overflow-hidden md:order-2 md:col-span-4 md:col-start-5 md:mb-0 lg:col-span-4 lg:col-start-9">
         <Media
           image={image}
+          // The scale rides on the photo, not on the box around it: a clip box is scaled
+          // along with its element, so putting it a level up would grow the frame instead of
+          // pushing the photo against it. `sizes` is unchanged — a transform is paint-time and
+          // never widens the layout box, so asking for more only buys a heavier download.
+          className="delay-100 duration-1000 group-hover:scale-105"
           sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, (max-width: 2047px) 33vw, 640px"
         />
       </div>
