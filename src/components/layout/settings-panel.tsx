@@ -1,5 +1,6 @@
 import { useId, type ReactNode } from 'react'
 
+import { CookieSettingsButton } from '@/components/cookies/cookie-settings-button'
 import { LanguageControl } from '@/components/layout/language-control'
 import { ThemeControl } from '@/components/theme/theme-control'
 import type { Locale } from '@/lib/i18n/i18n'
@@ -45,6 +46,8 @@ export function SettingsPanel({ paths, onNavigate }: PropsT) {
       <SettingsSection label={t('theme')}>
         {(labelledBy) => <ThemeControl labelledBy={labelledBy} />}
       </SettingsSection>
+
+      <CookieSettingsButton className="text-12 text-muted-foreground hover:text-foreground border-border-muted -mb-1 border-t px-1 pt-3 text-left transition-colors" />
     </div>
   )
 }
