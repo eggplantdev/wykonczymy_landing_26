@@ -3,6 +3,7 @@ import { useId, type ReactNode } from 'react'
 import { CookieSettingsButton } from '@/components/cookies/cookie-settings-button'
 import { LanguageControl } from '@/components/layout/language-control'
 import { ThemeControl } from '@/components/theme/theme-control'
+import { cn } from '@/lib/cn'
 import type { Locale } from '@/lib/i18n/i18n'
 import { useTranslation } from '@/lib/i18n/use-translation'
 
@@ -30,13 +31,16 @@ function SettingsSection({ label, children }: SectionPropsT) {
 type PropsT = {
   paths: Partial<Record<Locale, string>>
   onNavigate: () => void
+  // The surface, from whoever is showing this. In the bar it is a popover and has to draw its
+  // own card; in the mobile sheet it is just part of the sheet, which already is one.
+  className?: string
 }
 
-export function SettingsPanel({ paths, onNavigate }: PropsT) {
+export function SettingsPanel({ paths, onNavigate, className }: PropsT) {
   const { t } = useTranslation('common')
 
   return (
-    <div className="bg-card shadow-panel flex w-48 flex-col gap-3 rounded-lg p-3">
+    <div className={cn('flex w-48 flex-col gap-3', className)}>
       <SettingsSection label={t('language')}>
         {(labelledBy) => (
           <LanguageControl paths={paths} labelledBy={labelledBy} onSelect={onNavigate} />

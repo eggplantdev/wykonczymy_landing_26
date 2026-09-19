@@ -11,20 +11,20 @@ import { useTranslation } from '@/lib/i18n/use-translation'
 
 type PropsT = {
   paths: Partial<Record<Locale, string>>
-  variant?: 'header' | 'mobile-menu'
-  onNavigate?: () => void
 }
 
-export function SettingsMenu({ paths, variant = 'header', onNavigate }: PropsT) {
+// The bar only, because the bar is the only place short of room for the controls themselves.
+// The mobile sheet shows `SettingsPanel` outright — it has a whole screen, so a gear there
+// only added a tap between a visitor and three buttons they could already see the shape of.
+export function SettingsMenu({ paths }: PropsT) {
   const { t } = useTranslation('common')
   const shouldReduceMotion = useReducedMotion()
   const [isOpen, setIsOpen] = useState(false)
-  const isMobileMenu = variant === 'mobile-menu'
 
   return (
     <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
       <Popover.Trigger asChild>
-        <SettingsTrigger label={t('settings')} isOpen={isOpen} isMobileMenu={isMobileMenu} />
+        <SettingsTrigger label={t('settings')} isOpen={isOpen} />
       </Popover.Trigger>
 
       <AnimatePresence>
@@ -32,11 +32,10 @@ export function SettingsMenu({ paths, variant = 'header', onNavigate }: PropsT) 
           <Popover.Content
             forceMount
             // The panel is wider than the gear, so it cannot hang off the trigger's own edge:
-            // in the bar it is pinned to the right so it opens inward, and in the sheet it is
-            // centred on the column everything else in there is centred on.
-            align={isMobileMenu ? 'center' : 'end'}
-            // Measured from the gear, which in the bar sits inside the group's padding — so
-            // the gap the panel actually shows below the bar is this minus that padding.
+            // pinned to the right, it opens inward.
+            align="end"
+            // Measured from the gear, which sits inside the group's padding — so the gap the
+            // panel actually shows below the bar is this minus that padding.
             sideOffset={12}
             // Focus stays on the gear, so the next Tab walks into the panel and the one after
             // that leaves it. Radix would otherwise move focus onto the panel itself, which
@@ -52,10 +51,8 @@ export function SettingsMenu({ paths, variant = 'header', onNavigate }: PropsT) 
             >
               <SettingsPanel
                 paths={paths}
-                onNavigate={() => {
-                  setIsOpen(false)
-                  onNavigate?.()
-                }}
+                onNavigate={() => setIsOpen(false)}
+                className="bg-card shadow-panel rounded-lg p-3"
               />
             </motion.div>
           </Popover.Content>

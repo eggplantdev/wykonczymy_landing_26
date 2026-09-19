@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react'
 
 import { MenuToggle } from '@/components/layout/menu-toggle'
-import { SettingsMenu } from '@/components/layout/settings-menu'
+import { SettingsPanel } from '@/components/layout/settings-panel'
 import { SiteNav } from '@/components/layout/site-nav'
 import { PhoneCta } from '@/components/ui/phone-cta'
 import { Sheet } from '@/components/ui/sheet'
@@ -52,13 +52,25 @@ export function MobileMenu({ paths, typePaths, phone }: PropsT) {
         label={t('menu')}
         closeLabel={t('closeMenu')}
         id={MENU_ID}
-        className="items-center justify-center gap-4 bg-card p-6"
+        className="items-center gap-4 bg-card p-6"
       >
-        <SiteNav paths={typePaths} variant="mobile-menu" onNavigate={() => setIsOpen(false)} />
+        {/* `my-auto` on the group and nothing on the call button splits the free space evenly
+            above and below the nav, so the nav stays centred while the button sits on the floor. */}
+        <div className="my-auto flex flex-col items-center gap-4">
+          <SiteNav paths={typePaths} variant="mobile-menu" onNavigate={() => setIsOpen(false)} />
 
-        <SettingsMenu paths={paths} variant="mobile-menu" onNavigate={() => setIsOpen(false)} />
+          {/* The panel itself, not the gear that opens it in the bar: the sheet has the room,
+              so a trigger here only put a tap between a visitor and three buttons. Bare, because
+              the sheet is already the card the popover has to draw for itself. */}
+          <SettingsPanel paths={paths} onNavigate={() => setIsOpen(false)} />
+        </div>
 
-        <PhoneCta phone={phone} callLabel={t('callUs')} onClick={() => setIsOpen(false)} />
+        <PhoneCta
+          phone={phone}
+          callLabel={t('callUs')}
+          variant="solid"
+          onClick={() => setIsOpen(false)}
+        />
       </Sheet>
     </>
   )
