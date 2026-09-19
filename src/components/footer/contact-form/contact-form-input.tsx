@@ -1,5 +1,6 @@
 'use client'
 
+import { cn } from '@/lib/cn'
 import { ContactFormField, fieldControlClasses, useFieldIds } from './contact-form-field'
 
 type PropsT = {
@@ -11,6 +12,7 @@ type PropsT = {
   error?: string
   type?: 'text' | 'email' | 'tel'
   autoComplete?: string
+  className?: string
 }
 
 export function ContactFormInput({
@@ -22,13 +24,14 @@ export function ContactFormInput({
   error,
   type = 'text',
   autoComplete,
+  className,
 }: PropsT) {
   const { id, errorId } = useFieldIds()
 
   return (
     <ContactFormField id={id} errorId={errorId} label={placeholder} error={error}>
       <input
-        className={fieldControlClasses}
+        className={cn(fieldControlClasses, className)}
         id={id}
         name={name}
         placeholder={placeholder}

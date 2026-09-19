@@ -3,9 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 
-import { Button, buttonLabelClasses } from '@/components/ui/button'
-import { Arrow } from '@/components/ui/icons/arrow'
-import { cn } from '@/lib/cn'
+import { Button } from '@/components/ui/button'
+import { ButtonArrow } from '@/components/ui/button-arrow'
 import { useContactFormStore } from '@/lib/contact/contact-form-store'
 import { contactSchema, emptyContactValues, firstIssueKey } from '@/lib/contact/contact-schema'
 import { submitContactForm } from '@/lib/contact/submit-contact-form'
@@ -28,12 +27,15 @@ type TextFieldT = {
   name: 'name' | 'email' | 'phone' | 'area'
   type?: 'email' | 'tel'
   autoComplete?: string
+  className?: string
 }
 
-// Each name doubles as its own `form` translation key.
+// Each name doubles as its own `form` translation key. A control carries its spacing as top
+// padding, which the top row of the grid has nothing to separate from — dropping it there is
+// what puts the first placeholder on the same line as the contact block beside it.
 const TEXT_FIELDS: readonly TextFieldT[] = [
-  { name: 'name', autoComplete: 'name' },
-  { name: 'email', type: 'email', autoComplete: 'email' },
+  { name: 'name', autoComplete: 'name', className: 'pt-0' },
+  { name: 'email', type: 'email', autoComplete: 'email', className: 'md:pt-0' },
   { name: 'phone', type: 'tel', autoComplete: 'tel' },
   { name: 'area' },
 ]
@@ -125,6 +127,7 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
               placeholder={t(field.name)}
               type={field.type}
               autoComplete={field.autoComplete}
+              className={field.className}
               value={fieldApi.state.value}
               onChange={fieldApi.handleChange}
               onBlur={fieldApi.handleBlur}
@@ -177,15 +180,7 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
               isBusy={isSubmitting}
               className="md:ml-auto"
             >
-              <span
-                aria-hidden
-                className={cn(
-                  buttonLabelClasses({ disabled: isSubmitting }),
-                  'flex h-3 group-hover:translate-x-0.5',
-                )}
-              >
-                <Arrow />
-              </span>
+              <ButtonArrow disabled={isSubmitting} />
             </Button>
           )}
         </form.Subscribe>

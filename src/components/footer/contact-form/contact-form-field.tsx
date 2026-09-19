@@ -4,7 +4,7 @@ import { cn } from '@/lib/cn'
 // `placeholder:` is not decoration: a browser does not inherit the element's `color` into
 // `::placeholder`, so without it the fields show the UA's own grey instead of `grau_300`.
 export const fieldControlClasses = cn(
-  'border-grau_300 text-12 text-grau_300 w-full pt-8 pb-2',
+  'border-grau_300 text-12 text-grau_100 w-full pt-8 pb-2',
   'focus:border-grau_100 aria-invalid:border-error placeholder:text-grau_300 border-0 border-b bg-transparent pl-0',
 )
 
