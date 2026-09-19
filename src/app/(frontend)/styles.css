@@ -314,7 +314,7 @@
   }
 
   body {
-    @apply max-w-site bg-background text-foreground mx-auto flex w-full flex-col overscroll-none scroll-smooth;
+    @apply bg-background text-foreground flex w-full flex-col overscroll-none scroll-smooth;
   }
 
   input,
@@ -375,11 +375,13 @@
   @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
 }
 
-/* Breaks out of the `max-w-site` cap `body` carries: above 1920 that cap turns into gutters
-   either side, and a full-bleed photo must not stop at them. The symmetric negative margins
-   re-centre the 100vw box on the capped one. */
-@utility full-bleed {
-  @apply mx-[calc(50%-50vw)] w-screen;
+/* The 1920 cap belongs to the reading column, not to the page, so `body` runs the full width of
+   the screen and whatever has to line up takes this. Carried the other way round — the cap on
+   `body` — the header, the footer bar and every full-width photo had to break back out of it, and
+   the only way out was a `100vw` box, which is wider than the page whenever the scrollbar is a
+   classic one rather than an overlay. */
+@utility site-container {
+  @apply max-w-site mx-auto w-full;
 }
 
 /* The right edge only, for a carousel whose track is meant to run off the screen: the section

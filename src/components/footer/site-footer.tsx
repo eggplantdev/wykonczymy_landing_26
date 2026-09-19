@@ -32,42 +32,42 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
   const { nav } = getTranslations(locale)
 
   return (
-    <footer className="md:grid md:grid-cols-8 md:gap-x-5 lg:grid-cols-12 paddings pt-20 md:pt-36">
-      {/* Placement rides on the wrapper: once it sits between the grid and its item, the wrapper
-          is the grid item, and classes left on the paragraph would be laid out against nothing. */}
-      <FadeUp className="mb-20 md:col-span-6 md:mb-36 lg:col-span-8 lg:col-start-5">
-        <p className="text-18 leading-125 max-w-4xl md:text-20 lg:text-32 lg:leading-normal">
-          {intro}
-        </p>
-      </FadeUp>
+    <footer>
+      {/* The reading half takes the column; the dark bar below is a sibling rather than a grid
+          item precisely so it does not. */}
+      <div className="site-container paddings md:grid md:grid-cols-8 md:gap-x-5 lg:grid-cols-12 pt-20 md:pt-36">
+        {/* Placement rides on the wrapper: once it sits between the grid and its item, the wrapper
+            is the grid item, and classes left on the paragraph would be laid out against nothing. */}
+        <FadeUp className="mb-20 md:col-span-6 md:mb-36 lg:col-span-8 lg:col-start-5">
+          <p className="text-18 leading-125 max-w-4xl md:text-20 lg:text-32 lg:leading-normal">
+            {intro}
+          </p>
+        </FadeUp>
 
-      {/* The header is fixed, so the anchored block carries its own offset from the top. Landing on
-          the anchor mid-entrance still resolves ~20px high — the wrapper's transform moves the
-          target with it — so the offset is sized to survive that rather than to be exact. */}
-      <FadeUp className="col-span-full">
-        <div
-          id={CONTACT_FORM_ANCHOR}
-          className="scroll-mt-24 md:scroll-mt-28 lg:grid lg:grid-cols-12 lg:gap-x-5"
-        >
-          <SectionTitle title={title} className="mb-6 md:mb-8 lg:col-span-full lg:mb-10" />
+        {/* The header is fixed, so the anchored block carries its own offset from the top. Landing
+            on the anchor mid-entrance still resolves ~20px high — the wrapper's transform moves the
+            target with it — so the offset is sized to survive that rather than to be exact. */}
+        <FadeUp className="col-span-full">
+          <div
+            id={CONTACT_FORM_ANCHOR}
+            className="scroll-mt-24 md:scroll-mt-28 lg:grid lg:grid-cols-12 lg:gap-x-5"
+          >
+            <SectionTitle title={title} className="mb-6 md:mb-8 lg:col-span-full lg:mb-10" />
 
-          <ContactPerson {...person} />
-          <div className="lg:col-span-8 lg:col-start-5">
-            <ContactForm privacyPolicyHref={typePaths[PRIVACY_POLICY_PAGE_TYPE]} />
+            <ContactPerson {...person} />
+            <div className="lg:col-span-8 lg:col-start-5">
+              <ContactForm privacyPolicyHref={typePaths[PRIVACY_POLICY_PAGE_TYPE]} />
+            </div>
           </div>
-        </div>
-      </FadeUp>
+        </FadeUp>
+      </div>
 
       {/* The form stays on the page's own canvas and only this block claims the dark role
-          tokens — the same re-pointing the theme toggle does, scoped to a subtree. The
-          colour change is what separates it from the form above, so it carries no hairline.
-          `full-bleed` rather than margins that just cancel `paddings`: those reach the edge of the
-          column `body` caps at `max-w-site`, so past 1920 the black stopped short and sat in white
-          gutters. `paddings` then puts the inset back on the bar itself. */}
-      <div
-        data-theme="dark"
-        className="bg-background text-foreground full-bleed paddings col-span-full mt-6 py-4"
-      >
+          tokens — the same re-pointing the theme toggle does, scoped to a subtree. The colour
+          change is what separates it from the form above, so it carries no hairline. It takes
+          `paddings` without the column, so the black runs the width of the screen while its
+          contents sit as far in from the edge as the header's logo. */}
+      <div data-theme="dark" className="bg-background text-foreground paddings mt-6 py-4">
         {/* Three equal tracks, not `justify-between`: the latter equalises the gaps, so the
             middle item lands on the page's centre only when the two outer ones happen to be
             the same width. They are not — a pill against a credit line — and it sat off centre

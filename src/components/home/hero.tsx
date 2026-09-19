@@ -67,7 +67,7 @@ export function Hero({ data }: PropsT) {
   // `clip` over `hidden` because `hidden` leaves the box programmatically scrollable, and the hero
   // holds content that is scrolled out of its own frame rather than merely painted over.
   return (
-    <section ref={sectionRef} className="full-bleed relative flex h-svh flex-col overflow-clip">
+    <section ref={sectionRef} className="relative flex h-svh flex-col overflow-clip">
       {/* `sizes` stays at the layout width: `scale` is a paint-time transform, so it never changes
           how wide the element is laid out. Asking for 150vw only made the browser pick a source two
           steps up the srcset for the LCP image, to buy sharpness at the far end of the exit. */}

@@ -13,10 +13,9 @@ type PropsT = {
 // The bar spans the page but only its controls take pointer events, so the empty space
 // either side of the nav does not swallow clicks on the page beneath.
 //
-// It is fixed, so the viewport — not `body` — is its containing block, and it deliberately
-// does not take the `max-w-site` cap: the logo belongs at the edge of the screen, like the
-// footer bar and the carousel tracks. The nav does not move for it — the cap is centred, so
-// the column's axis and the viewport's are the same point.
+// It does not take `site-container`: the logo belongs at the edge of the screen, like the footer
+// bar and the carousel tracks. The nav does not move for that — the column is centred, so its
+// axis and the screen's are the same point.
 export function SiteHeader({ paths, typePaths }: PropsT) {
   return (
     // The outer columns are equal fractions, so the nav lands on the page's own axis
