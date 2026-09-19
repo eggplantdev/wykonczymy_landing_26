@@ -8,13 +8,6 @@ type PropsT = {
 // unmuted video would simply never start.
 export function MediaVideo({ video }: PropsT) {
   return (
-    <video
-      src={video.url}
-      autoPlay
-      loop
-      playsInline
-      muted
-      className="h-full w-full object-cover"
-    />
+    <video src={video.url} autoPlay loop playsInline muted className="h-full w-full object-cover" />
   )
 }
