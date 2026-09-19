@@ -9,13 +9,13 @@ type StyleT = {
   className?: string
 }
 
-// Exported as classes rather than kept inside NavItem, because the language trigger wears
-// the same panel appearance and cannot be a NavItem: `Popover.Trigger asChild` needs a
-// <button>, and a <button> inside an <a> is invalid HTML.
+// Exported as classes rather than kept inside NavItem, because NavItemPill wears the same
+// appearance but cannot be a NavItem: it renders the sliding pill as a sibling of the link,
+// which a NavItem's <li><Link> has nowhere to put.
 export function navItemClasses({ variant = 'bar', className }: StyleT) {
   return cn(
-    // The cursor only dims the label. A fill would compete with the selected item's
-    // pill, which is the one thing in the bar allowed to carry a background.
+    // A hover fill would compete with the selected item's pill, which is the one thing in
+    // the bar allowed to carry a background.
     'text-shwarz hover:text-grau_100 inline-flex items-center px-4 duration-200',
     // Chaos Kitchen's bar: a 24px item inside the group's 4px padding, so the whole
     // control stands 32px tall.
@@ -45,10 +45,15 @@ export function NavItem({ href, children, variant, className, ...linkProps }: Pr
         className={navItemClasses({
           variant,
           className: cn(
-            // The page you are on wears the brand colour as a filled pill. Both hover
-            // overrides are deliberate: without them the plain `hover:` rules would
-            // strip the fill off the one item that has to keep it.
-            'aria-[current=page]:bg-blau aria-[current=page]:text-white aria-[current=page]:hover:bg-blau aria-[current=page]:hover:text-white rounded-md',
+            'rounded-md',
+            // Both hover overrides are deliberate: without them the plain `hover:` rules
+            // would strip the fill off the one item that has to keep it.
+            variant !== 'mobile' &&
+              'aria-[current=page]:bg-shwarz aria-[current=page]:text-white aria-[current=page]:hover:bg-shwarz aria-[current=page]:hover:text-white',
+            // A fill across a full-width row in the mobile menu reads as a block, not a
+            // marker, so the panel keeps the underline it always had.
+            variant === 'mobile' &&
+              'aria-[current=page]:underline aria-[current=page]:underline-offset-4',
             className,
           ),
         })}

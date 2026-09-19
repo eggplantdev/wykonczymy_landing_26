@@ -28,10 +28,8 @@ const TOGGLE_DASH = {
 const OPEN_DURATION_MS = 520
 const CLOSE_DURATION_MS = 820
 
-// White strokes inverted against whatever they sit over, so one icon reads on a photo,
-// on white page sections and on the menu it slides over. Difference only sees the
-// backdrop of the nearest stacking-context ancestor, which is why the button positions
-// itself instead of sitting inside the fixed header.
+// Flat, matching the nav pill: it reads on the white page and on the panel it slides over,
+// but not on a dark photo.
 export function MenuToggle({ label, isOpen, onClick, className, ref, ...ariaProps }: PropsT) {
   const durationMs = isOpen ? OPEN_DURATION_MS : CLOSE_DURATION_MS
 
@@ -44,7 +42,7 @@ export function MenuToggle({ label, isOpen, onClick, className, ref, ...ariaProp
       aria-expanded={isOpen}
       {...ariaProps}
       className={cn(
-        'fixed top-4 right-6 z-50 text-white mix-blend-difference md:hidden',
+        'text-shwarz fixed top-4 right-6 z-50 md:hidden',
         // The open menu is a modal dialog, and Radix kills pointer events on everything
         // outside it. This button is outside it and is the only way to shut it.
         isOpen && 'pointer-events-auto',
