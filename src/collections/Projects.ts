@@ -38,7 +38,7 @@ export const Projects: CollectionConfig = {
       ],
     },
     { name: 'description', type: 'textarea', localized: true },
-    specListField('scope', 'The work carried out, one row per trade.'),
+    specListField('scope', 'The work carried out, one row per trade.', { withIcon: true }),
     specListField('materials', 'Materials and finishes, one row per category.'),
     {
       name: 'gallery',

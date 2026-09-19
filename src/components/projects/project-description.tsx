@@ -1,6 +1,7 @@
 import { SpecTable } from '@/components/ui/spec-table'
 import { SpecGroupHeading } from './spec-group-heading'
-import type { SpecItemT } from '@/components/ui/spec-item'
+import { ScopeList } from './scope-list'
+import type { ScopeItemT, SpecItemT } from '@/lib/content/spec-item'
 
 type PropsT = {
   container: string
@@ -8,7 +9,7 @@ type PropsT = {
   detailsTitle: string
   scopeTitle: string
   details: SpecItemT[]
-  scope: SpecItemT[]
+  scope: ScopeItemT[]
 }
 
 // tdg spread these lists over two subpages either side of the gallery; here they are one
@@ -27,15 +28,16 @@ export function ProjectDescription({
         {description}
       </p>
 
-      <div className="col-span-full grid gap-x-5 gap-y-10 md:grid-cols-2 lg:grid-cols-12">
+      <div className="col-span-full grid gap-x-5 gap-y-10 md:grid-cols-2 md:gap-x-16 lg:grid-cols-12 lg:gap-x-5">
         <div className="lg:col-span-4">
           <SpecGroupHeading title={detailsTitle} />
           <SpecTable items={details} />
         </div>
 
-        <div className="lg:col-span-4">
+        {/* Starting a column late: the two lists read as one block otherwise. */}
+        <div className="lg:col-span-4 lg:col-start-6">
           <SpecGroupHeading title={scopeTitle} />
-          <SpecTable items={scope} namesOnly />
+          <ScopeList items={scope} />
         </div>
       </div>
     </section>

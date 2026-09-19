@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Media } from '@/components/media/media'
 import { SpecStrip } from '@/components/ui/spec-strip'
 import type { MediaImageT } from '@/components/media/types'
-import type { SpecItemT } from '@/components/ui/spec-item'
+import type { SpecItemT } from '@/lib/content/spec-item'
 
 type PropsT = {
   href: string

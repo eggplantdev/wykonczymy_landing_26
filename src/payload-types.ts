@@ -389,7 +389,34 @@ export interface Project {
   scope?:
     | {
         name: string
-        value: string
+        /**
+         * The mark shown beside the name.
+         */
+        icon?:
+          | (
+              | 'check'
+              | 'bolt'
+              | 'fire'
+              | 'faucet'
+              | 'sink'
+              | 'bath'
+              | 'shower'
+              | 'layer-group'
+              | 'table-cells-large'
+              | 'grip-lines'
+              | 'trowel-bricks'
+              | 'paint-roller'
+              | 'brush'
+              | 'kitchen-set'
+              | 'door-open'
+              | 'window-maximize'
+              | 'lightbulb'
+              | 'fan'
+              | 'hammer'
+              | 'screwdriver-wrench'
+              | 'ruler-combined'
+            )
+          | null
         id?: string | null
       }[]
     | null
@@ -711,7 +738,7 @@ export interface ProjectsSelect<T extends boolean = true> {
     | T
     | {
         name?: T
-        value?: T
+        icon?: T
         id?: T
       }
   materials?:

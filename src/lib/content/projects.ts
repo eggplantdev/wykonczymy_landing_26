@@ -5,9 +5,9 @@ import config from '@/payload.config'
 import type { Project } from '@/payload-types'
 import type { Locale } from '@/lib/i18n/i18n'
 import type { MediaImageT } from '@/components/media/types'
-import type { SpecItemT } from '@/components/ui/spec-item'
+import type { ScopeItemT, SpecItemT } from '@/lib/content/spec-item'
 import { toImages } from './media'
-import { toSpecs } from './specs'
+import { toScope, toSpecs } from './specs'
 import { isTranslated } from './translated'
 
 export type ProjectT = {
@@ -20,7 +20,7 @@ export type ProjectT = {
   duration: string
   address: string
   description: string
-  scope: SpecItemT[]
+  scope: ScopeItemT[]
   materials: SpecItemT[]
   image: MediaImageT | null
   gallery: MediaImageT[]
@@ -40,7 +40,7 @@ export const toProject = (doc: Project): ProjectT => {
     duration: doc.duration ?? '',
     address: doc.address ?? '',
     description: doc.description ?? '',
-    scope: toSpecs(doc.scope),
+    scope: toScope(doc.scope),
     materials: toSpecs(doc.materials),
     image: image ?? null,
     gallery,

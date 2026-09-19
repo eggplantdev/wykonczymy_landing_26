@@ -1,4 +1,4 @@
-import type { SpecItemT } from '@/components/ui/spec-item'
+import type { SpecItemT } from '@/lib/content/spec-item'
 import { cn } from '@/lib/cn'
 
 type PropsT = {

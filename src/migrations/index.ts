@@ -16,6 +16,8 @@ import * as migration_20260918_163821_numbers_value_text from './20260918_163821
 import * as migration_20260918_190000_project_cover_from_gallery from './20260918_190000_project_cover_from_gallery'
 import * as migration_20260919_092650_services_card_drop_media from './20260919_092650_services_card_drop_media'
 import * as migration_20260919_093410_services_card_icon from './20260919_093410_services_card_icon'
+import * as migration_20260919_144808_scope_icon from './20260919_144808_scope_icon'
+import * as migration_20260919_151151_scope_drop_value from './20260919_151151_scope_drop_value'
 
 export const migrations = [
   {
@@ -107,5 +109,15 @@ export const migrations = [
     up: migration_20260919_093410_services_card_icon.up,
     down: migration_20260919_093410_services_card_icon.down,
     name: '20260919_093410_services_card_icon',
+  },
+  {
+    up: migration_20260919_144808_scope_icon.up,
+    down: migration_20260919_144808_scope_icon.down,
+    name: '20260919_144808_scope_icon',
+  },
+  {
+    up: migration_20260919_151151_scope_drop_value.up,
+    down: migration_20260919_151151_scope_drop_value.down,
+    name: '20260919_151151_scope_drop_value',
   },
 ]
