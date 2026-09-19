@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 
@@ -23,7 +22,6 @@ type PropsT = {
 export function ServicesCarousel({ container, data }: PropsT) {
   const { sectionTitle, cards } = data
   const carousel = useCarouselReady()
-  const [current, setCurrent] = useState(1)
 
   if (cards.length < 1) return null
 
@@ -43,7 +41,6 @@ export function ServicesCarousel({ container, data }: PropsT) {
           1280: { spaceBetween: 56, slidesPerView: 4.2 },
         }}
         onSwiper={carousel.onSwiper}
-        onSlideChange={(instance) => setCurrent(instance.realIndex + 1)}
       >
         {cards.map((card) => (
           <SwiperSlide key={card.id}>
@@ -56,11 +53,7 @@ export function ServicesCarousel({ container, data }: PropsT) {
             padding to let the track bleed off-screen, so the bar puts it back. */}
         {cards.length > 1 && (
           <div slot="container-end">
-            <CarouselNav
-              current={current}
-              total={cards.length}
-              className="pt-4 pr-6 md:pr-8 xl:pr-12"
-            />
+            <CarouselNav className="pt-4 pr-6 md:pr-8 xl:pr-12" />
           </div>
         )}
       </Swiper>
