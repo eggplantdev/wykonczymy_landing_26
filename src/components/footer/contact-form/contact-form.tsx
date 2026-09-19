@@ -32,9 +32,11 @@ type TextFieldT = {
 
 // Each name doubles as its own `form` translation key. A control carries its spacing as top
 // padding, which the top row of the grid has nothing to separate from — dropping it there is
-// what puts the first placeholder on the same line as the contact block beside it.
+// what puts the first placeholder on the same line as the contact block beside it. That padding
+// is responsive, so an override has to answer at both widths: `pt-0` alone leaves `md:pt-8`
+// untouched, because a class only displaces the one carrying the same modifier.
 const TEXT_FIELDS: readonly TextFieldT[] = [
-  { name: 'name', autoComplete: 'name', className: 'pt-0' },
+  { name: 'name', autoComplete: 'name', className: 'pt-0 md:pt-0' },
   { name: 'email', type: 'email', autoComplete: 'email', className: 'md:pt-0' },
   { name: 'phone', type: 'tel', autoComplete: 'tel' },
   { name: 'area' },
