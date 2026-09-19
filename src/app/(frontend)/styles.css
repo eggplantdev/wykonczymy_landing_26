@@ -79,9 +79,11 @@
 
   /* What the cap holds is the reading column — the header, the footer bar and the peeking
      carousel tracks all reach past it on purpose. Deliberately above `--breakpoint-xxl`, which
-     it used to match: stopping the column at 1920 left visible gutters on a 2560 screen and the
-     page read as boxed. Past 2400 the layout would only stretch those gutters. */
-  --container-site: 2400px;
+     it used to match: at 1920 the column left visible gutters on a wide screen and the page read
+     as boxed. 2048 rather than a rounder number because it is one of Next's `deviceSizes`, so a
+     full-width photo at the cap asks for a render that exists — 2400 would have reached for the
+     3840 one. Every `sizes` in `src/components` that ends in a fixed px is derived from it. */
+  --container-site: 2048px;
 
   --leading-normal: 120%;
 

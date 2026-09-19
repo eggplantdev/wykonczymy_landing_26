@@ -19,7 +19,7 @@ export function ObjectSlideContent({ item, sectionTitle }: PropsT) {
       <h2 className="text-14 col-span-full my-6 font-medium md:hidden">{sectionTitle}</h2>
 
       <div className="relative col-span-full mb-6 aspect-312/209 overflow-hidden md:order-2 md:col-span-3 md:col-start-6 md:mb-0 md:aspect-auto lg:col-span-4 lg:col-start-7">
-        <Media image={image} sizes="(max-width: 767px) 100vw, (max-width: 2399px) 33vw, 792px" />
+        <Media image={image} sizes="(max-width: 767px) 100vw, (max-width: 2047px) 33vw, 676px" />
       </div>
 
       <div className="col-span-full flex flex-col md:col-span-4">

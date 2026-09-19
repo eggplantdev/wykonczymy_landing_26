@@ -40,7 +40,7 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
             <PhotoButton
               image={image}
               priority
-              sizes="(max-width: 1023px) 100vw, (max-width: 2399px) 80vw, 1920px"
+              sizes="(max-width: 1023px) 100vw, (max-width: 2047px) 80vw, 1638px"
             />
           </div>
 
@@ -58,7 +58,7 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
             <div className="relative mt-10 aspect-312/238 overflow-hidden md:mt-8 md:aspect-523/342 lg:mt-12 lg:aspect-661/432">
               <PhotoButton
                 image={contentImage}
-                sizes="(max-width: 767px) 100vw, (max-width: 1023px) 72vw, (max-width: 2399px) 48vw, 1152px"
+                sizes="(max-width: 767px) 100vw, (max-width: 1023px) 72vw, (max-width: 2047px) 48vw, 984px"
               />
             </div>
 

@@ -24,7 +24,7 @@ export function ProjectRow({ href, title, summary, image, details }: PropsT) {
       <div className="relative col-span-full mb-6 aspect-3/2 overflow-hidden md:order-2 md:col-span-4 md:col-start-5 md:mb-0 lg:col-span-4 lg:col-start-9">
         <Media
           image={image}
-          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, (max-width: 2399px) 33vw, 750px"
+          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, (max-width: 2047px) 33vw, 640px"
         />
       </div>
 
