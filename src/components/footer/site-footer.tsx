@@ -35,13 +35,11 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
     <footer>
       {/* The reading half takes the column; the dark bar below is a sibling rather than a grid
           item precisely so it does not. */}
-      <div className="site-container paddings md:grid md:grid-cols-8 md:gap-x-5 lg:grid-cols-12 pt-20 md:pt-36">
+      <div className="site-container paddings md:grid md:grid-cols-8 md:gap-x-5 lg:grid-cols-12 pt-20 md:pt-28">
         {/* Placement rides on the wrapper: once it sits between the grid and its item, the wrapper
             is the grid item, and classes left on the paragraph would be laid out against nothing. */}
-        <FadeUp className="mb-20 md:col-span-6 md:mb-36 lg:col-span-8 lg:col-start-5">
-          <p className="text-18 leading-125 max-w-4xl md:text-20 lg:text-32 lg:leading-normal">
-            {intro}
-          </p>
+        <FadeUp className="mb-20 md:col-span-6 lg:col-span-8 lg:col-start-5">
+          <p className="text-18 leading-125 max-w-4xl md:text-32 md:leading-normal">{intro}</p>
         </FadeUp>
 
         {/* The header is fixed, so the anchored block carries its own offset from the top. Landing
@@ -50,7 +48,7 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
         <FadeUp className="col-span-full">
           <div
             id={CONTACT_FORM_ANCHOR}
-            className="scroll-mt-24 md:scroll-mt-28 lg:grid lg:grid-cols-12 lg:gap-x-5 mb-20 md:mb-36"
+            className="scroll-mt-24 md:scroll-mt-28 lg:grid lg:grid-cols-12 lg:gap-x-5 mb-8 lg:mb-20"
           >
             <SectionTitle title={title} className="mb-6 md:mb-8 lg:col-span-full lg:mb-10" />
 
@@ -66,8 +64,12 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
           tokens — the same re-pointing the theme toggle does, scoped to a subtree. The colour
           change is what separates it from the form above, so it carries no hairline. It takes
           `paddings` without the column, so the black runs the width of the screen while its
-          contents sit as far in from the edge as the header's logo. */}
-      <div data-theme="dark" className="bg-background text-foreground paddings py-4">
+          contents sit as far in from the edge as the header's logo.
+
+          From `md` up only: on a phone the bar sits on the page's own canvas, so the roles have
+          to stay the page's too — re-pointing them there painted the light theme's text on the
+          light theme's background and the whole bar vanished. */}
+      <div className="md:theme-dark md:bg-background text-foreground paddings py-4">
         {/* Three equal tracks, not `justify-between`: the latter equalises the gaps, so the
             middle item lands on the page's centre only when the two outer ones happen to be
             the same width. They are not — a pill against a credit line — and it sat off centre

@@ -237,8 +237,13 @@
 }
 
 /* Only the role assignments are restated — the palette above is shared, so a
-   theme is a re-pointing, not a second set of values. */
-[data-theme='dark'] {
+   theme is a re-pointing, not a second set of values.
+
+   A utility rather than declarations on the attribute alone, because `data-theme` is an
+   attribute and an attribute cannot carry a breakpoint: the footer bar is dark only from
+   `md` up, and `md:theme-dark` is the only way to say that without a second copy of the
+   block. */
+@utility theme-dark {
   --wk-background: var(--wk-ink);
   --wk-foreground: var(--wk-canvas);
 
@@ -263,6 +268,10 @@
      keyboard users who are the only ones who ever see it. */
   --wk-ring: var(--wk-grey-300);
   --wk-shadow: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] {
+  @apply theme-dark;
 }
 
 /* For the handful of things a token cannot reach — a raster logo is a picture, not a
