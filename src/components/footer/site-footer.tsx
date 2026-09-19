@@ -73,7 +73,15 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
             the same width. They are not — a pill against a credit line — and it sat off centre
             by half their difference. */}
         <div className="flex w-full flex-col items-center gap-y-2 md:grid md:grid-cols-3 md:justify-items-start md:gap-x-5">
-          <PhoneCta phone={data.phone} callLabel={nav.callUs} variant="ghost" />
+          {/* No pill height down here: the bar is a credit line and the number reads as part
+              of it, so the link is as tall as the type it is set in. `xl`'s h-12 made it a
+              48px band on a phone, which looked like a button with its fill missing. */}
+          <PhoneCta
+            phone={data.phone}
+            callLabel={nav.callUs}
+            variant="ghost"
+            className="h-auto py-0"
+          />
 
           <SocialLinks className="md:justify-self-center" />
 

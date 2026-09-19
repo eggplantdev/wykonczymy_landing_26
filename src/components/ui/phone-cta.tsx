@@ -11,17 +11,20 @@ type PropsT = {
   callLabel: string
   variant?: ButtonVariantT
   onClick?: () => void
+  // `xl` is the size a tappable pill wants, and the mobile menu takes it as it comes. The
+  // footer bar is a line of type rather than a target, so it hands back `h-auto` here.
+  className?: string
 }
 
 // The pill is worn by the link itself: a <button> inside an <a> is invalid markup and
 // announces two controls where the reader sees one.
-export function PhoneCta({ phone, callLabel, variant = 'light', onClick }: PropsT) {
+export function PhoneCta({ phone, callLabel, variant = 'light', onClick, className }: PropsT) {
   return (
     <a
       href={`tel:${phone.replace(/\s/g, '')}`}
       aria-label={`${callLabel} ${phone}`}
       onClick={onClick}
-      className={buttonClasses({ variant, size: 'xl' })}
+      className={cn(buttonClasses({ variant, size: 'xl' }), className)}
     >
       {/* Wears the label's colours rather than its own copy of them: the icon is part of the
           same swap, and a second table here drifted — it mapped `outline` onto the light pair,
