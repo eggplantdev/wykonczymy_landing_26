@@ -54,30 +54,26 @@ export function MobileMenu({ paths, typePaths, phone }: PropsT) {
         id={MENU_ID}
         className="items-center gap-4 bg-card p-6"
       >
-        {/* `my-auto` on the nav and nothing on what follows it: the auto margins take the whole
-            of the free space and split it evenly, so the nav sits centred and everything after
-            it is left flush against the floor. */}
-        <SiteNav
-          paths={typePaths}
-          variant="mobile-menu"
-          onNavigate={() => setIsOpen(false)}
-          className="my-auto"
-        />
+        {/* The call button rides with the links rather than sitting apart from them: it is
+            where Kontakt leads, so it belongs under that link. `my-auto` on the group takes the
+            whole of the free space and splits it evenly, which centres the two together and
+            leaves what follows flush against the floor. */}
+        <div className="my-auto flex flex-col items-center gap-4">
+          <SiteNav paths={typePaths} variant="mobile-menu" onNavigate={() => setIsOpen(false)} />
+
+          <PhoneCta
+            phone={phone}
+            callLabel={t('callUs')}
+            variant="solid"
+            onClick={() => setIsOpen(false)}
+          />
+        </div>
 
         {/* The panel itself, not the gear that opens it in the bar: the sheet has the room, so a
             trigger here only put a tap between a visitor and three buttons. Bare, because the
-            sheet is already the card the popover has to draw for itself. Down here with the call
-            button rather than under the nav — language and theme are settings, not destinations,
-            and the nav should not read as five items long. */}
+            sheet is already the card the popover has to draw for itself. On the floor and away
+            from the nav — language and theme are settings, not destinations. */}
         <SettingsPanel paths={paths} onNavigate={() => setIsOpen(false)} />
-
-        {/* Last, so the primary action keeps the floor and the thumb. */}
-        <PhoneCta
-          phone={phone}
-          callLabel={t('callUs')}
-          variant="solid"
-          onClick={() => setIsOpen(false)}
-        />
       </Sheet>
     </>
   )

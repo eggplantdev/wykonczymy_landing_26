@@ -34,12 +34,11 @@ type PropsT = {
   // as part of the nav group instead of a second card floating next to it. The mobile menu
   // has no gear — it shows the settings outright, as a sibling — so it passes nothing.
   trailing?: ReactNode
-  className?: string
 }
 
 // The header gathers the links into a pill; in the mobile menu they stack full width,
 // where that pill's chrome would only draw a box around the whole overlay.
-export function SiteNav({ paths, variant = 'header', onNavigate, trailing, className }: PropsT) {
+export function SiteNav({ paths, variant = 'header', onNavigate, trailing }: PropsT) {
   const { t } = useTranslation('nav')
   const pathname = usePathname()
   const shouldReduceMotion = useReducedMotion()
@@ -64,11 +63,11 @@ export function SiteNav({ paths, variant = 'header', onNavigate, trailing, class
   })
 
   return (
-    <nav className={className}>
+    <nav>
       <NavGroup
         ref={attach}
-        // The links are their own flex container, so the sheet's rhythm only stays even while
-        // this gap matches the one the Sheet spaces its own children by.
+        // The links sit one flex container deeper than the call button beside them, so the
+        // sheet's rhythm only stays even while this gap matches the one that group uses.
         className={
           isMobileMenu ? 'w-full flex-col gap-4 border-transparent bg-transparent p-0' : ''
         }
