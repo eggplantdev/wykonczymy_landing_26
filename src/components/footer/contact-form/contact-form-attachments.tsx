@@ -1,6 +1,6 @@
 'use client'
 
-import { faLightbulb } from '@fortawesome/free-solid-svg-icons'
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useId, useState } from 'react'
 
@@ -29,7 +29,7 @@ export function ContactFormAttachments({ className }: PropsT) {
             lands on that first line's optical middle exactly. A hand-tuned `mt-*` only holds
             for the one font size and line height it was eyeballed against. */}
         <span aria-hidden className="flex h-[1lh] shrink-0 items-center">
-          <FontAwesomeIcon icon={faLightbulb} className="size-3.5" />
+          <FontAwesomeIcon icon={faCircleInfo} className="size-3.5" />
         </span>
         {t('attachments')}
       </p>
