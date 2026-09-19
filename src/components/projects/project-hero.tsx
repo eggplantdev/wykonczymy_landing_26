@@ -6,8 +6,7 @@ type PropsT = {
 }
 
 export function ProjectHero({ project }: PropsT) {
-  const { title, summary, area, image } = project
-  const textStyle = 'text-18 leading-125 md:text-20 md:leading-130 xl:text-32 xl:leading-normal'
+  const { title, summary, image } = project
 
   return (
     <section className="relative h-svh">
@@ -18,9 +17,8 @@ export function ProjectHero({ project }: PropsT) {
       <div className="paddings relative flex h-full w-full flex-col items-start justify-end pb-5 text-on-media md:pb-12 xl:pb-10">
         <h1 className="text-18 xl:text-24 mb-6 md:leading-[111%] xl:leading-normal">{title}</h1>
         <div className="gridContainer w-full">
-          <p className={`col-span-6 mb-4 md:mb-10 xl:mb-0 ${textStyle}`}>{summary}</p>
-          <p className={`col-span-full xl:col-span-2 xl:col-start-11 xl:text-right ${textStyle}`}>
-            {area}
+          <p className="text-18 leading-125 md:text-20 md:leading-130 xl:text-32 xl:leading-normal col-span-6">
+            {summary}
           </p>
         </div>
       </div>

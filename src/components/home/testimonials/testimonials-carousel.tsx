@@ -100,7 +100,7 @@ export function TestimonialsCarousel({ container, data, ratings }: PropsT) {
           // the same line as the carousel controls; below that they stack underneath. They run
           // to column 5 — the title's four are too narrow for two badges side by side, and the
           // carousel only starts at column 6.
-          <ul className="col-span-full flex flex-col flex-wrap gap-y-3 pt-12 md:flex-row md:gap-x-12 md:pt-16 lg:col-span-5 lg:col-start-1 lg:row-start-1 lg:self-end lg:pt-0">
+          <ul className="col-span-full flex flex-col flex-wrap gap-y-3 pt-4 md:flex-row md:gap-x-12 lg:col-span-5 lg:col-start-1 lg:row-start-1 lg:self-end lg:pt-0">
             {ratings.map((rating) => (
               <li key={rating.platform}>
                 <RatingBadge data={rating} />

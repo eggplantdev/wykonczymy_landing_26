@@ -56,7 +56,7 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
           the viewport, then put that padding back on itself. */}
       <div
         data-theme="dark"
-        className="bg-background text-foreground col-span-full -mx-6 mt-6 px-6 py-4 pb-16 md:-mx-8 md:px-8 xl:-mx-12 xl:px-12"
+        className="bg-background text-foreground col-span-full -mx-6 mt-6 px-6 py-4 md:-mx-8 md:px-8 xl:-mx-12 xl:px-12"
       >
         {/* Three equal tracks, not `justify-between`: the latter equalises the gaps, so the
             middle item lands on the page's centre only when the two outer ones happen to be
