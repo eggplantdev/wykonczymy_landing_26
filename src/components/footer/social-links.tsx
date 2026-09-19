@@ -1,22 +1,28 @@
-import { Facebook } from '@/components/ui/icons/facebook'
-import { Instagram } from '@/components/ui/icons/instagram'
+import { cn } from '@/lib/cn'
+// TRIAL: swap these two back to `facebook`/`instagram` to undo.
+import { FacebookFlat } from '@/components/ui/icons/facebook-flat'
+import { InstagramFlat } from '@/components/ui/icons/instagram-flat'
 
 const SOCIALS = [
   {
     label: 'Facebook',
     href: 'https://www.facebook.com/people/Warsaw-Handyman/100085905117915/',
-    Icon: Facebook,
+    Icon: FacebookFlat,
   },
   {
     label: 'Instagram',
     href: 'https://www.instagram.com/handyman_warsaw_/',
-    Icon: Instagram,
+    Icon: InstagramFlat,
   },
 ]
 
-export function SocialLinks() {
+type PropsT = {
+  className?: string
+}
+
+export function SocialLinks({ className }: PropsT) {
   return (
-    <ul className="flex items-center gap-x-6">
+    <ul className={cn('text-shwarz flex items-center gap-x-6', className)}>
       {SOCIALS.map(({ label, href, Icon }) => (
         <li key={label} className="flex">
           <a
