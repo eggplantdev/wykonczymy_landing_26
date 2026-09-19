@@ -41,9 +41,8 @@ export function HomePage({ data, ratings }: PropsT) {
 
   return (
     <>
-      {/* Outside the wrapper on purpose: the wrapper clips horizontally — that clip is what
-          contains the carousel tracks — and the hero is the one thing on the page that has to
-          bleed past the 1920 cap rather than be trimmed back to it. */}
+      {/* Outside the wrapper on purpose: the wrapper opens the column with a gap the hero must
+          not take, and it is the one section that starts flush under the fixed header. */}
       {hero && <Hero data={hero} />}
       {/* The rhythm is one gap on the column, not a top padding per section: a section that
           carries its own spacing only knows what comes before it in the one order it was
@@ -64,9 +63,13 @@ export function HomePage({ data, ratings }: PropsT) {
             <TextSection container="gridContainer paddings" data={intro} />
           </FadeUp>
         )}
+        {/* `pr-0 bleed-right` is the opt-in, and only the two tracks that peek take it: a slide
+            cut off by the edge of the screen reads as "there is more", and cut off by a margin it
+            reads as a bug. The projects and testimonials tracks are bounded on purpose and stay on
+            the column. */}
         {services && (
           <FadeUp>
-            <ServicesCarousel container="paddings" data={services} />
+            <ServicesCarousel container="paddings pr-0 bleed-right" data={services} />
           </FadeUp>
         )}
         {afterServices && (
@@ -91,7 +94,7 @@ export function HomePage({ data, ratings }: PropsT) {
         )}
         {interiorStyles && (
           <FadeUp>
-            <InteriorStylesCarousel container="paddings" data={interiorStyles} />
+            <InteriorStylesCarousel container="paddings pr-0 bleed-right" data={interiorStyles} />
           </FadeUp>
         )}
       </PageWrapper>

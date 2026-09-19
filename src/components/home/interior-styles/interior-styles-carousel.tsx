@@ -52,8 +52,12 @@ export function InteriorStylesCarousel({ container, data }: PropsT) {
             than the arrows going out, which is what puts both on one row. Three columns so
             the link stays centred on the section whatever width the arrows take. No count
             beside them: the row is `slidesPerView="auto"`, so "3 of 12" would be counting
-            something the visitor cannot see the edges of. */}
-        <div slot="container-end" className="grid grid-cols-3 items-center pt-4">
+            something the visitor cannot see the edges of. The row also undoes the section's
+            right bleed, so the arrows land on the column rather than out in the gutter. */}
+        <div
+          slot="container-end"
+          className="unbleed-right grid grid-cols-3 items-center pt-4 pr-6 md:pr-8 xl:pr-12"
+        >
           <ButtonLink
             label={t('more')}
             href={ctaHref}

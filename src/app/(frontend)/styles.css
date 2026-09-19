@@ -381,6 +381,19 @@
   @apply mx-[calc(50%-50vw)] w-screen;
 }
 
+/* The right edge only, for a carousel whose track is meant to run off the screen: the section
+   keeps its left edge on the column so the heading still lines up with every other section.
+   Written against the viewport rather than as a percentage of the parent, because the arrow row
+   that cancels it sits inside the Swiper — a different box, so a percentage would resolve to a
+   different number and the two would not meet. Below 1920 both clamp to 0 and nothing moves. */
+@utility bleed-right {
+  margin-right: calc(-1 * max(0px, (100vw - var(--container-site)) / 2));
+}
+
+@utility unbleed-right {
+  margin-right: max(0px, (100vw - var(--container-site)) / 2);
+}
+
 /* tdg's `.gridContainerLg` was byte-identical to `.gridContainer`; only one survives. */
 @utility gridContainer {
   @apply grid grid-cols-6 gap-x-5 md:grid-cols-8 lg:grid-cols-12;

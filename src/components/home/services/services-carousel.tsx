@@ -26,7 +26,7 @@ export function ServicesCarousel({ container, data }: PropsT) {
   if (cards.length < 1) return null
 
   return (
-    <section className={cn(container, 'col-span-full pr-0', carousel.className)}>
+    <section className={cn(container, 'col-span-full', carousel.className)}>
       <SectionTitle title={sectionTitle} className="pb-6 md:pb-8 lg:pb-10" />
 
       <Swiper
@@ -54,10 +54,11 @@ export function ServicesCarousel({ container, data }: PropsT) {
 
         {/* `container-end` renders after the track but still inside Swiper's context, so
             the arrows reach the instance without riding a slide. The section drops its right
-            padding to let the track bleed off-screen, so the bar puts it back. */}
+            padding and runs past the 1920 cap to let the track bleed off-screen; the bar undoes
+            both, so the arrows sit on the column with every other section's right edge. */}
         {cards.length > 1 && (
           <div slot="container-end">
-            <CarouselNav className="pt-4 pr-6 md:pr-8 xl:pr-12" />
+            <CarouselNav className="unbleed-right pt-4 pr-6 md:pr-8 xl:pr-12" />
           </div>
         )}
       </Swiper>
