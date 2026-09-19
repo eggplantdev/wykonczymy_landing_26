@@ -1,4 +1,5 @@
 import { PageWrapper } from '@/components/layout/page-wrapper'
+import { FadeUp } from '@/components/ui/fade-up'
 import type { RatingT } from '@/components/ui/rating-badge'
 import { cn } from '@/lib/cn'
 import { Hero, type HeroT } from './hero'
@@ -55,15 +56,44 @@ export function HomePage({ data, ratings }: PropsT) {
           hero && 'pt-20 md:pt-36',
         )}
       >
-        {intro && <TextSection container="gridContainer paddings" data={intro} />}
-        {services && <ServicesCarousel container="paddings" data={services} />}
-        {afterServices && <TextSection container="gridContainer paddings" data={afterServices} />}
-        {numbers && <NumbersSection container="paddings" data={numbers} />}
-        {projects && <ProjectsCarousel container="paddings" data={projects} />}
-        {testimonials && (
-          <TestimonialsCarousel container="paddings" data={testimonials} ratings={ratings} />
+        {/* Each section rises into view on its own, so the wrapper is per section rather than
+            one around the column — a single wrapper would reveal the whole page at once the
+            moment its top edge cleared the fold. */}
+        {intro && (
+          <FadeUp>
+            <TextSection container="gridContainer paddings" data={intro} />
+          </FadeUp>
         )}
-        {interiorStyles && <InteriorStylesCarousel container="paddings" data={interiorStyles} />}
+        {services && (
+          <FadeUp>
+            <ServicesCarousel container="paddings" data={services} />
+          </FadeUp>
+        )}
+        {afterServices && (
+          <FadeUp>
+            <TextSection container="gridContainer paddings" data={afterServices} />
+          </FadeUp>
+        )}
+        {numbers && (
+          <FadeUp>
+            <NumbersSection container="paddings" data={numbers} />
+          </FadeUp>
+        )}
+        {projects && (
+          <FadeUp>
+            <ProjectsCarousel container="paddings" data={projects} />
+          </FadeUp>
+        )}
+        {testimonials && (
+          <FadeUp>
+            <TestimonialsCarousel container="paddings" data={testimonials} ratings={ratings} />
+          </FadeUp>
+        )}
+        {interiorStyles && (
+          <FadeUp>
+            <InteriorStylesCarousel container="paddings" data={interiorStyles} />
+          </FadeUp>
+        )}
       </PageWrapper>
     </>
   )

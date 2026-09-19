@@ -4,8 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 
-const DURATION = 0.5
-const OFFSET_Y = 20
+import { ENTRANCE_DURATION, ENTRANCE_EASE, ENTRANCE_OFFSET_Y } from '@/lib/motion'
 
 export function PageTransition({ children }: { children: ReactNode }) {
   const shouldReduceMotion = useReducedMotion()
@@ -15,11 +14,15 @@ export function PageTransition({ children }: { children: ReactNode }) {
     <AnimatePresence mode="wait">
       <motion.div
         key={pathname}
-        initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: OFFSET_Y }}
-        animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-        exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -OFFSET_Y }}
+        // Only the transition reacts to reduced motion — see `FadeUp`: branching what reaches the
+        // DOM costs a hydration mismatch, and at `duration: 0` the offset never shows.
+        initial={{ opacity: 0, y: ENTRANCE_OFFSET_Y }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -ENTRANCE_OFFSET_Y }}
         transition={
-          shouldReduceMotion ? { duration: 0 } : { duration: DURATION, ease: 'easeInOut' }
+          shouldReduceMotion
+            ? { duration: 0 }
+            : { duration: ENTRANCE_DURATION, ease: ENTRANCE_EASE }
         }
       >
         {children}
