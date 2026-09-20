@@ -411,6 +411,49 @@
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Card hover, in one place. Four cards do the same thing when the cursor lands on
+   them — the home projects slide, the home style slide, the interior-style listing
+   cell and the projects listing row — and they read as one gesture only while the
+   numbers below are literally the same ones. Change the feel here, not at the call
+   sites; a card opts in by taking the utilities, never by restating the values.
+   --------------------------------------------------------------------------- */
+:root {
+  /* Carried from tdg's HOVER_ANIMATION. Long on purpose: at this length the photo
+     reads as drifting forward rather than as a state flipping, and the delay is what
+     keeps a cursor crossing a three-up grid from setting off every card it passes. */
+  --wk-hover-duration: 1000ms;
+  --wk-hover-delay: 100ms;
+  /* The photo grows inside a clip box that does not, so this is how much of the shot
+     gets cropped away, not how much bigger the frame gets. */
+  --wk-hover-photo-scale: 1.05;
+}
+
+/* Goes on the photo itself, never on the box around it: a clip box is scaled along with
+   its contents, so a level up this would grow the frame instead of pushing the photo
+   against it. Needs a `group` on the card. */
+@utility hover-photo {
+  @apply transition duration-(--wk-hover-duration) delay-(--wk-hover-delay) group-hover:scale-(--wk-hover-photo-scale);
+}
+
+/* The darkening that rides with the push, as its own layer over the photo. `scrim` is the
+   role for anything laid over a photograph, and it is one of the three that deliberately
+   do not flip with the theme — a picture is the same picture in either. */
+@utility hover-photo-scrim {
+  @apply transition duration-(--wk-hover-duration) delay-(--wk-hover-delay) group-hover:bg-scrim/20;
+}
+
+/* Its own layer for the same reason the scrim is one: a border on the clip box would be scaled
+   along with the photo. Goes in a positioned box the size of the photograph. */
+@utility hover-photo-outline {
+  @apply border-foreground pointer-events-none absolute inset-3 border opacity-0 transition-opacity duration-(--wk-hover-duration) delay-(--wk-hover-delay) group-hover:opacity-100;
+}
+
+/* Reads the same clock as the outline on purpose: the two land as one mark. */
+@utility hover-photo-mark {
+  @apply text-foreground pointer-events-none absolute inset-0 flex -translate-x-2 items-center justify-center opacity-0 transition duration-(--wk-hover-duration) delay-(--wk-hover-delay) group-hover:translate-x-0 group-hover:opacity-100;
+}
+
 /* Driven by DebugTools toggling `data-debug-*` on the root. Scoped to `main` so the
    panel and the grid overlay, which are siblings of it, stay legible. */
 @layer utilities {

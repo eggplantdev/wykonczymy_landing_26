@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import { Media } from '@/components/media/media'
 import type { MediaImageT, MediaVideoT } from '@/components/media/types'
+import { PhotoHover } from '@/components/ui/photo-hover'
 import { CarouselControls } from './carousel-controls'
 
 export type ProjectSlideT = {
@@ -33,9 +34,10 @@ export function ProjectSlide({ slide, total }: PropsT) {
         <Media
           image={image}
           video={video}
-          className="delay-100 duration-1000 group-hover:scale-105"
+          className="hover-photo"
           sizes="(max-width: 767px) 100vw, (max-width: 1023px) 87vw, 67vw"
         />
+        <PhotoHover />
       </Link>
       <CarouselControls title={caption} total={total} />
     </>

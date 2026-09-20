@@ -1,9 +1,9 @@
 ---
 change_id: lead-delivery
 title: Deliver form submissions into the leads app, attachments included
-status: new
+status: planned
 created: 2026-09-18
-updated: 2026-09-18
+updated: 2026-09-20
 archived_at: null
 branch: null
 worktree: null
@@ -67,11 +67,29 @@ did; the decisions below are that agreement.
   kind (PDF, drawing, photo), not an entity. One collection shared by leads and investments means
   **promotion writes a relation and never copies bytes** — the file sits in Vercel Blob once. Two
   collections would re-upload on every promotion: double transfer, double storage, two copies free to
-  drift. Not `media` — that is the invoice library under the "Finanse" admin group.
+  drift.
   - Carries a known hazard this app has already hit once: the comment in `media.ts` records that
     `transactions_rels` is `ON DELETE cascade`, so deleting a media row silently unhooks it from every
     transfer pointing at it. Same shape here — deleting an old lead would take a PDF out from under a
     live investment. `makePreventDelete` (`@/hooks/prevent-delete`) already exists for exactly this.
+
+- **2026-09-20 — that one collection IS `media`.** Reverses the 2026-09-18 rider "Not `media` — that
+  is the invoice library under the 'Finanse' admin group". The objection was admin-panel labelling;
+  the evidence against it is structural. Every layer of the upload path in `wykonczymy` is already
+  generic and none of it mentions invoices: `process-upload-file` (classify → HEIC-convert →
+  compress → size-guard), `POST /api/upload-file`, `uploadFile()`, `discardOrphanedUploads`, the
+  `vercelBlobStorage` entry, the 400×300 thumbnail, and `media.mimeTypes` (`image/*`,
+  `application/pdf`) — four unrelated surfaces already share it, including vehicle inspections and
+  equipment handovers.
+  - The decisive cost is not duplication, it is **`deleteUnreferencedMedia`**: a single reference
+    counter naming, by hand, every collection that points at a file. It already lost that race —
+    `equipment-events.attachments` was added later and is **not** counted, so those files are
+    deletable out from under a live record **today**, despite the function's own comment instructing
+    the next author to add it. A second collection means a second such counter. Instead, one registry
+    (`MEDIA_RELATIONS`) drives both the counter and the `makePreventDelete` probes, and adding a
+    relation is one line in one place.
+  - Labelling is answered by a `kind` field (faktura / projekt / zdjęcie / inne) on `media`, which is
+    cheaper than a collection and is the field the next decision below already calls for.
 
 - **2026-09-18 — staff assign `kind`, at promotion; the visitor does not classify.** Every lead is
   qualified by hand anyway, and choosing which assets are worth carrying over is the same pass as
@@ -108,6 +126,9 @@ did; the decisions below are that agreement.
   app already states over `leadSchema` — strict on the envelope, permissive on what varies — with
   `notifyShapeAlert` as the existing safety net when a shape drifts.
 
+- **2026-09-20 — `area` is text.** Closes the open question. The label "Powierzchnia prac, np.
+  30–60 m²" invites a range, which no numeric column holds; sorting on it was never asked for.
+
 ## Open
 
 - **Who edits `wykonczymy`.** `landing_26`'s `AGENTS.md` still says nothing outside that repo is ever edited, and
@@ -115,9 +136,6 @@ did; the decisions below are that agreement.
   once for this change, (b) split the work across two sessions, endpoint first so there is something
   to test against, (c) lift it and update `AGENTS.md`, on the grounds that the rule stopped describing
   reality the moment the landing needed a sink.
-- **`area`: text or number.** The label is "Powierzchnia prac, np. 30–60 m²" — it invites a *range*,
-  which a numeric column cannot hold. Either it stays text (and never sorts) or the field becomes a
-  number and "30–60" is given up. Assumed **text** until decided.
 - **Open Question 5 looks answered — confirm at the source.** The leads app's `wpforms` route
   documents a `wpforms_process_complete` snippet POSTing every WordPress submission to it, with the
   WP notification e-mail as the human backstop, and states that WPForms Lite does not persist

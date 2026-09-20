@@ -94,15 +94,19 @@ export function Hero({ data }: PropsT) {
           the admin, so nothing here can assume where its bright areas fall. */}
       <div className="bg-scrim/10 absolute inset-0" />
 
-      {/* No measure on the title: the field is a textarea so the editor owns where the line
-          breaks, and a width cap would re-break it on the next copy change. */}
       <motion.div
         style={{ y, opacity, visibility }}
-        className="paddings text-on-media relative flex h-full w-full flex-col justify-end pb-12 md:pb-16"
+        className="paddings text-on-media relative flex h-full w-full flex-col justify-end pb-20 md:pb-16"
       >
+        {/* The measure is mobile-only and deliberate: at `text-40` the second line of today's
+            title reaches within a few pixels of the gutter, so it is capped short enough to
+            break once more and set the copy over three lines. The field is a textarea, so the
+            editor still owns the hard breaks — this only adds a soft one, and a longer word
+            than `wykończenie` (280px is roughly twelve characters at this size) will re-break
+            somewhere the editor did not choose. From `md` up the title has room and takes none. */}
         <p
           data-display
-          className="text-40 md:text-72 leading-105 font-bold break-words whitespace-pre-line"
+          className="text-40 md:text-72 leading-105 max-w-70 font-bold break-words whitespace-pre-line md:max-w-none"
         >
           {title}
         </p>

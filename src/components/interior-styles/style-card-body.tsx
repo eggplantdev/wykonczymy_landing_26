@@ -25,14 +25,8 @@ export function StyleCardBody({ style, imageClassName, textClassName, sizes }: P
       </header>
       <div className={cn('text-12 mb-5 md:mb-6', textClassName)}>{text}</div>
       <div className={cn('relative overflow-hidden', imageClassName)}>
-        {/* The scale rides on the photo rather than on the clip box, which would be scaled
-            along with its element and grow the frame instead of pushing the photo against it. */}
-        <Media
-          image={image}
-          sizes={sizes}
-          className="delay-100 duration-1000 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 delay-100 duration-1000 group-hover:bg-black/20" />
+        <Media image={image} sizes={sizes} className="hover-photo" />
+        <div className="hover-photo-scrim absolute inset-0" />
       </div>
     </>
   )
