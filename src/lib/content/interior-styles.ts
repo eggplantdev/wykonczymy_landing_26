@@ -6,6 +6,7 @@ import type { InteriorStyle } from '@/payload-types'
 import type { Locale } from '@/lib/i18n/i18n'
 import type { MediaImageT } from '@/components/media/types'
 import { toImage, toImages } from './media'
+import { toSeoMeta, type SeoMetaT } from './seo'
 import { isTranslated } from './translated'
 
 // Shared by the listing grid, the home page's carousel teaser and the style's own page
@@ -21,6 +22,7 @@ export type InteriorStyleT = {
   /** Breaks the article in half. */
   contentImage: MediaImageT | null
   gallery: MediaImageT[]
+  meta: SeoMetaT
 }
 
 export const toInteriorStyle = (doc: InteriorStyle): InteriorStyleT => {
@@ -35,6 +37,7 @@ export const toInteriorStyle = (doc: InteriorStyle): InteriorStyleT => {
     image: toImage(doc.image) ?? gallery[0] ?? null,
     contentImage: toImage(doc.contentImage) ?? gallery[1] ?? null,
     gallery,
+    meta: toSeoMeta(doc.meta, doc.text),
   }
 }
 

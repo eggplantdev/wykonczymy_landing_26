@@ -6,6 +6,7 @@ import type { Project } from '@/payload-types'
 import type { Locale } from '@/lib/i18n/i18n'
 import type { MediaImageT } from '@/components/media/types'
 import type { ScopeItemT, SpecItemT } from '@/lib/content/spec-item'
+import { toSeoMeta, type SeoMetaT } from './seo'
 import { toImages } from './media'
 import { toScope, toSpecs } from './specs'
 import { isTranslated } from './translated'
@@ -24,6 +25,7 @@ export type ProjectT = {
   materials: SpecItemT[]
   image: MediaImageT | null
   gallery: MediaImageT[]
+  meta: SeoMetaT
 }
 
 export const toProject = (doc: Project): ProjectT => {
@@ -44,6 +46,7 @@ export const toProject = (doc: Project): ProjectT => {
     materials: toSpecs(doc.materials),
     image: image ?? null,
     gallery,
+    meta: toSeoMeta(doc.meta, doc.summary),
   }
 }
 

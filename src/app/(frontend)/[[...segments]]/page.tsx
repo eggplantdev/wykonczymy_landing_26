@@ -15,6 +15,9 @@ import { findProjects, relatedProjects } from '@/lib/content/projects'
 import { getTranslations, i18n } from '@/lib/i18n/i18n'
 import { findFooter } from '@/lib/content/footer'
 import { findPublishedPages, pathsByType, pathsForPage } from '@/lib/content/pages'
+import { toSeoMeta } from '@/lib/content/seo'
+import { OG_LOCALES, SITE_NAME } from '@/lib/seo/constants'
+import { toOgImages } from '@/lib/seo/og-image'
 import {
   CONTACT_PAGE_TYPE,
   HOME_PAGE_TYPE,
@@ -88,11 +91,37 @@ export async function generateMetadata({
   // the parent, so only page-level addresses advertise their translations.
   const languages = childSlug ? undefined : await pathsForPage(page.id)
 
+  // A child's own meta was mapped by its finder, which also derived a description from its
+  // summary copy; a page carries the raw plugin group and is mapped here.
+  const meta = child?.meta ?? toSeoMeta(page.meta)
+
+  const title = meta.title ?? child?.title ?? page.title
+  const canonical = pathForPage(page, locale, childSlug ?? undefined)
+  const images = toOgImages(meta.image)
+
   return {
-    title: child?.title ?? page.title,
+    title,
+    description: meta.description,
     alternates: {
-      canonical: pathForPage(page, locale, childSlug ?? undefined),
+      canonical,
       languages,
+    },
+    // Spelled out rather than left to Next's inheritance: `title` here would otherwise pick up
+    // the layout's `| Wykończymy` template, which reads as noise next to `og:site_name`.
+    openGraph: {
+      type: 'website',
+      title,
+      description: meta.description,
+      url: canonical,
+      siteName: SITE_NAME,
+      locale: OG_LOCALES[locale],
+      images,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: meta.description,
+      images,
     },
   }
 }

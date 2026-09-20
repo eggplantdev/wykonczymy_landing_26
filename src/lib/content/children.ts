@@ -2,9 +2,10 @@ import type { Locale } from '@/lib/i18n/i18n'
 import { INTERIOR_STYLES_PAGE_TYPE, PROJECTS_PAGE_TYPE, type PageTypeT } from '@/lib/routing'
 import { findInteriorStyles } from './interior-styles'
 import { findProjects } from './projects'
+import type { SeoMetaT } from './seo'
 
-/** What the route needs off a child to build and resolve its address. */
-export type PageChildT = { slug: string; title: string }
+/** What the route needs off a child to build its address and its metadata. */
+export type PageChildT = { slug: string; title: string; meta: SeoMetaT }
 
 // Which collection hangs off which page type. As a map rather than an `if` ladder
 // because the route asked the same question three ways — prerender the children,

@@ -80,7 +80,7 @@ flag, a second leads-app deployment, or any other isolation machinery for this.
 | S4  | Completed projects — listing + project pages         | proposed | S1         | S2, S3, S5    |
 | S5  | Testimonials and the shared content lists            | proposed | S1         | S2, S3, S4    |
 | S6  | Photo attachments on the form                        | blocked  | S2         | —             |
-| S7  | SEO surface — sitemap, hreflang, canonical, metadata | proposed | S3, S4     | S6            |
+| S7  | SEO surface — sitemap, hreflang, canonical, metadata | in progress | S3, S4  | S6            |
 | S8  | Cutover — url-map test green, redirects, DNS         | blocked  | S2, S7     | —             |
 
 **Parallel band:** once S1 lands, S2 / S3 / S4 / S5 touch different collections and different routes.
@@ -139,7 +139,8 @@ tracked here because the Linear MCP was unreachable in that session — move the
   layout hardcodes `lang="en"`. One routing decision — a catch-all layout cannot see the locale.
   Test disposition: TDD · e2e, travels with the fix.
 - **`alternates.canonical` + hreflang, and seoPlugin fields in `generateMetadata`.** Belongs with
-  S7 — the plugin's fields are not modelled yet.
+  S7. The plugin's `meta.title` / `meta.description` / `meta.image` are already in production on
+  pages, projects and interior styles — what is missing is a route that reads them.
 - **`/en/home/` is hardcoded in `next.config.ts`'s redirect** while the EN home slug is a
   CMS-editable field; renaming it silently breaks an indexed redirect.
 
@@ -263,7 +264,7 @@ which is why it sits after the north star rather than inside it.
 
 ### S7 — SEO surface
 
-**Status:** proposed · **Change ID:** `s7-seo` · **Depends on:** S3, S4
+**Status:** in progress · **Change ID:** `s7-seo` · **Depends on:** S3, S4
 
 Sitemap covering both languages (FR-013), per-page title, description, canonical, and correct
 `hreflang` pairing between the Polish and English addresses (FR-014).

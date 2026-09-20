@@ -8,8 +8,7 @@ import { siteFont, titleFont } from './fonts'
 // Every route renders through this layout, so a missing or malformed public var fails
 // `next build` here instead of surfacing as undefined in the browser.
 import { SERVER_URL } from '@/lib/env'
-
-const SITE_NAME = 'Wykończymy'
+import { SITE_NAME } from '@/lib/seo/constants'
 
 // metadataBase is what makes the per-page `alternates` resolve to absolute URLs; without
 // it Next emits relative canonicals, which search engines treat as no canonical at all.
