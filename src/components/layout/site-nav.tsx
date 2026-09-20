@@ -86,7 +86,6 @@ export function SiteNav({ paths, variant = 'header', onNavigate, trailing }: Pro
             transition={shouldReduceMotion ? { duration: 0 } : PILL_SPRING}
           />
         )}
-
         {links.map(({ pageType, href }) => (
           <NavItemPill
             key={pageType}
@@ -99,7 +98,6 @@ export function SiteNav({ paths, variant = 'header', onNavigate, trailing }: Pro
             {t(labelKeys[pageType])}
           </NavItemPill>
         ))}
-
         {!isMobileMenu && trailing && (
           <>
             <NavSeparator />

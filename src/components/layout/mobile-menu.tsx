@@ -65,6 +65,7 @@ export function MobileMenu({ paths, typePaths, phone }: PropsT) {
             phone={phone}
             callLabel={t('callUs')}
             variant="solid"
+            size="sm"
             onClick={() => setIsOpen(false)}
           />
         </div>
