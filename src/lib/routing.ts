@@ -61,8 +61,14 @@ export function localeRoot(locale: Locale, homeSlug = HOME_PAGE_TYPE): string {
   return locale === i18n.defaultLocale ? '/' : `/${locale}/${homeSlug}/`
 }
 
+// The inverse of the trailing-slash rule above: Next's catch-all wants the segments, and
+// splitting a path by hand at each call site is how a leading empty segment creeps back in.
+export function segmentsForPath(path: string): string[] {
+  return path.split('/').filter(Boolean)
+}
+
 export function segmentsForPage(page: PageAddressT, locale: Locale, childSlug?: string): string[] {
-  return pathForPage(page, locale, childSlug).split('/').filter(Boolean)
+  return segmentsForPath(pathForPage(page, locale, childSlug))
 }
 
 // `slug: null` means the locale root. Only Polish has one — `/en/` is a redirect to

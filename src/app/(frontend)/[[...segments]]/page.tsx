@@ -8,13 +8,13 @@ import { StylePage } from '@/components/interior-styles/style-page'
 import { ProjectPage } from '@/components/projects/project-page'
 import { ProjectsPage } from '@/components/projects/projects-page'
 import { toHomeData } from '@/lib/content/home'
-import { findChildren } from '@/lib/content/children'
+import { listAddresses } from '@/lib/content/addresses'
 import { resolveRoute } from '@/lib/content/route'
 import { findInteriorStyles, relatedStyles } from '@/lib/content/interior-styles'
 import { findProjects, relatedProjects } from '@/lib/content/projects'
-import { getTranslations, i18n } from '@/lib/i18n/i18n'
+import { getTranslations } from '@/lib/i18n/i18n'
 import { findFooter } from '@/lib/content/footer'
-import { findPublishedPages, pathsByType, pathsForPage } from '@/lib/content/pages'
+import { pathsByType, pathsForPage } from '@/lib/content/pages'
 import { toSeoMeta } from '@/lib/content/seo'
 import { OG_LOCALES, SITE_NAME } from '@/lib/seo/constants'
 import { toOgImages } from '@/lib/seo/og-image'
@@ -25,7 +25,7 @@ import {
   PROJECTS_PAGE_TYPE,
   PRIVACY_POLICY_PAGE_TYPE,
   pathForPage,
-  segmentsForPage,
+  segmentsForPath,
 } from '@/lib/routing'
 
 type ParamsT = { segments?: string[] }
@@ -40,37 +40,9 @@ export const dynamicParams = true
 // tech-stack.md makes the CMS-owned-slug decision conditional on exactly this: every
 // public address resolves at build time, so no request pays for a slug lookup.
 export async function generateStaticParams(): Promise<ParamsT[]> {
-  const perLocale = await Promise.all(
-    i18n.locales.map(async (locale) => {
-      const docs = await findPublishedPages(locale)
-      const params: ParamsT[] = []
+  const addresses = await listAddresses()
 
-      // Hoisted out of the document loop so the two child collections are read once per
-      // locale by construction, rather than relying on `cache()` to collapse a read per page.
-      const children = new Map(
-        await Promise.all(
-          docs.map(
-            async (doc) => [doc.pageType, await findChildren(doc.pageType, locale)] as const,
-          ),
-        ),
-      )
-
-      // `fallback: false`, so a page translated in one language only comes back with an
-      // empty slug in the other — prerendering it would emit `/en/null/`.
-      for (const doc of docs) {
-        if (doc.pageType !== HOME_PAGE_TYPE && !doc.slug) continue
-
-        params.push({ segments: segmentsForPage(doc, locale) })
-
-        for (const child of children.get(doc.pageType) ?? [])
-          params.push({ segments: segmentsForPage(doc, locale, child.slug) })
-      }
-
-      return params
-    }),
-  )
-
-  return perLocale.flat()
+  return addresses.map(({ path }) => ({ segments: segmentsForPath(path) }))
 }
 
 export async function generateMetadata({
