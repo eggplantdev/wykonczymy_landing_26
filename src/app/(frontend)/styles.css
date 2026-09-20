@@ -322,7 +322,7 @@
 
   /* `data-display` is the hook for the few places that take the face without being a
      heading — a label that would otherwise duplicate a heading in the page outline. */
-  :is(h1, h2, [data-display]) {
+  :is(h1, h2, h3, [data-display]) {
     font-family: var(--font-display);
   }
 
