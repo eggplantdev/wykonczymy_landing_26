@@ -10,7 +10,7 @@ export const siteFont = Geist({
   display: 'swap',
 })
 
-// The title face, applied to headings and the hero in `styles.css`. Poppins ships as static
+// The title face, applied to headings in `styles.css`. Poppins ships as static
 // cuts rather than a variable axis, so every weight a heading can reach has to be named here
 // — an unlisted one is not downloaded and the browser synthesises it instead.
 export const titleFont = Poppins({

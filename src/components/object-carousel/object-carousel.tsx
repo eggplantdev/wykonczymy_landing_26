@@ -23,6 +23,7 @@ export function ObjectCarousel({ container, sectionTitle, items }: PropsT) {
 
   return (
     <section className={cn('duration-200', container, carousel.className)}>
+      <h2 className="sr-only">{sectionTitle}</h2>
       <Swiper
         {...carouselDefaults}
         spaceBetween={24}

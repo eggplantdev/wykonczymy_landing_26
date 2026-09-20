@@ -66,6 +66,9 @@ export function Hero({ data }: PropsT) {
 
   // Invisible has to mean gone: at `opacity: 0` the CTA pill still sat under the cursor and still
   // took a tab stop, so the hero could be clicked through to the quote page with nothing on screen.
+  // Scoped to the pill and not the whole block because `visibility: hidden` prunes its subtree from
+  // the accessibility tree, and the block holds the page's only `h1` — scrolling past the hero
+  // would leave the document with no level-1 heading. Nothing else in there is interactive.
   const visibility = useTransform(opacity, (value) => (value === 0 ? 'hidden' : 'visible'))
 
   // `overflow-clip` on the section rather than on the photo itself: a clip box on the scaled element
@@ -95,7 +98,7 @@ export function Hero({ data }: PropsT) {
       <div className="bg-scrim/10 absolute inset-0" />
 
       <motion.div
-        style={{ y, opacity, visibility }}
+        style={{ y, opacity }}
         className="paddings text-on-media relative flex h-full w-full flex-col justify-end pb-20 md:pb-16"
       >
         {/* The measure is mobile-only and deliberate: at `text-40` the second line of today's
@@ -104,21 +107,18 @@ export function Hero({ data }: PropsT) {
             editor still owns the hard breaks — this only adds a soft one, and a longer word
             than `wykończenie` (280px is roughly twelve characters at this size) will re-break
             somewhere the editor did not choose. From `md` up the title has room and takes none. */}
-        <p
-          data-display
-          className="text-40 md:text-72 leading-105 max-w-70 font-bold break-words whitespace-pre-line md:max-w-none"
-        >
+        <h1 className="text-40 md:text-72 leading-105 max-w-70 font-bold break-words whitespace-pre-line md:max-w-none">
           {title}
-        </p>
+        </h1>
         {/* The photo is a dark surface whatever the page's theme is, so the CTA claims the
             dark role tokens the way the footer band does — `solid` then resolves to the same
             white pill here as it does down there, instead of going black on the light theme. */}
         {ctaLabel && ctaHref && (
-          <div data-theme="dark" className="flex pt-6 md:pt-10">
+          <motion.div style={{ visibility }} data-theme="dark" className="flex pt-6 md:pt-10">
             <ButtonLink href={ctaHref} label={ctaLabel} variant="solid" size="xl" icon="trailing">
               <ButtonArrow variant="solid" size="xl" />
             </ButtonLink>
-          </div>
+          </motion.div>
         )}
       </motion.div>
     </section>

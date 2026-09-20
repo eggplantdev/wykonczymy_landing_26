@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { Media } from '@/components/media/media'
+import { EntryTitle } from '@/components/ui/entry-title'
 import { SpecStrip } from '@/components/ui/spec-strip'
 import type { MediaImageT } from '@/components/media/types'
 import type { SpecItemT } from '@/lib/content/spec-item'
@@ -29,7 +30,7 @@ export function ProjectRow({ href, title, summary, image, details }: PropsT) {
       </div>
 
       <div className="col-span-full flex flex-col md:col-span-4 lg:col-span-5">
-        <h2 className="text-20 md:text-22 lg:text-28 mb-6 md:mb-9 lg:mb-12">{title}</h2>
+        <EntryTitle title={title} />
         <p className="text-12 md:text-14 leading-130 mb-8 lg:mb-12">{summary}</p>
         <SpecStrip items={details} className="mt-auto grid-cols-1" />
       </div>

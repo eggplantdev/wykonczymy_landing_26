@@ -7,6 +7,8 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
-    include: ['tests/int/**/*.int.spec.ts', 'tests/unit/**/*.spec.ts'],
+    // `.tsx` too: a spec that renders a component reads as JSX, and `createElement` cannot
+    // satisfy a component whose props type requires `children`.
+    include: ['tests/int/**/*.int.spec.ts', 'tests/unit/**/*.spec.{ts,tsx}'],
   },
 })

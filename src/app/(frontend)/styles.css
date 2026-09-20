@@ -320,8 +320,8 @@
     cursor: pointer;
   }
 
-  /* The title face. Set here rather than per component so a heading gets it by being a
-     heading; the hero title is a `p`, hence the `data-display` hook it carries. */
+  /* `data-display` is the hook for the few places that take the face without being a
+     heading — a label that would otherwise duplicate a heading in the page outline. */
   :is(h1, h2, [data-display]) {
     font-family: var(--font-display);
   }

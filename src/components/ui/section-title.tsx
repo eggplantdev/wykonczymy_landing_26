@@ -6,8 +6,11 @@ type PropsT = {
 }
 
 export function SectionTitle({ title, className }: PropsT) {
+  // An absent title is an empty section heading in the page outline, not an empty box.
+  if (!title) return null
+
   return (
-    <h2 className={cn('text-22 md:text-28 lg:text-36 font-medium text-balance', className)}>
+    <h2 className={cn('text-22 md:text-28 lg:text-36 font-bold text-balance', className)}>
       {title}
     </h2>
   )
