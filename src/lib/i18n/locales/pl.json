@@ -29,6 +29,7 @@
     "send": "Wyślij",
     "attachments": "Dodaj załączniki, jeśli masz — projekt, rzut, zdjęcia — im więcej informacji dostaniemy, tym łatwiej będzie nam przygotować wycenę prac.",
     "fileTooLarge": "Plik jest za duży — maksymalnie 8 MB.",
+    "duplicateFileName": "Dwa pliki mają tę samą nazwę. Zmień nazwę jednego z nich i spróbuj ponownie.",
     "tooManyFiles": "Możesz dołączyć najwyżej 15 plików.",
     "unsupportedFileType": "Dołącz zdjęcia lub plik PDF.",
     "uploadFailed": "Nie udało się wysłać załączników. Spróbuj ponownie.",

@@ -115,7 +115,7 @@ export function Hero({ data }: PropsT) {
         {ctaLabel && ctaHref && (
           <motion.div style={{ visibility }} data-theme="dark" className="flex pt-6 md:pt-10">
             <ButtonLink href={ctaHref} label={ctaLabel} variant="success" size="xl" icon="trailing">
-              <ButtonArrow variant="dark" size="xl" />
+              <ButtonArrow variant="success" size="xl" />
             </ButtonLink>
           </motion.div>
         )}

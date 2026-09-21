@@ -29,6 +29,7 @@
     "send": "Send",
     "attachments": "Add attachments if you have any — a design, a floor plan, photos — the more we get, the easier it is to prepare your quote.",
     "fileTooLarge": "That file is too large — 8 MB maximum.",
+    "duplicateFileName": "Two files share the same name. Rename one of them and try again.",
     "tooManyFiles": "You can attach at most 15 files.",
     "unsupportedFileType": "Attach photos or a PDF.",
     "uploadFailed": "The attachments could not be uploaded. Please try again.",
