@@ -10,10 +10,25 @@ test.describe('Frontend routing', () => {
   })
 
   test('adds the trailing slash rather than 404ing', async ({ page }) => {
-    const response = await page.goto('/oferta')
+    const response = await page.goto('/realizacje')
 
     expect(response?.status()).toBe(200)
-    await expect(page).toHaveURL('/oferta/')
+    await expect(page).toHaveURL('/realizacje/')
+  })
+
+  // `/oferta/` and `/cennik/` are indexed on the WordPress site and have no counterpart here.
+  // Asserted through the slashless form because that is the shape a search result carries, and
+  // it has to survive two hops: the trailing-slash normalisation, then the redirect itself.
+  test('sends the retired offer and price-list addresses to the home page', async ({ page }) => {
+    for (const [retired, destination] of [
+      ['/oferta', '/'],
+      ['/cennik', '/'],
+      ['/en/offer', '/en/home/'],
+      ['/en/price-list', '/en/home/'],
+    ]) {
+      await page.goto(retired)
+      await expect(page).toHaveURL(destination)
+    }
   })
 
   test('redirects /en to the English home page', async ({ page }) => {
@@ -23,7 +38,7 @@ test.describe('Frontend routing', () => {
   })
 
   test('404s on a path deeper than <locale>/<slug>', async ({ page }) => {
-    const response = await page.goto('/oferta/anything/at/all/')
+    const response = await page.goto('/realizacje/anything/at/all/')
 
     expect(response?.status()).toBe(404)
   })
