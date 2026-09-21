@@ -19,6 +19,7 @@ import * as migration_20260919_093410_services_card_icon from './20260919_093410
 import * as migration_20260919_144808_scope_icon from './20260919_144808_scope_icon'
 import * as migration_20260919_151151_scope_drop_value from './20260919_151151_scope_drop_value'
 import * as migration_20260921_091755_contact_postal_address from './20260921_091755_contact_postal_address'
+import * as migration_20260921_101328_media_alt_localized from './20260921_101328_media_alt_localized'
 
 export const migrations = [
   {
@@ -125,5 +126,10 @@ export const migrations = [
     up: migration_20260921_091755_contact_postal_address.up,
     down: migration_20260921_091755_contact_postal_address.down,
     name: '20260921_091755_contact_postal_address',
+  },
+  {
+    up: migration_20260921_101328_media_alt_localized.up,
+    down: migration_20260921_101328_media_alt_localized.down,
+    name: '20260921_101328_media_alt_localized',
   },
 ]

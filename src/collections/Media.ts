@@ -9,6 +9,10 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
+      // An English screen reader should hear English. `fallback: false` in payload.config.ts
+      // means an untranslated photo serves an empty alt rather than the Polish one, so a new
+      // upload owes both locales — `pnpm media:localize-alt` reports what is missing.
+      localized: true,
       required: true,
     },
   ],
