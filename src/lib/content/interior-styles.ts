@@ -27,6 +27,7 @@ export type InteriorStyleT = {
 
 export const toInteriorStyle = (doc: InteriorStyle): InteriorStyleT => {
   const gallery = toImages(doc.gallery)
+  const image = toImage(doc.image) ?? gallery[0] ?? null
 
   return {
     id: doc.id,
@@ -34,10 +35,10 @@ export const toInteriorStyle = (doc: InteriorStyle): InteriorStyleT => {
     title: doc.title,
     text: doc.text,
     body: (doc.body ?? []).map((row) => row.paragraph),
-    image: toImage(doc.image) ?? gallery[0] ?? null,
+    image,
     contentImage: toImage(doc.contentImage) ?? gallery[1] ?? null,
     gallery,
-    meta: toSeoMeta(doc.meta, doc.text),
+    meta: toSeoMeta(doc.meta, doc.text, image),
   }
 }
 

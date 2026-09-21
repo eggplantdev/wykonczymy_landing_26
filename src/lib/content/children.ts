@@ -4,7 +4,6 @@ import { findInteriorStyles } from './interior-styles'
 import { findProjects } from './projects'
 import type { SeoMetaT } from './seo'
 
-/** What the route needs off a child to build its address and its metadata. */
 export type PageChildT = { slug: string; title: string; meta: SeoMetaT }
 
 // Which collection hangs off which page type. As a map rather than an `if` ladder

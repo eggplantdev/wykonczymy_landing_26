@@ -4,7 +4,7 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 import type { Page } from '@/payload-types'
 import { i18n, type Locale } from '@/lib/i18n/i18n'
-import { HOME_PAGE_TYPE, pathForPage } from '@/lib/routing'
+import { hasAddress, HOME_PAGE_TYPE, pathForPage } from '@/lib/routing'
 
 // generateMetadata and the component both resolve the same request, so without this
 // every render costs two identical queries.
@@ -53,8 +53,8 @@ export const pathsForPage = cache(
     const paths: Partial<Record<Locale, string>> = {}
 
     for (const locale of i18n.locales) {
-      const slug = slugs?.[locale]
-      if (slug) paths[locale] = pathForPage({ slug, pageType: doc.pageType }, locale)
+      const page = { slug: slugs?.[locale], pageType: doc.pageType }
+      if (hasAddress(page, locale)) paths[locale] = pathForPage(page, locale)
     }
 
     return paths
@@ -85,8 +85,7 @@ export const pathsByType = cache(
     const paths: Partial<Record<Page['pageType'], string>> = {}
 
     for (const doc of await findPublishedPages(locale)) {
-      if (doc.pageType === HOME_PAGE_TYPE || doc.slug)
-        paths[doc.pageType] = pathForPage(doc, locale)
+      if (hasAddress(doc, locale)) paths[doc.pageType] = pathForPage(doc, locale)
     }
 
     return paths

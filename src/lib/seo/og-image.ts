@@ -11,8 +11,7 @@ const DEFAULT_OG_IMAGE = {
   alt: SITE_NAME,
 } as const
 
-// A card with no image is rendered as a bare link, so a page whose `meta.image` is unset falls
-// back to the brand card rather than shipping nothing.
+// A card with no image is rendered as a bare link.
 export const toOgImages = (image: MediaImageT | null) =>
   image
     ? [{ url: image.url, width: image.width, height: image.height, alt: image.alt }]

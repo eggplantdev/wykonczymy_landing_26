@@ -1,20 +1,19 @@
 import { SERVER_URL } from '@/lib/env'
+import type { OrganizationT } from '@/lib/content/organization'
+import { absoluteUrl } from '@/lib/seo/absolute-url'
 import { SITE_NAME } from '@/lib/seo/constants'
 
-type PropsT = {
-  telephone?: string
-  email?: string
-  /** One free-text line, as the editor typed it. */
-  address?: string
-  vatID?: string
-}
-
-export function OrganizationJsonLd({ telephone, email, address, vatID }: PropsT) {
+export function OrganizationJsonLd({ telephone, email, address, vatID }: OrganizationT) {
   const organization = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    // The block renders on every address, so PL and EN each emit one. A stable `@id` is what
+    // says they describe the same business rather than two that happen to share a url.
+    '@id': absoluteUrl('#organization'),
     name: SITE_NAME,
     url: SERVER_URL,
+    // Required for the Organization rich result; the favicon is the only square mark we ship.
+    logo: absoluteUrl('/icon.png'),
     telephone,
     email,
     // schema.org accepts `address` as Text. Splitting the editor's single line into a

@@ -8,16 +8,14 @@ import { siteFont, titleFont } from './fonts'
 // Every route renders through this layout, so a missing or malformed public var fails
 // `next build` here instead of surfacing as undefined in the browser.
 import { SERVER_URL } from '@/lib/env'
-import { SITE_NAME } from '@/lib/seo/constants'
+import { SEARCH_INDEXING_ENABLED, SITE_NAME } from '@/lib/seo/constants'
 
 // metadataBase is what makes the per-page `alternates` resolve to absolute URLs; without
 // it Next emits relative canonicals, which search engines treat as no canonical at all.
 export const metadata: Metadata = {
   metadataBase: new URL(SERVER_URL),
   title: { default: SITE_NAME, template: `%s | ${SITE_NAME}` },
-  // robots.txt only asks a crawler not to fetch; a bot that fetches anyway still needs to
-  // be told not to index. Both go at cutover — see src/app/robots.ts.
-  robots: { index: false, follow: false },
+  robots: SEARCH_INDEXING_ENABLED ? undefined : { index: false, follow: false },
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

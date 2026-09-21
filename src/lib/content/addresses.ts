@@ -1,12 +1,11 @@
 import { cache } from 'react'
 
-import { i18n, type Locale } from '@/lib/i18n/i18n'
-import { HOME_PAGE_TYPE, pathForPage } from '@/lib/routing'
+import { i18n } from '@/lib/i18n/i18n'
+import { hasAddress, pathForPage } from '@/lib/routing'
 import { findChildren } from './children'
 import { findPublishedPages } from './pages'
 
 export type AddressT = {
-  locale: Locale
   /** Root-relative and trailing-slashed, exactly as `pathForPage` builds it. */
   path: string
   pageId: string | number
@@ -32,16 +31,13 @@ export const listAddresses = cache(async (): Promise<AddressT[]> => {
         ),
       )
 
-      // `fallback: false`, so a page translated in one language only comes back with an
-      // empty slug in the other — listing it would emit `/en/null/`.
       for (const doc of docs) {
-        if (doc.pageType !== HOME_PAGE_TYPE && !doc.slug) continue
+        if (!hasAddress(doc, locale)) continue
 
-        addresses.push({ locale, path: pathForPage(doc, locale), pageId: doc.id })
+        addresses.push({ path: pathForPage(doc, locale), pageId: doc.id })
 
         for (const child of children.get(doc.pageType) ?? [])
           addresses.push({
-            locale,
             path: pathForPage(doc, locale, child.slug),
             pageId: doc.id,
             childSlug: child.slug,

@@ -13,6 +13,7 @@ import { resolveRoute } from '@/lib/content/route'
 import { findInteriorStyles, relatedStyles } from '@/lib/content/interior-styles'
 import { findProjects, relatedProjects } from '@/lib/content/projects'
 import { getTranslations } from '@/lib/i18n/i18n'
+import { findContactDetails } from '@/lib/content/contact'
 import { findFooter } from '@/lib/content/footer'
 import { pathsByType, pathsForPage } from '@/lib/content/pages'
 import { toSeoMeta } from '@/lib/content/seo'
@@ -160,18 +161,13 @@ export default async function CatchAllPage({ params }: { params: Promise<ParamsT
   if (page.pageType === CONTACT_PAGE_TYPE) {
     // Phone and mail live on the footer global, which is already loaded for the layout's
     // footer — `findFooter` is request-cached, so reading it again costs no second query.
-    const footer = await findFooter(locale)
+    const [footer, contact] = await Promise.all([findFooter(locale), findContactDetails(locale)])
 
     return (
       <ContactPage
         locale={locale}
         title={page.title}
-        data={{
-          address: page.contact?.address ?? undefined,
-          nip: page.contact?.nip ?? undefined,
-          phone: footer.phone,
-          mail: footer.mail,
-        }}
+        data={{ ...contact, phone: footer.phone, mail: footer.mail }}
       />
     )
   }

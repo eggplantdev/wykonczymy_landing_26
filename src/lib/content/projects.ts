@@ -46,7 +46,7 @@ export const toProject = (doc: Project): ProjectT => {
     materials: toSpecs(doc.materials),
     image: image ?? null,
     gallery,
-    meta: toSeoMeta(doc.meta, doc.summary),
+    meta: toSeoMeta(doc.meta, doc.summary, image),
   }
 }
 

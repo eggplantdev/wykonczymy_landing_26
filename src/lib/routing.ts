@@ -39,6 +39,14 @@ export type ResolvedSegmentsT = {
   isMiss: boolean
 }
 
+// `pathForPage` interpolates `page.slug` unconditionally, and `fallback: false` lets a page
+// translated in one language only come back with an empty slug in the other — so every caller
+// owes this test first or it builds `/en/null/`. It lives beside the builder because the three
+// call sites had already written it three ways, one of them without the locale half.
+export function hasAddress(page: PageAddressT, locale: Locale): boolean {
+  return Boolean(page.slug) || (page.pageType === HOME_PAGE_TYPE && locale === i18n.defaultLocale)
+}
+
 // The single source of URL shape: every address ends in a slash and only the
 // non-default locale carries a prefix. See context/foundation/url-map.md.
 export function pathForPage(page: PageAddressT, locale: Locale, childSlug?: string): string {
@@ -67,10 +75,6 @@ export function segmentsForPath(path: string): string[] {
   return path.split('/').filter(Boolean)
 }
 
-export function segmentsForPage(page: PageAddressT, locale: Locale, childSlug?: string): string[] {
-  return segmentsForPath(pathForPage(page, locale, childSlug))
-}
-
 // `slug: null` means the locale root. Only Polish has one — `/en/` is a redirect to
 // `/en/home/`, not a page (next.config.ts).
 //
@@ -94,5 +98,5 @@ export function resolveSegments(segments?: string[]): ResolvedSegmentsT {
 }
 
 export function localeFromPath(pathname: string): Locale {
-  return resolveSegments(pathname.split('/').filter(Boolean)).locale
+  return resolveSegments(segmentsForPath(pathname)).locale
 }

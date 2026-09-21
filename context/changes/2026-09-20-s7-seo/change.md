@@ -36,6 +36,14 @@ in your browser to complete this form"), and `/en/completed-works/` has none. `o
 - **`pnpm seo:populate --write` has not been run.** It is the one production write in this slice
   and it is the owner's call. Dry run on 2026-09-21 was clean: ten pages, both locales, zero
   existing values touched. Order is `pnpm db:dump`, then the dry run, then `--write`.
+
+  The review gate hardened that write twice. `payload.update` merges onto the *latest* version
+  rather than the published one, so a page holding unpublished editorial work would have had that
+  draft published as a side effect of filling in a description — reproduced against the test
+  container, then guarded: such a page is now skipped and named in the output. And the script now
+  echoes the database host and waits for a typed `yes`, because `POSTGRES_URL` is production
+  everywhere, `--write` was the entire safety model, and `--yes` is the only way past. Detail and
+  the reproduction → `review-gate.md`.
 - **The e2e suite was not run to green.** Six specs failed on the working tree at the end of this
   run (admin dashboard, two frontend-routing, two photo-lightbox, reduced-motion). Four files
   belonging to a parallel agent were dirty in the tree at the time, so whose failures these are

@@ -89,6 +89,12 @@ anything bilingual.
   claiming the site had one phone mark while `phone-cta.tsx` imported `faPhoneVolume` itself.
   Pattern to copy: `@src/components/ui/phone-cta.tsx`.
 
+- **`src/lib/content/` is the CMS tier; every other `src/lib/` module is Payload-free.** A module
+  that reads or maps CMS data is a file in `lib/content/`; one that does not gets its own
+  directory. That is why `lib/seo/` sits next to `lib/content/seo.ts` and `lib/contact/` next to
+  `lib/content/contact.ts` — the pairs are the same topic split by whether the code touches
+  Payload, not a duplicate. Put a CMS read in `lib/<x>/` and the boundary stops meaning anything.
+
 ## Stack, deploy, local DB
 
 Layer table, rationale, and the two tdg migration frictions (Tailwind 3→4 class migration;

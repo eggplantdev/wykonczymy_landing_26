@@ -61,6 +61,13 @@ bare checkbox with nothing to link to.
 The populate script has **not** been run. Everything below about page descriptions assumes
 `pnpm seo:populate --write` has gone in first, after `pnpm db:dump`.
 
+Two things to expect from that run. It prints the database host and waits for a typed `yes`
+before writing — read the host, it is production. And it **skips any page holding an unpublished
+draft**, printing `skip <locale> <pageType> — has an unpublished draft`: writing through such a
+page would publish that draft as a side effect (reproduced; see the change folder's
+`review-gate.md`). If a page you expected is skipped, publish or discard its draft in the admin
+and run the script again. `--yes` bypasses the prompt and nothing else.
+
 Local, against `pnpm dev`:
 
 - [ ] View source on `/` and on `/en/home/`: each carries a `<meta name="description">` with its

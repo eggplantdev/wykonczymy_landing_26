@@ -3,15 +3,11 @@ import { faEnvelope, faLocationDot, faPhoneVolume } from '@fortawesome/free-soli
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { PageWrapper } from '@/components/layout/page-wrapper'
+import type { ContactDetailsT } from '@/lib/content/contact'
 import { getTranslations, type Locale } from '@/lib/i18n/i18n'
 import '@/lib/fontawesome'
 
-export type ContactPageDataT = {
-  address?: string
-  nip?: string
-  phone: string
-  mail: string
-}
+export type ContactPageDataT = ContactDetailsT & { phone: string; mail: string }
 
 type RowT = {
   key: string
