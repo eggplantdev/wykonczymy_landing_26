@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import { Media } from '@/components/media/media'
 import { EntryTitle } from '@/components/ui/entry-title'
+import { PhotoHover } from '@/components/ui/photo-hover'
 import { SpecStrip } from '@/components/ui/spec-strip'
 import type { MediaImageT } from '@/components/media/types'
 import type { SpecItemT } from '@/lib/content/spec-item'
@@ -27,6 +28,7 @@ export function ProjectRow({ href, title, summary, image, details }: PropsT) {
           className="hover-photo"
           sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, (max-width: 2047px) 33vw, 640px"
         />
+        <PhotoHover />
       </div>
 
       <div className="col-span-full flex flex-col md:col-span-4 lg:col-span-5">

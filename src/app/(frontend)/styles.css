@@ -436,15 +436,8 @@
   @apply transition duration-(--wk-hover-duration) delay-(--wk-hover-delay) group-hover:scale-(--wk-hover-photo-scale);
 }
 
-/* The darkening that rides with the push, as its own layer over the photo. `scrim` is the
-   role for anything laid over a photograph, and it is one of the three that deliberately
-   do not flip with the theme — a picture is the same picture in either. */
-@utility hover-photo-scrim {
-  @apply transition duration-(--wk-hover-duration) delay-(--wk-hover-delay) group-hover:bg-scrim/20;
-}
-
-/* Its own layer for the same reason the scrim is one: a border on the clip box would be scaled
-   along with the photo. Goes in a positioned box the size of the photograph. */
+/* Its own layer, like the push itself: a border on the clip box would be scaled along with
+   the photo. Goes in a positioned box the size of the photograph. */
 @utility hover-photo-outline {
   @apply border-foreground pointer-events-none absolute inset-3 border opacity-0 transition-opacity duration-(--wk-hover-duration) delay-(--wk-hover-delay) group-hover:opacity-100;
 }

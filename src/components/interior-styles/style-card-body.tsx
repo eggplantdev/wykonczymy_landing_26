@@ -1,4 +1,5 @@
 import { Media } from '@/components/media/media'
+import { PhotoHover } from '@/components/ui/photo-hover'
 import { cn } from '@/lib/cn'
 import type { InteriorStyleT } from '@/lib/content/interior-styles'
 
@@ -26,7 +27,7 @@ export function StyleCardBody({ style, imageClassName, textClassName, sizes }: P
       <div className={cn('text-12 mb-5 md:mb-6', textClassName)}>{text}</div>
       <div className={cn('relative overflow-hidden', imageClassName)}>
         <Media image={image} sizes={sizes} className="hover-photo" />
-        <div className="hover-photo-scrim absolute inset-0" />
+        <PhotoHover />
       </div>
     </>
   )

@@ -1,11 +1,7 @@
 import Link from 'next/link'
 
 import { StyleCardBody } from '@/components/interior-styles/style-card-body'
-import { PhotoHover } from '@/components/ui/photo-hover'
-import { cn } from '@/lib/cn'
 import type { InteriorStyleT } from '@/lib/content/interior-styles'
-
-const PHOTO_HEIGHT = 'h-76 md:h-100'
 
 type PropsT = {
   style: InteriorStyleT
@@ -19,26 +15,19 @@ export function InteriorStyleSlide({ style, href }: PropsT) {
       className="group border-r-border relative block shrink-0 border-r px-2 md:px-2.5"
     >
       <div className="w-80 px-2 md:w-108 md:px-4">
-        {/* Killing the role, not the element: the listing card shares `StyleCardBody` and keeps
-            its scrim. */}
-        <div className="relative [--wk-scrim:transparent]">
-          <StyleCardBody
-            style={style}
-            imageClassName={PHOTO_HEIGHT}
-            // `min-h` rather than `h`: an explicit height on a `-webkit-box` fights the clamp and
-            // lets a fourth line show through. Three lines at 135% is 48.6px, so 50px is the floor
-            // a one-line card has to reach for the photos to stay level.
-            textClassName="leading-135 line-clamp-3 min-h-12.5"
-            // Wider than the square 304/400px box on purpose. `object-cover` scales a
-            // landscape photo until it covers the box's *height*, so the visible strip is cut
-            // from a source laid out height × its own aspect wide — and the widest of these
-            // twelve is 2:1. Asking for the box width alone upscales those on a 1x screen.
-            sizes="(max-width: 767px) 620px, 800px"
-          />
-          <div className={cn('absolute inset-x-0 bottom-0', PHOTO_HEIGHT)}>
-            <PhotoHover />
-          </div>
-        </div>
+        <StyleCardBody
+          style={style}
+          imageClassName="h-76 md:h-100"
+          // `min-h` rather than `h`: an explicit height on a `-webkit-box` fights the clamp and
+          // lets a fourth line show through. Three lines at 135% is 48.6px, so 50px is the floor
+          // a one-line card has to reach for the photos to stay level.
+          textClassName="leading-135 line-clamp-3 min-h-12.5"
+          // Wider than the square 304/400px box on purpose. `object-cover` scales a
+          // landscape photo until it covers the box's *height*, so the visible strip is cut
+          // from a source laid out height × its own aspect wide — and the widest of these
+          // twelve is 2:1. Asking for the box width alone upscales those on a 1x screen.
+          sizes="(max-width: 767px) 620px, 800px"
+        />
       </div>
     </Link>
   )
