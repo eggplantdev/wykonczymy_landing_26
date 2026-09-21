@@ -3,7 +3,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 
-import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
+import { carouselDefaults, useCarousel } from '@/lib/carousel'
 import type { ObjectCarouselItemT } from '@/components/object-carousel/types'
 import { cn } from '@/lib/cn'
 import { ObjectCarouselSlide } from './object-carousel-slide'
@@ -17,7 +17,7 @@ type PropsT = {
 // The section that closes a detail page — tdg's `ObjectsSlider`, shared by the interior
 // style pages and the project pages.
 export function ObjectCarousel({ container, sectionTitle, items }: PropsT) {
-  const carousel = useCarouselReady()
+  const carousel = useCarousel()
 
   if (items.length < 1) return null
 

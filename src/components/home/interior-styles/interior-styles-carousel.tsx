@@ -3,7 +3,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 
-import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
+import { carouselDefaults, useCarousel } from '@/lib/carousel'
 import { cn } from '@/lib/cn'
 import { useTranslation } from '@/lib/i18n/use-translation'
 import { childPath } from '@/lib/routing'
@@ -28,7 +28,7 @@ type PropsT = {
 export function InteriorStylesCarousel({ container, data }: PropsT) {
   const { sectionTitle, ctaHref, basePath, styles } = data
   const { t } = useTranslation('common')
-  const carousel = useCarouselReady()
+  const carousel = useCarousel()
 
   if (styles.length < 1) return null
 

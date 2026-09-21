@@ -3,7 +3,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 
-import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
+import { carouselDefaults, useCarousel } from '@/lib/carousel'
 import { SectionTitle } from '@/components/ui/section-title'
 import { CarouselNav } from '@/components/ui/carousel-nav'
 import { cn } from '@/lib/cn'
@@ -21,7 +21,7 @@ type PropsT = {
 
 export function ServicesCarousel({ container, data }: PropsT) {
   const { sectionTitle, cards } = data
-  const carousel = useCarouselReady()
+  const carousel = useCarousel()
 
   if (cards.length < 1) return null
 

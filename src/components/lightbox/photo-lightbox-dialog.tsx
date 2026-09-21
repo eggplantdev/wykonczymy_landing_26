@@ -13,6 +13,7 @@ import type { MediaImageT } from '@/components/media/types'
 import { CarouselArrow } from '@/components/ui/carousel-arrow'
 import { CarouselCounter } from '@/components/ui/carousel-counter'
 import { useTranslation } from '@/lib/i18n/use-translation'
+import { useOverlayLock } from '@/lib/overlay'
 import '@/lib/fontawesome'
 
 type PropsT = {
@@ -31,6 +32,10 @@ export function PhotoLightboxDialog({ images, initialIndex, onClose }: PropsT) {
   const [activeIndex, setActiveIndex] = useState(initialIndex)
   const { t } = useTranslation('common')
   const isAlone = images.length < 2
+
+  // This dialog owns the arrow keys while it is up. Without the claim the page's own
+  // carousels answer them too, from behind the overlay.
+  useOverlayLock()
 
   return (
     <RadixDialog.Root

@@ -1,11 +1,10 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import type { Swiper as SwiperT } from 'swiper'
+import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 
-import { carouselDefaults, useCarouselReady } from '@/lib/carousel'
+import { carouselDefaults, useCarousel } from '@/lib/carousel'
 import { SectionTitle } from '@/components/ui/section-title'
 import { CarouselNav } from '@/components/ui/carousel-nav'
 import { RatingBadge, type RatingT } from '@/components/ui/rating-badge'
@@ -25,8 +24,7 @@ type PropsT = {
 
 export function TestimonialsCarousel({ container, data, ratings }: PropsT) {
   const { sectionTitle, quotes } = data
-  const carousel = useCarouselReady()
-  const swiper = useRef<SwiperT>(null)
+  const carousel = useCarousel()
   const [current, setCurrent] = useState(1)
 
   // Expansion is the track's business, not a slide's: Swiper stretches every slide to the
@@ -38,8 +36,8 @@ export function TestimonialsCarousel({ container, data, ratings }: PropsT) {
   const toggle = (id: string) => {
     const next = expandedId === id ? undefined : id
     setExpandedId(next)
-    if (next) swiper.current?.autoplay.stop()
-    else swiper.current?.autoplay.start()
+    if (next) carousel.swiper?.autoplay.stop()
+    else carousel.swiper?.autoplay.start()
   }
 
   if (quotes.length < 1) return null
@@ -57,10 +55,7 @@ export function TestimonialsCarousel({ container, data, ratings }: PropsT) {
             {...carouselDefaults}
             spaceBetween={24}
             slidesPerView={1}
-            onSwiper={(instance) => {
-              swiper.current = instance
-              carousel.onSwiper()
-            }}
+            onSwiper={carousel.onSwiper}
             // `slideChange` also fires without the visitor moving: expanding a quote
             // re-renders the track, and Swiper's loop fix shifts `activeIndex` to emit it.
             // Keying off `realIndex` tells a real move from that bookkeeping — otherwise
