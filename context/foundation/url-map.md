@@ -35,7 +35,7 @@ sitemap's page set is unchanged (`lastmod` 2025-12-19) — nothing has been adde
 | 3   | `/realizacje/`  | `/en/completed-works/` | Realizacje                                                                      | unchanged     |
 | 4   | `/wykonczenia/` | `/en/interior-styles/` | Wykończenia                                                                     | unchanged     |
 | 5   | `/kontakt/`     | `/en/contact/`         | Kontakt                                                                         | unchanged     |
-| 6   | `/cennik/`      | `/en/price-list/`      | Cennik — **being retired**, needs deliberate replacements (PRD Open Question 3) | **UNDECIDED** |
+| 6   | `/cennik/`      | `/en/price-list/`      | Cennik — **dropped 2026-09-21**; no page will be built                          | `301`, target owed |
 
 Plus two redirects that already exist and must keep working: apex → `www`, and `/en/` → `/en/home/`.
 
@@ -48,9 +48,14 @@ tiles that link nowhere, and the page they used to point at was deleted from the
 addresses now have no target — `/oferta/`, `/en/offer/`, `/cennik/`, `/en/price-list/` — and each
 needs a deliberate `301` before cutover.
 
-**Two rows are still open.** A row left empty at cutover is the
-defect the guardrail exists to prevent. If PRD Open Question 8 changes the page set, a row's target
-changes — the address still has to resolve or redirect deliberately.
+**Cennik was dropped on 2026-09-21** — the owner's call, matching Oferta's. Neither page is built, so
+four of the twelve addresses are now redirect-only and none of the four has a target yet. Dropping a
+page decides what does *not* get built; it does not retire the address, which is indexed and must
+still answer deliberately.
+
+**Two rows are still open** — both waiting on a `301` target, not on a page. A row left empty at
+cutover is the defect the guardrail exists to prevent. If PRD Open Question 8 changes the page set, a
+row's target changes — the address still has to resolve or redirect deliberately.
 
 ## Behaviour to reproduce — verified 2026-09-03
 

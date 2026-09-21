@@ -157,16 +157,18 @@ Against production, after deploy:
 
 - [ ] Google Rich Results test on the deployed `/kontakt/` reports a valid `Organization`, with
       the phone, mail and address the footer and contact page show.
-- [ ] `vatID` is missing from that block because `contact.nip` is empty in the CMS. Either fill
+- [x] `vatID` is missing from that block because `contact.nip` is empty in the CMS. Either fill
       it in the admin or accept its absence — the code emits it the moment it is set.
+      → absence accepted 2026-09-21. `contact.nip` stays empty; the field is live, so setting it in
+      the admin starts emitting `vatID` without a code change.
 - [ ] Lighthouse SEO on the eight measured pages: `meta-description` passes. `is-crawlable`
       still fails and is **expected** — `robots.ts` and the layout's `robots` key hold the
       pre-cutover noindex. Do not delete them to chase the number; cutover owns that.
 
 Recorded debt:
 
-- **`price-list` has no Pages document**, so it is absent from the sitemap and from the populate
-  script's write set, while `url-map.md` still lists `/cennik/` and `/en/price-list/` among the
-  twelve indexed addresses. Cutover decides: build the page or drop the address.
+- **`price-list` has no Pages document** and will not get one — dropped 2026-09-21. Its absence from
+  the sitemap and from the populate script's write set is now correct, not a gap. `/cennik/` and
+  `/en/price-list/` stay in `url-map.md` as indexed addresses owed a `301`; cutover picks the target.
 - **`<html lang="pl">` on `/en/*`** still contradicts the hreflang pairs this slice emits. Out of
   scope here; it needs the locale in a real route segment.
