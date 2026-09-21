@@ -67,3 +67,29 @@ the new site has to keep, not just addresses:
 | `https://wykonczymy.com.pl/` (apex) | `301` → `https://www.wykonczymy.com.pl/`                           |
 | `/oferta` — no trailing slash       | `301` → `/oferta/`, which is what `trailingSlash: true` reproduces |
 | a path that does not exist          | `404`                                                              |
+
+## Where the apex → `www` redirect actually lives — checked 2026-09-21
+
+**It is not on Vercel yet, and it is not in this repository.** `wykonczymy.com.pl` has not been
+added to the Vercel account at all: `vercel domains ls --scope wykonczymys-projects` lists only
+`wykonczymy.app`, and the project — `wykonczymy_landing_26`, not `wykonczymy-www` — answers on
+`wykonczymylanding26.vercel.app` alone. Both the apex and `www` still resolve to `188.210.222.1`,
+the WordPress host, and the `301` in the table above is that host's, not ours.
+
+So there is nothing to verify before the domain moves; the redirect is a step **of** cutover, not a
+precondition to check beforehand. It belongs on Vercel rather than in `next.config.ts`: a Vercel
+domain redirect answers at the edge before any function runs, while a host redirect in the app
+costs an invocation per hit and can loop against the platform's own.
+
+At cutover, in the Vercel dashboard for `wykonczymy_landing_26` → Settings → Domains:
+
+1. Add `www.wykonczymy.com.pl` as the primary domain.
+2. Add `wykonczymy.com.pl` and set it to **Redirect to** `www.wykonczymy.com.pl`, status `308`
+   (Vercel's default; `301` is also acceptable — what must not happen is the pair configured the
+   other way round, which flips the canonical host on all twelve addresses at once).
+
+Then re-run the three probes in the table against the new host, plus:
+
+```
+curl -sSI https://wykonczymy.com.pl/ | head -3      # 30x → https://www.wykonczymy.com.pl/
+```
