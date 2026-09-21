@@ -7,30 +7,56 @@ const body = JSON.stringify({ submissionId: '9f2c1b64-7d3a-4e58-9a10-6c5b2e8f4d7
 
 describe('sign / verify', () => {
   it('round-trips the exact bytes it signed', () => {
-    expect(verify(body, sign(body, secret), secret)).toBe(true)
+    expect(
+      verify(body, sign(body, secret, 'landing-submission'), secret, 'landing-submission'),
+    ).toBe(true)
   })
 
   it('emits the sha256= prefix the contract header carries', () => {
-    expect(sign(body, secret)).toMatch(/^sha256=[0-9a-f]{64}$/)
+    expect(sign(body, secret, 'landing-submission')).toMatch(/^sha256=[0-9a-f]{64}$/)
+  })
+
+  // The whole point of the scoped key: this body IS a valid cleanup body, so an unscoped scheme
+  // would make every forwarded envelope a replayable „delete this submission's files".
+  it('refuses a submission signature presented as a cleanup', () => {
+    expect(verify(body, sign(body, secret, 'landing-submission'), secret, 'landing-cleanup')).toBe(
+      false,
+    )
   })
 
   // Re-serialising an object changes key order or spacing, which is why both sides pass the
   // string around rather than the object.
   it('rejects a body that changed after signing', () => {
-    expect(verify(`${body} `, sign(body, secret), secret)).toBe(false)
+    expect(
+      verify(`${body} `, sign(body, secret, 'landing-cleanup'), secret, 'landing-cleanup'),
+    ).toBe(false)
   })
 
   it('rejects a signature made with a different secret', () => {
-    expect(verify(body, sign(body, 'not-the-shared-secret'), secret)).toBe(false)
+    expect(
+      verify(
+        body,
+        sign(body, 'not-the-shared-secret', 'landing-submission'),
+        secret,
+        'landing-submission',
+      ),
+    ).toBe(false)
   })
 
   // `timingSafeEqual` throws on a length mismatch, so without the guard this is a 500 rather
   // than a 403.
   it('rejects a truncated signature instead of throwing', () => {
-    expect(verify(body, sign(body, secret).slice(0, 20), secret)).toBe(false)
+    expect(
+      verify(
+        body,
+        sign(body, secret, 'landing-submission').slice(0, 20),
+        secret,
+        'landing-submission',
+      ),
+    ).toBe(false)
   })
 
   it('rejects a missing signature', () => {
-    expect(verify(body, '', secret)).toBe(false)
+    expect(verify(body, '', secret, 'landing-submission')).toBe(false)
   })
 })

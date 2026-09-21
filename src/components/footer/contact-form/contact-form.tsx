@@ -5,6 +5,7 @@ import { useForm } from '@tanstack/react-form'
 
 import { Button } from '@/components/ui/button'
 import { ButtonArrow } from '@/components/ui/button-arrow'
+import { checkAttachments } from '@/lib/contact/attachments'
 import { useContactFormStore } from '@/lib/contact/contact-form-store'
 import { contactSchema, emptyContactValues, firstIssueKey } from '@/lib/contact/contact-schema'
 import { submitContactForm } from '@/lib/contact/submit-contact-form'
@@ -58,6 +59,9 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
   const clearDraft = useContactFormStore((state) => state.clearDraft)
   const [serverError, setServerError] = useState<string>()
   const [isSent, setIsSent] = useState(false)
+  // Files live outside the form's values: they are not part of the schema and never travel to the
+  // action — they are uploaded straight to the blob store and the action is told their urls.
+  const [files, setFiles] = useState<File[]>([])
 
   const form = useForm({
     defaultValues: DEFAULT_VALUES,
@@ -88,6 +92,7 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
 
       clearDraft()
       formApi.reset(DEFAULT_VALUES)
+      setFiles([])
       setIsSent(true)
     },
   })
@@ -156,7 +161,15 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
         </form.Field>
       ))}
 
-      <ContactFormAttachments className="md:col-span-2" />
+      <ContactFormAttachments
+        files={files}
+        onFilesChange={(picked) => {
+          const checked = checkAttachments(picked)
+          setServerError(checked.ok ? undefined : t(checked.errorKey))
+          setFiles(checked.ok ? checked.files : [])
+        }}
+        className="md:col-span-2"
+      />
 
       <div className="items-center md:col-span-2 md:flex">
         <form.Field name="acceptsTerms">

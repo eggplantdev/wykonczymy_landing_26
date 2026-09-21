@@ -2,7 +2,7 @@
 
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useId, useState } from 'react'
+import { useEffect, useId, useRef } from 'react'
 
 import { buttonClasses, buttonLabelClasses } from '@/components/ui/button'
 import { Paperclip } from '@/components/ui/icons/paperclip'
@@ -11,13 +11,23 @@ import '@/lib/fontawesome'
 import { useTranslation } from '@/lib/i18n/use-translation'
 
 type PropsT = {
+  /** Owned by the form: the selection travels with the submission, and a send clears it. */
+  files: File[]
+  onFilesChange: (files: File[]) => void
   className?: string
 }
 
-export function ContactFormAttachments({ className }: PropsT) {
+export function ContactFormAttachments({ files, onFilesChange, className }: PropsT) {
   const { t } = useTranslation('form')
   const id = useId()
-  const [fileNames, setFileNames] = useState<string[]>([])
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  // `formApi.reset` does not reach a file input, and clearing only our own state would leave the
+  // input holding the same value — so re-picking the very file that was just sent would fire no
+  // `change` event at all.
+  useEffect(() => {
+    if (files.length === 0 && inputRef.current) inputRef.current.value = ''
+  }, [files])
 
   return (
     <div className={cn('pt-5 md:pt-8', className)}>
@@ -52,22 +62,21 @@ export function ContactFormAttachments({ className }: PropsT) {
           <Paperclip />
         </span>
         <input
+          ref={inputRef}
           id={id}
           name="attachments"
           type="file"
           multiple
           accept="image/*,application/pdf"
-          onChange={(event) =>
-            setFileNames(Array.from(event.target.files ?? []).map((file) => file.name))
-          }
+          onChange={(event) => onFilesChange(Array.from(event.target.files ?? []))}
           className="sr-only"
         />
       </label>
 
-      {fileNames.length > 0 && (
+      {files.length > 0 && (
         <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-10 text-muted-foreground">
-          {fileNames.map((fileName, index) => (
-            <li key={index}>{fileName}</li>
+          {files.map((file, index) => (
+            <li key={index}>{file.name}</li>
           ))}
         </ul>
       )}

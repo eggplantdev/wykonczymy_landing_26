@@ -634,15 +634,15 @@ Run **once**, after the final phase.
 
 #### Automated
 
-- [x] 3.1 The builder reproduces the shared fixture exactly
-- [x] 3.2 Signing round-trips and rejects tampered body, wrong secret, truncated signature
+- [x] 3.1 The builder reproduces the shared fixture exactly — d049698
+- [x] 3.2 Signing round-trips and rejects tampered body, wrong secret, truncated signature — d049698
 
 ### Phase 4: The upload path
 
 #### Automated
 
-- [ ] 4.1 File guards return the right message key for each rejection
-- [ ] 4.2 The token route refuses invalid payloads and pins the pathname
+- [x] 4.1 File guards return the right message key for each rejection
+- [x] 4.2 The token route refuses invalid payloads and pins the pathname
 
 ### Phase 5: Delivery
 

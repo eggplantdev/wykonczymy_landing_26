@@ -18,21 +18,40 @@ The HMAC is computed over the **exact bytes sent**, never over a re-serialised o
 re-`JSON.stringify` on either side changes key order or spacing and the signature stops matching.
 Shared secret: `LANDING_WEBHOOK_SECRET`, the same value in both projects' env.
 
+**The key is scoped, not the bare secret.** Each direction signs with a key derived from the shared
+secret and a scope string:
+
+```
+key   = HMAC-SHA256(LANDING_WEBHOOK_SECRET, <scope>)      # scope as utf-8 bytes
+value = "sha256=" + hex(HMAC-SHA256(key, <raw body>))
+```
+
+| Direction                         | Scope                |
+| --------------------------------- | -------------------- |
+| landing → wykonczymy (submission) | `landing-submission` |
+| wykonczymy → landing (cleanup)    | `landing-cleanup`    |
+
+One undifferentiated key would make the two interchangeable, and that is not theoretical: a cleanup
+body is nothing but a `submissionId`, and every submission envelope carries one — so a signed
+submission, of which the landing's own retry queue holds copies, would also be a valid and
+never-expiring „delete this submission's files" instruction. Scoping also makes the signature layer
+refuse a request either side sends to the wrong endpoint, which it otherwise waves through.
+
 ## Envelope
 
 Strict on what identifies a submission, permissive on the rest: the landing may add a question
 without a coordinated deploy here, and an unknown field is ignored rather than rejected.
 
-| Field | Required | Notes |
-| --- | --- | --- |
-| `submissionId` | yes | uuid, one per submission — this is what makes a replay idempotent |
-| `submittedAt` | no | ISO 8601 |
-| `formId`, `formName`           | no | recorded as-is |
-| `name`, `email`, `phone` | no | the standard three |
-| `address`, `scope`, `area`, `message` | no | the landing's typed answers; `area` is text, because the form invites a range |
-| `rawData` | no | `{ name, values[] }[]` — when omitted, the typed answers above become the answer list |
-| `formQuestions` | no | `{ key, label, type? }[]` — key→label for the answers modal |
-| `assets` | no | `{ url, filename, contentType, size }[]`, at most **15** |
+| Field                                 | Required | Notes                                                                                 |
+| ------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
+| `submissionId`                        | yes      | uuid, one per submission — this is what makes a replay idempotent                     |
+| `submittedAt`                         | no       | ISO 8601                                                                              |
+| `formId`, `formName`                  | no       | recorded as-is                                                                        |
+| `name`, `email`, `phone`              | no       | the standard three                                                                    |
+| `address`, `scope`, `area`, `message` | no       | the landing's typed answers; `area` is text, because the form invites a range         |
+| `rawData`                             | no       | `{ name, values[] }[]` — when omitted, the typed answers above become the answer list |
+| `formQuestions`                       | no       | `{ key, label, type? }[]` — key→label for the answers modal                           |
+| `assets`                              | no       | `{ url, filename, contentType, size }[]`, at most **15**                              |
 
 Schema and mapping: `src/lib/leads/landing.ts`. Fixture: `src/__tests__/fixtures/landing-submission.ts`.
 
@@ -51,7 +70,7 @@ store, and this handler pulls each file back from its url.
 
 There is **one landing Blob store for every environment** — Preview and Production resolve to the
 same host, so `LANDING_BLOB_HOST` carries the same value in both. The consequence is that `leads/`
-is a *shared* prefix: a preview deploy and production stage their uploads side by side and neither
+is a _shared_ prefix: a preview deploy and production stage their uploads side by side and neither
 can tell the other's apart by path. Delivery-driven cleanup is unaffected (it names a
 `submissionId`, which belongs to exactly one deploy), but anything that deletes by age must run
 from production only.
@@ -72,7 +91,8 @@ x-landing-signature: sha256=<hex HMAC-SHA256 of the RAW body>
 ```
 
 Same secret and same scheme as the inbound webhook (`LANDING_WEBHOOK_SECRET`, HMAC over the exact
-bytes sent). `LANDING_CLEANUP_URL` is the full endpoint url, held in `wykonczymy`'s env.
+bytes sent) but under scope **`landing-cleanup`**, so an inbound submission's signature is not one
+of these. `LANDING_CLEANUP_URL` is the full endpoint url, held in `wykonczymy`'s env.
 
 **The callback carries no urls.** A delete instruction that names its own targets is a delete
 primitive exposed to whoever can forge or replay it; one that names a submission can only ever
@@ -85,16 +105,16 @@ prefix scheme rather than by the caller's honesty.
 down must not turn a delivered submission into a retried one. The cost of a missed callback is an
 orphan, which the landing's age sweep reclaims.
 
-| Situation | Status | What happens |
-| --- | --- | --- |
-| Bad or missing signature | `403` | nothing is deleted |
-| Body is not JSON, or `submissionId` is not a uuid | `400` | — |
-| Prefix listed and deleted | `200` | the queue row's files are gone |
-| No such prefix, or already deleted | `200` | idempotent — a replay deletes nothing twice |
-| The delete itself failed | `500` | the sweep is the backstop; `wykonczymy` does not retry |
+| Situation                                         | Status | What happens                                           |
+| ------------------------------------------------- | ------ | ------------------------------------------------------ |
+| Bad or missing signature                          | `403`  | nothing is deleted                                     |
+| Body is not JSON, or `submissionId` is not a uuid | `400`  | —                                                      |
+| Prefix listed and deleted                         | `200`  | the queue row's files are gone                         |
+| No such prefix, or already deleted                | `200`  | idempotent — a replay deletes nothing twice            |
+| The delete itself failed                          | `500`  | the sweep is the backstop; `wykonczymy` does not retry |
 
 **Partial deliveries are not cleaned up by the callback, and the sweep is a deadline, not a
-reprieve.** A file that landed in `failed[]` is one this app does *not* have, so its bytes are the
+reprieve.** A file that landed in `failed[]` is one this app does _not_ have, so its bytes are the
 only copy left — which is why the callback never fires for that submission. But the sweep cannot
 tell that prefix from an abandoned one: the submission WAS delivered, so its queue row is gone, and
 once the age window passes the sweep's two conditions (old enough, no live queue row) both hold and
@@ -117,14 +137,14 @@ orphaned prefix behind.
 
 ## Answers
 
-| Situation | Status | What happens |
-| --- | --- | --- |
-| Bad or missing signature | `403` | nothing is read |
-| Body is not JSON | `400` | — |
-| Envelope fails the schema | `400` | ops alert (`notifyShapeAlert`) |
-| Some files could not be pulled | `200` | **the lead is stored** with what resolved; ops alert lists the failed urls |
-| Same `submissionId` again | `200` | no second lead, no second e-mail, no second download |
-| The lead itself could not be stored | `500` | the landing should retry |
+| Situation                           | Status | What happens                                                               |
+| ----------------------------------- | ------ | -------------------------------------------------------------------------- |
+| Bad or missing signature            | `403`  | nothing is read                                                            |
+| Body is not JSON                    | `400`  | —                                                                          |
+| Envelope fails the schema           | `400`  | ops alert (`notifyShapeAlert`)                                             |
+| Some files could not be pulled      | `200`  | **the lead is stored** with what resolved; ops alert lists the failed urls |
+| Same `submissionId` again           | `200`  | no second lead, no second e-mail, no second download                       |
+| The lead itself could not be stored | `500`  | the landing should retry                                                   |
 
 `200` means „stop retrying", so it is the answer to everything except a failure to store the lead.
 Losing the enquiry is the outcome the landing's queue exists to prevent; an incomplete photo set is
