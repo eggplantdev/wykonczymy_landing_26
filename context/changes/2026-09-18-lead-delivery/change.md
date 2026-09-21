@@ -291,6 +291,27 @@ did; the decisions below are that agreement.
   dependency and no second store, which is what a landing page should cost. The tradeoff is that the
   rules live in Vercel's config rather than the repo, so they are a manual check, not a test.
 
+- **2026-09-21 — attachments are re-encoded in the browser, at 2560 px / q0.80.** The constants
+  were ported from the leads app's invoice ingest (1920×1080, q0.60) and are wrong for this side:
+  an invoice is read once for its total, a renovation attachment is a floor plan whose dimension
+  text is the payload. Two shape bugs came with the port — a 1920×1080 *box* sizes a portrait A4 by
+  its height (~93 DPI), and JPEG ringing shows on line art long before it shows on a photo of a
+  finished room. One `MAX_EDGE` now bounds both axes. The cost is roughly 3-4× the bytes of the
+  invoice settings, which the 8 MB per-file cap and client-side blob upload both absorb.
+
+- **2026-09-21 — HEIC is decoded by `heic-to`, lazily, and only then compressed.** iPhone photos are
+  the common case and no browser but Safari decodes HEIC, so without this the site's own file picker
+  offers a format it then rejects. `heic-to` is ~3 MB raw / ~737 KB gzipped, so it is behind a
+  dynamic `import()` that only a HEIC pick pays for. The decode runs near-lossless (q0.92) because
+  `compressImage` after it is the pass that sets the real quality — decoding at the final quality
+  compressed twice and showed it.
+
+- **2026-09-21 — the pre-upload pass caps concurrency at 4 and isolates per-file failure.** Both
+  guards exist in the leads app's `ingest-files.ts` and were lost in the port; the review caught
+  them. Each file runs main-thread CompressorJS and possibly a WASM decode, so an unbounded pick of
+  15 freezes the tab the feature exists to serve, and a single `Promise.all` rejection threw away
+  fourteen files that had compressed fine. Pinned by `tests/unit/process-attachments.spec.ts`.
+
 ## Build status — 2026-09-21
 
 Written down because "the env vars are set and the deploy is green" was read once as "the feature is
@@ -319,9 +340,11 @@ purpose.
   signed POST from the landing is now what proves the two sides actually match — nothing before it
   did.
 
-**On `landing_26`, unbuilt.** `submitContactForm` still ends at "No sink yet". Missing: the
-`submissions` queue collection, the token route with prefix pinning, the signed forward, the cleanup
-receiver, the age sweep.
+**On `landing_26`, built, uncommitted, never opened in a browser.** The `submissions` queue
+collection, the token route with prefix pinning, the signed forward, the cleanup receiver and the
+age sweep all exist, as does the browser-side compression pass and the outcome dialog. What has
+*not* happened is a single real submission: nothing in the attachment path has been exercised
+against a running browser, so "the specs are green" is the only claim being made here.
 
 **Blocking an end-to-end test, and none of it is the agent's to do:**
 
