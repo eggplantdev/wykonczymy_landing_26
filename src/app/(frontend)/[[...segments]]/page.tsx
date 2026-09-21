@@ -103,42 +103,53 @@ export default async function CatchAllPage({ params }: { params: Promise<ParamsT
   // The layout has already run this and 404ed on a miss — which is where the response status
   // is still settable. This call is free (the finders behind it are request-cached) and is
   // what gives the render a non-null page.
-  const { locale, childSlug, page, isMiss } = await resolveRoute((await params).segments)
+  const { locale, page, child, isMiss } = await resolveRoute((await params).segments)
   if (isMiss || !page) notFound()
 
   const basePath = pathForPage(page, locale)
 
-  if (page.pageType === INTERIOR_STYLES_PAGE_TYPE) {
-    const styles = await findInteriorStyles(locale)
-    const style = childSlug ? styles.find((item) => item.slug === childSlug) : undefined
+  // A resolved child already is the row its page renders — the tag on it is what says which
+  // collection it came from, so the detail pages branch off the child and the page-type
+  // ladder below is left to the listings.
+  if (child) {
+    if (child.pageType === INTERIOR_STYLES_PAGE_TYPE)
+      return (
+        <StylePage
+          locale={locale}
+          style={child}
+          basePath={basePath}
+          related={relatedStyles(await findInteriorStyles(locale), child.slug)}
+        />
+      )
 
-    return style ? (
-      <StylePage
-        locale={locale}
-        style={style}
-        basePath={basePath}
-        related={relatedStyles(styles, style.slug)}
-      />
-    ) : (
-      <InteriorStylesPage title={page.title} basePath={basePath} data={{ styles }} />
-    )
-  }
-
-  if (page.pageType === PROJECTS_PAGE_TYPE) {
-    const projects = await findProjects(locale)
-    const project = childSlug ? projects.find((item) => item.slug === childSlug) : undefined
-
-    return project ? (
+    return (
       <ProjectPage
         locale={locale}
-        project={project}
+        project={child}
         basePath={basePath}
-        related={relatedProjects(projects, project.slug)}
+        related={relatedProjects(await findProjects(locale), child.slug)}
       />
-    ) : (
-      <ProjectsPage locale={locale} title={page.title} basePath={basePath} data={{ projects }} />
     )
   }
+
+  if (page.pageType === INTERIOR_STYLES_PAGE_TYPE)
+    return (
+      <InteriorStylesPage
+        title={page.title}
+        basePath={basePath}
+        data={{ styles: await findInteriorStyles(locale) }}
+      />
+    )
+
+  if (page.pageType === PROJECTS_PAGE_TYPE)
+    return (
+      <ProjectsPage
+        locale={locale}
+        title={page.title}
+        basePath={basePath}
+        data={{ projects: await findProjects(locale) }}
+      />
+    )
 
   if (page.pageType === HOME_PAGE_TYPE) {
     // The rating badges are stored on the footer global; `findFooter` is request-cached, so
