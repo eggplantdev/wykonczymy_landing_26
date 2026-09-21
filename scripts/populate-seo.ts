@@ -35,6 +35,22 @@ const DESCRIPTIONS: Partial<Record<PageTypeT, Record<Locale, string>>> = {
   },
 }
 
+// The share card, by filename rather than media id — the id says nothing to a reader and a
+// wrong one fails silently as somebody else's photo, where a wrong filename aborts the run.
+//
+// A page carries no image of its own, so each one points at a photo it already leads with:
+// home at its hero, the two listings at the first item they show. Contact and the privacy
+// policy are deliberately absent — `toOgImages` falls back to the brand card, which is the
+// better share image for both than an arbitrary living room.
+//
+// Localized, like `meta.description`: the column is on `pages_locales`. The same photo is
+// written to both locales here only because these three are rooms, not copy.
+const IMAGES: Partial<Record<PageTypeT, string>> = {
+  home: 'salon-bezowy.jpg',
+  'completed-works': 'Jastrzebie-Patkow-lesnych-106G-12.webp',
+  'interior-styles': 'boho-salon.webp',
+}
+
 const isWrite = process.argv.includes('--write')
 const skipPrompt = process.argv.includes('--yes')
 
@@ -62,6 +78,24 @@ const run = async () => {
   if (isWrite) await confirmTarget()
 
   const payload = await getPayload({ config: await config })
+
+  // Resolved once, and a miss aborts before anything is written rather than leaving half the
+  // pages pointing at a card and half at the brand fallback.
+  const filenames = Object.values(IMAGES)
+  const { docs: media } = await payload.find({
+    collection: 'media',
+    depth: 0,
+    limit: filenames.length,
+    where: { filename: { in: filenames } },
+  })
+  const imageIdByFilename = new Map(media.map((doc) => [doc.filename, doc.id]))
+
+  const missing = filenames.filter((filename) => !imageIdByFilename.has(filename))
+  if (missing.length > 0) {
+    console.error(`No media row for: ${missing.join(', ')}. Nothing was written.`)
+    process.exit(1)
+  }
+
   let written = 0
   let skipped = 0
 
@@ -86,34 +120,46 @@ const run = async () => {
     )
 
     for (const doc of docs) {
-      const description = DESCRIPTIONS[doc.pageType as PageTypeT]?.[locale]
-
       if (drafted.has(doc.id)) {
         console.log(`skip  ${locale} ${doc.pageType} — has an unpublished draft`)
         skipped += 1
         continue
       }
 
-      if (!description) {
-        console.log(`skip  ${locale} ${doc.pageType} — no copy drafted`)
+      const pageType = doc.pageType as PageTypeT
+      const filename = IMAGES[pageType]
+
+      // Blanks only. An editor's own description or share card outranks anything drafted here,
+      // and re-running the script must never undo one.
+      const description = doc.meta?.description ? undefined : DESCRIPTIONS[pageType]?.[locale]
+      const image = doc.meta?.image || !filename ? undefined : imageIdByFilename.get(filename)
+
+      if (!description && !image) {
+        console.log(`keep  ${locale} ${doc.pageType} — nothing left to fill`)
         skipped += 1
         continue
       }
 
-      if (doc.meta?.description) {
-        console.log(`keep  ${locale} ${doc.pageType} — already has "${doc.meta.description}"`)
-        skipped += 1
-        continue
-      }
+      const filled = [description && `description "${description}"`, image && `image ${filename}`]
+        .filter(Boolean)
+        .join(' + ')
 
-      console.log(`${isWrite ? 'write' : 'dry  '} ${locale} ${doc.pageType} → "${description}"`)
+      console.log(`${isWrite ? 'write' : 'dry  '} ${locale} ${doc.pageType} → ${filled}`)
 
+      // The group is sent whole rather than field by field, so filling one of the two can
+      // never be what clears the other.
       if (isWrite)
         await payload.update({
           collection: 'pages',
           id: doc.id,
           locale,
-          data: { meta: { description } },
+          data: {
+            meta: {
+              ...doc.meta,
+              ...(description ? { description } : {}),
+              ...(image ? { image } : {}),
+            },
+          },
         })
 
       written += 1
