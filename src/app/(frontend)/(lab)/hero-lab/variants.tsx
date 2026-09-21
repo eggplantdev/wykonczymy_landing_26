@@ -51,7 +51,7 @@ export function CentredBottomCta({ source }: PropsT) {
 export function LeftCentred({ source }: PropsT) {
   return (
     <HeroFrame label="3 · Left, centred" note="what ships today" source={source}>
-      <div className="paddings flex h-full flex-col justify-center">
+      <div className="flex h-full flex-col justify-center paddings">
         <p className={cn(titleClasses, 'max-w-[18ch]')}>{source.title}</p>
         {hasCta(source) && (
           <div className="flex pt-6 md:pt-10">
@@ -70,7 +70,7 @@ export function LeftFoot({ source }: PropsT) {
       note="the block sat on the floor of the frame"
       source={source}
     >
-      <div className="paddings flex h-full flex-col justify-end pb-12 md:pb-16">
+      <div className="flex h-full flex-col justify-end paddings pb-12 md:pb-16">
         <p className={cn(titleClasses, 'max-w-[18ch]')}>{source.title}</p>
         {hasCta(source) && (
           <div className="flex pt-6 md:pt-10">
@@ -89,7 +89,7 @@ export function LeftFoot({ source }: PropsT) {
 export function SplitFoot({ source }: PropsT) {
   return (
     <HeroFrame label="5 · Split foot" note="title left, CTA right, one baseline" source={source}>
-      <div className="paddings flex h-full flex-col justify-end pb-12 md:pb-16">
+      <div className="flex h-full flex-col justify-end paddings pb-12 md:pb-16">
         <div className="flex flex-col gap-y-6 md:flex-row md:items-end md:justify-between md:gap-x-10">
           <p className={cn(titleClasses, 'max-w-[18ch]')}>{source.title}</p>
           {hasCta(source) && (

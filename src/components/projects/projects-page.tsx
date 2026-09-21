@@ -24,7 +24,7 @@ export function ProjectsPage({ locale, title, basePath, data }: PropsT) {
 
   return (
     <PageWrapper hasHero={false} title={title}>
-      <div className="divide-border border-border grid divide-y border-b">
+      <div className="grid divide-y divide-border border-b border-border">
         {data.projects.map((project) => (
           <FadeUp key={project.id}>
             <ProjectRow

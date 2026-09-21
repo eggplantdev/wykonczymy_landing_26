@@ -27,9 +27,9 @@ export function HeroFrame({ label, note, source, children }: FramePropsT) {
       <div className="absolute inset-0 flex">
         <Media image={source.image} video={source.video} sizes="100vw" />
       </div>
-      <div className="bg-scrim/20 absolute inset-0" />
+      <div className="absolute inset-0 bg-scrim/20" />
 
-      <div className="text-12 bg-scrim/70 absolute top-4 left-4 z-10 rounded-full px-4 py-2 text-on-media">
+      <div className="absolute top-4 left-4 z-10 rounded-full bg-scrim/70 px-4 py-2 text-12 text-on-media">
         <span className="font-medium">{label}</span>
         <span className="text-muted-foreground"> — {note}</span>
       </div>

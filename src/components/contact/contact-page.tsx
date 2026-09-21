@@ -73,7 +73,7 @@ export function ContactPage({ locale, title, data }: PropsT) {
   return (
     <PageWrapper hasHero={false} title={title}>
       <div className="flex flex-col items-center text-center">
-        <ul className="text-14 md:text-18 flex flex-col items-start gap-y-4">
+        <ul className="flex flex-col items-start gap-y-4 text-14 md:text-18">
           {rows.map(({ key, label, text, href, icon }) => (
             <li key={key} className="flex items-center gap-x-4">
               <FontAwesomeIcon icon={icon} className="size-5 shrink-0" aria-hidden />
@@ -81,7 +81,7 @@ export function ContactPage({ locale, title, data }: PropsT) {
                 href={href}
                 aria-label={`${label}: ${text}`}
                 {...(key === 'address' ? { target: '_blank', rel: 'noreferrer' } : {})}
-                className="hover:text-muted-foreground transition-colors"
+                className="transition-colors hover:text-muted-foreground"
               >
                 {text}
               </a>
@@ -90,7 +90,7 @@ export function ContactPage({ locale, title, data }: PropsT) {
         </ul>
 
         {nip && (
-          <p className="text-10 md:text-14 text-muted-foreground mt-8">
+          <p className="mt-8 text-10 text-muted-foreground md:text-14">
             {contact.nip} {nip}
           </p>
         )}

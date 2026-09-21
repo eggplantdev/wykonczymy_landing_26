@@ -25,7 +25,7 @@ export function ObjectCarouselSlide({ item, sectionTitle }: PropsT) {
         </aside>
       </div>
 
-      <div className="paddings mt-4 flex items-end justify-end gap-x-1.5 lg:hidden">
+      <div className="mt-4 flex items-end justify-end gap-x-1.5 paddings lg:hidden">
         <CarouselArrow direction="left" />
         <CarouselArrow direction="right" />
       </div>

@@ -2,5 +2,5 @@
 // items would make the list invalid. Decorative only — the hairline says nothing a
 // screen reader needs, the list structure already separates the items.
 export function NavSeparator() {
-  return <li aria-hidden="true" className="bg-subtle my-auto h-5 w-px shrink-0" />
+  return <li aria-hidden="true" className="my-auto h-5 w-px shrink-0 bg-subtle" />
 }

@@ -30,7 +30,7 @@ export function Board({ manifest }: PropsT) {
             {[{ key: 'all', label: 'All' }, ...families].map((option) => (
               <button
                 aria-pressed={family === option.key}
-                className="cursor-pointer rounded-full border border-stone-300 px-3 py-1.5 font-mono text-[11px] tracking-wide uppercase text-stone-500 transition-colors hover:text-stone-900 aria-pressed:border-blue-700 aria-pressed:bg-blue-100 aria-pressed:text-blue-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-100 dark:aria-pressed:border-blue-400 dark:aria-pressed:bg-blue-950 dark:aria-pressed:text-blue-300"
+                className="cursor-pointer rounded-full border border-stone-300 px-3 py-1.5 font-mono text-[11px] tracking-wide text-stone-500 uppercase transition-colors hover:text-stone-900 aria-pressed:border-blue-700 aria-pressed:bg-blue-100 aria-pressed:text-blue-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-100 dark:aria-pressed:border-blue-400 dark:aria-pressed:bg-blue-950 dark:aria-pressed:text-blue-300"
                 key={option.key}
                 onClick={() => setFamily(option.key)}
                 type="button"

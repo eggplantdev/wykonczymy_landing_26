@@ -30,7 +30,7 @@ export function ProjectsCarousel({ container, data }: PropsT) {
 
   return (
     <section className={cn(container, carousel.className)}>
-      <div className="gridContainer mb-4 items-center justify-between md:mb-6 xl:mb-10">
+      <div className="mb-4 gridContainer items-center justify-between md:mb-6 xl:mb-10">
         <SectionTitle title={sectionTitle} className="col-span-4 lg:col-span-5 lg:col-start-3" />
         <div className="col-span-3">
           <ButtonLink

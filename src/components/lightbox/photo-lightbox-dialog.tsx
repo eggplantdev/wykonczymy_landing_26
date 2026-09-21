@@ -42,17 +42,17 @@ export function PhotoLightboxDialog({ images, initialIndex, onClose }: PropsT) {
       <RadixDialog.Portal>
         {/* Radix mounts the scroll lock on the overlay, so it is required even though the
             content paints over all of it. */}
-        <RadixDialog.Overlay className="bg-card fixed inset-0 z-50" />
+        <RadixDialog.Overlay className="fixed inset-0 z-50 bg-card" />
 
         <RadixDialog.Content
           aria-describedby={undefined}
-          className="bg-card fixed inset-0 z-50 flex flex-col outline-hidden"
+          className="fixed inset-0 z-50 flex flex-col bg-card outline-hidden"
         >
           <RadixDialog.Title className="sr-only">{t('gallery')}</RadixDialog.Title>
 
           <RadixDialog.Close
             aria-label={t('close')}
-            className="bg-card hover:bg-muted absolute top-4 right-4 z-10 flex size-8 items-center justify-center rounded-md md:top-6 md:right-6"
+            className="absolute top-4 right-4 z-10 flex size-8 items-center justify-center rounded-md bg-card hover:bg-muted md:top-6 md:right-6"
           >
             <FontAwesomeIcon icon={faXmark} className="size-3.5" />
           </RadixDialog.Close>
@@ -85,7 +85,7 @@ export function PhotoLightboxDialog({ images, initialIndex, onClose }: PropsT) {
               </SwiperSlide>
             ))}
 
-            <div className="text-14 md:text-16 *:leading-140 absolute inset-x-0 bottom-0 z-10 flex items-center justify-between px-6 pb-6 md:px-10">
+            <div className="absolute inset-x-0 bottom-0 z-10 flex items-center justify-between px-6 pb-6 text-14 *:leading-140 md:px-10 md:text-16">
               <CarouselCounter current={activeIndex + 1} total={images.length} />
               <div className="flex gap-x-1.5">
                 <CarouselArrow direction="left" disabled={isAlone} />

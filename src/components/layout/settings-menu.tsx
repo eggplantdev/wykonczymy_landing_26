@@ -52,7 +52,7 @@ export function SettingsMenu({ paths }: PropsT) {
               <SettingsPanel
                 paths={paths}
                 onNavigate={() => setIsOpen(false)}
-                className="bg-card shadow-panel rounded-lg p-3"
+                className="rounded-lg bg-card p-3 shadow-panel"
               />
             </motion.div>
           </Popover.Content>

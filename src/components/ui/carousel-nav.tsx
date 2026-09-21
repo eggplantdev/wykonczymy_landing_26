@@ -23,7 +23,7 @@ export function CarouselNav({ current, total, className }: PropsT) {
     <div className={className}>
       <div
         className={cn(
-          'text-14 md:text-16 *:leading-140 flex min-h-7 items-center',
+          'flex min-h-7 items-center text-14 *:leading-140 md:text-16',
           hasCounter ? 'justify-between' : 'justify-end',
         )}
       >

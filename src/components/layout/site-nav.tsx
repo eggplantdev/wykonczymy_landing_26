@@ -77,7 +77,7 @@ export function SiteNav({ paths, variant = 'header', onNavigate, trailing }: Pro
           // positioning keeps it out of the flex row it would otherwise join.
           <motion.li
             aria-hidden
-            className="bg-surface absolute top-0 left-0 rounded-full"
+            className="absolute top-0 left-0 rounded-full bg-surface"
             // On a fresh load there is nowhere to come from, so the pill simply appears
             // under the current item; after a navigation it slides from where the previous
             // copy of the bar left it.

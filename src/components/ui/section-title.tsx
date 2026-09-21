@@ -10,7 +10,7 @@ export function SectionTitle({ title, className }: PropsT) {
   if (!title) return null
 
   return (
-    <h2 className={cn('text-22 md:text-28 lg:text-36 font-bold text-balance', className)}>
+    <h2 className={cn('text-22 font-bold text-balance md:text-28 lg:text-36', className)}>
       {title}
     </h2>
   )

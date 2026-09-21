@@ -29,14 +29,14 @@ export function NavItemPill({ href, children, isActive, hasPill, variant, onClic
         className={cn(
           // A hover fill would compete with the selected item's pill, which is the one thing
           // in the bar allowed to carry a background.
-          'text-foreground hover:text-muted-foreground inline-flex items-center px-4 duration-200',
+          'inline-flex items-center px-4 text-foreground duration-200 hover:text-muted-foreground',
           // Chaos Kitchen's bar: a 24px item inside the group's 4px padding, so the whole
           // control stands 32px tall.
-          isBar && 'text-14 min-h-6',
+          isBar && 'min-h-6 text-14',
           // Every control in the mobile menu — links and the settings gear alike — reads at
           // the same touch size, and drops hover because on a touch screen it only ever
           // lingers as a highlight left behind after a tap.
-          !isBar && 'text-24 hover:text-foreground min-h-12 w-full justify-center',
+          !isBar && 'min-h-12 w-full justify-center text-24 hover:text-foreground',
           // Positioned so it paints over the pill, which is a preceding sibling inside the
           // same stacking context.
           'relative rounded-full',

@@ -21,8 +21,8 @@ export function SpecStrip({ items, className }: PropsT) {
       )}
     >
       {items.map((item) => (
-        <li key={item.id} className="text-10 md:text-12 grid gap-y-2">
-          <span className="text-subtle-foreground inline-block capitalize">{item.name}</span>
+        <li key={item.id} className="grid gap-y-2 text-10 md:text-12">
+          <span className="inline-block text-subtle-foreground capitalize">{item.name}</span>
           <span>{item.value}</span>
         </li>
       ))}

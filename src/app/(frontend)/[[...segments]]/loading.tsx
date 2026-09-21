@@ -16,7 +16,7 @@ export default function SegmentLoading() {
     <div role="status" className="flex min-h-svh items-center justify-center">
       <span
         aria-hidden
-        className="border-border-muted border-t-foreground size-10 animate-spin rounded-full border-2 motion-reduce:animate-none"
+        className="size-10 animate-spin rounded-full border-2 border-border-muted border-t-foreground motion-reduce:animate-none"
       />
       <span className="sr-only">{copy.loading}</span>
     </div>

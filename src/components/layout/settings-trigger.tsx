@@ -21,7 +21,7 @@ export function SettingsTrigger({ label, isOpen, ...triggerProps }: PropsT) {
       aria-label={label}
       {...triggerProps}
       // 24px, matched to the nav item beside it inside the bar's 4px padding.
-      className="text-foreground hover:text-muted-foreground inline-flex size-6 items-center justify-center rounded-full duration-200"
+      className="inline-flex size-6 items-center justify-center rounded-full text-foreground duration-200 hover:text-muted-foreground"
     >
       <FontAwesomeIcon
         icon={faGear}

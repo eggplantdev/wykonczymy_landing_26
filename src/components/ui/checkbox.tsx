@@ -38,7 +38,7 @@ export function Checkbox({
     <label
       htmlFor={id}
       className={cn(
-        'text-12 text-muted-foreground flex items-center gap-x-2',
+        'flex items-center gap-x-2 text-12 text-muted-foreground',
         !disabled && 'cursor-pointer',
         className,
       )}
@@ -64,9 +64,9 @@ export function Checkbox({
           on an invalid box changed nothing but the offset. */}
       <span
         className={cn(
-          'peer-focus-visible:outline-offset-2 peer-focus-visible:outline-2 peer-focus-visible:outline-ring peer-disabled:opacity-60 flex size-4.5 shrink-0 items-center justify-center rounded-md',
+          'flex size-4.5 shrink-0 items-center justify-center rounded-md peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring peer-disabled:opacity-60',
           invalid
-            ? 'bg-error/15 text-error outline-error outline'
+            ? 'bg-error/15 text-error outline outline-error'
             : 'bg-subtle text-muted-foreground',
         )}
       >

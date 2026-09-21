@@ -16,7 +16,7 @@ export function ObjectSlideContent({ item, sectionTitle }: PropsT) {
   const { href, title, text, image, details } = item
 
   return (
-    <Link href={href} className="gridContainer col-span-full lg:col-span-10 lg:grid-cols-10">
+    <Link href={href} className="col-span-full gridContainer lg:col-span-10 lg:grid-cols-10">
       {/* The label repeats on every slide and again per breakpoint, so the carousel carries
           the one real heading and these two stay plain text — six copies of the same `h2`
           would otherwise stand in the page outline. `aria-hidden` for the same reason: the
@@ -25,7 +25,7 @@ export function ObjectSlideContent({ item, sectionTitle }: PropsT) {
       <p
         aria-hidden="true"
         data-display
-        className="text-14 col-span-full my-6 font-medium md:hidden"
+        className="col-span-full my-6 text-14 font-medium md:hidden"
       >
         {sectionTitle}
       </p>
@@ -38,7 +38,7 @@ export function ObjectSlideContent({ item, sectionTitle }: PropsT) {
         <p
           aria-hidden="true"
           data-display
-          className="md:text-18 lg:text-20 mb-6 hidden font-medium md:block"
+          className="mb-6 hidden font-medium md:block md:text-18 lg:text-20"
         >
           {sectionTitle}
         </p>
@@ -48,7 +48,7 @@ export function ObjectSlideContent({ item, sectionTitle }: PropsT) {
             page as the carousel advances. */}
         <p
           className={cn(
-            'text-12 md:text-14 leading-130 line-clamp-3 h-12 md:h-14',
+            'line-clamp-3 h-12 text-12 leading-130 md:h-14 md:text-14',
             details && 'mb-8 lg:mb-12',
           )}
         >

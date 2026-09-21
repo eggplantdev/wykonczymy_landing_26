@@ -12,7 +12,7 @@ export function InteriorStyleSlide({ style, href }: PropsT) {
   return (
     <Link
       href={href}
-      className="group border-r-border relative block shrink-0 border-r px-2 md:px-2.5"
+      className="group relative block shrink-0 border-r border-r-border px-2 md:px-2.5"
     >
       <div className="w-80 px-2 md:w-108 md:px-4">
         <StyleCardBody

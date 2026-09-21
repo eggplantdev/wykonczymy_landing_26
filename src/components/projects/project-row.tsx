@@ -19,7 +19,7 @@ type PropsT = {
 // a listing has no use for, so this row spans the full grid instead.
 export function ProjectRow({ href, title, summary, image, details }: PropsT) {
   return (
-    <Link href={href} className="gridContainer paddings group py-8 lg:py-12">
+    <Link href={href} className="group gridContainer paddings py-8 lg:py-12">
       <div className="relative col-span-full mb-6 aspect-3/2 overflow-hidden md:order-2 md:col-span-4 md:col-start-5 md:mb-0 lg:col-span-4 lg:col-start-9">
         <Media
           image={image}
@@ -33,7 +33,7 @@ export function ProjectRow({ href, title, summary, image, details }: PropsT) {
 
       <div className="col-span-full flex flex-col md:col-span-4 lg:col-span-5">
         <EntryTitle title={title} />
-        <p className="text-12 md:text-14 leading-130 mb-8 lg:mb-12">{summary}</p>
+        <p className="mb-8 text-12 leading-130 md:text-14 lg:mb-12">{summary}</p>
         <SpecStrip items={details} className="mt-auto grid-cols-1" />
       </div>
     </Link>

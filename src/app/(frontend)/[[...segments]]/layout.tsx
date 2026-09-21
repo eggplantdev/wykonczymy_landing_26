@@ -57,7 +57,7 @@ export default async function SegmentLayout({
         <OrganizationJsonLd {...organization} />
         <SiteHeader paths={paths} typePaths={typePaths} phone={footer.phone} locale={locale} />
         <MobileMenu paths={paths} typePaths={typePaths} phone={footer.phone} />
-        <div className="bg-background flex min-h-lvh flex-col">
+        <div className="flex min-h-lvh flex-col bg-background">
           <div className="grow">
             <PageTransition>{children}</PageTransition>
           </div>

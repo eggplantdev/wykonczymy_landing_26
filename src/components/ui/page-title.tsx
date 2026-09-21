@@ -9,7 +9,7 @@ export function PageTitle({ title, className }: PropsT) {
   return (
     <h1
       className={cn(
-        'paddings text-32 md:text-40 lg:text-58 mb-12 text-center font-bold md:mb-24 lg:mb-20',
+        'mb-12 paddings text-center text-32 font-bold md:mb-24 md:text-40 lg:mb-20 lg:text-58',
         className,
       )}
     >

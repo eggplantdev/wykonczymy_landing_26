@@ -20,7 +20,7 @@ export function CarouselControls({ title, total }: PropsT) {
   return (
     <div
       className={cn(
-        'text-14 md:text-16 *:leading-140 flex items-center transition-opacity duration-300',
+        'flex items-center text-14 transition-opacity duration-300 *:leading-140 md:text-16',
         // `invisible` and not `opacity-0` alone: a transparent element still takes focus and
         // clicks, and `loop: true` duplicates every slide — so the faded copies put two full
         // sets of unreachable arrows in the tab order.

@@ -21,10 +21,10 @@ export function StyleCardBody({ style, imageClassName, textClassName, sizes }: P
     <>
       {/* Both blocks keep a reserved height so every photo in a row starts at the same y,
           whatever the copy runs to. */}
-      <header className="text-18 md:text-20 xlg:text-22 leading-120 xlg:h-13.5 mb-3 line-clamp-2 h-11 font-medium md:h-12.5">
+      <header className="mb-3 line-clamp-2 h-11 text-18 leading-120 font-medium md:h-12.5 md:text-20 xlg:h-13.5 xlg:text-22">
         {title}
       </header>
-      <div className={cn('text-12 mb-5 md:mb-6', textClassName)}>{text}</div>
+      <div className={cn('mb-5 text-12 md:mb-6', textClassName)}>{text}</div>
       <div className={cn('relative overflow-hidden', imageClassName)}>
         <Media image={image} sizes={sizes} className="hover-photo" />
         <PhotoHover />

@@ -12,7 +12,7 @@ export function EntryTitle({ title, level = 'h2', className }: PropsT) {
   const Tag = level
 
   return (
-    <Tag className={cn('text-20 md:text-22 lg:text-28 mb-6 md:mb-9 lg:mb-12', className)}>
+    <Tag className={cn('mb-6 text-20 md:mb-9 md:text-22 lg:mb-12 lg:text-28', className)}>
       {title}
     </Tag>
   )

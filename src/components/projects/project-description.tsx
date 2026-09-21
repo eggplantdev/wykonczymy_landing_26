@@ -28,7 +28,7 @@ export function ProjectDescription({
       {/* Placement rides on each wrapper: once it sits between the grid and its item, the wrapper
           is the grid item, and classes left on the inner element would be laid out against nothing. */}
       <FadeUp className="col-span-full mb-20 md:col-span-6 md:mb-24 lg:col-span-8 xl:mb-40">
-        <p className="text-18 md:text-20 lg:text-32 leading-125 lg:leading-normal">{description}</p>
+        <p className="text-18 leading-125 md:text-20 lg:text-32 lg:leading-normal">{description}</p>
       </FadeUp>
 
       <FadeUp className="col-span-full">

@@ -26,7 +26,7 @@ export function SiteHeader({ paths, typePaths, phone, locale }: PropsT) {
     // The outer columns are equal fractions, so the nav lands on the page's own axis
     // whatever the logo happens to measure — a flex row would only centre it in the space
     // left over, and it would drift as the labels change length in EN.
-    <header className="paddings pointer-events-none fixed inset-x-0 top-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center gap-4 pt-2 md:py-6">
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center gap-4 paddings pt-2 md:py-6">
       <div className="pointer-events-auto justify-self-start">
         <SiteLogo homeHref={typePaths[HOME_PAGE_TYPE] ?? '/'} />
       </div>

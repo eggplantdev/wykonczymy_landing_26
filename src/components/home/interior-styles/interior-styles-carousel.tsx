@@ -38,7 +38,7 @@ export function InteriorStylesCarousel({ container, data }: PropsT) {
       <Swiper
         {...carouselDefaults}
         slidesPerView="auto"
-        className="xlg:mb-10 mb-8"
+        className="mb-8 xlg:mb-10"
         onSwiper={carousel.onSwiper}
       >
         {styles.map((style) => (

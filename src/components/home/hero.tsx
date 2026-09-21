@@ -95,11 +95,11 @@ export function Hero({ data }: PropsT) {
       </motion.div>
       {/* Covers the whole frame rather than fading in from an edge: the photo is editable in
           the admin, so nothing here can assume where its bright areas fall. */}
-      <div className="bg-scrim/10 absolute inset-0" />
+      <div className="absolute inset-0 bg-scrim/10" />
 
       <motion.div
         style={{ y, opacity }}
-        className="paddings text-on-media relative flex h-full w-full flex-col justify-end pb-20 md:pb-16"
+        className="relative flex h-full w-full flex-col justify-end paddings pb-20 text-on-media md:pb-16"
       >
         {/* The measure is mobile-only and deliberate: at `text-40` the second line of today's
             title reaches within a few pixels of the gutter, so it is capped short enough to
@@ -107,7 +107,7 @@ export function Hero({ data }: PropsT) {
             editor still owns the hard breaks — this only adds a soft one, and a longer word
             than `wykończenie` (280px is roughly twelve characters at this size) will re-break
             somewhere the editor did not choose. From `md` up the title has room and takes none. */}
-        <h1 className="text-40 md:text-72 leading-105 max-w-70 font-bold break-words whitespace-pre-line md:max-w-lg">
+        <h1 className="max-w-70 text-40 leading-105 font-bold break-words whitespace-pre-line md:max-w-lg md:text-72">
           {title}
         </h1>
         {/* The photo is a dark surface whatever the page's theme is, so the CTA claims the

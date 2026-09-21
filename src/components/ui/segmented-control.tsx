@@ -22,7 +22,7 @@ export function SegmentedControl({ children, className, ...groupProps }: Compone
       // Tray and segment are both fully round, as on the nav group and the pill inside it:
       // this is the same tray-holding-a-pill shape, and a softened rectangle beside a round
       // one is the three-radii problem that pass was closing.
-      className={cn('bg-muted flex gap-1 rounded-full p-1', className)}
+      className={cn('flex gap-1 rounded-full bg-muted p-1', className)}
     >
       {children}
     </div>

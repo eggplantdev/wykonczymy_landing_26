@@ -53,7 +53,7 @@ export function TestimonialSlide({ testimonial, isExpanded, onToggle }: PropsT) 
       <blockquote
         ref={measure}
         className={cn(
-          'text-14 md:text-16 lg:text-20 leading-140 text-balance [&>p+p]:pt-4 max-w-3xl',
+          'max-w-3xl text-14 leading-140 text-balance md:text-16 lg:text-20 [&>p+p]:pt-4',
           !isExpanded && 'line-clamp-8',
         )}
       >
@@ -66,7 +66,7 @@ export function TestimonialSlide({ testimonial, isExpanded, onToggle }: PropsT) 
         <button
           type="button"
           onClick={onToggle}
-          className="text-12 md:text-14 text-muted-foreground hover:text-foreground pt-3 underline underline-offset-4 transition-colors"
+          className="pt-3 text-12 text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground md:text-14"
         >
           {t(isExpanded ? 'showLess' : 'readMore')}
         </button>
@@ -74,7 +74,7 @@ export function TestimonialSlide({ testimonial, isExpanded, onToggle }: PropsT) 
 
       <figcaption className="flex flex-col pt-8 md:pt-10">
         <p className="text-16 md:text-20">{name}</p>
-        {role && <p className="text-12 md:text-14 text-muted-foreground">{role}</p>}
+        {role && <p className="text-12 text-muted-foreground md:text-14">{role}</p>}
       </figcaption>
     </figure>
   )

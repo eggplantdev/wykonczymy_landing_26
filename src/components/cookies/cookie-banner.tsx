@@ -24,17 +24,17 @@ export function CookieBanner({ privacyPolicyHref }: PropsT) {
   return (
     <section
       aria-labelledby={titleId}
-      className="border-border-muted bg-card shadow-header fixed inset-x-4 bottom-4 z-50 max-w-md rounded-md border p-5 md:inset-x-6 md:bottom-6"
+      className="fixed inset-x-4 bottom-4 z-50 max-w-md rounded-md border border-border-muted bg-card p-5 shadow-header md:inset-x-6 md:bottom-6"
     >
-      <h2 id={titleId} className="text-14 text-foreground mb-2 md:text-16">
+      <h2 id={titleId} className="mb-2 text-14 text-foreground md:text-16">
         {t('title')}
       </h2>
-      <p className="text-12 text-muted-foreground leading-150">{t('description')}</p>
+      <p className="text-12 leading-150 text-muted-foreground">{t('description')}</p>
 
       {privacyPolicyHref && (
         <Link
           href={privacyPolicyHref}
-          className="text-10 text-muted-foreground hover:text-foreground mt-2 inline-block underline underline-offset-2 transition-colors"
+          className="mt-2 inline-block text-10 text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
         >
           {tNav('privacyPolicy')}
         </Link>

@@ -42,7 +42,7 @@ export function MenuToggle({ label, isOpen, onClick, className, ref, ...ariaProp
       aria-expanded={isOpen}
       {...ariaProps}
       className={cn(
-        'text-foreground fixed top-2 right-6 z-50 md:hidden',
+        'fixed top-2 right-6 z-50 text-foreground md:hidden',
         // The open menu is a modal dialog, and Radix kills pointer events on everything
         // outside it. This button is outside it and is the only way to shut it.
         isOpen && 'pointer-events-auto',

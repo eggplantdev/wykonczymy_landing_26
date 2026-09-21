@@ -32,7 +32,7 @@ export function RatingBadge({ data }: PropsT) {
       <StarRating rating={rating} label={`${platform}: ${score} / 5`} />
       {/* The badges land on the same line as the testimonials counter, so the score is set
           like that figure rather than as a second, louder one. */}
-      <span className="text-14 md:text-16 leading-140">{score}</span>
+      <span className="text-14 leading-140 md:text-16">{score}</span>
     </>
   )
 

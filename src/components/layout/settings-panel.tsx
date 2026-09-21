@@ -20,7 +20,7 @@ function SettingsSection({ label, children }: SectionPropsT) {
 
   return (
     <div className="flex flex-col gap-1.5">
-      <span id={labelId} className="text-10 text-muted-foreground px-1 tracking-wide uppercase">
+      <span id={labelId} className="px-1 text-10 tracking-wide text-muted-foreground uppercase">
         {label}
       </span>
       {children(labelId)}
@@ -51,7 +51,7 @@ export function SettingsPanel({ paths, onNavigate, className }: PropsT) {
         {(labelledBy) => <ThemeControl labelledBy={labelledBy} />}
       </SettingsSection>
 
-      <CookieSettingsButton className="text-12 text-muted-foreground hover:text-foreground border-border-muted -mb-1 border-t px-1 pt-3 text-left transition-colors" />
+      <CookieSettingsButton className="-mb-1 border-t border-border-muted px-1 pt-3 text-left text-12 text-muted-foreground transition-colors hover:text-foreground" />
     </div>
   )
 }

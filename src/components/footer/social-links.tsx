@@ -21,7 +21,7 @@ type PropsT = {
 
 export function SocialLinks({ className }: PropsT) {
   return (
-    <ul className={cn('text-foreground flex items-center gap-x-3', className)}>
+    <ul className={cn('flex items-center gap-x-3 text-foreground', className)}>
       {SOCIALS.map(({ label, href, Icon }) => (
         <li key={label} className="flex">
           <a

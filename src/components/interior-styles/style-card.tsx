@@ -23,7 +23,7 @@ export function StyleCard({ style, href, index }: PropsT) {
       // `block`: as a grid item the link was blockified for free; inside the wrapper it is an
       // ordinary inline box, and the padding and borders below would hang off a line of text.
       className={cn(
-        'group border-border relative block pt-6 md:px-6 lg:border-r lg:px-6.5',
+        'group relative block border-border pt-6 md:px-6 lg:border-r lg:px-6.5',
         isSecondInPair && 'md:border-l lg:border-l-0',
         isLastInRow && 'lg:border-r-0',
       )}

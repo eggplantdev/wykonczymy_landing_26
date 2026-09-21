@@ -35,11 +35,11 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
     <footer>
       {/* The reading half takes the column; the dark bar below is a sibling rather than a grid
           item precisely so it does not. */}
-      <div className="site-container paddings md:grid md:grid-cols-8 md:gap-x-5 lg:grid-cols-12 pt-20 md:pt-28">
+      <div className="site-container paddings pt-20 md:grid md:grid-cols-8 md:gap-x-5 md:pt-28 lg:grid-cols-12">
         {/* Placement rides on the wrapper: once it sits between the grid and its item, the wrapper
             is the grid item, and classes left on the paragraph would be laid out against nothing. */}
         <FadeUp className="mb-20 md:col-span-6 lg:col-span-8 lg:col-start-5">
-          <p className="text-18 leading-125 max-w-4xl md:text-32 md:leading-normal">{intro}</p>
+          <p className="max-w-4xl text-18 leading-125 md:text-32 md:leading-normal">{intro}</p>
         </FadeUp>
 
         {/* The header is fixed, so the anchored block carries its own offset from the top. Landing
@@ -48,7 +48,7 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
         <FadeUp className="col-span-full">
           <div
             id={CONTACT_FORM_ANCHOR}
-            className="scroll-mt-24 md:scroll-mt-28 lg:grid lg:grid-cols-12 lg:gap-x-5 mb-8 lg:mb-20"
+            className="mb-8 scroll-mt-24 md:scroll-mt-28 lg:mb-20 lg:grid lg:grid-cols-12 lg:gap-x-5"
           >
             <SectionTitle title={title} className="mb-6 md:mb-8 lg:col-span-full lg:mb-10" />
 
@@ -60,7 +60,7 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
         </FadeUp>
       </div>
 
-      <div className="md:theme-dark md:bg-background text-foreground paddings py-4">
+      <div className="paddings py-4 text-foreground md:bg-background md:theme-dark">
         <div className="flex w-full flex-col items-center gap-y-2 md:grid md:grid-cols-3 md:justify-items-start md:gap-x-5">
           <PhoneCta
             phone={data.phone}
@@ -75,7 +75,7 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
             href="https://eggplantdev.com"
             target="_blank"
             rel="noreferrer"
-            className="text-10 hover:text-muted-foreground flex items-center gap-x-2 font-semibold transition-colors md:justify-self-end"
+            className="flex items-center gap-x-2 text-10 font-semibold transition-colors hover:text-muted-foreground md:justify-self-end"
           >
             <span>© 2026 eggplantdev.com</span>
             <BrandLogo className="h-8 w-auto" />
