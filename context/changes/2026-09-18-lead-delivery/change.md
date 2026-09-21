@@ -303,10 +303,15 @@ purpose.
 - `POST /api/webhooks/landing` — signature (403), envelope (400), `captureLead` (the only step
   allowed to 500), serial asset fetch, attach, redelivery guard.
 - `signBody()` in `verify-signature.ts` — one signer for both directions, so the inbound verify and
-  the outbound sign cannot drift apart.
-- `releaseLandingAssets()` — the delete-on-delivery callback. Fires only when `failed[]` is empty
-  **and** the attach write has committed; never throws, so a landing that is down cannot turn a
-  delivered submission into a retried one.
+  the outbound sign cannot drift apart. **Scoped since 2026-09-21:** the key is
+  `HMAC(LANDING_WEBHOOK_SECRET, scope)`, `landing-submission` inbound and `landing-cleanup`
+  outbound, so a captured submission signature is not also a valid delete instruction (Meta's
+  `x-hub-signature-256` stays on the bare app secret). **The landing must sign and verify the same
+  way** — mirrored into `src/lib/contact/sign.ts` there, and specified in the shared contract doc.
+- `releaseLandingAssets()` — the delete-on-delivery callback. Fires only when the number of files we
+  hold equals the number the envelope listed — counted, not inferred from an empty `failed[]` — and
+  only once the attach write has committed. Never throws, and runs behind `after()`, so a landing
+  that is down cannot turn a delivered submission into a retried one.
 - `LANDING_CLEANUP_URL` — optional in the schema. Absent means the callback is skipped and the
   webhook still answers `200`; the cost is an orphaned prefix the landing's sweep reclaims.
 - `LANDING_WEBHOOK_SECRET` and `LANDING_BLOB_HOST` are set on both projects × both environments, one
