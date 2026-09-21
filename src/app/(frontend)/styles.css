@@ -183,6 +183,12 @@
 
   /* Review stars, sampled from the Fixly badge this mirrors. */
   --wk-amber: #ffd739;
+  /* Spotify's green, for a step the visitor has already passed. The lifted pair is
+     Spotify's own hover value — green is a constant here, so it brightens rather than
+     swapping fills the way the theme-following pills do. */
+  --wk-green: #1db954;
+  --wk-green-lifted: #1ed760;
+
   /* Two reds, because error type is small and has to carry on a white field and on the
      dark footer alike: one value clears 4.5:1 against the first and fails the second. */
   --wk-red: #d11f1a;
@@ -231,6 +237,11 @@
   --wk-brand: var(--wk-petrol);
   --wk-rating: var(--wk-amber);
   --wk-error: var(--wk-red);
+  --wk-success: var(--wk-green);
+  --wk-success-hover: var(--wk-green-lifted);
+  /* Constant, not theme-following: the green underneath it is the same colour in both
+     themes. Canvas on it is 2.6:1 — under AA, so this pill carries no small prose. */
+  --wk-success-foreground: var(--wk-canvas);
 
   /* A drop shadow is a darkening, so on a near-black page it has nothing left to darken —
      the dark theme lifts the edge with light instead of sinking it with black. */
@@ -298,6 +309,9 @@
   --color-scrim: var(--wk-scrim);
   --color-on-media: var(--wk-on-media);
   --color-error: var(--wk-error);
+  --color-success: var(--wk-success);
+  --color-success-hover: var(--wk-success-hover);
+  --color-success-foreground: var(--wk-success-foreground);
 }
 
 @layer base {

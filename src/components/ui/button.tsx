@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/cn'
 
-export type ButtonVariantT = 'light' | 'dark' | 'outline' | 'solid' | 'ghost'
+export type ButtonVariantT = 'light' | 'dark' | 'outline' | 'solid' | 'success' | 'ghost'
 
 export type ButtonSizeT = 'sm' | 'xl' | 'responsive'
 
@@ -36,6 +36,8 @@ export function buttonClasses({
       'border-border hover:border-foreground focus-visible:bg-muted focus-visible:outline-ring disabled:border-border-muted border bg-transparent',
     variant === 'solid' &&
       'bg-foreground hover:bg-background focus-visible:outline-ring disabled:bg-muted',
+    variant === 'success' &&
+      'bg-success hover:bg-success-hover focus-visible:outline-ring disabled:bg-muted',
     variant === 'ghost' && 'bg-transparent focus-visible:outline-ring',
     size === 'responsive' && 'h-8 px-4.5 text-12 md:h-9 md:text-14',
     size === 'sm' && 'h-7 px-3 text-12',
@@ -64,6 +66,8 @@ export function buttonLabelClasses({
     variant === 'dark' && 'text-foreground group-hover:text-background',
     variant === 'outline' && 'text-muted-foreground group-hover:text-foreground',
     variant === 'solid' && 'text-background group-hover:text-foreground',
+    // No hover pair: green does not follow the theme, so the fill brightens instead of swapping.
+    variant === 'success' && 'text-success-foreground',
     variant === 'ghost' && 'text-foreground group-hover:text-muted-foreground',
     disabled && 'text-subtle-foreground',
   )

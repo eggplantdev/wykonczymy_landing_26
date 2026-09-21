@@ -110,13 +110,12 @@ export function Hero({ data }: PropsT) {
         <h1 className="max-w-70 text-40 leading-105 font-bold break-words whitespace-pre-line md:max-w-lg md:text-72">
           {title}
         </h1>
-        {/* The photo is a dark surface whatever the page's theme is, so the CTA claims the
-            dark role tokens the way the footer band does — `solid` then resolves to the same
-            white pill here as it does down there, instead of going black on the light theme. */}
+        {/* The photo is a dark surface whatever the page's theme is, so the CTA claims the dark
+            role tokens the way the footer band does — that is where its focus ring comes from. */}
         {ctaLabel && ctaHref && (
           <motion.div style={{ visibility }} data-theme="dark" className="flex pt-6 md:pt-10">
-            <ButtonLink href={ctaHref} label={ctaLabel} variant="solid" size="xl" icon="trailing">
-              <ButtonArrow variant="solid" size="xl" />
+            <ButtonLink href={ctaHref} label={ctaLabel} variant="success" size="xl" icon="trailing">
+              <ButtonArrow variant="dark" size="xl" />
             </ButtonLink>
           </motion.div>
         )}
