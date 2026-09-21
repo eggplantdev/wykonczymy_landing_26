@@ -1,5 +1,6 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import type { ReactNode } from 'react'
 import {
   ConsentManagerProvider,
@@ -8,9 +9,16 @@ import {
 } from '@c15t/nextjs/headless'
 
 import { CONSENT_CATEGORIES } from './consent-categories'
-import { ConsentedAnalytics } from './consented-analytics'
 import { CookieBanner } from './cookie-banner'
 import { CookiePreferences } from './cookie-preferences'
+
+// The answer lives in the browser, so the server always renders "not consented" and a client that
+// said yes renders the beacon — a mismatch React answers by discarding the whole tree. `ssr: false`
+// leaves the server nothing to disagree with; the gate then only ever runs on the client.
+const ConsentedAnalytics = dynamic(
+  () => import('./consented-analytics').then((module) => module.ConsentedAnalytics),
+  { ssr: false, loading: () => null },
+)
 
 // c15t forwards store options it does not re-declare on its React-facing type.
 type OptionsT = ConsentManagerOptions & {
