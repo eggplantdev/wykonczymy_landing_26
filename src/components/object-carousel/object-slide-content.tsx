@@ -5,7 +5,7 @@ import type { ObjectCarouselItemT } from '@/components/object-carousel/types'
 import { EntryTitle } from '@/components/ui/entry-title'
 import { SpecStrip } from '@/components/ui/spec-strip'
 import { cn } from '@/lib/cn'
-import { firstSlideLoading } from '@/lib/carousel'
+import { firstSlideLoading } from '@/lib/carousel-loading'
 
 type PropsT = {
   item: ObjectCarouselItemT

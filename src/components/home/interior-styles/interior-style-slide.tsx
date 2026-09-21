@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { StyleCardBody } from '@/components/interior-styles/style-card-body'
-import { firstSlideLoading } from '@/lib/carousel'
+import { firstSlideLoading } from '@/lib/carousel-loading'
 import type { InteriorStyleT } from '@/lib/content/interior-styles'
 
 type PropsT = {

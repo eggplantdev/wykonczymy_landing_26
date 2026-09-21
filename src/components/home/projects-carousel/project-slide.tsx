@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { Media } from '@/components/media/media'
-import { firstSlideLoading } from '@/lib/carousel'
+import { firstSlideLoading } from '@/lib/carousel-loading'
 import type { MediaImageT, MediaVideoT } from '@/components/media/types'
 import { PhotoHover } from '@/components/ui/photo-hover'
 import { CarouselControls } from './carousel-controls'

@@ -4,12 +4,6 @@ import type { SwiperClass, SwiperProps } from 'swiper/react'
 
 import { useIsOverlayOpen } from '@/lib/overlay'
 
-// What `lazyPreloadPrevNext` cannot reach: the first slide is never its own neighbour, so it
-// keeps native lazy loading and waits for the visitor to scroll within range of the carousel.
-// `eager` takes that gate off; `low` keeps the request behind the page's own preloaded photo,
-// which is the one image that has to arrive first.
-export const firstSlideLoading = { loading: 'eager', fetchPriority: 'low' } as const
-
 // Every carousel on the site behaves identically — the same advance, the same pause on
 // hover, the same keyboard support. Only the track geometry (slidesPerView, spacing,
 // breakpoints) is a per-section decision, so that stays at the call site.
@@ -19,12 +13,8 @@ export const carouselDefaults = {
   // `disableOnInteraction: false` so a swipe pauses the rotation rather than killing it
   // for the rest of the visit.
   autoplay: { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
-  // A slide parked off to the side is clipped by the track, so its intersection ratio is
-  // zero and native lazy loading never fires — the first advance then lands on an image
-  // that starts downloading at that moment. Swiper strips `loading` off the neighbouring
-  // slides instead (`lazyPreload` is on by default; the count is what ships at 0), which
-  // covers everything past the first slide. The first one is the caller's job: it is never
-  // a neighbour of itself, so it waits for the visitor to scroll within range.
+  // A slide clipped by the track never intersects, so native lazy loading never fires on it.
+  // Ships at 0; slide 0 is `firstSlideLoading`'s job.
   lazyPreloadPrevNext: 1,
   speed: 200,
   grabCursor: true,
