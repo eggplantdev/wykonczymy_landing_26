@@ -16,6 +16,9 @@ type PropsT = {
 // The bar spans the page but only its controls take pointer events, so the empty space
 // either side of the nav does not swallow clicks on the page beneath.
 //
+// On a phone it is `absolute`, so the logo scrolls away with the page and leaves the small
+// viewport to the content; the menu toggle is a separate fixed element and stays reachable.
+//
 // It does not take `site-container`: the logo belongs at the edge of the screen, like the footer
 // bar and the carousel tracks. The nav does not move for that — the column is centred, so its
 // axis and the screen's are the same point.
@@ -26,7 +29,7 @@ export function SiteHeader({ paths, typePaths, phone, locale }: PropsT) {
     // The outer columns are equal fractions, so the nav lands on the page's own axis
     // whatever the logo happens to measure — a flex row would only centre it in the space
     // left over, and it would drift as the labels change length in EN.
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center gap-4 paddings pt-2 md:py-6">
+    <header className="pointer-events-none absolute inset-x-0 top-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center gap-4 paddings pt-2 md:fixed md:py-6">
       <div className="pointer-events-auto justify-self-start">
         <SiteLogo homeHref={typePaths[HOME_PAGE_TYPE] ?? '/'} />
       </div>
