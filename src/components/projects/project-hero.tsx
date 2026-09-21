@@ -11,7 +11,7 @@ export function ProjectHero({ project }: PropsT) {
   return (
     <section className="relative h-svh">
       <div className="absolute inset-0 flex">
-        <Media image={image} priority sizes="100vw" />
+        <Media image={image} preload sizes="100vw" />
       </div>
 
       <div className="relative flex h-full w-full flex-col items-start justify-end paddings pb-5 text-on-media md:pb-12 xl:pb-10">

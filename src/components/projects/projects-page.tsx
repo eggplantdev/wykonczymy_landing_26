@@ -25,13 +25,14 @@ export function ProjectsPage({ locale, title, basePath, data }: PropsT) {
   return (
     <PageWrapper hasHero={false} title={title}>
       <div className="grid divide-y divide-border border-b border-border">
-        {data.projects.map((project) => (
+        {data.projects.map((project, index) => (
           <FadeUp key={project.id}>
             <ProjectRow
               href={childPath(basePath, project.slug)}
               title={project.title}
               summary={project.summary}
               image={project.image}
+              preload={index === 0}
               details={[
                 { id: 1, name: strings.location, value: project.address },
                 { id: 2, name: strings.area, value: project.area },

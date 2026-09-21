@@ -12,9 +12,10 @@ type PropsT = {
   // a fixed-height slide can only afford three lines, the wider listing cell shows five.
   textClassName: string
   sizes: string
+  preload?: boolean
 }
 
-export function StyleCardBody({ style, imageClassName, textClassName, sizes }: PropsT) {
+export function StyleCardBody({ style, imageClassName, textClassName, sizes, preload }: PropsT) {
   const { title, text, image } = style
 
   return (
@@ -29,7 +30,7 @@ export function StyleCardBody({ style, imageClassName, textClassName, sizes }: P
       </header>
       <div className={cn('mb-5 text-14 md:mb-6', textClassName)}>{text}</div>
       <div className={cn('relative overflow-hidden', imageClassName)}>
-        <Media image={image} sizes={sizes} className="hover-photo" />
+        <Media image={image} sizes={sizes} preload={preload} className="hover-photo" />
         <PhotoHover />
       </div>
     </>

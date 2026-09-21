@@ -39,7 +39,7 @@ export function StylePage({ locale, style, basePath, related }: PropsT) {
           <div className="relative col-span-full mb-8 h-80 overflow-hidden md:mb-12 md:h-88 lg:col-span-10 lg:col-start-2 xl:h-140">
             <PhotoButton
               image={image}
-              priority
+              preload
               sizes="(max-width: 1023px) 100vw, (max-width: 2047px) 80vw, 1638px"
             />
           </div>

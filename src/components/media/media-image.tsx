@@ -6,18 +6,18 @@ import { cn } from '@/lib/cn'
 type PropsT = {
   image: MediaImageT
   sizes: string
-  priority?: boolean
+  preload?: boolean
   className?: string
 }
 
-export function MediaImage({ image, sizes, priority, className }: PropsT) {
+export function MediaImage({ image, sizes, preload, className }: PropsT) {
   return (
     <Image
       fill
       src={image.url}
       alt={image.alt}
       sizes={sizes}
-      priority={priority}
+      preload={preload}
       // Every source photo is already a lossy WebP, so Next's default 75 re-encodes a
       // re-encode and smears the smooth walls and soft daylight this material is mostly
       // made of. 90 lands back at roughly the original file's weight. Allowed values are

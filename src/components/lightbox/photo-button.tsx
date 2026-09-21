@@ -8,14 +8,14 @@ import { useOpenPhoto } from './photo-lightbox'
 type PropsT = {
   image: MediaImageT | null
   sizes: string
-  priority?: boolean
+  preload?: boolean
 }
 
-export function PhotoButton({ image, sizes, priority }: PropsT) {
+export function PhotoButton({ image, sizes, preload }: PropsT) {
   const openPhoto = useOpenPhoto()
   const { t } = useTranslation('common')
 
-  if (!image) return <Media image={image} sizes={sizes} priority={priority} />
+  if (!image) return <Media image={image} sizes={sizes} preload={preload} />
 
   return (
     <button
@@ -24,7 +24,7 @@ export function PhotoButton({ image, sizes, priority }: PropsT) {
       onClick={() => openPhoto(image.url)}
       className="block h-full w-full cursor-zoom-in"
     >
-      <Media image={image} sizes={sizes} priority={priority} />
+      <Media image={image} sizes={sizes} preload={preload} />
     </button>
   )
 }

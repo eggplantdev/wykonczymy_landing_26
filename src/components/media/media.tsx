@@ -7,7 +7,7 @@ type PropsT = {
   image?: MediaImageT | null
   video?: MediaVideoT | null
   sizes: string
-  priority?: boolean
+  preload?: boolean
   placeholderType?: 'light' | 'dark' | 'default'
   placeholderClassName?: string
   className?: string
@@ -17,7 +17,7 @@ export function Media({
   image,
   video,
   sizes,
-  priority,
+  preload,
   placeholderType,
   placeholderClassName,
   className,
@@ -27,9 +27,7 @@ export function Media({
       {video ? (
         <MediaVideo video={video} className={className} />
       ) : (
-        image && (
-          <MediaImage image={image} sizes={sizes} priority={priority} className={className} />
-        )
+        image && <MediaImage image={image} sizes={sizes} preload={preload} className={className} />
       )}
     </MediaPlaceholder>
   )

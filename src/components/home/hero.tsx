@@ -91,7 +91,7 @@ export function Hero({ data }: PropsT) {
         }}
         className="absolute inset-0 flex"
       >
-        <Media image={image} video={video} priority sizes="150vw" />
+        <Media image={image} video={video} preload sizes="100vw" />
       </motion.div>
       {/* Covers the whole frame rather than fading in from an edge: the photo is editable in
           the admin, so nothing here can assume where its bright areas fall. */}
