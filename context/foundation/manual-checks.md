@@ -1,19 +1,35 @@
 # Manual checks
 
-Human-only verification owed by a slice before it can move past `In Review`. An agent cannot
-tick a box here — each one needs a browser, the admin UI, or production.
+Verification owed by a slice before it can move past `In Review`. Most boxes need a browser,
+the admin UI, or production, and only a human can close those. A box whose whole claim is
+observable over HTTP — a status code, a redirect target, a string in the response — is
+settled by fetching it, and the note under it records what came back.
 
 ## F2 — i18n spine (2026-09-03)
 
-Local, against `pnpm dev` with the two seeded Pages documents:
+Local, against `pnpm dev`.
 
-- [ ] `/` renders the home document; `/oferta/` renders Oferta.
-- [ ] `/en/home/` and `/en/offer/` render the same two documents in English.
-- [ ] `/oferta` (no trailing slash) 308s to `/oferta/` rather than 404ing.
-- [ ] `/en` 301s to `/en/home/`.
-- [ ] A slug that exists in neither locale renders the 404 page, and the 404 under `/en/…`
-      shows English copy while the 404 under `/…` shows Polish.
-- [ ] The language switcher on `/oferta/` links to `/en/offer/` and back.
+The original list was written against `/oferta/` and "the two seeded Pages documents". Neither
+exists: `offer` was dropped from the page-type enum on 2026-09-04 and seeding was deleted on
+2026-09-19. Rewritten 2026-09-21 against the six page types actually published, which is why
+the addresses below are not the ones the slice was reviewed with.
+
+- [x] `/` renders the home document; `/realizacje/` renders the projects listing.
+      → both 200, `/realizacje/` links its six project children.
+- [x] `/en/home/` and `/en/completed-works/` render the same two documents in English.
+      → both 200.
+- [x] `/realizacje` (no trailing slash) 308s to `/realizacje/` rather than 404ing.
+      → 308 → `/realizacje/`; same for `/kontakt`.
+- [x] `/en` reaches `/en/home/`.
+      → two hops, both 308: `/en` → `/en/` → `/en/home/`. The original box said "301s"; it is
+      a 308 chain, which preserves the method and is what `trailingSlash: true` emits.
+- [ ] **FAILING** — a slug that exists in neither locale renders the 404 page, and the 404
+      under `/en/…` shows English copy while the 404 under `/…` shows Polish.
+      → status is 404 in both locales, but the body is Next's built-in English default;
+      `not-found.tsx` is never reached. Filed as EX-824 with the root cause.
+- [ ] The language switcher on `/realizacje/` links to `/en/completed-works/` and back.
+      → not observable over HTTP: no `/en/…` href appears in the server-rendered markup, so
+      the switcher is behind a client interaction. Needs a browser.
 - [ ] Creating a second Pages document with `pageType: home` is rejected in the admin.
 - [ ] Editing a published page's title in the admin updates **both** addresses without a
       redeploy (the revalidation hook), including the locale that was not edited.
