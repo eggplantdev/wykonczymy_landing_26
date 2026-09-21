@@ -36,3 +36,29 @@ export const HERO_PARALLAX_TRAVEL = '-40svh'
 // to feel deliberate, and 0.75 leaves the copy at roughly a third of its strength as it goes.
 export const HERO_FADE_START_AT = 0.25
 export const HERO_FADE_OUT_AT = 0.75
+
+// A periodic nudge on the hero CTA's arrow. The pause carries the idea, not the movement: long
+// enough that the button is at rest whenever anyone is actually reading, short enough to catch an
+// eye that has settled on the photo. Travel matches `ButtonArrow`'s own `group-hover:translate-x-2`
+// so the idle nudge lands exactly where hovering would take it — change one and change the other.
+export const HERO_CTA_NUDGE_X = 8
+export const HERO_CTA_NUDGE_REST = 5
+
+// Out and back, so the whole duration covers both legs. Not a spring: a spring is solved from
+// displacement and velocity between two values and throws outright on a third keyframe, which is
+// what blanked the page. `easeInOut` is applied per segment, not across the array, so the arrow
+// still leaves soft, reaches the turn soft and settles soft.
+const HERO_CTA_NUDGE_DURATION = 0.8
+
+// Reduced motion is spent on the transition alone, per `entranceTransition` above — at `duration: 0`
+// with no repeat the keyframes collapse onto their last value, which is the resting position.
+export function heroCtaNudgeTransition(shouldReduceMotion: boolean | null): Transition {
+  return shouldReduceMotion
+    ? { duration: 0 }
+    : {
+        duration: HERO_CTA_NUDGE_DURATION,
+        ease: ENTRANCE_EASE,
+        repeat: Infinity,
+        repeatDelay: HERO_CTA_NUDGE_REST,
+      }
+}

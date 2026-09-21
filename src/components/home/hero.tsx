@@ -8,10 +8,12 @@ import type { MediaImageT, MediaVideoT } from '@/components/media/types'
 import { ButtonArrow } from '@/components/ui/button-arrow'
 import { ButtonLink } from '@/components/ui/button-link'
 import {
+  HERO_CTA_NUDGE_X,
   HERO_FADE_OUT_AT,
   HERO_FADE_START_AT,
   HERO_PARALLAX_SCALE,
   HERO_PARALLAX_TRAVEL,
+  heroCtaNudgeTransition,
 } from '@/lib/motion'
 
 export type HeroT = {
@@ -114,8 +116,14 @@ export function Hero({ data }: PropsT) {
             role tokens the way the footer band does — that is where its focus ring comes from. */}
         {ctaLabel && ctaHref && (
           <motion.div style={{ visibility }} data-theme="dark" className="flex pt-6 md:pt-10">
-            <ButtonLink href={ctaHref} label={ctaLabel} variant="" size="xl" icon="trailing">
-              <ButtonArrow variant="success" size="xl" />
+            <ButtonLink href={ctaHref} label={ctaLabel} variant="glass" size="xl" icon="trailing">
+              <motion.span
+                className="flex"
+                animate={{ x: [0, HERO_CTA_NUDGE_X, 0] }}
+                transition={heroCtaNudgeTransition(shouldReduceMotion)}
+              >
+                <ButtonArrow variant="glass" size="xl" />
+              </motion.span>
             </ButtonLink>
           </motion.div>
         )}

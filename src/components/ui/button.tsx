@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/cn'
 
-export type ButtonVariantT = 'light' | 'dark' | 'outline' | 'solid' | 'success' | 'ghost'
+export type ButtonVariantT =
+  'light' | 'dark' | 'outline' | 'on-media' | 'glass' | 'solid' | 'success' | 'ghost'
 
 export type ButtonSizeT = 'sm' | 'xl' | 'responsive'
 
@@ -34,6 +35,14 @@ export function buttonClasses({
       'bg-card hover:bg-muted-foreground focus-visible:bg-muted focus-visible:outline-ring disabled:bg-muted disabled:text-subtle-foreground',
     variant === 'outline' &&
       'border-border hover:border-foreground focus-visible:bg-muted focus-visible:outline-ring disabled:border-border-muted border bg-transparent',
+    // `on-media` and `glass` both dress a control laid over a photograph, so they reach for the
+    // three roles that deliberately do not follow the theme — a photo is the same picture in
+    // either one. `outline` cannot stand in: its border is `border`, which resolves to a near-black
+    // grey under `data-theme="dark"` and disappears into the shot.
+    variant === 'on-media' &&
+      'border-on-media hover:bg-on-media focus-visible:outline-ring border bg-transparent',
+    variant === 'glass' &&
+      'border-on-media/30 bg-glass/25 hover:bg-glass/40 focus-visible:outline-ring border backdrop-blur-xl backdrop-saturate-150',
     variant === 'solid' &&
       'bg-foreground hover:bg-background focus-visible:outline-ring disabled:bg-muted',
     variant === 'success' &&
@@ -65,6 +74,10 @@ export function buttonLabelClasses({
     variant === 'light' && 'text-foreground group-hover:text-background',
     variant === 'dark' && 'text-foreground group-hover:text-background',
     variant === 'outline' && 'text-muted-foreground group-hover:text-foreground',
+    variant === 'on-media' && 'text-on-media group-hover:text-scrim',
+    // No hover pair: the glass itself brightens, and light type is the only thing legible over
+    // a blurred photograph whatever is behind it.
+    variant === 'glass' && 'text-on-media',
     variant === 'solid' && 'text-background group-hover:text-foreground',
     // No hover pair: green does not follow the theme, so the fill brightens instead of swapping.
     variant === 'success' && 'text-success-foreground',
