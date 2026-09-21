@@ -69,21 +69,49 @@ describe('toHomeData', () => {
     expect(toHomeData(page(), { locale: 'en', ...sources }).hero?.ctaHref).toBe('#contact-form')
   })
 
+  const withStyles = {
+    ...page(),
+    home: { interiorStyles: { sectionTitle: 'Style', ctaLabel: 'Więcej', ctaLink: 'contact' } },
+  } as Page
+  const styleSources = { ...sources, styles: [{}] as unknown as InteriorStyleT[] }
+
   // A page with no slug in this locale has no address here; `/` is the Polish root, so the
   // English site must not fall back to it.
   it('falls back to the locale root when a CTA target has no address', () => {
-    const withStyles = {
-      ...page(),
-      home: { interiorStyles: { sectionTitle: 'Style', ctaLabel: 'Więcej', ctaLink: 'contact' } },
-    } as Page
-    const styleSources = { ...sources, styles: [{}] as unknown as InteriorStyleT[] }
+    const addressed = { ...styleSources, typePaths: { 'interior-styles': '/wykonczenia/' } }
 
-    expect(toHomeData(withStyles, { locale: 'pl', ...styleSources }).interiorStyles?.ctaHref).toBe(
-      '/',
-    )
+    expect(toHomeData(withStyles, { locale: 'pl', ...addressed }).interiorStyles?.ctaHref).toBe('/')
 
-    expect(toHomeData(withStyles, { locale: 'en', ...styleSources }).interiorStyles?.ctaHref).toBe(
+    expect(toHomeData(withStyles, { locale: 'en', ...addressed }).interiorStyles?.ctaHref).toBe(
       '/en/home/',
     )
+  })
+
+  // The CTA may fall back to a root, but a child's base path may not: `childPath('/en/home/',
+  // 'boho')` is `/en/home/boho/`, which resolves as a second segment under the home page and
+  // 404s. Twelve of them, one per style. The section goes rather than the links.
+  it('hides the interior styles section when the listing page has no address here', () => {
+    expect(toHomeData(withStyles, { locale: 'en', ...styleSources }).interiorStyles).toBe(undefined)
+  })
+
+  const projects = [{ id: 1, slug: 'jastrzebie', title: 'Jastrzębie', image: null }]
+  const withProjects = { ...page(), home: { projects: { sectionTitle: 'Realizacje' } } } as Page
+
+  it('hides the projects section when the listing page has no address here', () => {
+    const projectSources = { ...sources, projects } as unknown as typeof sources
+
+    expect(toHomeData(withProjects, { locale: 'en', ...projectSources }).projects).toBe(undefined)
+  })
+
+  it('hangs a project slide off the listing page address', () => {
+    const projectSources = {
+      ...sources,
+      projects,
+      typePaths: { 'completed-works': '/en/completed-works/' },
+    } as unknown as typeof sources
+
+    expect(
+      toHomeData(withProjects, { locale: 'en', ...projectSources }).projects?.slides[0]?.href,
+    ).toBe('/en/completed-works/jastrzebie/')
   })
 })

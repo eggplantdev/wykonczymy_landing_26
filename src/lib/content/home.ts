@@ -34,6 +34,13 @@ export function toHomeData(
   const link = (pageType?: PageTypeT | null) =>
     (pageType && typePaths[pageType]) || localeRoot(locale)
 
+  // That fallback is safe for a button and wrong for a child's base: `childPath('/en/home/',
+  // 'boho')` reads as a second segment under the home page, which has no children, so all
+  // twelve cards 404 at once. A listing page with no address in this locale has no children
+  // with one either, so the section is dropped rather than linked into nowhere.
+  const projectsBase = typePaths[PROJECTS_PAGE_TYPE]
+  const stylesBase = typePaths[INTERIOR_STYLES_PAGE_TYPE]
+
   const { hero, intro, services, afterServices, numbers, testimonials } = home
 
   const toTextSection = (section?: { text?: string | null; position?: 'left' | 'right' | null }) =>
@@ -86,19 +93,20 @@ export function toHomeData(
         }
       : undefined,
 
-    projects: projects.length
-      ? {
-          sectionTitle: home.projects?.sectionTitle ?? undefined,
-          ctaHref: link(home.projects?.ctaLink),
-          slides: projects.map((project) => ({
-            id: project.id,
-            image: project.image,
-            video: null,
-            caption: project.title,
-            href: childPath(link(PROJECTS_PAGE_TYPE), project.slug),
-          })),
-        }
-      : undefined,
+    projects:
+      projects.length && projectsBase
+        ? {
+            sectionTitle: home.projects?.sectionTitle ?? undefined,
+            ctaHref: link(home.projects?.ctaLink),
+            slides: projects.map((project) => ({
+              id: project.id,
+              image: project.image,
+              video: null,
+              caption: project.title,
+              href: childPath(projectsBase, project.slug),
+            })),
+          }
+        : undefined,
 
     numbers: numbers?.cards?.length
       ? {
@@ -116,15 +124,16 @@ export function toHomeData(
       ? { sectionTitle: testimonials?.sectionTitle ?? undefined, quotes }
       : undefined,
 
-    interiorStyles: styles.length
-      ? {
-          sectionTitle: home.interiorStyles?.sectionTitle ?? '',
-          ctaHref: link(home.interiorStyles?.ctaLink),
-          // Not `ctaHref`: that one is an editor's choice of where the button goes, while a
-          // style's own address is always under the interior styles page.
-          basePath: link(INTERIOR_STYLES_PAGE_TYPE),
-          styles,
-        }
-      : undefined,
+    interiorStyles:
+      styles.length && stylesBase
+        ? {
+            sectionTitle: home.interiorStyles?.sectionTitle ?? '',
+            ctaHref: link(home.interiorStyles?.ctaLink),
+            // Not `ctaHref`: that one is an editor's choice of where the button goes, while a
+            // style's own address is always under the interior styles page.
+            basePath: stylesBase,
+            styles,
+          }
+        : undefined,
   }
 }
