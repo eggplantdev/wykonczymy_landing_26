@@ -27,7 +27,7 @@ without a coordinated deploy here, and an unknown field is ignored rather than r
 | --- | --- | --- |
 | `submissionId` | yes | uuid, one per submission — this is what makes a replay idempotent |
 | `submittedAt` | no | ISO 8601 |
-| `locale`, `formId`, `formName` | no | recorded as-is |
+| `formId`, `formName`           | no | recorded as-is |
 | `name`, `email`, `phone` | no | the standard three |
 | `address`, `scope`, `area`, `message` | no | the landing's typed answers; `area` is text, because the form invites a range |
 | `rawData` | no | `{ name, values[] }[]` — when omitted, the typed answers above become the answer list |

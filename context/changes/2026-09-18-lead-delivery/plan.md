@@ -628,14 +628,14 @@ Run **once**, after the final phase.
 
 #### Automated
 
-- [x] 2.1 Integration test creates, reads and deletes a queue row, and the unique index rejects a duplicate
+- [x] 2.1 Integration test creates, reads and deletes a queue row, and the unique index rejects a duplicate — d084cef
 
 ### Phase 3: Envelope and signing
 
 #### Automated
 
-- [ ] 3.1 The builder reproduces the shared fixture exactly
-- [ ] 3.2 Signing round-trips and rejects tampered body, wrong secret, truncated signature
+- [x] 3.1 The builder reproduces the shared fixture exactly
+- [x] 3.2 Signing round-trips and rejects tampered body, wrong secret, truncated signature
 
 ### Phase 4: The upload path
 

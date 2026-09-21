@@ -1,3 +1,5 @@
+import type { SubmissionEnvelopeT } from '@/lib/contact/envelope'
+
 /**
  * The envelope both repos agree on, pinned by one fixture committed byte-identically here and in
  * `wykonczymy`. The contract is duplicated rather than packaged (recorded 2026-09-18 decision), so
@@ -5,15 +7,14 @@
  * breaks a test on both sides.
  *
  * The receiving copy annotates this with `LandingSubmissionT` from its own envelope schema; this
- * side has no such type until the forward is built, so the literal stands alone. Add the
- * `satisfies` clause against the landing's envelope type when that module lands — an untyped
- * fixture pins the bytes but not the shape.
+ * side pins it against the builder's own return type, so a field the builder stops sending is a
+ * compile error here rather than a silent wire change. The self-describing tail is omitted: it is
+ * derived from the same answers and carries no agreement the typed fields do not.
  *
  * All PII is fabricated.
  */
 export const LANDING_SUBMISSION = {
   submissionId: '9f2c1b64-7d3a-4e58-9a10-6c5b2e8f4d71',
-  locale: 'pl',
   submittedAt: '2026-09-21T09:15:00.000Z',
   formId: 'wycena',
   formName: 'Formularz wyceny',
@@ -41,7 +42,7 @@ export const LANDING_SUBMISSION = {
       size: 118_904,
     },
   ],
-}
+} satisfies Omit<SubmissionEnvelopeT, 'rawData' | 'formQuestions'>
 
 /** The host `LANDING_BLOB_HOST` must be set to for the fixture's asset urls to be accepted. */
 export const LANDING_FIXTURE_HOST = 'landing-assets.public.blob.vercel-storage.com'
