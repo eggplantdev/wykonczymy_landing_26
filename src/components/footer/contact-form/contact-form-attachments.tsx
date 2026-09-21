@@ -5,13 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect, useId, useRef } from 'react'
 
 import { buttonClasses, buttonLabelClasses } from '@/components/ui/button'
+import { ACCEPTED_CONTENT_TYPES } from '@/lib/contact/attachments'
 import { Paperclip } from '@/components/ui/icons/paperclip'
 import { cn } from '@/lib/cn'
 import '@/lib/fontawesome'
 import { useTranslation } from '@/lib/i18n/use-translation'
 
 type PropsT = {
-  /** Owned by the form: the selection travels with the submission, and a send clears it. */
   files: File[]
   onFilesChange: (files: File[]) => void
   className?: string
@@ -32,7 +32,7 @@ export function ContactFormAttachments({ files, onFilesChange, className }: Prop
       {/* `items-start` and not `items-center`: the hint runs to two or three lines on a phone,
           and a centred mark would drift to the middle of the block instead of sitting on the
           line the sentence starts on. */}
-      <p className="flex items-start gap-2 text-12 text-black">
+      <p className="flex items-start gap-2 text-12 text-foreground">
         {/* `1lh` is one line box of the text beside it, so a mark centred inside this span
             lands on that first line's optical middle exactly. A hand-tuned `mt-*` only holds
             for the one font size and line height it was eyeballed against. */}
@@ -65,7 +65,7 @@ export function ContactFormAttachments({ files, onFilesChange, className }: Prop
           name="attachments"
           type="file"
           multiple
-          accept="image/*,application/pdf"
+          accept={ACCEPTED_CONTENT_TYPES.join(',')}
           onChange={(event) => onFilesChange(Array.from(event.target.files ?? []))}
           className="sr-only"
         />

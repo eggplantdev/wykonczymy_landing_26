@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { isThrottled } from '@/lib/contact/throttled'
+import { isThrottled } from '@/lib/blob/throttled'
 
 const answer = (status: number) =>
   vi.stubGlobal(

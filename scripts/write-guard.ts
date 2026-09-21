@@ -7,7 +7,7 @@ export const isWrite = process.argv.includes('--write')
 const skipPrompt = process.argv.includes('--yes')
 
 // `POSTGRES_URL` is production in every environment including a laptop, so `--write` alone is one
-// shell-history recall away from the live database. Naming the host is what makes that visible.
+// shell-history recall away from the live database.
 const confirmTarget = async () => {
   const host = process.env.POSTGRES_URL?.replace(/^.*@/, '').replace(/\?.*$/, '') ?? '(unset)'
 

@@ -6,7 +6,7 @@ const SECRET = 'cron-secret'
 // it, and the 401 cases never reach any of these.
 vi.mock('@vercel/blob', () => ({ list: async () => ({ blobs: [] }), del: async () => undefined }))
 vi.mock('@/lib/content/submissions', () => ({
-  hasRow: async () => false,
+  claimedSubmissionIds: async () => new Set(),
   listPending: async () => [],
   deleteRow: async () => undefined,
   recordFailure: async () => undefined,

@@ -3,14 +3,11 @@
 import { after } from 'next/server'
 import { array, number, object, string, url, uuid } from 'zod'
 
+import { isDirectChild } from '@/lib/blob/prefix'
 import { deleteRow, enqueue, recordFailure } from '@/lib/content/submissions'
 import { isAcceptedType, MAX_FILE_BYTES, MAX_FILES } from './attachments'
-import {
-  contactSchema,
-  firstIssueKey,
-  SHORT_FIELD_MAX_LENGTH,
-  type FormMessageKeyT,
-} from './contact-schema'
+import { contactSchema, SHORT_FIELD_MAX_LENGTH } from './contact-schema'
+import { firstIssueKey, type FormMessageKeyT } from './form-message-key'
 import { buildEnvelope, type SubmissionEnvelopeT } from './envelope'
 import { forward } from './forward'
 
@@ -28,8 +25,9 @@ const submissionSchema = object({
   submissionId: string().pipe(uuid()),
   values: contactSchema,
   assets: array(assetSchema).max(MAX_FILES),
-  // The honeypot, capped rather than rejected on length so an overlong one is still *answered*.
-  trap: string().max(SHORT_FIELD_MAX_LENGTH).optional().catch(''),
+  // A truthy sentinel, not `''`: `.catch` fires on an overlong or non-string value, and reading
+  // that back as empty would let a bot walk past the trap by overfilling it.
+  trap: string().max(SHORT_FIELD_MAX_LENGTH).optional().catch('trapped'),
 })
 
 export async function submitContactForm(input: unknown): Promise<ContactSubmitResultT> {
@@ -47,6 +45,10 @@ export async function submitContactForm(input: unknown): Promise<ContactSubmitRe
   // is all a spammer needs to stop filling that one.
   if (parsed.data.trap) return { ok: true }
 
+  if (!ownsAssets(parsed.data.submissionId, parsed.data.assets)) {
+    return { ok: false, errorKey: 'error' }
+  }
+
   const envelope = buildEnvelope(parsed.data)
 
   // Store, answer, then forward: the thank-you rests on a write this app controls, never on the
@@ -61,6 +63,31 @@ export async function submitContactForm(input: unknown): Promise<ContactSubmitRe
   after(() => deliver(envelope, row.id))
 
   return { ok: true }
+}
+
+/**
+ * The leads app fetches every url in the envelope we signed, and its own allowlist pins only the
+ * host — the same host serving this site's CMS media at the store root. Without this, a forged
+ * action call makes it fetch an arbitrary object under our signature. Duplicates are refused for
+ * the other half of the contract: the far side releases the prefix once it holds as many files as
+ * the envelope listed, so a repeated url leaves the staged files orphaned forever.
+ */
+function ownsAssets(submissionId: string, assets: { url: string }[]): boolean {
+  const paths = new Set<string>()
+
+  for (const asset of assets) {
+    let pathname: string
+    try {
+      pathname = new URL(asset.url).pathname
+    } catch {
+      return false
+    }
+
+    if (!isDirectChild(pathname, submissionId)) return false
+    paths.add(pathname)
+  }
+
+  return paths.size === assets.length
 }
 
 async function deliver(envelope: SubmissionEnvelopeT, rowId: number): Promise<void> {

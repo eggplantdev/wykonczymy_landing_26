@@ -46,4 +46,12 @@ describe('checkAttachments', () => {
 
     expect(checkAttachments(files)).toEqual({ ok: false, errorKey: 'unsupportedFileType' })
   })
+
+  // `addRandomSuffix: false` makes the filename the blob path verbatim, and the store refuses the
+  // second write to a path it already holds — which surfaced as a blanket upload failure.
+  it('refuses two files sharing a name', () => {
+    const files = [fileOf('plan.pdf', 'application/pdf'), fileOf('plan.pdf', 'application/pdf')]
+
+    expect(checkAttachments(files)).toEqual({ ok: false, errorKey: 'duplicateFileName' })
+  })
 })

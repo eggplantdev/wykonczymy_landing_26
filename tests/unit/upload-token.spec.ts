@@ -1,17 +1,29 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { MAX_FILES } from '@/lib/contact/attachments'
 import { emptyContactValues } from '@/lib/contact/contact-schema'
 
 // Mocked at the module boundary: `handleUpload` talks to the blob service and reads a token from
 // the environment, neither of which is what this route owns. What it owns is the callback — so the
 // mock captures it and the tests call it directly.
 const handleUpload = vi.hoisted(() => vi.fn())
+const blob = vi.hoisted(() => ({
+  list: vi.fn(async () => ({ blobs: [] as { pathname: string }[] })),
+}))
 vi.mock('@vercel/blob/client', () => ({ handleUpload }))
+vi.mock('@vercel/blob', () => blob)
 
 const { POST } = await import('@/app/api/blob/upload-token/route')
 
 const SUBMISSION_ID = '9f2c1b64-7d3a-4e58-9a10-6c5b2e8f4d71'
 const values = { ...emptyContactValues(), email: 'anna@example.com', acceptsTerms: true }
+
+/** A prefix sitting exactly on the ceiling, so the next token request is the one over it. */
+const blobsAtCeiling = () => ({
+  blobs: Array.from({ length: MAX_FILES }, (_unused, index) => ({
+    pathname: `leads/${SUBMISSION_ID}/${index}.jpg`,
+  })),
+})
 
 type BeforeTokenT = (
   pathname: string,
@@ -41,6 +53,7 @@ const mintToken = async (pathname: string, clientPayload: unknown) => {
 // as a cleanup hook — calling the route's own dependency again, with no arguments.
 beforeEach(() => {
   handleUpload.mockClear()
+  blob.list.mockResolvedValue({ blobs: [] })
 })
 
 describe('POST /api/blob/upload-token', () => {
@@ -100,6 +113,53 @@ describe('POST /api/blob/upload-token', () => {
 
     const response = await POST(
       new Request('http://localhost/api/blob/upload-token', { method: 'POST', body: '{}' }),
+    )
+
+    expect(response.status).toBe(400)
+  })
+
+  // Each file is its own token request, so the browser's and the action's copies of MAX_FILES both
+  // run after the bytes are already in the store. Unenforced here, one prefix takes unbounded 8 MB
+  // objects from a public route and the 24h sweep is the only thing that ever reclaims them.
+  it('refuses a token once the prefix already holds the ceiling', async () => {
+    blob.list.mockResolvedValue(blobsAtCeiling())
+
+    const { generate } = await mintToken(`leads/${SUBMISSION_ID}/sixteenth.jpg`, {
+      submissionId: SUBMISSION_ID,
+      values,
+    })
+
+    await expect(generate()).rejects.toThrow('Too many files')
+  })
+
+  // A retry of the same file is a replacement, not a sixteenth object.
+  it('counts a re-upload of a path it already holds as that same file', async () => {
+    blob.list.mockResolvedValue(blobsAtCeiling())
+
+    const { generate } = await mintToken(`leads/${SUBMISSION_ID}/3.jpg`, {
+      submissionId: SUBMISSION_ID,
+      values,
+    })
+
+    await expect(generate()).resolves.toMatchObject({ tokenPayload: SUBMISSION_ID })
+  })
+
+  it('counts only within this submission prefix', async () => {
+    await mintToken(`leads/${SUBMISSION_ID}/a.jpg`, { submissionId: SUBMISSION_ID, values }).then(
+      ({ generate }) => generate(),
+    )
+
+    expect(blob.list).toHaveBeenCalledWith({
+      prefix: `leads/${SUBMISSION_ID}/`,
+      limit: MAX_FILES + 1,
+    })
+  })
+
+  // Regression: `request.json()` sat outside the try, so a non-JSON body was the one refusal that
+  // answered 500 — and the throttle probe reads the status to tell a deny from a malformed body.
+  it('answers a non-JSON body with the route own 400', async () => {
+    const response = await POST(
+      new Request('http://localhost/api/blob/upload-token', { method: 'POST', body: 'not json' }),
     )
 
     expect(response.status).toBe(400)

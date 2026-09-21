@@ -1,3 +1,7 @@
+'use client'
+
+export const UPLOAD_TOKEN_PATH = '/api/blob/upload-token'
+
 /**
  * Whether the upload-token route is currently rate-limited for this visitor.
  *
@@ -8,7 +12,7 @@
  */
 export async function isThrottled(): Promise<boolean> {
   try {
-    const response = await fetch('/api/blob/upload-token', { method: 'POST', body: '{}' })
+    const response = await fetch(UPLOAD_TOKEN_PATH, { method: 'POST', body: '{}' })
     return response.status === 403
   } catch {
     // A probe that cannot reach the network says nothing about throttling.

@@ -5,10 +5,16 @@ import { sign } from './sign'
 
 export type ForwardResultT = { delivered: true } | { delivered: false; error: string }
 
+// One hung connection would otherwise hold the `after()` callback, or a cron batch, until the
+// platform kills the invocation mid-row — leaving a row with neither a delete nor a recorded failure.
+const FORWARD_TIMEOUT_MS = 10_000
+
 /**
  * Serialised once, then both signed and sent as those exact bytes — a second `JSON.stringify` and
- * the signature stops matching. `4xx` counts as delivered: a rejected shape is a bug a retry only
- * buries. Only `5xx` and a transport failure leave the row for the cron.
+ * the signature stops matching. Only `2xx` is delivered: a `4xx` means the leads app refused this
+ * envelope, and deleting the row on a refusal would destroy the lead the queue exists to hold. The
+ * row stays and carries the status, so a rotated secret or a typo'd URL surfaces as a growing queue
+ * instead of silence.
  */
 export async function forward(envelope: SubmissionEnvelopeT): Promise<ForwardResultT> {
   const body = JSON.stringify(envelope)
@@ -22,12 +28,13 @@ export async function forward(envelope: SubmissionEnvelopeT): Promise<ForwardRes
         'x-landing-signature': sign(body, serverEnv.LANDING_WEBHOOK_SECRET, 'landing-submission'),
       },
       body,
+      signal: AbortSignal.timeout(FORWARD_TIMEOUT_MS),
     })
   } catch (error) {
     return { delivered: false, error: `Transport failure: ${(error as Error).message}` }
   }
 
-  if (response.status >= 500) {
+  if (!response.ok) {
     return { delivered: false, error: `Leads app answered ${response.status}` }
   }
 

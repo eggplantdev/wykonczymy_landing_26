@@ -70,7 +70,9 @@ const eslintConfig = [
     rules: betterTailwindcss.configs['correctness-error'].rules,
   },
   {
-    ignores: ['.next/', '.next-e2e/', 'src/migrations/', 'src/payload-types.ts'],
+    // Every dist dir, not just the default one: ESLint's flat config does not read .gitignore, so
+    // an alternate NEXT_DIST_DIR left on disk turns `pnpm lint` red with its own chunk dump.
+    ignores: ['.next*/', 'src/migrations/', 'src/payload-types.ts'],
   },
 ]
 

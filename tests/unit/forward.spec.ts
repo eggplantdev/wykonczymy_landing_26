@@ -54,15 +54,33 @@ describe('forward', () => {
     await expect(forward(envelope)).resolves.toEqual({ delivered: true })
   })
 
-  // A rejected shape or a refused signature is a bug: retrying replays it forever and hides it.
-  it.each([400, 403])('stops on %i rather than retrying a bug', async (status) => {
+  // Regression: a 4xx used to answer `delivered: true`, and the caller answers that by deleting
+  // the row — so a rotated secret (403) or a typo'd url (404) destroyed every lead in silence.
+  it.each([400, 401, 403, 404])('keeps the row on %i and records the status', async (status) => {
     answering(status)
 
-    await expect(forward(envelope)).resolves.toEqual({ delivered: true })
+    await expect(forward(envelope)).resolves.toEqual({
+      delivered: false,
+      error: `Leads app answered ${status}`,
+    })
   })
 
   it('leaves a 500 for the cron to retry', async () => {
     answering(500)
+
+    await expect(forward(envelope)).resolves.toMatchObject({ delivered: false })
+  })
+
+  it('gives up on a hung connection rather than holding the batch', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (_url: string, init: RequestInit) => {
+        expect(init.signal).toBeInstanceOf(AbortSignal)
+        throw Object.assign(new Error('The operation was aborted due to timeout'), {
+          name: 'TimeoutError',
+        })
+      }),
+    )
 
     await expect(forward(envelope)).resolves.toMatchObject({ delivered: false })
   })

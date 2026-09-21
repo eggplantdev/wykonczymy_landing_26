@@ -5,8 +5,8 @@ import {
   SHORT_FIELD_MAX_LENGTH,
   contactSchema,
   emptyContactValues,
-  firstIssueKey,
 } from '@/lib/contact/contact-schema'
+import { firstIssueKey } from '@/lib/contact/form-message-key'
 import { getTranslations, i18n, type Locale } from '@/lib/i18n/i18n'
 
 function issuesFor(values: Record<string, unknown>) {

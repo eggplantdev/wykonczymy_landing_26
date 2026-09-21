@@ -1,11 +1,10 @@
+import { list } from '@vercel/blob'
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client'
 import { NextResponse } from 'next/server'
 
-import { leadPrefix } from '@/lib/blob/prefix'
-import { ACCEPTED_CONTENT_TYPES, MAX_FILE_BYTES } from '@/lib/contact/attachments'
+import { isDirectChild, isSubmissionId, leadPrefix } from '@/lib/blob/prefix'
+import { ACCEPTED_CONTENT_TYPES, MAX_FILE_BYTES, MAX_FILES } from '@/lib/contact/attachments'
 import { contactSchema } from '@/lib/contact/contact-schema'
-
-const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 /**
  * No visitor to authenticate on a public form, so form validity is the gate. The pathname is checked
@@ -13,15 +12,17 @@ const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{
  * the path asked for, so refusing anything outside the prefix IS the pin.
  */
 export async function POST(request: Request): Promise<NextResponse> {
-  const body = (await request.json()) as HandleUploadBody
-
   try {
+    // Inside the try with everything else: a non-JSON body is a refusal like any other, and a 500
+    // here would be the one path answering neither the route's 400 nor the Firewall's 403.
+    const body = (await request.json()) as HandleUploadBody
+
     return NextResponse.json(
       await handleUpload({
         request,
         body,
         onBeforeGenerateToken: async (pathname, clientPayload) => {
-          const { submissionId } = authorize(pathname, clientPayload)
+          const { submissionId } = await authorize(pathname, clientPayload)
 
           return {
             allowedContentTypes: [...ACCEPTED_CONTENT_TYPES],
@@ -34,29 +35,37 @@ export async function POST(request: Request): Promise<NextResponse> {
       }),
     )
   } catch (error) {
-    // Everything reaching here is a refused request, not a fault.
     return NextResponse.json({ error: (error as Error).message }, { status: 400 })
   }
 }
 
-function authorize(pathname: string, clientPayload: string | null): { submissionId: string } {
+async function authorize(
+  pathname: string,
+  clientPayload: string | null,
+): Promise<{ submissionId: string }> {
   const payload: unknown = JSON.parse(clientPayload ?? 'null')
 
   if (typeof payload !== 'object' || payload === null) throw new Error('Missing client payload')
 
   const { submissionId, values } = payload as { submissionId?: unknown; values?: unknown }
 
-  if (typeof submissionId !== 'string' || !UUID_PATTERN.test(submissionId)) {
-    throw new Error('Malformed submissionId')
-  }
+  if (!isSubmissionId(submissionId)) throw new Error('Malformed submissionId')
 
   if (!contactSchema.safeParse(values).success) throw new Error('Invalid enquiry')
 
-  const prefix = leadPrefix(submissionId)
-  const filename = pathname.startsWith(prefix) ? pathname.slice(prefix.length) : ''
+  if (!isDirectChild(pathname, submissionId)) {
+    throw new Error('Pathname outside the submission prefix')
+  }
 
-  // A nested path is one neither the cleanup nor the sweep would ever reclaim.
-  if (!filename || filename.includes('/')) throw new Error('Pathname outside the submission prefix')
+  const prefix = leadPrefix(submissionId)
+
+  // The ceiling has to be counted here, not just in the browser and the action: each file is its
+  // own token request, so without this one prefix accepts unbounded 8 MB objects on a public route
+  // and the 24h sweep is the only thing that ever takes them back.
+  const { blobs } = await list({ prefix, limit: MAX_FILES + 1 })
+  if (blobs.filter((blob) => blob.pathname !== pathname).length >= MAX_FILES) {
+    throw new Error('Too many files for this submission')
+  }
 
   return { submissionId }
 }

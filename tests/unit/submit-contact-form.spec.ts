@@ -119,4 +119,47 @@ describe('submitContactForm', () => {
     expect(result).toEqual({ ok: false, errorKey: 'error' })
     expect(queue.enqueue).not.toHaveBeenCalled()
   })
+
+  // Regression: `.catch('')` rewrote an overlong trap to empty, which reads as falsy — so a bot
+  // walked straight past the honeypot by overfilling the field it was meant to be caught by.
+  it.each([
+    ['an overlong value', 'x'.repeat(500)],
+    ['a non-string value', 12_345],
+    ['a short value', 'buy-backlinks'],
+  ])('answers a honeypot filled with %s as sent, storing nothing', async (_label, trap) => {
+    await expect(submitContactForm({ ...input, trap })).resolves.toEqual({ ok: true })
+
+    expect(queue.enqueue).not.toHaveBeenCalled()
+    expect(forward).not.toHaveBeenCalled()
+  })
+
+  // The leads app fetches every url we sign and pins only the host — the same host that serves this
+  // site's CMS media. Without the path check, a forged call makes it fetch anything in the store.
+  it.each([
+    ['the store root', 'https://landing-assets.public.blob.vercel-storage.com/hero-photo.jpg'],
+    [
+      "another submission's prefix",
+      'https://landing-assets.public.blob.vercel-storage.com/leads/11111111-2222-3333-4444-555555555555/x.jpg',
+    ],
+  ])('refuses an asset url pointing at %s', async (_label, url) => {
+    const assets = [{ ...input.assets[0], url }]
+
+    await expect(submitContactForm({ ...input, assets })).resolves.toEqual({
+      ok: false,
+      errorKey: 'error',
+    })
+    expect(queue.enqueue).not.toHaveBeenCalled()
+  })
+
+  // The far side releases the prefix once it holds as many files as the envelope listed, so a
+  // repeated url satisfies that count while leaving the staged files orphaned forever.
+  it('refuses an envelope that lists the same asset twice', async () => {
+    const assets = [input.assets[0], input.assets[0]]
+
+    await expect(submitContactForm({ ...input, assets })).resolves.toEqual({
+      ok: false,
+      errorKey: 'error',
+    })
+    expect(queue.enqueue).not.toHaveBeenCalled()
+  })
 })

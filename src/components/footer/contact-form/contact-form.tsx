@@ -8,11 +8,12 @@ import { ButtonArrow } from '@/components/ui/button-arrow'
 import { upload } from '@vercel/blob/client'
 
 import { leadPrefix } from '@/lib/blob/prefix'
+import { isThrottled, UPLOAD_TOKEN_PATH } from '@/lib/blob/throttled'
 import { checkAttachments } from '@/lib/contact/attachments'
 import { useContactFormStore } from '@/lib/contact/contact-form-store'
-import { contactSchema, emptyContactValues, firstIssueKey } from '@/lib/contact/contact-schema'
+import { contactSchema, emptyContactValues } from '@/lib/contact/contact-schema'
+import { firstIssueKey } from '@/lib/contact/form-message-key'
 import { submitContactForm } from '@/lib/contact/submit-contact-form'
-import { isThrottled } from '@/lib/contact/throttled'
 import { useTranslation } from '@/lib/i18n/use-translation'
 import { ConsentLabel } from './consent-label'
 import { ContactFormAttachments } from './contact-form-attachments'
@@ -96,7 +97,7 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
           checked.files.map(async (file) => {
             const blob = await upload(`${leadPrefix(submissionId)}${file.name}`, file, {
               access: 'public',
-              handleUploadUrl: '/api/blob/upload-token',
+              handleUploadUrl: UPLOAD_TOKEN_PATH,
               clientPayload: JSON.stringify({ submissionId, values: value }),
             })
 
@@ -132,6 +133,7 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
       clearDraft()
       formApi.reset(DEFAULT_VALUES)
       setFiles([])
+      setTrap('')
       setIsSent(true)
     },
   })

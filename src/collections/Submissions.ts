@@ -20,7 +20,7 @@ export const Submissions: CollectionConfig = {
     group: 'System',
   },
   fields: [
-    // The uuid the browser minted before uploading: the blob prefix, the wire `externalId`
+    // The uuid the browser minted before uploading: the blob prefix, the wire `submissionId`
     // and this row all agree on it, and the unique index is what makes a redelivery idempotent.
     { name: 'submissionId', type: 'text', required: true, unique: true, index: true },
     // The exact object that gets signed and sent. Stored whole so a retry re-sends what the

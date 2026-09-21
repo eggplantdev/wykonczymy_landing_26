@@ -10,8 +10,6 @@ import type { Submission } from '@/payload-types'
  */
 export type QueuedEnvelopeT = { submissionId: string }
 
-// Every write goes through `overrideAccess`, because the collection refuses create, update and
-// delete through access control — the admin is a window onto the queue, not a way into it.
 const getClient = async () => getPayload({ config: await config })
 
 export async function enqueue(envelope: QueuedEnvelopeT): Promise<Submission> {
@@ -24,6 +22,12 @@ export async function enqueue(envelope: QueuedEnvelopeT): Promise<Submission> {
   })
 }
 
+// A row the leads app keeps refusing must stop consuming the batch, or the oldest-first sort hands
+// every run the same poisoned head and no newer lead is ever attempted again. Past the ceiling the
+// row stays visible in the admin — that is the alarm — but the cron leaves it alone.
+export const MAX_ATTEMPTS = 10
+const RETRY_BACKOFF_MS = 10 * 60 * 1000
+
 /** Oldest first: a submission that has been waiting longest is the one closest to being lost. */
 export async function listPending(limit: number): Promise<Submission[]> {
   const payload = await getClient()
@@ -32,16 +36,35 @@ export async function listPending(limit: number): Promise<Submission[]> {
     collection: 'submissions',
     limit,
     sort: 'createdAt',
+    where: {
+      attempts: { less_than: MAX_ATTEMPTS },
+      or: [
+        // Never attempted, or the backoff has elapsed — the `after()` callback may still be
+        // in flight on a row enqueued seconds ago, and both halves deleting it is a lost race.
+        { lastAttemptAt: { exists: false } },
+        {
+          lastAttemptAt: {
+            less_than: new Date(Date.now() - RETRY_BACKOFF_MS).toISOString(),
+          },
+        },
+      ],
+    },
     overrideAccess: true,
   })
 
   return docs
 }
 
+// Tolerates a row the other half of the race already deleted: the delivery happened, so there is
+// no failure left to record and `findByID` would throw `NotFound` out of the whole cron batch.
 export async function recordFailure(id: number, error: string): Promise<void> {
   const payload = await getClient()
 
-  const current = await payload.findByID({ collection: 'submissions', id, overrideAccess: true })
+  const current = await payload
+    .findByID({ collection: 'submissions', id, overrideAccess: true })
+    .catch(() => undefined)
+
+  if (!current) return
 
   await payload.update({
     collection: 'submissions',
@@ -70,15 +93,25 @@ export async function deleteRow(submissionId: string): Promise<void> {
   })
 }
 
-// The sweep asks before reclaiming a prefix: a row means the files are still the only copy.
-export async function hasRow(submissionId: string): Promise<boolean> {
+/**
+ * Which of these submissions still have a queue row — a live row means the staged files are the
+ * only copy, so the sweep must leave them alone. Asked for the whole batch in one query rather
+ * than per prefix: the sweep's reason to exist is the day many prefixes are orphaned at once,
+ * which is exactly when a round trip each hurts most. It also fails in the safe direction — a
+ * database that is down aborts the sweep before anything is deleted, instead of answering
+ * "no row" one prefix at a time.
+ */
+export async function claimedSubmissionIds(submissionIds: string[]): Promise<Set<string>> {
+  if (submissionIds.length === 0) return new Set()
+
   const payload = await getClient()
 
-  const { totalDocs } = await payload.count({
+  const { docs } = await payload.find({
     collection: 'submissions',
-    where: { submissionId: { equals: submissionId } },
+    limit: submissionIds.length,
+    where: { submissionId: { in: submissionIds } },
     overrideAccess: true,
   })
 
-  return totalDocs > 0
+  return new Set(docs.map((doc) => doc.submissionId))
 }

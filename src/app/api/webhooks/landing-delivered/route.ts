@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server'
 
 import { deleteSubmissionFiles } from '@/lib/blob/cleanup'
+import { isSubmissionId } from '@/lib/blob/prefix'
 import { verify } from '@/lib/contact/sign'
 import { serverEnv } from '@/lib/env.server'
-
-const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 /**
  * The Callback section of `context/reference/landing-intake-contract.md`. The raw body is read
@@ -26,7 +25,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json({ error: 'Body is not JSON' }, { status: 400 })
   }
 
-  if (typeof submissionId !== 'string' || !UUID_PATTERN.test(submissionId)) {
+  if (!isSubmissionId(submissionId)) {
     return NextResponse.json({ error: 'Malformed submissionId' }, { status: 400 })
   }
 
