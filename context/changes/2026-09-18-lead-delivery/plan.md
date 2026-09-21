@@ -641,15 +641,15 @@ Run **once**, after the final phase.
 
 #### Automated
 
-- [x] 4.1 File guards return the right message key for each rejection
-- [x] 4.2 The token route refuses invalid payloads and pins the pathname
+- [x] 4.1 File guards return the right message key for each rejection — 31213a5
+- [x] 4.2 The token route refuses invalid payloads and pins the pathname — 31213a5
 
 ### Phase 5: Delivery
 
 #### Automated
 
-- [ ] 5.1 The forward classifies every row of the contract's status table
-- [ ] 5.2 The action enqueues before returning and deletes the row on delivery
+- [x] 5.1 The forward classifies every row of the contract's status table
+- [x] 5.2 The action enqueues before returning and deletes the row on delivery
 
 ### Phase 6: Scheduled work and cleanup
 

@@ -5,6 +5,9 @@ import { useForm } from '@tanstack/react-form'
 
 import { Button } from '@/components/ui/button'
 import { ButtonArrow } from '@/components/ui/button-arrow'
+import { upload } from '@vercel/blob/client'
+
+import { leadPrefix } from '@/lib/blob/prefix'
 import { checkAttachments } from '@/lib/contact/attachments'
 import { useContactFormStore } from '@/lib/contact/contact-form-store'
 import { contactSchema, emptyContactValues, firstIssueKey } from '@/lib/contact/contact-schema'
@@ -74,12 +77,47 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
       setServerError(undefined)
       setIsSent(false)
 
+      const checked = checkAttachments(files)
+      if (!checked.ok) {
+        setServerError(t(checked.errorKey))
+        return
+      }
+
+      // The id is minted here because it names the blob prefix the uploads go to and the queue row
+      // the action creates — the same submission has to be one thing on both sides.
+      const submissionId = crypto.randomUUID()
+
+      // Straight to the blob store, never through the action: a Vercel function caps its request
+      // body at 4.5 MB, which fifteen photos pass in a single attachment.
+      let assets
+      try {
+        assets = await Promise.all(
+          checked.files.map(async (file) => {
+            const blob = await upload(`${leadPrefix(submissionId)}${file.name}`, file, {
+              access: 'public',
+              handleUploadUrl: '/api/blob/upload-token',
+              clientPayload: JSON.stringify({ submissionId, values: value }),
+            })
+
+            return {
+              url: blob.url,
+              filename: file.name,
+              contentType: file.type,
+              size: file.size,
+            }
+          }),
+        )
+      } catch {
+        setServerError(t('uploadFailed'))
+        return
+      }
+
       // handleSubmit rethrows whatever the handler throws, and its caller can only
       // `void` the promise — so an offline browser or a server action id invalidated
       // by a redeploy would otherwise leave the visitor with a silent dead button.
       let result
       try {
-        result = await submitContactForm(value)
+        result = await submitContactForm({ submissionId, values: value, assets })
       } catch {
         setServerError(t('error'))
         return
