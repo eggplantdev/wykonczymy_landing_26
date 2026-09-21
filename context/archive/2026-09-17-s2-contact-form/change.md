@@ -1,10 +1,10 @@
 ---
 change_id: s2-contact-form
 title: Wire the footer contact form to TanStack Form, Zod and Zustand
-status: implemented
+status: archived
 created: 2026-09-17
-updated: 2026-09-17
-archived_at: null
+updated: 2026-09-21
+archived_at: 2026-09-21T08:49:51Z
 branch: null
 worktree: null
 ---
