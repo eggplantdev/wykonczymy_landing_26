@@ -41,7 +41,7 @@ export function toHomeData(
   const projectsBase = typePaths[PROJECTS_PAGE_TYPE]
   const stylesBase = typePaths[INTERIOR_STYLES_PAGE_TYPE]
 
-  const { hero, intro, services, afterServices, numbers, testimonials } = home
+  const { hero, intro, services, afterServices, numbers, testimonials, process } = home
 
   const toTextSection = (section?: { text?: string | null; position?: 'left' | 'right' | null }) =>
     section?.text ? { text: section.text, position: section.position ?? 'left' } : undefined
@@ -135,5 +135,26 @@ export function toHomeData(
             styles,
           }
         : undefined,
+
+    process: process?.steps?.length
+      ? {
+          sectionTitle: process.sectionTitle ?? '',
+          // Same shape as `testimonials.quotes`: with `localization.fallback` off, a row
+          // added in one locale comes back with a null `title` in the other, whatever the
+          // generated type says about a required field.
+          steps: process.steps.flatMap((step, index) =>
+            step.title
+              ? [
+                  {
+                    id: step.id ?? String(index),
+                    title: step.title,
+                    text: step.text ?? '',
+                    icon: step.icon,
+                  },
+                ]
+              : [],
+          ),
+        }
+      : undefined,
   }
 }

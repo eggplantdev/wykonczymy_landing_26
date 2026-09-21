@@ -294,6 +294,32 @@ export interface Page {
        */
       ctaLink?: ('home' | 'completed-works' | 'interior-styles' | 'contact' | 'price-list' | 'privacy-policy') | null;
     };
+    process?: {
+      sectionTitle?: string | null;
+      steps?:
+        | {
+            title: string;
+            text?: string | null;
+            /**
+             * The drawing beside the step.
+             */
+            icon:
+              | 'hammer'
+              | 'arrow-up-right-dots'
+              | 'paint-roller'
+              | 'screwdriver-wrench'
+              | 'lightbulb'
+              | 'faucet-drip'
+              | 'fan'
+              | 'ruler-combined'
+              | 'door-open'
+              | 'house-chimney'
+              | 'brush'
+              | 'compass-drafting';
+            id?: string | null;
+          }[]
+        | null;
+    };
   };
   contact?: {
     /**
@@ -714,6 +740,19 @@ export interface PagesSelect<T extends boolean = true> {
               sectionTitle?: T;
               ctaLabel?: T;
               ctaLink?: T;
+            };
+        process?:
+          | T
+          | {
+              sectionTitle?: T;
+              steps?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    icon?: T;
+                    id?: T;
+                  };
             };
       };
   contact?:

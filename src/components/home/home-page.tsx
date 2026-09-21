@@ -7,8 +7,7 @@ import {
   type InteriorStylesSectionT,
 } from './interior-styles/interior-styles-carousel'
 import { NumbersSection, type NumbersSectionT } from './numbers/numbers-section'
-import { ProcessSpotlight } from './process/process-spotlight'
-import { processPlaceholder } from './process/steps'
+import { ProcessSpotlight, type ProcessSectionT } from './process/process-spotlight'
 import { ProjectsCarousel, type ProjectsSectionT } from './projects-carousel/projects-carousel'
 import { ServicesCarousel, type ServicesSectionT } from './services/services-carousel'
 import {
@@ -26,6 +25,7 @@ export type HomePageDataT = {
   numbers?: NumbersSectionT
   interiorStyles?: InteriorStylesSectionT
   testimonials?: TestimonialsSectionT
+  process?: ProcessSectionT
 }
 
 type PropsT = {
@@ -37,8 +37,17 @@ type PropsT = {
 // Section order and the vertical rhythm between them are the layout, so they live here
 // rather than in a CMS field: an editor fills each section, never rearranges them.
 export function HomePage({ data, ratings }: PropsT) {
-  const { hero, intro, services, afterServices, projects, numbers, interiorStyles, testimonials } =
-    data
+  const {
+    hero,
+    intro,
+    services,
+    afterServices,
+    projects,
+    numbers,
+    interiorStyles,
+    testimonials,
+    process,
+  } = data
 
   return (
     <>
@@ -106,13 +115,11 @@ export function HomePage({ data, ratings }: PropsT) {
             />
           </FadeUp>
         )}
-        {/* TEST: placeholder copy, judged in place — see `process/steps.ts`. */}
-        <FadeUp>
-          <ProcessSpotlight
-            container="site-container paddings pt-20 md:pt-28"
-            data={processPlaceholder}
-          />
-        </FadeUp>
+        {process && (
+          <FadeUp>
+            <ProcessSpotlight container="site-container paddings pt-20 md:pt-28" data={process} />
+          </FadeUp>
+        )}
       </PageWrapper>
     </>
   )

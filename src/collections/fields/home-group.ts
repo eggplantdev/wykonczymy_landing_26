@@ -151,5 +151,33 @@ export const homeGroup: Field = {
       },
       fields: [{ name: 'sectionTitle', type: 'text', localized: true }, ...ctaFields()],
     },
+    {
+      name: 'process',
+      type: 'group',
+      label: 'How the work runs',
+      fields: [
+        { name: 'sectionTitle', type: 'text', localized: true },
+        {
+          // Ordered: the steps are a sequence, and the row order is the order the visitor
+          // is walked through them in.
+          name: 'steps',
+          type: 'array',
+          admin: { initCollapsed: true },
+          fields: [
+            { name: 'title', type: 'text', localized: true, required: true },
+            { name: 'text', type: 'textarea', localized: true },
+            // The same closed set the services cards draw from, so one drawing vocabulary
+            // serves both sections.
+            {
+              name: 'icon',
+              type: 'select',
+              required: true,
+              options: [...SERVICE_ICONS],
+              admin: { description: 'The drawing beside the step.' },
+            },
+          ],
+        },
+      ],
+    },
   ],
 }

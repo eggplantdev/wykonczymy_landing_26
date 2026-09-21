@@ -1,7 +1,7 @@
 {
   "name": "wykonczymy-www",
   "version": "1.0.0",
-  "description": "Marketing and lead-generation site for wykonczymy.com.pl — Payload 3 + Next on Vercel.",
+  "description": "Marketing and lead-generation site for wykonczymy.com.pl \u2014 Payload 3 + Next on Vercel.",
   "packageManager": "pnpm@10.33.4",
   "type": "module",
   "scripts": {
@@ -27,6 +27,7 @@
     "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "prepare": "husky",
+    "process:populate": "set -a && source .env && { [ -f .env.local ] && source .env.local; true; } && set +a && cross-env NODE_OPTIONS=--no-deprecation tsx scripts/populate-process.ts",
     "seo:populate": "set -a && source .env && { [ -f .env.local ] && source .env.local; true; } && set +a && cross-env NODE_OPTIONS=--no-deprecation tsx scripts/populate-seo.ts",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",

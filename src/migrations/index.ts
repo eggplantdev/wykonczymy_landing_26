@@ -21,6 +21,7 @@ import * as migration_20260919_151151_scope_drop_value from './20260919_151151_s
 import * as migration_20260921_091755_contact_postal_address from './20260921_091755_contact_postal_address'
 import * as migration_20260921_101328_media_alt_localized from './20260921_101328_media_alt_localized'
 import * as migration_20260921_140715_submissions_queue from './20260921_140715_submissions_queue'
+import * as migration_20260921_170759_process_steps from './20260921_170759_process_steps'
 
 export const migrations = [
   {
@@ -137,5 +138,10 @@ export const migrations = [
     up: migration_20260921_140715_submissions_queue.up,
     down: migration_20260921_140715_submissions_queue.down,
     name: '20260921_140715_submissions_queue',
+  },
+  {
+    up: migration_20260921_170759_process_steps.up,
+    down: migration_20260921_170759_process_steps.down,
+    name: '20260921_170759_process_steps',
   },
 ]

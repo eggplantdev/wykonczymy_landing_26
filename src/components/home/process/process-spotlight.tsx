@@ -20,8 +20,20 @@ import { SectionTitle } from '@/components/ui/section-title'
 import { carouselDefaults, useCarousel } from '@/lib/carousel'
 import { cn } from '@/lib/cn'
 import '@/lib/fontawesome'
+import type { ServiceIconKeyT } from '@/lib/service-icons'
 
-import type { ProcessSectionT } from './steps'
+export type ProcessStepT = {
+  id: string
+  /** The same closed set the services cards draw from, so one select field serves both. */
+  icon: ServiceIconKeyT
+  title: string
+  text: string
+}
+
+export type ProcessSectionT = {
+  sectionTitle: string
+  steps: ProcessStepT[]
+}
 
 type PropsT = {
   container: string
