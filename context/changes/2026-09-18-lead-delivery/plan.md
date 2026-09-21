@@ -648,13 +648,13 @@ Run **once**, after the final phase.
 
 #### Automated
 
-- [x] 5.1 The forward classifies every row of the contract's status table
-- [x] 5.2 The action enqueues before returning and deletes the row on delivery
+- [x] 5.1 The forward classifies every row of the contract's status table — 11b24c9
+- [x] 5.2 The action enqueues before returning and deletes the row on delivery — 11b24c9
 
 ### Phase 6: Scheduled work and cleanup
 
 #### Automated
 
-- [ ] 6.1 The callback receiver returns 403 / 400 / 200 per the callback status table
-- [ ] 6.2 The sweep is a no-op outside production and spares young or claimed prefixes
-- [ ] 6.3 Both cron routes refuse a request with no CRON_SECRET
+- [x] 6.1 The callback receiver returns 403 / 400 / 200 per the callback status table
+- [x] 6.2 The sweep is a no-op outside production and spares young or claimed prefixes
+- [x] 6.3 Both cron routes refuse a request with no CRON_SECRET

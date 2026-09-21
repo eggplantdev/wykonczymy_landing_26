@@ -69,3 +69,19 @@ export async function deleteRow(submissionId: string): Promise<void> {
     overrideAccess: true,
   })
 }
+
+/**
+ * Whether a submission is still waiting to be delivered. The sweep asks before reclaiming a prefix:
+ * a row means someone is still retrying, and its files are the only copy that exists.
+ */
+export async function hasRow(submissionId: string): Promise<boolean> {
+  const payload = await getClient()
+
+  const { totalDocs } = await payload.count({
+    collection: 'submissions',
+    where: { submissionId: { equals: submissionId } },
+    overrideAccess: true,
+  })
+
+  return totalDocs > 0
+}

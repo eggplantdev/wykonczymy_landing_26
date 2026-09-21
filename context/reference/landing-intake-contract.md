@@ -11,7 +11,7 @@ A byte-identical copy of this file lives in `landing_26`. Change one, change bot
 ```
 POST https://<wykonczymy>/api/webhooks/landing
 Content-Type: application/json
-x-landing-signature: sha256=<hex HMAC-SHA256 of the RAW body>
+x-landing-signature: sha256=<hex HMAC-SHA256 of the RAW body, under the scoped key below>
 ```
 
 The HMAC is computed over the **exact bytes sent**, never over a re-serialised object — a
@@ -85,7 +85,7 @@ its bytes.
 ```
 POST <LANDING_CLEANUP_URL>
 Content-Type: application/json
-x-landing-signature: sha256=<hex HMAC-SHA256 of the RAW body>
+x-landing-signature: sha256=<hex HMAC-SHA256 of the RAW body, scope `landing-cleanup`>
 
 { "submissionId": "<uuid>" }
 ```
