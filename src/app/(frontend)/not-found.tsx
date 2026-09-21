@@ -20,8 +20,8 @@ export default function NotFound() {
       <div className="flex items-center gap-6">
         <h1 className="border-r border-current/30 pr-6 text-24 font-medium">404</h1>
         <div className="space-y-1">
-          <p className="text-sm">{copy.notFoundBody}</p>
-          <Link className="text-sm underline" href={localeRoot(locale)}>
+          <p className="text-12">{copy.notFoundBody}</p>
+          <Link className="text-12 underline" href={localeRoot(locale)}>
             {copy.backToHome}
           </Link>
         </div>
