@@ -80,7 +80,7 @@ flag, a second leads-app deployment, or any other isolation machinery for this.
 | S4  | Completed projects — listing + project pages         | proposed | S1         | S2, S3, S5    |
 | S5  | Testimonials and the shared content lists            | proposed | S1         | S2, S3, S4    |
 | S6  | Photo attachments on the form                        | blocked  | S2         | —             |
-| S7  | SEO surface — sitemap, hreflang, canonical, metadata | in progress | S3, S4  | S6            |
+| S7  | SEO surface — sitemap, hreflang, canonical, metadata | in review | S3, S4    | S6            |
 | S8  | Cutover — url-map test green, redirects, DNS         | blocked  | S2, S7     | —             |
 
 **Parallel band:** once S1 lands, S2 / S3 / S4 / S5 touch different collections and different routes.
@@ -264,7 +264,7 @@ which is why it sits after the north star rather than inside it.
 
 ### S7 — SEO surface
 
-**Status:** in progress · **Change ID:** `s7-seo` · **Depends on:** S3, S4
+**Status:** in review · **Change ID:** `s7-seo` · **Depends on:** S3, S4
 
 Sitemap covering both languages (FR-013), per-page title, description, canonical, and correct
 `hreflang` pairing between the Polish and English addresses (FR-014).

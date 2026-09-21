@@ -55,3 +55,47 @@ Local, against `pnpm dev` on :3001 (:3000 is the leads app), footer of any page:
 
 Recorded debt: FR-032 (privacy-policy page) ships unmet — the consent box is deliberately a
 bare checkbox with nothing to link to.
+
+## S7 — SEO surface (2026-09-21)
+
+The populate script has **not** been run. Everything below about page descriptions assumes
+`pnpm seo:populate --write` has gone in first, after `pnpm db:dump`.
+
+Local, against `pnpm dev`:
+
+- [ ] View source on `/` and on `/en/home/`: each carries a `<meta name="description">` with its
+      own copy, the one drafted in `context/changes/2026-09-20-s7-seo/seo-copy.md`.
+- [ ] `/wykonczenia/boho/` and `/realizacje/kiwi-8/` carry a description derived from the style's
+      `text` / the project's `summary`. **Read them as search snippets** — a blurb written for a
+      card can read badly as a result. A bad one is an argument for editing the blurb in the
+      admin, which fixes both surfaces, not for adding a second field.
+- [ ] The same two addresses under `/en/…` carry English descriptions, not Polish ones.
+- [ ] Setting `meta.description` by hand on a project in the admin overrides the derived one on
+      the next load; clearing it brings the derived one back.
+- [ ] The tab icon is the Wykończymy house-and-tools mark, not the default globe. Hard-reload —
+      browsers cache a favicon aggressively.
+- [ ] Paste `http://localhost:3000/wykonczenia/boho/` into a rich-preview surface (Slack DM to
+      yourself, Discord, Signal). The card shows the brand image, the page title and the style's
+      description. **Not** the eggplantdev agency mark, and not a bare link.
+- [ ] `/sitemap.xml` lists 46 URLs. Every one ends in a slash; none contains `null`. Page-level
+      entries carry an `xhtml:link` pair, children carry none.
+- [ ] Every `<loc>` in it is one the site actually answers — spot-check three, including one
+      `/en/` child.
+
+Against production, after deploy:
+
+- [ ] Google Rich Results test on the deployed `/kontakt/` reports a valid `Organization`, with
+      the phone, mail and address the footer and contact page show.
+- [ ] `vatID` is missing from that block because `contact.nip` is empty in the CMS. Either fill
+      it in the admin or accept its absence — the code emits it the moment it is set.
+- [ ] Lighthouse SEO on the eight measured pages: `meta-description` passes. `is-crawlable`
+      still fails and is **expected** — `robots.ts` and the layout's `robots` key hold the
+      pre-cutover noindex. Do not delete them to chase the number; cutover owns that.
+
+Recorded debt:
+
+- **`price-list` has no Pages document**, so it is absent from the sitemap and from the populate
+  script's write set, while `url-map.md` still lists `/cennik/` and `/en/price-list/` among the
+  twelve indexed addresses. Cutover decides: build the page or drop the address.
+- **`<html lang="pl">` on `/en/*`** still contradicts the hreflang pairs this slice emits. Out of
+  scope here; it needs the locale in a real route segment.

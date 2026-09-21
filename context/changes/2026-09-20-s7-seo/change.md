@@ -1,9 +1,9 @@
 ---
 change_id: s7-seo
 title: SEO surface — read the seoPlugin fields, add openGraph, sitemap and JSON-LD
-status: implementing
+status: implemented
 created: 2026-09-20
-updated: 2026-09-20
+updated: 2026-09-21
 archived_at: null
 branch: s7-seo
 worktree: null
@@ -30,3 +30,15 @@ Live-site crawl (2026-09-20, all twelve indexed addresses) as a copy source: onl
 All-in-One-SEO auto-extracts from the first body paragraph (one includes "Please enable JavaScript
 in your browser to complete this form"), and `/en/completed-works/` has none. `og:image` is
 `cropped-favicon.png` on every page. Harvest in `live-seo-harvest.md`.
+
+## Owed before this can close
+
+- **`pnpm seo:populate --write` has not been run.** It is the one production write in this slice
+  and it is the owner's call. Dry run on 2026-09-21 was clean: ten pages, both locales, zero
+  existing values touched. Order is `pnpm db:dump`, then the dry run, then `--write`.
+- **The e2e suite was not run to green.** Six specs failed on the working tree at the end of this
+  run (admin dashboard, two frontend-routing, two photo-lightbox, reduced-motion). Four files
+  belonging to a parallel agent were dirty in the tree at the time, so whose failures these are
+  was not established — the owner asked to skip the investigation. `pnpm lint`, `tsc --noEmit`,
+  `pnpm build` (46 prerendered paths) and `pnpm test:int` (64 passed) were all green.
+- **Manual checks** → `context/foundation/manual-checks.md`, section `S7`.
