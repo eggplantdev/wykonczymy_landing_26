@@ -1,5 +1,6 @@
 import { cache } from 'react'
 
+import type { PostalAddressT } from '@/lib/contact/postal-address'
 import type { Locale } from '@/lib/i18n/i18n'
 import { findContactDetails } from './contact'
 import { findFooter } from './footer'
@@ -7,8 +8,7 @@ import { findFooter } from './footer'
 export type OrganizationT = {
   telephone?: string
   email?: string
-  /** One free-text line, as the editor typed it. */
-  address?: string
+  address: PostalAddressT
   vatID?: string
 }
 

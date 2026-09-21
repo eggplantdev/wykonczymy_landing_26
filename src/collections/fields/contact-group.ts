@@ -12,9 +12,39 @@ export const contactGroup: Field = {
   fields: [
     {
       name: 'address',
-      type: 'text',
-      localized: true,
-      admin: { description: 'One line, as it should read. Links to a Google Maps search for it.' },
+      type: 'group',
+      label: 'Address',
+      admin: {
+        description:
+          'The parts, not a finished line. The page joins them in the order that locale reads in — Polish puts the town before the postcode, English after it.',
+      },
+      fields: [
+        {
+          name: 'street',
+          type: 'text',
+          localized: true,
+          admin: { description: 'Street and number, e.g. "ul. Terespolska 2".' },
+        },
+        {
+          name: 'locality',
+          type: 'text',
+          localized: true,
+          admin: { description: 'Town. Translated — "Warszawa" reads as "Warsaw" in English.' },
+        },
+        // Neither a postcode nor a country code is language, so both sit outside the locale
+        // tables — the same reason `nip` below does.
+        {
+          name: 'postalCode',
+          type: 'text',
+          admin: { description: 'e.g. "03-813".' },
+        },
+        {
+          name: 'country',
+          type: 'text',
+          defaultValue: 'PL',
+          admin: { description: 'Two-letter ISO code. Machine-read only; never shown.' },
+        },
+      ],
     },
     {
       name: 'nip',

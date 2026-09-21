@@ -1,7 +1,26 @@
-import { SERVER_URL } from '@/lib/env'
+import type { PostalAddressT } from '@/lib/contact/postal-address'
 import type { OrganizationT } from '@/lib/content/organization'
+import { SERVER_URL } from '@/lib/env'
 import { absoluteUrl } from '@/lib/seo/absolute-url'
 import { SITE_NAME } from '@/lib/seo/constants'
+
+// schema.org also accepts `address` as Text, which is what this emitted while the CMS held one
+// free-text line. The parts are stored separately now, so the typed form costs nothing and
+// leaves the street, town and postcode individually machine-readable.
+const postalAddress = ({ street, locality, postalCode, country }: PostalAddressT) => {
+  // `country` is excluded from the test on purpose: it defaults to `PL`, so counting it would
+  // make every empty address look populated and emit a `PostalAddress` carrying nothing but a
+  // country — worse than claiming no address at all.
+  if (!street && !locality && !postalCode) return undefined
+
+  return {
+    '@type': 'PostalAddress',
+    streetAddress: street,
+    addressLocality: locality,
+    postalCode,
+    addressCountry: country,
+  }
+}
 
 export function OrganizationJsonLd({ telephone, email, address, vatID }: OrganizationT) {
   const organization = {
@@ -16,9 +35,7 @@ export function OrganizationJsonLd({ telephone, email, address, vatID }: Organiz
     logo: absoluteUrl('/icon.png'),
     telephone,
     email,
-    // schema.org accepts `address` as Text. Splitting the editor's single line into a
-    // `PostalAddress` would invent structure they never entered.
-    address,
+    address: postalAddress(address),
     vatID,
   }
 

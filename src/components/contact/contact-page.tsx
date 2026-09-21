@@ -3,6 +3,7 @@ import { faEnvelope, faLocationDot, faPhoneVolume } from '@fortawesome/free-soli
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { PageWrapper } from '@/components/layout/page-wrapper'
+import { formatPostalAddress } from '@/lib/contact/postal-address'
 import type { ContactDetailsT } from '@/lib/content/contact'
 import { getTranslations, type Locale } from '@/lib/i18n/i18n'
 import '@/lib/fontawesome'
@@ -35,7 +36,8 @@ const mapsHref = (address: string) =>
 // included. All that is left is the company's postal details.
 export function ContactPage({ locale, title, data }: PropsT) {
   const { contact } = getTranslations(locale)
-  const { address, nip, phone, mail } = data
+  const { nip, phone, mail } = data
+  const address = formatPostalAddress(data.address, locale)
 
   // The address row is a spread rather than a filtered-out falsy entry: a conditional
   // member widens the array to include `false`, which no amount of filtering narrows back.

@@ -59,157 +59,168 @@ export type SupportedTimezones =
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
   | 'Pacific/Auckland'
-  | 'Pacific/Fiji';
+  | 'Pacific/Fiji'
 
 export interface Config {
   auth: {
-    users: UserAuthOperations;
-  };
-  blocks: {};
+    users: UserAuthOperations
+  }
+  blocks: {}
   collections: {
-    users: User;
-    media: Media;
-    pages: Page;
-    projects: Project;
-    'interior-styles': InteriorStyle;
-    'payload-kv': PayloadKv;
-    'payload-locked-documents': PayloadLockedDocument;
-    'payload-preferences': PayloadPreference;
-    'payload-migrations': PayloadMigration;
-  };
-  collectionsJoins: {};
+    users: User
+    media: Media
+    pages: Page
+    projects: Project
+    'interior-styles': InteriorStyle
+    'payload-kv': PayloadKv
+    'payload-locked-documents': PayloadLockedDocument
+    'payload-preferences': PayloadPreference
+    'payload-migrations': PayloadMigration
+  }
+  collectionsJoins: {}
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
-    pages: PagesSelect<false> | PagesSelect<true>;
-    projects: ProjectsSelect<false> | ProjectsSelect<true>;
-    'interior-styles': InteriorStylesSelect<false> | InteriorStylesSelect<true>;
-    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
-    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
-    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
-    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
-  };
+    users: UsersSelect<false> | UsersSelect<true>
+    media: MediaSelect<false> | MediaSelect<true>
+    pages: PagesSelect<false> | PagesSelect<true>
+    projects: ProjectsSelect<false> | ProjectsSelect<true>
+    'interior-styles': InteriorStylesSelect<false> | InteriorStylesSelect<true>
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>
+    'payload-locked-documents':
+      PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>
+  }
   db: {
-    defaultIDType: number;
-  };
-  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('pl' | 'en') | ('pl' | 'en')[];
+    defaultIDType: number
+  }
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('pl' | 'en') | ('pl' | 'en')[]
   globals: {
-    footer: Footer;
-  };
+    footer: Footer
+  }
   globalsSelect: {
-    footer: FooterSelect<false> | FooterSelect<true>;
-  };
-  locale: 'pl' | 'en';
+    footer: FooterSelect<false> | FooterSelect<true>
+  }
+  locale: 'pl' | 'en'
   widgets: {
-    collections: CollectionsWidget;
-  };
-  user: User;
+    collections: CollectionsWidget
+  }
+  user: User
   jobs: {
-    tasks: unknown;
-    workflows: unknown;
-  };
+    tasks: unknown
+    workflows: unknown
+  }
 }
 export interface UserAuthOperations {
   forgotPassword: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
   login: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
   registerFirstUser: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
   unlock: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
+  id: number
+  updatedAt: string
+  createdAt: string
+  email: string
+  resetPasswordToken?: string | null
+  resetPasswordExpiration?: string | null
+  salt?: string | null
+  hash?: string | null
+  loginAttempts?: number | null
+  lockUntil?: string | null
   sessions?:
     | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
+        id: string
+        createdAt?: string | null
+        expiresAt: string
       }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
+    | null
+  password?: string | null
+  collection: 'users'
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
+  id: number
+  alt: string
+  updatedAt: string
+  createdAt: string
+  url?: string | null
+  thumbnailURL?: string | null
+  filename?: string | null
+  mimeType?: string | null
+  filesize?: number | null
+  width?: number | null
+  height?: number | null
+  focalX?: number | null
+  focalY?: number | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
 export interface Page {
-  id: number;
-  title: string;
+  id: number
+  title: string
   /**
    * The address segment, without slashes. Indexed by Google — see context/foundation/url-map.md before changing one.
    */
-  slug: string;
+  slug: string
   /**
    * Selects the page’s field group. The "home" page also serves at /.
    */
-  pageType: 'home' | 'completed-works' | 'interior-styles' | 'contact' | 'price-list' | 'privacy-policy';
+  pageType:
+    'home' | 'completed-works' | 'interior-styles' | 'contact' | 'price-list' | 'privacy-policy'
   home?: {
     hero?: {
-      title?: string | null;
-      image?: (number | null) | Media;
+      title?: string | null
+      image?: (number | null) | Media
       /**
        * Plays over the image when set.
        */
-      video?: (number | null) | Media;
-      ctaLabel?: string | null;
+      video?: (number | null) | Media
+      ctaLabel?: string | null
       /**
        * The page the button opens, in whichever language is being read.
        */
-      ctaLink?: ('home' | 'completed-works' | 'interior-styles' | 'contact' | 'price-list' | 'privacy-policy') | null;
-    };
+      ctaLink?:
+        | (
+            | 'home'
+            | 'completed-works'
+            | 'interior-styles'
+            | 'contact'
+            | 'price-list'
+            | 'privacy-policy'
+          )
+        | null
+    }
     intro?: {
-      text?: string | null;
-      position?: ('left' | 'right') | null;
-    };
+      text?: string | null
+      position?: ('left' | 'right') | null
+    }
     services?: {
-      sectionTitle?: string | null;
+      sectionTitle?: string | null
       cards?:
         | {
-            title: string;
-            text?: string | null;
+            title: string
+            text?: string | null
             /**
              * The drawing above the title.
              */
@@ -225,141 +236,176 @@ export interface Page {
               | 'door-open'
               | 'house-chimney'
               | 'brush'
-              | 'compass-drafting';
-            id?: string | null;
+              | 'compass-drafting'
+            id?: string | null
           }[]
-        | null;
-    };
+        | null
+    }
     afterServices?: {
-      text?: string | null;
-      position?: ('left' | 'right') | null;
-    };
+      text?: string | null
+      position?: ('left' | 'right') | null
+    }
     /**
      * Teases every published project — the slides are not curated here.
      */
     projects?: {
-      sectionTitle?: string | null;
-      ctaLabel?: string | null;
+      sectionTitle?: string | null
+      ctaLabel?: string | null
       /**
        * The page the button opens, in whichever language is being read.
        */
-      ctaLink?: ('home' | 'completed-works' | 'interior-styles' | 'contact' | 'price-list' | 'privacy-policy') | null;
-    };
+      ctaLink?:
+        | (
+            | 'home'
+            | 'completed-works'
+            | 'interior-styles'
+            | 'contact'
+            | 'price-list'
+            | 'privacy-policy'
+          )
+        | null
+    }
     numbers?: {
-      sectionTitle?: string | null;
+      sectionTitle?: string | null
       cards?:
         | {
-            value: string;
-            unit?: string | null;
-            description?: string | null;
-            id?: string | null;
+            value: string
+            unit?: string | null
+            description?: string | null
+            id?: string | null
           }[]
-        | null;
-    };
+        | null
+    }
     testimonials?: {
-      sectionTitle?: string | null;
+      sectionTitle?: string | null
       quotes?:
         | {
             quote: {
               root: {
-                type: string;
+                type: string
                 children: {
-                  type: any;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
-                version: number;
-              };
-              [k: string]: unknown;
-            };
-            name: string;
-            role?: string | null;
-            id?: string | null;
+                  type: any
+                  version: number
+                  [k: string]: unknown
+                }[]
+                direction: ('ltr' | 'rtl') | null
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+                indent: number
+                version: number
+              }
+              [k: string]: unknown
+            }
+            name: string
+            role?: string | null
+            id?: string | null
           }[]
-        | null;
-    };
+        | null
+    }
     /**
      * Teases every published interior style — the slides are not curated here.
      */
     interiorStyles?: {
-      sectionTitle?: string | null;
-      ctaLabel?: string | null;
+      sectionTitle?: string | null
+      ctaLabel?: string | null
       /**
        * The page the button opens, in whichever language is being read.
        */
-      ctaLink?: ('home' | 'completed-works' | 'interior-styles' | 'contact' | 'price-list' | 'privacy-policy') | null;
-    };
-  };
+      ctaLink?:
+        | (
+            | 'home'
+            | 'completed-works'
+            | 'interior-styles'
+            | 'contact'
+            | 'price-list'
+            | 'privacy-policy'
+          )
+        | null
+    }
+  }
   contact?: {
     /**
-     * One line, as it should read. Links to a Google Maps search for it.
+     * The parts, not a finished line. The page joins them in the order that locale reads in — Polish puts the town before the postcode, English after it.
      */
-    address?: string | null;
+    address?: {
+      /**
+       * Street and number, e.g. "ul. Terespolska 2".
+       */
+      street?: string | null
+      /**
+       * Town. Translated — "Warszawa" reads as "Warsaw" in English.
+       */
+      locality?: string | null
+      /**
+       * e.g. "03-813".
+       */
+      postalCode?: string | null
+      /**
+       * Two-letter ISO code. Machine-read only; never shown.
+       */
+      country?: string | null
+    }
     /**
      * Tax id. Digits only — the label is added by the page.
      */
-    nip?: string | null;
-  };
+    nip?: string | null
+  }
   legal?: {
     /**
      * The full text. Headings and lists are yours to use.
      */
     body?: {
       root: {
-        type: string;
+        type: string
         children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
-  };
+          type: any
+          version: number
+          [k: string]: unknown
+        }[]
+        direction: ('ltr' | 'rtl') | null
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+        indent: number
+        version: number
+      }
+      [k: string]: unknown
+    } | null
+  }
   meta?: {
-    title?: string | null;
-    description?: string | null;
+    title?: string | null
+    description?: string | null
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (number | null) | Media;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+    image?: (number | null) | Media
+  }
+  updatedAt: string
+  createdAt: string
+  _status?: ('draft' | 'published') | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".
  */
 export interface Project {
-  id: number;
-  title: string;
+  id: number
+  title: string
   /**
    * The address segment under the Realizacje page, without slashes.
    */
-  slug: string;
+  slug: string
   /**
    * One sentence. Doubles as the hero lead and the card blurb.
    */
-  summary: string;
-  area?: string | null;
-  duration?: string | null;
-  address?: string | null;
-  description?: string | null;
+  summary: string
+  area?: string | null
+  duration?: string | null
+  address?: string | null
+  description?: string | null
   /**
    * The work carried out, one row per trade.
    */
   scope?:
     | {
-        name: string;
+        name: string
         /**
          * The mark shown beside the name.
          */
@@ -387,470 +433,477 @@ export interface Project {
               | 'screwdriver-wrench'
               | 'ruler-combined'
             )
-          | null;
-        id?: string | null;
+          | null
+        id?: string | null
       }[]
-    | null;
+    | null
   /**
    * Materials and finishes, one row per category.
    */
   materials?:
     | {
-        name: string;
-        value: string;
-        id?: string | null;
+        name: string
+        value: string
+        id?: string | null
       }[]
-    | null;
+    | null
   /**
    * The first photo is the card and hero shot; drag a different one to the top to change it.
    */
-  gallery?: (number | Media)[] | null;
+  gallery?: (number | Media)[] | null
   meta?: {
-    title?: string | null;
-    description?: string | null;
+    title?: string | null
+    description?: string | null
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (number | null) | Media;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+    image?: (number | null) | Media
+  }
+  updatedAt: string
+  createdAt: string
+  _status?: ('draft' | 'published') | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "interior-styles".
  */
 export interface InteriorStyle {
-  id: number;
-  title: string;
+  id: number
+  title: string
   /**
    * The address segment under the Style wnętrz page, without slashes.
    */
-  slug: string;
+  slug: string
   /**
    * Card blurb. The style’s own page opens with the same sentence.
    */
-  text: string;
+  text: string
   /**
    * One row per paragraph. The article breaks in half around the middle image.
    */
   body?:
     | {
-        paragraph: string;
-        id?: string | null;
+        paragraph: string
+        id?: string | null
       }[]
-    | null;
-  image?: (number | null) | Media;
+    | null
+  image?: (number | null) | Media
   /**
    * Sits between the two halves of the article.
    */
-  contentImage?: (number | null) | Media;
-  gallery?: (number | Media)[] | null;
+  contentImage?: (number | null) | Media
+  gallery?: (number | Media)[] | null
   meta?: {
-    title?: string | null;
-    description?: string | null;
+    title?: string | null
+    description?: string | null
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (number | null) | Media;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+    image?: (number | null) | Media
+  }
+  updatedAt: string
+  createdAt: string
+  _status?: ('draft' | 'published') | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number;
-  key: string;
+  id: number
+  key: string
   data:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
+    | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: number
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
+        relationTo: 'users'
+        value: number | User
       } | null)
     | ({
-        relationTo: 'media';
-        value: number | Media;
+        relationTo: 'media'
+        value: number | Media
       } | null)
     | ({
-        relationTo: 'pages';
-        value: number | Page;
+        relationTo: 'pages'
+        value: number | Page
       } | null)
     | ({
-        relationTo: 'projects';
-        value: number | Project;
+        relationTo: 'projects'
+        value: number | Project
       } | null)
     | ({
-        relationTo: 'interior-styles';
-        value: number | InteriorStyle;
-      } | null);
-  globalSlug?: string | null;
+        relationTo: 'interior-styles'
+        value: number | InteriorStyle
+      } | null)
+  globalSlug?: string | null
   user: {
-    relationTo: 'users';
-    value: number | User;
-  };
-  updatedAt: string;
-  createdAt: string;
+    relationTo: 'users'
+    value: number | User
+  }
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: number
   user: {
-    relationTo: 'users';
-    value: number | User;
-  };
-  key?: string | null;
+    relationTo: 'users'
+    value: number | User
+  }
+  key?: string | null
   value?:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
+    | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
-  name?: string | null;
-  batch?: number | null;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  name?: string | null
+  batch?: number | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
+  updatedAt?: T
+  createdAt?: T
+  email?: T
+  resetPasswordToken?: T
+  resetPasswordExpiration?: T
+  salt?: T
+  hash?: T
+  loginAttempts?: T
+  lockUntil?: T
   sessions?:
     | T
     | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
+        id?: T
+        createdAt?: T
+        expiresAt?: T
+      }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
+  alt?: T
+  updatedAt?: T
+  createdAt?: T
+  url?: T
+  thumbnailURL?: T
+  filename?: T
+  mimeType?: T
+  filesize?: T
+  width?: T
+  height?: T
+  focalX?: T
+  focalY?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  pageType?: T;
+  title?: T
+  slug?: T
+  pageType?: T
   home?:
     | T
     | {
         hero?:
           | T
           | {
-              title?: T;
-              image?: T;
-              video?: T;
-              ctaLabel?: T;
-              ctaLink?: T;
-            };
+              title?: T
+              image?: T
+              video?: T
+              ctaLabel?: T
+              ctaLink?: T
+            }
         intro?:
           | T
           | {
-              text?: T;
-              position?: T;
-            };
+              text?: T
+              position?: T
+            }
         services?:
           | T
           | {
-              sectionTitle?: T;
+              sectionTitle?: T
               cards?:
                 | T
                 | {
-                    title?: T;
-                    text?: T;
-                    icon?: T;
-                    id?: T;
-                  };
-            };
+                    title?: T
+                    text?: T
+                    icon?: T
+                    id?: T
+                  }
+            }
         afterServices?:
           | T
           | {
-              text?: T;
-              position?: T;
-            };
+              text?: T
+              position?: T
+            }
         projects?:
           | T
           | {
-              sectionTitle?: T;
-              ctaLabel?: T;
-              ctaLink?: T;
-            };
+              sectionTitle?: T
+              ctaLabel?: T
+              ctaLink?: T
+            }
         numbers?:
           | T
           | {
-              sectionTitle?: T;
+              sectionTitle?: T
               cards?:
                 | T
                 | {
-                    value?: T;
-                    unit?: T;
-                    description?: T;
-                    id?: T;
-                  };
-            };
+                    value?: T
+                    unit?: T
+                    description?: T
+                    id?: T
+                  }
+            }
         testimonials?:
           | T
           | {
-              sectionTitle?: T;
+              sectionTitle?: T
               quotes?:
                 | T
                 | {
-                    quote?: T;
-                    name?: T;
-                    role?: T;
-                    id?: T;
-                  };
-            };
+                    quote?: T
+                    name?: T
+                    role?: T
+                    id?: T
+                  }
+            }
         interiorStyles?:
           | T
           | {
-              sectionTitle?: T;
-              ctaLabel?: T;
-              ctaLink?: T;
-            };
-      };
+              sectionTitle?: T
+              ctaLabel?: T
+              ctaLink?: T
+            }
+      }
   contact?:
     | T
     | {
-        address?: T;
-        nip?: T;
-      };
+        address?:
+          | T
+          | {
+              street?: T
+              locality?: T
+              postalCode?: T
+              country?: T
+            }
+        nip?: T
+      }
   legal?:
     | T
     | {
-        body?: T;
-      };
+        body?: T
+      }
   meta?:
     | T
     | {
-        title?: T;
-        description?: T;
-        image?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+        title?: T
+        description?: T
+        image?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  _status?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  summary?: T;
-  area?: T;
-  duration?: T;
-  address?: T;
-  description?: T;
+  title?: T
+  slug?: T
+  summary?: T
+  area?: T
+  duration?: T
+  address?: T
+  description?: T
   scope?:
     | T
     | {
-        name?: T;
-        icon?: T;
-        id?: T;
-      };
+        name?: T
+        icon?: T
+        id?: T
+      }
   materials?:
     | T
     | {
-        name?: T;
-        value?: T;
-        id?: T;
-      };
-  gallery?: T;
+        name?: T
+        value?: T
+        id?: T
+      }
+  gallery?: T
   meta?:
     | T
     | {
-        title?: T;
-        description?: T;
-        image?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+        title?: T
+        description?: T
+        image?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  _status?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "interior-styles_select".
  */
 export interface InteriorStylesSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  text?: T;
+  title?: T
+  slug?: T
+  text?: T
   body?:
     | T
     | {
-        paragraph?: T;
-        id?: T;
-      };
-  image?: T;
-  contentImage?: T;
-  gallery?: T;
+        paragraph?: T
+        id?: T
+      }
+  image?: T
+  contentImage?: T
+  gallery?: T
   meta?:
     | T
     | {
-        title?: T;
-        description?: T;
-        image?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+        title?: T
+        description?: T
+        image?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  _status?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
-  key?: T;
-  data?: T;
+  key?: T
+  data?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
-  document?: T;
-  globalSlug?: T;
-  user?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  document?: T
+  globalSlug?: T
+  user?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences_select".
  */
 export interface PayloadPreferencesSelect<T extends boolean = true> {
-  user?: T;
-  key?: T;
-  value?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  user?: T
+  key?: T
+  value?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations_select".
  */
 export interface PayloadMigrationsSelect<T extends boolean = true> {
-  name?: T;
-  batch?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  name?: T
+  batch?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
  */
 export interface Footer {
-  id: number;
-  title: string;
-  intro: string;
-  name: string;
-  role: string;
-  phone: string;
-  mail: string;
-  avatar?: (number | null) | Media;
+  id: number
+  title: string
+  intro: string
+  name: string
+  role: string
+  phone: string
+  mail: string
+  avatar?: (number | null) | Media
   /**
    * Typed in by hand: Fixly publishes no API, and Google licenses its rating per page view under terms that forbid storing it.
    */
   ratings?:
     | {
-        platform: 'fixly' | 'google';
-        rating: number;
-        reviewCount?: number | null;
-        profileUrl?: string | null;
-        id?: string | null;
+        platform: 'fixly' | 'google'
+        rating: number
+        reviewCount?: number | null
+        profileUrl?: string | null
+        id?: string | null
       }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    | null
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  title?: T;
-  intro?: T;
-  name?: T;
-  role?: T;
-  phone?: T;
-  mail?: T;
-  avatar?: T;
+  title?: T
+  intro?: T
+  name?: T
+  role?: T
+  phone?: T
+  mail?: T
+  avatar?: T
   ratings?:
     | T
     | {
-        platform?: T;
-        rating?: T;
-        reviewCount?: T;
-        profileUrl?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+        platform?: T
+        rating?: T
+        reviewCount?: T
+        profileUrl?: T
+        id?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -858,18 +911,17 @@ export interface FooterSelect<T extends boolean = true> {
  */
 export interface CollectionsWidget {
   data?: {
-    [k: string]: unknown;
-  };
-  width: 'full';
+    [k: string]: unknown
+  }
+  width: 'full'
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
-  [k: string]: unknown;
+  [k: string]: unknown
 }
-
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}
