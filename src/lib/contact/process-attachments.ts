@@ -1,4 +1,4 @@
-import { checkAttachments, isRasterImageType, MAX_FILES } from './attachments'
+import { checkAttachments, HEIC_EXTENSIONS, isRasterImageType, MAX_FILES } from './attachments'
 import type { FormMessageKeyT } from './form-message-key'
 
 // Matches the leads app's ingest cap. Each file runs main-thread CompressorJS and possibly a WASM
@@ -8,7 +8,6 @@ const PROCESS_CONCURRENCY = 4
 // Near-lossless: this pass only decodes, and the `compressImage` after it sets the real quality.
 const HEIC_DECODE_QUALITY = 0.92
 
-const HEIC_EXTENSIONS = ['.heic', '.heif']
 const IMAGE_EXTENSIONS = [...HEIC_EXTENSIONS, '.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp']
 
 type CodecsT = typeof import('./compress-image')
@@ -108,7 +107,7 @@ function isHeic(file: File): boolean {
   )
 }
 
-function hasExtension(name: string, extensions: string[]): boolean {
+function hasExtension(name: string, extensions: readonly string[]): boolean {
   const lower = name.toLowerCase()
   return extensions.some((extension) => lower.endsWith(extension))
 }

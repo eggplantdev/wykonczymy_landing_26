@@ -6,9 +6,11 @@ export const MAX_FILE_BYTES = 8 * 1024 * 1024
 
 export const ACCEPTED_CONTENT_TYPES = ['image/*', 'application/pdf'] as const
 
+export const HEIC_EXTENSIONS = ['.heic', '.heif'] as const
+
 // HEIC is offered but never accepted — it becomes a JPEG before upload, and `image/*` alone greys
 // out every iPhone photo because Chrome and Firefox report an empty type for it.
-export const FILE_PICKER_ACCEPT = [...ACCEPTED_CONTENT_TYPES, '.heic', '.heif'] as const
+export const FILE_PICKER_ACCEPT = [...ACCEPTED_CONTENT_TYPES, ...HEIC_EXTENSIONS] as const
 
 export type AttachmentCheckT =
   { ok: true; files: File[] } | { ok: false; errorKey: FormMessageKeyT }
