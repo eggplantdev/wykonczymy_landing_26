@@ -28,8 +28,6 @@ const eslintConfig = [
     files: ['src/**/*.{ts,tsx}'],
     ignores: [
       'src/lib/env.ts',
-      // Listed although no server-side reader exists yet: the first one re-adds this file,
-      // and having to edit the lint config to do it is how it ends up in `clientSchema`.
       'src/lib/env.server.ts',
       'src/lib/env-schema.ts',
       'src/payload.config.ts',
@@ -42,6 +40,16 @@ const eslintConfig = [
             "MemberExpression[object.object.name='process'][object.property.name='env']:not([property.name='NODE_ENV'])",
           message:
             'Read env through a module that parses env-schema.ts — env.ts for NEXT_PUBLIC_*, a server-only module for the rest.',
+        },
+        {
+          // Without `loading`, Next gives the lazy component a Suspense boundary with an
+          // undefined fallback: the suspension bubbles to the page's own boundary, React hides
+          // that subtree while the chunk loads, and the scroll position goes with it. A comment
+          // at each call site could not stop the third one repeating it.
+          selector:
+            "CallExpression[callee.name='dynamic']:not(:has(ObjectExpression > Property[key.name='loading']))",
+          message:
+            'next/dynamic needs a `loading` option — without one the suspension destroys the page scroll position. Use `loading: () => null` if it should render nothing.',
         },
       ],
     },

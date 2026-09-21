@@ -1,16 +1,11 @@
-import { createInterface } from 'node:readline/promises'
-
 import { getPayload } from 'payload'
 
 import config from '@/payload.config'
+import { i18n } from '@/lib/i18n/i18n'
+import { isWrite, runWriteScript } from './write-guard'
 
-// Every Polish alt in the library is one of three shapes: a style photo, a project photo, or
-// one of four strings written by hand. The translation is derived from the shape rather than
-// listed row by row, so re-running after new photos are uploaded keeps working — and an alt
-// that fits none of the three aborts the run instead of being guessed at.
-
-// Style photos read `<style title> — <room>`. The titles come from the CMS, so a renamed style
-// needs nothing here; the six rooms are a closed set and do not.
+// Derived from the shape of the Polish alt, not a row-by-row list, so it still works after the
+// next upload. Style titles come from the CMS; the six rooms are a closed set.
 const ROOMS: Record<string, string> = {
   gabinet: 'home office',
   hall: 'hallway',
@@ -20,8 +15,7 @@ const ROOMS: Record<string, string> = {
   łazienka: 'bathroom',
 }
 
-// Project photos read `<place> — zdjęcie N`. Place names are deliberately untranslated (a
-// Warsaw district is not renamed for an English reader), so only the word `zdjęcie` moves.
+// Place names stay as they are — a Warsaw district is not renamed for an English reader.
 const PROJECT_PHOTO = /^(.+) — zdjęcie (\d+)$/
 
 const FREEFORM: Record<string, string> = {
@@ -32,39 +26,12 @@ const FREEFORM: Record<string, string> = {
     'Living room with a dark marble wall and a dining area',
 }
 
-const isWrite = process.argv.includes('--write')
-const skipPrompt = process.argv.includes('--yes')
-
-// `POSTGRES_URL` is production in every environment including a laptop, so `--write` alone is one
-// shell-history recall away from the live database. Naming the host is what makes that visible.
-const confirmTarget = async () => {
-  const host = process.env.POSTGRES_URL?.replace(/^.*@/, '').replace(/\?.*$/, '') ?? '(unset)'
-
-  if (skipPrompt) {
-    console.log(`writing to ${host} (--yes)\n`)
-    return
-  }
-
-  const prompt = createInterface({ input: process.stdin, output: process.stdout })
-  const answer = await prompt.question(`About to write to ${host}. Type "yes" to continue: `)
-  prompt.close()
-
-  if (answer.trim() !== 'yes') {
-    console.log('aborted.')
-    process.exit(1)
-  }
-}
-
 const run = async () => {
-  if (isWrite) await confirmTarget()
-
   const payload = await getPayload({ config: await config })
 
-  // Both locales of every style, keyed by id, so a Polish alt prefix can be matched to its
-  // style and swapped for the English title of the same document.
   const [stylesPl, stylesEn] = await Promise.all(
-    (['pl', 'en'] as const).map((locale) =>
-      payload.find({ collection: 'interior-styles', locale, depth: 0, limit: 100 }),
+    i18n.locales.map((locale) =>
+      payload.find({ collection: 'interior-styles', locale, depth: 0, limit: 0 }),
     ),
   )
   const englishByPolishTitle = new Map<string, string>()
@@ -73,7 +40,9 @@ const run = async () => {
     if (english) englishByPolishTitle.set(style.title, english)
   }
 
-  const translate = (polish: string) => {
+  // Undefined for an EN-only upload: report it below rather than throw.
+  const translate = (polish: string | undefined) => {
+    if (!polish) return undefined
     if (FREEFORM[polish]) return FREEFORM[polish]
 
     const project = PROJECT_PHOTO.exec(polish)
@@ -89,15 +58,14 @@ const run = async () => {
     return undefined
   }
 
-  const { docs } = await payload.find({ collection: 'media', locale: 'pl', depth: 0, limit: 500 })
+  const { docs } = await payload.find({ collection: 'media', locale: 'pl', depth: 0, limit: 0 })
   const { docs: existing } = await payload.find({
     collection: 'media',
     locale: 'en',
     depth: 0,
-    limit: 500,
+    limit: 0,
   })
-  // `fallback: false`, so an unwritten English alt reads as empty rather than as the Polish one
-  // — which is the whole reason this script exists, and also how it knows what is left to do.
+  // `fallback: false`, so an unwritten English alt reads as empty — that is what is left to do.
   const translated = new Set(existing.filter((doc) => doc.alt).map((doc) => doc.id))
 
   const unmatched = docs.filter((doc) => !translated.has(doc.id) && !translate(doc.alt))
@@ -125,15 +93,7 @@ const run = async () => {
     written += 1
   }
 
-  console.log(
-    `\n${isWrite ? 'wrote' : 'would write'} ${written}, left ${kept} alone.` +
-      (isWrite ? '' : '\nRe-run with --write to apply. Take `pnpm db:dump` first.'),
-  )
-
-  process.exit(0)
+  return { written, kept }
 }
 
-run().catch((error) => {
-  console.error(error)
-  process.exit(1)
-})
+runWriteScript(run)

@@ -19,7 +19,9 @@ export const toImage = (value: UploadT): MediaImageT | null =>
   isPopulated(value) && value.url
     ? {
         url: value.url,
-        alt: value.alt,
+        // Typed `string`, but localized under `fallback: false` — undefined drops the attribute
+        // entirely and a screen reader reads the file name instead.
+        alt: value.alt ?? '',
         width: value.width ?? undefined,
         height: value.height ?? undefined,
         focalPoint: toFocalPoint(value),

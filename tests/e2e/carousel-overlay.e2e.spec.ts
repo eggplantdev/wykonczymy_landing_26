@@ -7,15 +7,9 @@ const TILE = 'Powiększ zdjęcie'
 const CAROUSEL = 'section:has(> h2.sr-only) .swiper'
 
 // Whether the carousel is still listening for arrow keys, read off the instance rather than
-// by pressing a key and watching the track.
-//
-// Pressing the key is what this test would rather do, but it cannot yet: Swiper ignores the
-// keyboard for a carousel that is off screen, and opening the lightbox throws the page's
-// scroll position away (2000 → ~143, and closing does not put it back), which lands the
-// carousel off screen every time, whatever the viewport or the starting scroll. That scroll
-// bug is separate from this one and is filed on its own; until it is fixed no arrow press
-// can reach this carousel, so a behaviour-level assertion here would pass whether or not the
-// fix is present. This reads the one thing the fix actually changes.
+// by pressing a key and watching the track. Swiper ignores the keyboard for a carousel that is
+// off screen, so a press-and-assert version only works from a starting scroll that keeps the
+// carousel in view — this reads the one thing the fix actually changes, from anywhere.
 function isListeningForKeys(page: Page) {
   return page.evaluate((selector) => {
     const track = [...document.querySelectorAll(selector)].at(-1) as

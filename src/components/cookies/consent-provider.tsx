@@ -23,11 +23,8 @@ type OptionsT = ConsentManagerOptions & {
 // The country is pinned rather than resolved: the audience is Polish, so everyone gets
 // the European opt-in pack.
 //
-// There is deliberately no `storageConfig.defaultExpiryDays`. It only shortens the cookie,
-// and c15t keeps a second copy in localStorage that never expires and is written back over
-// the cookie on load — so no value here can produce a periodic re-ask, and setting one just
-// implies an expiry the visitor never experiences. Consent is asked once; the footer's
-// cookie settings is how it gets changed.
+// No `storageConfig.defaultExpiryDays`: c15t keeps a second copy in localStorage that never
+// expires and overwrites the cookie on load, so no value there can produce a periodic re-ask.
 //
 // `colorScheme` and the iframe blocker are both pinned so c15t's defaults don't install
 // permanent MutationObservers on <html> and <body>. Pinning it light costs nothing visible:

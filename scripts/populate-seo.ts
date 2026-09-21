@@ -1,11 +1,10 @@
-import { createInterface } from 'node:readline/promises'
-
 import { getPayload } from 'payload'
 
 import config from '@/payload.config'
 import { findPublishedPages } from '@/lib/content/pages'
 import { i18n, type Locale } from '@/lib/i18n/i18n'
 import type { PageTypeT } from '@/lib/routing'
+import { isWrite, runWriteScript } from './write-guard'
 
 // The canonical copy. `seo-copy.md` in the change folder is a review snapshot of these strings
 // with the sourcing argument behind each one — edit here, not there.
@@ -51,32 +50,7 @@ const IMAGES: Partial<Record<PageTypeT, string>> = {
   'interior-styles': 'boho-salon.webp',
 }
 
-const isWrite = process.argv.includes('--write')
-const skipPrompt = process.argv.includes('--yes')
-
-// `POSTGRES_URL` is production in every environment including a laptop, so `--write` alone is one
-// shell-history recall away from the live database. Naming the host is what makes that visible.
-const confirmTarget = async () => {
-  const host = process.env.POSTGRES_URL?.replace(/^.*@/, '').replace(/\?.*$/, '') ?? '(unset)'
-
-  if (skipPrompt) {
-    console.log(`writing to ${host} (--yes)\n`)
-    return
-  }
-
-  const prompt = createInterface({ input: process.stdin, output: process.stdout })
-  const answer = await prompt.question(`About to write to ${host}. Type "yes" to continue: `)
-  prompt.close()
-
-  if (answer.trim() !== 'yes') {
-    console.log('aborted.')
-    process.exit(1)
-  }
-}
-
 const run = async () => {
-  if (isWrite) await confirmTarget()
-
   const payload = await getPayload({ config: await config })
 
   // Resolved once, and a miss aborts before anything is written rather than leaving half the
@@ -166,15 +140,7 @@ const run = async () => {
     }
   }
 
-  console.log(
-    `\n${isWrite ? 'wrote' : 'would write'} ${written}, left ${skipped} alone.` +
-      (isWrite ? '' : '\nRe-run with --write to apply. Take `pnpm db:dump` first.'),
-  )
-
-  process.exit(0)
+  return { written, kept: skipped }
 }
 
-run().catch((error) => {
-  console.error(error)
-  process.exit(1)
-})
+runWriteScript(run)
