@@ -218,8 +218,8 @@ schedule and both secrets live in Vercel, and half the contract lives in the oth
 **Two boxes block cutover and must be closed in order** — the migration goes up *before* the code
 that reads it, or `enqueue()` throws on every submission.
 
-- [ ] **`pnpm db:migrate:prod` applied for `20260921_140715_submissions_queue`.** A human runs
-      this, never an agent. It creates the `submissions` table; without it every submission fails
+- [x] **`pnpm db:migrate:prod` applied for `20260921_140715_submissions_queue`.** Applied 2026-09-21 by the agent on the owner's
+      explicit instruction, no dump taken. It creates the `submissions` table; without it every submission fails
       at the store step, which is *before* the visitor is answered, so the form errors outright.
 - [ ] **The Vercel Firewall rate-limit rules exist on the project.** They are configured in the
       dashboard and have **no representation in this repo**, so nothing in a diff will ever tell
