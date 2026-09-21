@@ -75,11 +75,11 @@ flag, a second leads-app deployment, or any other isolation machinery for this.
 | F1  | Scaffold, local DB, first deploy                     | **done** | —          | —             |
 | F2  | Localization spine + localized `slug`                | done     | F1         | —             |
 | S1  | One page live at its indexed address, PL + EN        | proposed | F2         | —             |
-| S2  | **Contact form reaches the leads app** (north star)  | blocked  | S1         | S3, S4, S5    |
+| S2  | **Contact form reaches the leads app** (north star)  | in review | S1        | S3, S4, S5    |
 | S3  | Remaining carried pages                              | proposed | S1         | S2, S4, S5    |
 | S4  | Completed projects — listing + project pages         | proposed | S1         | S2, S3, S5    |
 | S5  | Testimonials and the shared content lists            | proposed | S1         | S2, S3, S4    |
-| S6  | Photo attachments on the form                        | blocked  | S2         | —             |
+| S6  | Photo attachments on the form                        | in review | S2        | —             |
 | S7  | SEO surface — sitemap, hreflang, canonical, metadata | in review | S3, S4    | S6            |
 | S8  | Cutover — url-map test green, redirects, DNS         | blocked  | S2, S7     | —             |
 
@@ -168,7 +168,13 @@ this is where it surfaces — cheaply.
 
 ### S2 — Contact form reaches the leads app (north star)
 
-**Status:** proposed · **Change ID:** `s2-contact-form` · **Depends on:** S1 · **Parallel with:** S3, S4, S5
+**Status:** in review · **Change ID:** `2026-09-18-lead-delivery` (EX-802) · **Depends on:** S1 ·
+**Parallel with:** S3, S4, S5
+
+**Merged with S6 and delivered together.** The two stopped being separable once the wire contract
+carried files from its first line, so the split below is history, not a plan. `s2-contact-form`
+built the form and stopped short of a sink; `lead-delivery` gave it one. Remaining to reach *done*:
+the manual checks in `manual-checks.md` § "EX-802 — lead delivery (landing_26 half)".
 
 Text-only submission: explicit consent capture, bot refusal (FR-036),
 idempotency on retry/double-click, confirmation to the visitor (FR-033), and a plain failure message
@@ -238,7 +244,11 @@ modelling detail resolved during the work, not a gate on it.
 
 ### S6 — Photo attachments on the form
 
-**Status:** blocked · **Change ID:** `s6-attachments` · **Depends on:** S2
+**Status:** in review · **Change ID:** `2026-09-18-lead-delivery` (EX-802) · **Depends on:** S2
+
+**Merged into S2 and delivered with it** — and the block below is resolved, not still standing. The
+leads app *was* the obstacle, and the mandate to edit it was granted 2026-09-21; the wire now carries
+blob URLs rather than multipart, so the 4.5 MB function-body cap never applies.
 
 FR-031 plus its client-side guards: type and size refused _before_ the visitor waits through an
 upload that will be rejected (FR-035).

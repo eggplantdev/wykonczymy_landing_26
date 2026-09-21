@@ -207,3 +207,59 @@ a short one reserves the same box and proves nothing.
 If a tier is off by a pixel or two, that is the expected direction of the change (the old
 constants rounded up off the fractional spacing scale) — the question is only whether it reads
 worse. It is a line count that is wrong, not a rounding.
+
+## EX-802 — lead delivery (landing_26 half, 2026-09-21)
+
+The form finally has a sink. A submission is stored, the visitor is answered, then the envelope is
+forwarded HMAC-signed to the leads app, which fetches the attachments and calls back to release the
+staged blob prefix. Almost nothing below is observable from this repo: the rate limits, the cron
+schedule and both secrets live in Vercel, and half the contract lives in the other repo.
+
+**Two boxes block cutover and must be closed in order** — the migration goes up *before* the code
+that reads it, or `enqueue()` throws on every submission.
+
+- [ ] **`pnpm db:migrate:prod` applied for `20260921_140715_submissions_queue`.** A human runs
+      this, never an agent. It creates the `submissions` table; without it every submission fails
+      at the store step, which is *before* the visitor is answered, so the form errors outright.
+- [ ] **The Vercel Firewall rate-limit rules exist on the project.** They are configured in the
+      dashboard and have **no representation in this repo**, so nothing in a diff will ever tell
+      you they are missing: rebuild the project and they are silently gone while every test still
+      passes. Confirm both — the form Server Action at 60 requests / 60s per IP, and
+      `/api/blob/upload-token/` at 10 / 60s per IP. The upload-token limit is the load-bearing
+      one: each file is its own token request on a public route.
+
+Then the wiring, which is all environment and all invisible to the test suite:
+
+- [ ] **Production env holds `LANDING_WEBHOOK_SECRET`, `WYKONCZYMY_WEBHOOK_URL`, `CRON_SECRET`.**
+      The secret must be byte-identical to the leads app's copy — the signature is scoped, so a
+      mismatch fails closed and shows up only as a queue that grows.
+- [ ] **The leads app has `LANDING_CLEANUP_URL` pointing back here**, and its
+      `POST /api/webhooks/landing` is deployed. Without the callback the delivery still succeeds
+      and the row is still deleted; what leaks is the blob prefix, which then waits for the daily
+      sweep instead of going immediately.
+- [ ] **Both crons report `200` in the Vercel cron log, not `308`.** `trailingSlash: true` puts a
+      redirect ahead of every route including `/api/*`, and Vercel cron does not follow redirects
+      and does not log a redirected invocation — so a missing slash looks exactly like a cron that
+      never fired. `vercel.json` carries the slashes; this box is confirming the deploy agrees.
+
+Then the round trip, which needs a browser and a real file:
+
+- [ ] **Submit the footer form with two attachments (one image, one PDF) and watch it land in the
+      leads app**, with both files openable from there. This is the only check that exercises the
+      whole chain at once.
+- [ ] **The staged prefix under `leads/<submissionId>/` is gone afterwards**, and the
+      `submissions` row with it. A surviving row means the forward failed; a surviving prefix with
+      no row means the cleanup callback did not arrive.
+- [ ] **Chrome with a saved address profile does not trip the honeypot.** Autofill the form from a
+      real profile, submit, and confirm the enquiry arrives. The trap field is named `website`
+      precisely because Chrome maps `company` to `organization` and fills it regardless of
+      `autoComplete` — a honeypot autofill can trip discards a real enquiry while showing the
+      visitor a thank-you, which is the worst failure this slice can have because it is silent on
+      both sides.
+
+One known gap, deliberately left:
+
+- **A forward from a *preview* deployment will not reach the leads app** while that app has
+  Deployment Protection on — the request needs an `x-vercel-protection-bypass` header that
+  `forward.ts` does not send. Production is unaffected. Decide it when a preview actually needs to
+  deliver; until then, test the round trip against production.
