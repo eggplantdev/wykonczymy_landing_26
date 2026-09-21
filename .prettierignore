@@ -2,3 +2,8 @@
 # which buries a one-line edit under a hundred lines of churn.
 context/
 *.md
+
+# Payload regenerates this on every `pnpm dev` and writes semicolons, which `"semi": false`
+# then strips — so formatting it puts the file in a permanent ping-pong that shows up as a
+# ~900-line diff in whatever commit happens to be open. Generated output keeps its own shape.
+src/payload-types.ts
