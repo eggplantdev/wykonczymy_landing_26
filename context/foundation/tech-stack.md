@@ -75,7 +75,25 @@ flag despite being absent from the CLI README — it installed Payload's skill a
 The connection string is **`POSTGRES_URL`**, which is both what `payload.config.ts` reads and what
 Vercel's Neon integration injects, so production needs no extra wiring. `PROD_POSTGRES_URL` carries the
 production credential for the two commands that must target prod explicitly — `db:dump` and
-`db:migrate:prod`. It is currently unset.
+`db:migrate:prod`. Both work.
+
+## Generate a migration only after the fields have settled
+
+`payload migrate:create` diffs the collections against the checked-in Drizzle snapshot, so a
+migration generated mid-edit freezes whatever the schema happened to be at that moment. Remove the
+field afterwards and the migration still creates the column — and the **next** `migrate:create`,
+which may belong to an unrelated change, inherits the cleanup and emits a `DROP COLUMN` its author
+never asked for.
+
+That already happened once: `20260917_160110_testimonials.ts` was generated while
+`home.testimonials.quotes` still had an `avatar` upload field, and the drop landed seven hours later
+inside `20260917_184739_legal_pages.ts`. Harmless in the end — the column existed for one migration
+and production is clean — but only because it was caught before either reached prod.
+
+The window to fix this closes on `db:migrate:prod`. Once a migration is recorded in production's
+`payload_migrations` it cannot be regenerated, only corrected by another migration on top; rolling
+back live schema to tidy a generated file is never worth it. So the check belongs **before** the
+migration is applied, not after.
 
 ## Scaffold command
 
