@@ -11,8 +11,7 @@ import { forward } from './forward'
 
 export type ContactSubmitResultT = { ok: true } | { ok: false; errorKey: FormMessageKeyT }
 
-// The browser uploaded these itself, so every descriptor is the client's word. The url is the one
-// the leads app will fetch, so it is re-checked here rather than taken on trust.
+// Every descriptor is the client's word, and the leads app fetches these urls — so re-check them.
 const assetSchema = object({
   url: string().pipe(url()),
   filename: string().min(1),
@@ -39,9 +38,8 @@ export async function submitContactForm(input: unknown): Promise<ContactSubmitRe
 
   const envelope = buildEnvelope(parsed.data)
 
-  // Store, answer, then forward. The queue row is committed before the visitor is answered, so the
-  // thank-you rests on a write this app controls and never on the leads app being up; everything
-  // after it is recovery, which the cron can finish.
+  // Store, answer, then forward: the thank-you rests on a write this app controls, never on the
+  // leads app being up.
   let row
   try {
     row = await enqueue(envelope)
@@ -62,7 +60,6 @@ async function deliver(envelope: SubmissionEnvelopeT, rowId: number): Promise<vo
     return
   }
 
-  // The row stays, carrying why: the cron retries it, and `attempts` is what makes a permanently
-  // failing submission visible in the admin rather than silently looping.
+  // The row stays, carrying why — the cron retries it and `attempts` makes a stuck one visible.
   await recordFailure(rowId, result.error)
 }

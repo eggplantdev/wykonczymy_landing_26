@@ -70,10 +70,7 @@ export async function deleteRow(submissionId: string): Promise<void> {
   })
 }
 
-/**
- * Whether a submission is still waiting to be delivered. The sweep asks before reclaiming a prefix:
- * a row means someone is still retrying, and its files are the only copy that exists.
- */
+// The sweep asks before reclaiming a prefix: a row means the files are still the only copy.
 export async function hasRow(submissionId: string): Promise<boolean> {
   const payload = await getClient()
 

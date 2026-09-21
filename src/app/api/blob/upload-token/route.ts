@@ -8,13 +8,9 @@ import { contactSchema } from '@/lib/contact/contact-schema'
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 /**
- * A public marketing form has no visitor to authenticate, so form validity is the gate: the same
- * schema the action runs, re-run here, is what separates an enquiry from an open file drop.
- *
- * The pathname is checked rather than assigned — `onBeforeGenerateToken` cannot return one, and the
- * issued token is bound to exactly the path that was asked for. So the check IS the pin: refuse
- * anything outside `leads/<submissionId>/` and the token cannot address the store root, where this
- * site's CMS media sits under exact filenames that `allowOverwrite: true` would replace.
+ * No visitor to authenticate on a public form, so form validity is the gate. The pathname is checked
+ * rather than assigned — `onBeforeGenerateToken` cannot return one and the token is bound to exactly
+ * the path asked for, so refusing anything outside the prefix IS the pin.
  */
 export async function POST(request: Request): Promise<NextResponse> {
   const body = (await request.json()) as HandleUploadBody
@@ -30,8 +26,7 @@ export async function POST(request: Request): Promise<NextResponse> {
           return {
             allowedContentTypes: [...ACCEPTED_CONTENT_TYPES],
             maximumSizeInBytes: MAX_FILE_BYTES,
-            // The filename is the visitor's; the prefix is ours. A random suffix would break the
-            // envelope's `filename`, which is what the salesperson sees beside the photo.
+            // A random suffix would break the envelope's `filename`, which is what the leads app shows.
             addRandomSuffix: false,
             tokenPayload: submissionId,
           }
@@ -39,8 +34,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       }),
     )
   } catch (error) {
-    // Everything that reaches here is a refused request, not a fault: a malformed body, an enquiry
-    // that does not validate, a pathname outside the prefix.
+    // Everything reaching here is a refused request, not a fault.
     return NextResponse.json({ error: (error as Error).message }, { status: 400 })
   }
 }
@@ -61,8 +55,7 @@ function authorize(pathname: string, clientPayload: string | null): { submission
   const prefix = leadPrefix(submissionId)
   const filename = pathname.startsWith(prefix) ? pathname.slice(prefix.length) : ''
 
-  // A nested path would still sit under the prefix, but the cleanup and the sweep both list one
-  // level, so anything deeper is an object neither of them would ever reclaim.
+  // A nested path is one neither the cleanup nor the sweep would ever reclaim.
   if (!filename || filename.includes('/')) throw new Error('Pathname outside the submission prefix')
 
   return { submissionId }

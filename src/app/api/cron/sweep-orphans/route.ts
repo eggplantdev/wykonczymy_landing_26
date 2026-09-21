@@ -6,20 +6,13 @@ import { hasRow } from '@/lib/content/submissions'
 import { isAuthorizedCron } from '@/lib/cron/authorize'
 import { serverEnv } from '@/lib/env.server'
 
-// Long enough that no submission is still retrying inside it. The cost of being wrong in the other
-// direction is only a file that lives a day longer than it had to.
+// Long enough that nothing is still retrying inside it.
 const ORPHAN_AGE_MS = 24 * 60 * 60 * 1000
 
 /**
- * Reclaims what a visitor uploaded before closing the tab: bytes no queue row ever claimed and no
- * delivery callback will ever mention.
- *
- * Production only, and that is not hygiene. Preview and Production resolve to the same blob store,
- * so `leads/` is a shared prefix — a sweep run from a preview deploy would delete files belonging to
- * submissions still retrying in production.
- *
- * Both conditions have to hold before a prefix goes: old enough, and no live queue row. Age alone
- * races a submission still retrying; the queue check alone cannot see one that was never created.
+ * Reclaims what a visitor uploaded before closing the tab. Production only: preview shares this blob
+ * store, so a sweep from there would delete production's files. Both conditions must hold — old
+ * enough (age alone races a retry) and no queue row (which cannot see a submission never created).
  */
 export async function GET(request: Request): Promise<NextResponse> {
   if (!isAuthorizedCron(request)) {
@@ -30,7 +23,7 @@ export async function GET(request: Request): Promise<NextResponse> {
     return NextResponse.json({ skipped: 'not production' })
   }
 
-  // Only under `leads/` — the store root is where this site's CMS media lives.
+  // Only under `leads/` — the store root holds the CMS media.
   const { blobs } = await list({ prefix: LEADS_PREFIX })
 
   const bySubmission = new Map<string, { urls: string[]; newest: number }>()

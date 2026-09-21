@@ -7,13 +7,9 @@ import { serverEnv } from '@/lib/env.server'
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 /**
- * The leads app telling us it has committed its own copy, so our staging bytes can go. Built to the
- * Callback section of `context/reference/landing-intake-contract.md`.
- *
- * The raw body is read before it is parsed: the signature covers the exact bytes sent, and a
- * re-`JSON.stringify` of the parsed object would change spacing and stop matching. The scope is
- * `landing-cleanup`, which is what keeps a forwarded envelope's signature from doubling as a
- * never-expiring delete instruction for the submission it names.
+ * The Callback section of `context/reference/landing-intake-contract.md`. The raw body is read
+ * before parsing because the signature covers the exact bytes; the `landing-cleanup` scope is what
+ * stops a forwarded envelope's signature doubling as a delete instruction.
  */
 export async function POST(request: Request): Promise<NextResponse> {
   const rawBody = await request.text()
@@ -38,8 +34,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     const deleted = await deleteSubmissionFiles(submissionId)
     return NextResponse.json({ deleted })
   } catch (error) {
-    // The sweep is the backstop, and the leads app does not retry this call — so a failure here
-    // costs an orphan, not a lead.
+    // The sweep is the backstop: a failure here costs an orphan, not a lead.
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }

@@ -62,8 +62,7 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
   const clearDraft = useContactFormStore((state) => state.clearDraft)
   const [serverError, setServerError] = useState<string>()
   const [isSent, setIsSent] = useState(false)
-  // Files live outside the form's values: they are not part of the schema and never travel to the
-  // action — they are uploaded straight to the blob store and the action is told their urls.
+  // Outside the form's values: files go straight to the blob store, the action is told their urls.
   const [files, setFiles] = useState<File[]>([])
 
   const form = useForm({
@@ -83,12 +82,10 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
         return
       }
 
-      // The id is minted here because it names the blob prefix the uploads go to and the queue row
-      // the action creates — the same submission has to be one thing on both sides.
+      // Names both the blob prefix and the queue row — one submission has to be one thing.
       const submissionId = crypto.randomUUID()
 
-      // Straight to the blob store, never through the action: a Vercel function caps its request
-      // body at 4.5 MB, which fifteen photos pass in a single attachment.
+      // Never through the action: a function request body caps at 4.5 MB.
       let assets
       try {
         assets = await Promise.all(

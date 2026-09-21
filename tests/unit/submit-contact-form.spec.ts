@@ -11,7 +11,11 @@ const queue = vi.hoisted(() => ({
   deleteRow: vi.fn(async () => undefined),
   recordFailure: vi.fn(async () => undefined),
 }))
-const forward = vi.hoisted(() => vi.fn(async () => ({ delivered: true })))
+const forward = vi.hoisted(() =>
+  vi.fn<() => Promise<{ delivered: true } | { delivered: false; error: string }>>(async () => ({
+    delivered: true,
+  })),
+)
 // `after` defers to when the response is already sent; running it inline is what lets the test
 // observe the delivery at all.
 const after = vi.hoisted(() => vi.fn((callback: () => Promise<void>) => callback()))

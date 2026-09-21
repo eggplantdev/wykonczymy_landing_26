@@ -22,9 +22,7 @@ export function ContactFormAttachments({ files, onFilesChange, className }: Prop
   const id = useId()
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // `formApi.reset` does not reach a file input, and clearing only our own state would leave the
-  // input holding the same value — so re-picking the very file that was just sent would fire no
-  // `change` event at all.
+  // `formApi.reset` does not reach a file input, and re-picking its current value fires no `change`.
   useEffect(() => {
     if (files.length === 0 && inputRef.current) inputRef.current.value = ''
   }, [files])

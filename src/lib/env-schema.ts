@@ -31,9 +31,7 @@ export const serverSchema = z
     LANDING_WEBHOOK_SECRET: z.string().min(1),
     WYKONCZYMY_WEBHOOK_URL: z.url(),
     CRON_SECRET: z.string().min(1),
-    // Preview and Production share one blob store, so the age sweep has to know which of the two
-    // it is running in — a sweep from preview would delete files belonging to submissions still
-    // retrying in production. Absent locally, which reads as „not production" and is correct.
+    // Preview shares production's blob store, so the sweep has to know which one it is running in.
     VERCEL_ENV: optional(z.enum(['development', 'preview', 'production'])),
 
     // Optional by design: without SMTP_HOST the config omits the nodemailer adapter and
