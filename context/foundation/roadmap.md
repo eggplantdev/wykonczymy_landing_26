@@ -168,7 +168,7 @@ this is where it surfaces — cheaply.
 
 ### S2 — Contact form reaches the leads app (north star)
 
-**Status:** blocked · **Change ID:** `s2-contact-form` · **Depends on:** S1 · **Parallel with:** S3, S4, S5
+**Status:** proposed · **Change ID:** `s2-contact-form` · **Depends on:** S1 · **Parallel with:** S3, S4, S5
 
 Text-only submission: explicit consent capture, bot refusal (FR-036),
 idempotency on retry/double-click, confirmation to the visitor (FR-033), and a plain failure message
@@ -178,19 +178,13 @@ they are S6.
 **User-visible outcome:** the PRD's primary success criterion, satisfied literally — a human fills in
 the real form on the deployed site and the complete request is confirmed present in the leads app.
 
-**Why it is blocked, and by what:** **Open Question 5 — where form submissions actually land today.**
-This slice preserves current lead delivery, and the current behaviour is the thing being preserved.
-Believed to be the business e-mail plus the leads app, but the WordPress site may also record them
-elsewhere. Building against a guess risks silently dropping a delivery channel — the exact defect
-class the guardrail exists to prevent.
-
-**Unblocking action:** confirm the WordPress form's delivery targets. Owner: user.
+**Open Question 5 is closed (2026-09-21, owner).** There is no delivery channel outside what is built
+in the leads app — the notification recipients are that app's `notification-recipients` global and
+nowhere else, and nothing is configured in WordPress. The old form dies with the old site, so no
+submission path survives cutover to be preserved.
 
 **Also unknown, not blocking:** the exact question list (OQ 1). Build the delivery path against the
 current field set; adding questions later is a field addition, not a rework.
-
-**Note on ordering:** everything except the final live verification can be built while OQ 5 is open.
-The block is on _declaring the slice done_, not on starting it.
 
 ### S3 — Remaining carried pages
 

@@ -16,11 +16,16 @@ This file assumes **Claude Code**. If a step references a skill, command, or too
 do **not** improvise a substitute, skip it silently, or guess an equivalent. **Stop, name the
 missing capability and what you were about to do, and wait for the human.**
 
-## Reference repos — four, all read-only
+## Reference repos — four, three read-only
 
-Named throughout this file. **Nothing outside `landing_26` is ever edited** — work flows one way,
-read there, write here. Roles and the rules for copying from each →
-`@context/foundation/references.md`.
+Named throughout this file. **Nothing outside `landing_26` is edited** — work flows one way, read
+there, write here. Roles and the rules for copying from each → `@context/foundation/references.md`.
+
+**One carve-out, granted 2026-09-21: the leads app (`/workspace/yolo/wykonczymy`) is a write target
+for the `lead-delivery` change.** It is not a pattern source like the other three — it is the other
+half of that change, and the two halves are joined by a wire contract (envelope schema, shared
+fixture, mirrored `change.md`) that cannot be kept in step from one side. The carve-out is scoped to
+that change; the other three repos are never written to, and `tdg` never at all.
 
 | Name              | Path                         | What it is                                                                  |
 | ----------------- | ---------------------------- | --------------------------------------------------------------------------- |

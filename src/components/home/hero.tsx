@@ -107,7 +107,7 @@ export function Hero({ data }: PropsT) {
             editor still owns the hard breaks — this only adds a soft one, and a longer word
             than `wykończenie` (280px is roughly twelve characters at this size) will re-break
             somewhere the editor did not choose. From `md` up the title has room and takes none. */}
-        <h1 className="text-40 md:text-72 leading-105 max-w-70 font-bold break-words whitespace-pre-line md:max-w-lg lg:max-w-none">
+        <h1 className="text-40 md:text-72 leading-105 max-w-70 font-bold break-words whitespace-pre-line md:max-w-lg">
           {title}
         </h1>
         {/* The photo is a dark surface whatever the page's theme is, so the CTA claims the

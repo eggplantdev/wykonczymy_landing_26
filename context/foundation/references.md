@@ -5,7 +5,7 @@ What each repo is for, and the rules for touching it. Read this before copying a
 | Repo              | Path                        | Role                   | May I edit it?        |
 | ----------------- | --------------------------- | ---------------------- | --------------------- |
 | **Chaos Kitchen** | `workspace/nomad_chef`      | Primary pattern source | No — read only        |
-| **Leads app**     | `workspace/yolo/wykonczymy` | Integration contract   | No — separate product |
+| **Leads app**     | `workspace/yolo/wykonczymy` | Integration contract   | **Yes, for `lead-delivery` only** |
 | **tdg**           | `workspace/_old_repos/tdg`  | Design / markup source | **No. Never.**        |
 | **fest**          | `workspace/fest`            | i18n pattern source    | No — read only        |
 
@@ -34,6 +34,12 @@ Where contact form submissions land. A different product with its own roadmap; t
 Relevant surface: the `leads` collection, its intake path, and its auth model. The PRD records the
 constraint that matters — the current intake carries a flat set of text answers and cannot accept
 file attachments, so photo uploads require work _in that repo_, not a workaround in this one.
+
+**Editable for `lead-delivery`, and only for it (2026-09-21).** That change is roughly half in each
+repo — this side owns the form, the upload token route, the queue and the signed forward; that side
+owns `POST /api/webhooks/landing`, the `media`/`leads` schema and the promotion. Its decisions live
+in a `change.md` mirrored in both trees, and a decision is not agreed until it reads the same in
+both. Outside `lead-delivery` this repo stays read-only here too — no drive-by fixes.
 
 ## tdg — `workspace/_old_repos/tdg`
 
