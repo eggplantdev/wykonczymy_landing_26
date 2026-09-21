@@ -98,6 +98,21 @@ describe('submitContactForm', () => {
     expect(queue.enqueue).not.toHaveBeenCalled()
   })
 
+  // Silence is the whole mechanism: a refusal tells the filler which field to leave alone next time.
+  it('answers a honeypot submission as sent and stores nothing', async () => {
+    await expect(submitContactForm({ ...input, trap: 'ACME Ltd' })).resolves.toEqual({ ok: true })
+
+    expect(queue.enqueue).not.toHaveBeenCalled()
+    expect(forward).not.toHaveBeenCalled()
+  })
+
+  it('queues an enquiry whose honeypot is empty or absent', async () => {
+    await submitContactForm({ ...input, trap: '' })
+    await submitContactForm(input)
+
+    expect(queue.enqueue).toHaveBeenCalledTimes(2)
+  })
+
   it('refuses a malformed submissionId', async () => {
     const result = await submitContactForm({ ...input, submissionId: 'not-a-uuid' })
 

@@ -32,6 +32,7 @@
     "tooManyFiles": "Możesz dołączyć najwyżej 15 plików.",
     "unsupportedFileType": "Dołącz zdjęcia lub plik PDF.",
     "uploadFailed": "Nie udało się wysłać załączników. Spróbuj ponownie.",
+    "throttled": "Zbyt wiele prób. Odczekaj minutę i spróbuj ponownie.",
     "attachmentsCta": "Wybierz pliki"
   },
   "common": {

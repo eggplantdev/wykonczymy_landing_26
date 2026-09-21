@@ -12,12 +12,14 @@ import { checkAttachments } from '@/lib/contact/attachments'
 import { useContactFormStore } from '@/lib/contact/contact-form-store'
 import { contactSchema, emptyContactValues, firstIssueKey } from '@/lib/contact/contact-schema'
 import { submitContactForm } from '@/lib/contact/submit-contact-form'
+import { isThrottled } from '@/lib/contact/throttled'
 import { useTranslation } from '@/lib/i18n/use-translation'
 import { ConsentLabel } from './consent-label'
 import { ContactFormAttachments } from './contact-form-attachments'
 import { ContactFormCheckbox } from './contact-form-checkbox'
 import { ContactFormInput } from './contact-form-input'
 import { ContactFormTextarea } from './contact-form-textarea'
+import { ContactFormTrap } from './contact-form-trap'
 
 const DRAFT_DEBOUNCE_MS = 500
 
@@ -64,6 +66,8 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
   const [isSent, setIsSent] = useState(false)
   // Outside the form's values: files go straight to the blob store, the action is told their urls.
   const [files, setFiles] = useState<File[]>([])
+  // Also outside them, so the trap never reaches the draft store, the schema or the envelope.
+  const [trap, setTrap] = useState('')
 
   const form = useForm({
     defaultValues: DEFAULT_VALUES,
@@ -105,7 +109,7 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
           }),
         )
       } catch {
-        setServerError(t('uploadFailed'))
+        setServerError(t((await isThrottled()) ? 'throttled' : 'uploadFailed'))
         return
       }
 
@@ -114,7 +118,7 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
       // by a redeploy would otherwise leave the visitor with a silent dead button.
       let result
       try {
-        result = await submitContactForm({ submissionId, values: value, assets })
+        result = await submitContactForm({ submissionId, values: value, assets, trap })
       } catch {
         setServerError(t('error'))
         return
@@ -195,6 +199,8 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
           )}
         </form.Field>
       ))}
+
+      <ContactFormTrap value={trap} onChange={setTrap} />
 
       <ContactFormAttachments
         files={files}

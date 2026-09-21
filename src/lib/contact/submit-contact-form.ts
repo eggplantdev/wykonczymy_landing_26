@@ -5,7 +5,12 @@ import { array, number, object, string, url, uuid } from 'zod'
 
 import { deleteRow, enqueue, recordFailure } from '@/lib/content/submissions'
 import { isAcceptedType, MAX_FILE_BYTES, MAX_FILES } from './attachments'
-import { contactSchema, firstIssueKey, type FormMessageKeyT } from './contact-schema'
+import {
+  contactSchema,
+  firstIssueKey,
+  SHORT_FIELD_MAX_LENGTH,
+  type FormMessageKeyT,
+} from './contact-schema'
 import { buildEnvelope, type SubmissionEnvelopeT } from './envelope'
 import { forward } from './forward'
 
@@ -23,6 +28,8 @@ const submissionSchema = object({
   submissionId: string().pipe(uuid()),
   values: contactSchema,
   assets: array(assetSchema).max(MAX_FILES),
+  // The honeypot, capped rather than rejected on length so an overlong one is still *answered*.
+  trap: string().max(SHORT_FIELD_MAX_LENGTH).optional().catch(''),
 })
 
 export async function submitContactForm(input: unknown): Promise<ContactSubmitResultT> {
@@ -35,6 +42,10 @@ export async function submitContactForm(input: unknown): Promise<ContactSubmitRe
     // would make it a second owner of key-to-sentence that could drift from the form's.
     return { ok: false, errorKey: firstIssueKey(parsed.error.issues) ?? 'error' }
   }
+
+  // Answered as if sent, and nothing is stored: telling a form-filler which field gave it away
+  // is all a spammer needs to stop filling that one.
+  if (parsed.data.trap) return { ok: true }
 
   const envelope = buildEnvelope(parsed.data)
 

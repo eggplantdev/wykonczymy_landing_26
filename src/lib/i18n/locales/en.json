@@ -32,6 +32,7 @@
     "tooManyFiles": "You can attach at most 15 files.",
     "unsupportedFileType": "Attach photos or a PDF.",
     "uploadFailed": "The attachments could not be uploaded. Please try again.",
+    "throttled": "Too many attempts. Wait a minute and try again.",
     "attachmentsCta": "Choose files"
   },
   "common": {
