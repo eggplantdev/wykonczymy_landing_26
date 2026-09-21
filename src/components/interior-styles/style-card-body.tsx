@@ -27,7 +27,7 @@ export function StyleCardBody({ style, imageClassName, textClassName, sizes }: P
       <header className="mb-3 line-clamp-2 min-h-[2lh] text-18 leading-120 font-medium md:text-20 xlg:text-22">
         {title}
       </header>
-      <div className={cn('mb-5 text-12 md:mb-6', textClassName)}>{text}</div>
+      <div className={cn('mb-5 text-14 md:mb-6', textClassName)}>{text}</div>
       <div className={cn('relative overflow-hidden', imageClassName)}>
         <Media image={image} sizes={sizes} className="hover-photo" />
         <PhotoHover />

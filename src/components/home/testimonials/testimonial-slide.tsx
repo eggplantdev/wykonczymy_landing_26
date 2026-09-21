@@ -66,7 +66,7 @@ export function TestimonialSlide({ testimonial, isExpanded, onToggle }: PropsT) 
         <button
           type="button"
           onClick={onToggle}
-          className="pt-3 text-12 text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground md:text-14"
+          className="pt-3 text-14 text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
         >
           {t(isExpanded ? 'showLess' : 'readMore')}
         </button>
@@ -74,7 +74,7 @@ export function TestimonialSlide({ testimonial, isExpanded, onToggle }: PropsT) 
 
       <figcaption className="flex flex-col pt-8 md:pt-10">
         <p className="text-16 md:text-20">{name}</p>
-        {role && <p className="text-12 text-muted-foreground md:text-14">{role}</p>}
+        {role && <p className="text-14 text-muted-foreground">{role}</p>}
       </figcaption>
     </figure>
   )

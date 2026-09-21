@@ -44,7 +44,7 @@ export default async function PageBoardPage() {
 
   return (
     <div className="mx-auto max-w-[62ch] px-6 py-24">
-      <h1 className="text-xl font-semibold tracking-tight">Nothing built yet</h1>
+      <h1 className="text-40 leading-135 font-semibold tracking-tight">Nothing built yet</h1>
       {rebuildOnly ? (
         <p className="mt-4 text-stone-600 dark:text-zinc-400">
           The captures are still on disk. Run <code>pnpm board:build</code> — it re-encodes them

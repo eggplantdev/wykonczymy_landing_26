@@ -12,7 +12,7 @@ export function SpecTable({ items, className }: PropsT) {
       {items.map((item) => (
         <li
           key={item.id}
-          className="grid min-h-10 grid-cols-2 items-center gap-x-5 border-b border-border py-2 text-12"
+          className="grid min-h-10 grid-cols-2 items-center gap-x-5 border-b border-border py-2 text-14"
         >
           <span className="font-medium text-subtle-foreground">{item.name}</span>
           <span>{item.value}</span>

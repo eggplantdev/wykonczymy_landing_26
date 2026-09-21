@@ -21,9 +21,7 @@ export function NumberCard({ card }: PropsT) {
         </p>
         <div className="max-w-50.5 text-16 leading-130 md:text-18">{card.unit}</div>
       </div>
-      <div className="max-w-50.5 text-12 leading-130 md:max-w-57.5 md:text-14">
-        {card.description}
-      </div>
+      <div className="max-w-50.5 text-14 leading-130 md:max-w-57.5">{card.description}</div>
     </li>
   )
 }

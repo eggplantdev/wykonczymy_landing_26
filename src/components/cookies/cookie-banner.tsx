@@ -29,12 +29,12 @@ export function CookieBanner({ privacyPolicyHref }: PropsT) {
       <h2 id={titleId} className="mb-2 text-14 text-foreground md:text-16">
         {t('title')}
       </h2>
-      <p className="text-12 leading-150 text-muted-foreground">{t('description')}</p>
+      <p className="text-14 leading-150 text-muted-foreground">{t('description')}</p>
 
       {privacyPolicyHref && (
         <Link
           href={privacyPolicyHref}
-          className="mt-2 inline-block text-10 text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
+          className="mt-2 inline-block text-14 text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
         >
           {tNav('privacyPolicy')}
         </Link>

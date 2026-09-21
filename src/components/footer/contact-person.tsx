@@ -17,7 +17,7 @@ export function ContactPerson({ avatar, name, role, phone, mail }: PropsT) {
         <div className="size-22.5 shrink-0 overflow-hidden rounded-full">
           <Media image={avatar} sizes="90px" placeholderClassName="rounded-full" />
         </div>
-        <div className="flex grow flex-col gap-y-1 text-10">
+        <div className="flex grow flex-col gap-y-1 text-14">
           <p>{name}</p>
           <p>{role}</p>
           <p className="mt-auto flex items-center gap-x-2">

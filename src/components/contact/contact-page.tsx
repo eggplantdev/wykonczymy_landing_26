@@ -90,7 +90,7 @@ export function ContactPage({ locale, title, data }: PropsT) {
         </ul>
 
         {nip && (
-          <p className="mt-8 text-10 text-muted-foreground md:text-14">
+          <p className="mt-8 text-14 text-muted-foreground">
             {contact.nip} {nip}
           </p>
         )}

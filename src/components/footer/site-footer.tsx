@@ -75,7 +75,7 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
             href="https://eggplantdev.com"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-x-2 text-10 font-semibold transition-colors hover:text-muted-foreground md:justify-self-end"
+            className="flex items-center gap-x-2 text-14 font-semibold transition-colors hover:text-muted-foreground md:justify-self-end"
           >
             <span>© 2026 eggplantdev.com</span>
             <BrandLogo className="h-8 w-auto" />

@@ -24,7 +24,7 @@ export function ServiceSlide({ card }: PropsT) {
       <header className="pt-6 pb-3 text-center text-18 font-medium md:pb-4 md:text-20">
         {title}
       </header>
-      <p className="text-center text-12 md:text-14 md:leading-130">{text}</p>
+      <p className="text-center text-14 md:leading-130">{text}</p>
     </div>
   )
 }

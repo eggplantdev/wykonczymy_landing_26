@@ -28,8 +28,8 @@ export default function Error({
       <div className="flex items-center gap-6">
         <h1 className="border-r border-current/30 pr-6 text-24 font-medium">500</h1>
         <div className="space-y-1">
-          <p className="text-sm">{copy.errorBody}</p>
-          <button className="text-sm underline" type="button" onClick={reset}>
+          <p className="text-14">{copy.errorBody}</p>
+          <button className="text-14 underline" type="button" onClick={reset}>
             {copy.retry}
           </button>
         </div>

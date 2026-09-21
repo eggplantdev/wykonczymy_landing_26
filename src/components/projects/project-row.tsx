@@ -33,7 +33,7 @@ export function ProjectRow({ href, title, summary, image, details }: PropsT) {
 
       <div className="col-span-full flex flex-col md:col-span-4 lg:col-span-5">
         <EntryTitle title={title} />
-        <p className="mb-8 text-12 leading-130 md:text-14 lg:mb-12">{summary}</p>
+        <p className="mb-8 text-14 leading-130 lg:mb-12">{summary}</p>
         <SpecStrip items={details} className="mt-auto grid-cols-1" />
       </div>
     </Link>

@@ -32,7 +32,7 @@ export function ContactFormAttachments({ files, onFilesChange, className }: Prop
       {/* `items-start` and not `items-center`: the hint runs to two or three lines on a phone,
           and a centred mark would drift to the middle of the block instead of sitting on the
           line the sentence starts on. */}
-      <p className="flex items-start gap-2 text-12 text-foreground">
+      <p className="flex items-start gap-2 text-14 text-foreground">
         {/* `1lh` is one line box of the text beside it, so a mark centred inside this span
             lands on that first line's optical middle exactly. A hand-tuned `mt-*` only holds
             for the one font size and line height it was eyeballed against. */}
@@ -72,7 +72,7 @@ export function ContactFormAttachments({ files, onFilesChange, className }: Prop
       </label>
 
       {files.length > 0 && (
-        <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-10 text-muted-foreground">
+        <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-14 text-muted-foreground">
           {files.map((file, index) => (
             <li key={index}>{file.name}</li>
           ))}

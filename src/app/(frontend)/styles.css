@@ -51,22 +51,6 @@
   --text-hero--letter-spacing: -0.025em;
   --text-hero: 6.6vw;
 
-  /* tdg's `sm` is 12px, not Tailwind's 14px — lifted markup depends on the smaller value. */
-  --text-sm: 0.75rem;
-  --text-base: 1rem;
-  --text-base--line-height: 150%;
-  --text-base--letter-spacing: -0.16px;
-  --text-md: 1.25rem;
-  --text-md--line-height: 140%;
-  --text-md--letter-spacing: -0.2px;
-  --text-lg: 1.5rem;
-  --text-lg--line-height: 150%;
-  --text-xl: 2.5rem;
-  --text-xl--line-height: 135%;
-  --text-xxl: 3.75rem;
-  --text-xxl--line-height: 120%;
-  --text-xxl--letter-spacing: 1.2px;
-
   /* `sm` and `xl` diverge from Tailwind's defaults (640/1280). tdg extended rather than
      replaced, so the untouched `2xl: 1536px` still exists above `xl`. */
   --breakpoint-sm: 360px;
@@ -341,7 +325,7 @@
   }
 
   body {
-    @apply bg-background text-foreground flex w-full flex-col overscroll-none scroll-smooth;
+    @apply flex w-full flex-col overscroll-none scroll-smooth bg-background text-foreground;
   }
 
   input,
@@ -362,14 +346,14 @@
 /* The legal pages are one rich-text field, so their headings, lists and links carry no
    classes of their own — the rhythm has to come from the wrapper. */
 @utility legal-prose {
-  @apply text-14 md:text-16 text-muted-foreground leading-150;
+  @apply text-14 leading-150 text-muted-foreground md:text-16;
 
   & h2 {
-    @apply text-20 md:text-24 text-foreground mt-10 mb-4 first:mt-0;
+    @apply mt-10 mb-4 text-20 text-foreground first:mt-0 md:text-24;
   }
 
   & h3 {
-    @apply text-16 md:text-18 text-foreground mt-8 mb-3;
+    @apply mt-8 mb-3 text-16 text-foreground md:text-18;
   }
 
   & p {
@@ -408,7 +392,7 @@
    the only way out was a `100vw` box, which is wider than the page whenever the scrollbar is a
    classic one rather than an overlay. */
 @utility site-container {
-  @apply max-w-site mx-auto w-full;
+  @apply mx-auto w-full max-w-site;
 }
 
 /* tdg's `.gridContainerLg` was byte-identical to `.gridContainer`; only one survives. */
@@ -447,18 +431,18 @@
    its contents, so a level up this would grow the frame instead of pushing the photo
    against it. Needs a `group` on the card. */
 @utility hover-photo {
-  @apply transition duration-(--wk-hover-duration) delay-(--wk-hover-delay) group-hover:scale-(--wk-hover-photo-scale);
+  @apply transition delay-(--wk-hover-delay) duration-(--wk-hover-duration) group-hover:scale-(--wk-hover-photo-scale);
 }
 
 /* Its own layer, like the push itself: a border on the clip box would be scaled along with
    the photo. Goes in a positioned box the size of the photograph. */
 @utility hover-photo-outline {
-  @apply border-foreground pointer-events-none absolute inset-3 border opacity-0 transition-opacity duration-(--wk-hover-duration) delay-(--wk-hover-delay) group-hover:opacity-100;
+  @apply pointer-events-none absolute inset-3 border border-foreground opacity-0 transition-opacity delay-(--wk-hover-delay) duration-(--wk-hover-duration) group-hover:opacity-100;
 }
 
 /* Reads the same clock as the outline on purpose: the two land as one mark. */
 @utility hover-photo-mark {
-  @apply text-foreground pointer-events-none absolute inset-0 flex -translate-x-2 items-center justify-center opacity-0 transition duration-(--wk-hover-duration) delay-(--wk-hover-delay) group-hover:translate-x-0 group-hover:opacity-100;
+  @apply pointer-events-none absolute inset-0 flex -translate-x-2 items-center justify-center text-foreground opacity-0 transition delay-(--wk-hover-delay) duration-(--wk-hover-duration) group-hover:translate-x-0 group-hover:opacity-100;
 }
 
 /* Driven by DebugTools toggling `data-debug-*` on the root. Scoped to `main` so the

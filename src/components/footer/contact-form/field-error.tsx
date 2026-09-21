@@ -20,7 +20,7 @@ export function FieldError({ id, error, className }: PropsT) {
       id={id}
       role="status"
       aria-live="polite"
-      className={cn('absolute top-full left-0 block text-10 text-error', className)}
+      className={cn('absolute top-full left-0 block text-14 text-error', className)}
     >
       {error}
     </span>

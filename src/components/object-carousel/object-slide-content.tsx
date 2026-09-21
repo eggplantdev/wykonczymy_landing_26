@@ -46,12 +46,7 @@ export function ObjectSlideContent({ item, sectionTitle }: PropsT) {
         {/* The height is pinned, not just clamped: the arrows sit below this block on
             mobile, so a short blurb followed by a long one would walk them up and down the
             page as the carousel advances. */}
-        <p
-          className={cn(
-            'line-clamp-3 h-12 text-12 leading-130 md:h-14 md:text-14',
-            details && 'mb-8 lg:mb-12',
-          )}
-        >
+        <p className={cn('line-clamp-3 h-14 text-14 leading-130', details && 'mb-8 lg:mb-12')}>
           {text}
         </p>
         {details && <SpecStrip items={details} className="mt-auto" />}

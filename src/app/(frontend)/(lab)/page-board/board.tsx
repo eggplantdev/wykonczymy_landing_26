@@ -22,7 +22,7 @@ export function Board({ manifest }: PropsT) {
     <div className="min-h-screen bg-stone-100 text-stone-900 dark:bg-zinc-950 dark:text-zinc-100">
       <header className="sticky top-0 z-20 border-b border-stone-300 bg-stone-100/90 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/90">
         <div className="mx-auto flex max-w-[1600px] flex-wrap items-baseline gap-x-6 gap-y-2 px-6 py-4">
-          <h1 className="text-xl font-semibold tracking-tight">tdg — page board</h1>
+          <h1 className="text-40 leading-135 font-semibold tracking-tight">tdg — page board</h1>
           <p className="font-mono text-12 text-stone-500 dark:text-zinc-400">
             {rendered} routes × {viewports.length} breakpoints · captured {capturedAt}
           </p>
@@ -64,7 +64,7 @@ export function Board({ manifest }: PropsT) {
               </header>
 
               {page.redirectsTo ? (
-                <p className="flex items-center gap-2 px-3 py-6 text-sm text-stone-500 dark:text-zinc-400">
+                <p className="flex items-center gap-2 px-3 py-6 text-12 text-stone-500 dark:text-zinc-400">
                   <span className="text-blue-700 dark:text-blue-400">redirect →</span>
                   <code className="text-stone-900 dark:text-zinc-100">{page.redirectsTo}</code>
                 </p>
@@ -126,7 +126,7 @@ export function Board({ manifest }: PropsT) {
             role="presentation"
           >
             <div className="sticky top-0 flex items-center gap-3 border-b border-stone-300 bg-stone-200 px-4 py-2.5 dark:border-zinc-800 dark:bg-zinc-800">
-              <code className="text-sm">{opened.page.route}</code>
+              <code className="text-12">{opened.page.route}</code>
               <span className="ml-auto font-mono text-[11px] text-stone-500 tabular-nums dark:text-zinc-400">
                 {opened.viewport.label} × {opened.view.height.toLocaleString('en-US')} px
               </span>

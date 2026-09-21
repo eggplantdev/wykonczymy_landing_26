@@ -39,8 +39,8 @@ export function buttonClasses({
     variant === 'success' &&
       'bg-success hover:bg-success-hover focus-visible:outline-ring disabled:bg-muted',
     variant === 'ghost' && 'bg-transparent focus-visible:outline-ring',
-    size === 'responsive' && 'h-8 px-4.5 text-12 md:h-9 md:text-14',
-    size === 'sm' && 'h-7 px-3 text-12',
+    size === 'responsive' && 'h-8 px-4.5 text-14 md:h-9',
+    size === 'sm' && 'h-7 px-3 text-14',
     size === 'xl' && 'text-16 h-12 px-6',
     icon === 'trailing' && 'pr-3 pl-4',
     icon === 'leading' && 'pl-3 pr-4',

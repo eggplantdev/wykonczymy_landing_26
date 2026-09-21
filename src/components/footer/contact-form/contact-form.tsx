@@ -247,10 +247,10 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
         </form.Subscribe>
       </div>
 
-      <p role="status" aria-live="polite" className="text-12 md:col-span-2">
+      <p role="status" aria-live="polite" className="text-14 md:col-span-2">
         {isSent && <span className="text-muted-foreground">{t('success')}</span>}
       </p>
-      <p role="alert" className="text-12 text-error md:col-span-2">
+      <p role="alert" className="text-14 text-error md:col-span-2">
         {serverError}
       </p>
     </form>

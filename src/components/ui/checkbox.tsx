@@ -38,7 +38,7 @@ export function Checkbox({
     <label
       htmlFor={id}
       className={cn(
-        'flex items-center gap-x-2 text-12 text-muted-foreground',
+        'flex items-center gap-x-2 text-14 text-muted-foreground',
         !disabled && 'cursor-pointer',
         className,
       )}
