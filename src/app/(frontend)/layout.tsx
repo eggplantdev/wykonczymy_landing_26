@@ -21,8 +21,8 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     // The root layout cannot see route params, so this is the default locale, not the
-    // current one — `/en/` knowingly declares itself Polish until the locale moves into
-    // a real route segment.
+    // current one. TranslationsProvider corrects it after hydration; this attribute is what
+    // a crawler that never runs JS still sees on `/en/`.
     // Painting `html` rather than `body` leaves the segment layout's own painted wrapper as
     // what the menu toggle blends against.
     // suppressHydrationWarning is required, not defensive: next-themes resolves the theme
