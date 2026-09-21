@@ -61,6 +61,56 @@ describe('toHomeData', () => {
     expect(testimonials).toBe(undefined)
   })
 
+  it('drops a service card with no title in this locale', () => {
+    const withCards = {
+      ...page(),
+      home: {
+        services: {
+          sectionTitle: 'What we do',
+          cards: [
+            { id: 'a', title: 'Bathrooms', text: 'Tiling', icon: 'hammer' },
+            { id: 'b', title: null, text: null, icon: 'brush' },
+          ],
+        },
+      },
+    } as unknown as Page
+
+    const { services } = toHomeData(withCards, { locale: 'en', ...sources })
+
+    expect(services?.cards).toHaveLength(1)
+    expect(services?.cards[0]?.id).toBe('a')
+  })
+
+  // Same shape as the testimonials rows above, and the same trap: the process steps are one
+  // row set shared by both locales, so an untranslated step must not keep the section alive.
+  const withSteps = (steps: unknown[]) =>
+    ({
+      ...page(),
+      home: { process: { sectionTitle: 'How we work together', steps } },
+    }) as unknown as Page
+
+  it('drops a process step with no title in this locale', () => {
+    const { process } = toHomeData(
+      withSteps([
+        { id: 'a', title: 'A visit and a quote', text: 'We walk the flat', icon: 'hammer' },
+        { id: 'b', title: null, text: null, icon: 'brush' },
+      ]),
+      { locale: 'en', ...sources },
+    )
+
+    expect(process?.steps).toHaveLength(1)
+    expect(process?.steps[0]?.id).toBe('a')
+  })
+
+  it('hides the process section when no step is translated into this locale', () => {
+    const { process } = toHomeData(withSteps([{ id: 'a', title: null, icon: 'hammer' }]), {
+      locale: 'en',
+      ...sources,
+    })
+
+    expect(process).toBe(undefined)
+  })
+
   // The hero button is the one CTA that does not open a page: it scrolls to the footer form,
   // so whichever page an editor picks in `ctaLink` is deliberately ignored.
   it('points the hero button at the footer form in both locales', () => {

@@ -1,5 +1,5 @@
 import type { ServiceIconKeyT } from '@/lib/service-icons'
-import { ServiceIcon } from './service-icon'
+import { ServiceIcon } from '@/components/ui/service-icon'
 
 export type ServiceCardT = {
   /** The CMS row's own id — a title is not unique and does not survive a rename. */

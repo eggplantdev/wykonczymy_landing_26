@@ -46,7 +46,7 @@ export function HomePage({ data, ratings }: PropsT) {
     numbers,
     interiorStyles,
     testimonials,
-    process,
+    process: processSection,
   } = data
 
   return (
@@ -115,9 +115,12 @@ export function HomePage({ data, ratings }: PropsT) {
             />
           </FadeUp>
         )}
-        {process && (
+        {processSection && (
           <FadeUp>
-            <ProcessSpotlight container="site-container paddings pt-20 md:pt-28" data={process} />
+            <ProcessSpotlight
+              container="site-container paddings pt-20 md:pt-28"
+              data={processSection}
+            />
           </FadeUp>
         )}
       </PageWrapper>

@@ -4,6 +4,7 @@ import type { InteriorStyleT } from '@/lib/content/interior-styles'
 import type { ProjectT } from '@/lib/content/projects'
 import { CONTACT_FORM_ANCHOR } from '@/lib/anchors'
 import type { Locale } from '@/lib/i18n/i18n'
+import type { ServiceIconKeyT } from '@/lib/service-icons'
 import {
   childPath,
   INTERIOR_STYLES_PAGE_TYPE,
@@ -12,6 +13,13 @@ import {
   type PageTypeT,
 } from '@/lib/routing'
 import { toImage, toVideo } from './media'
+
+type IconCardRowT = {
+  id?: string | null
+  title?: string | null
+  text?: string | null
+  icon: ServiceIconKeyT
+}
 
 type SourcesT = {
   locale: Locale
@@ -41,14 +49,25 @@ export function toHomeData(
   const projectsBase = typePaths[PROJECTS_PAGE_TYPE]
   const stylesBase = typePaths[INTERIOR_STYLES_PAGE_TYPE]
 
-  const { hero, intro, services, afterServices, numbers, testimonials, process } = home
+  const { hero, intro, services, afterServices, numbers, testimonials } = home
 
   const toTextSection = (section?: { text?: string | null; position?: 'left' | 'right' | null }) =>
     section?.text ? { text: section.text, position: section.position ?? 'left' } : undefined
 
-  // `localization.fallback` is off, so a row added in one locale comes back with a null
-  // `quote` in the other — the generated type says `string` because the field is required
-  // in the config, not because this locale has been filled in.
+  // The services cards and the process steps are the same row on both sides: one
+  // `iconCardFields` group in the Payload config, one mapper here.
+  const toIconCards = (rows?: IconCardRowT[] | null) =>
+    rows?.flatMap((row, index) =>
+      row.title
+        ? [{ id: row.id ?? String(index), title: row.title, text: row.text ?? '', icon: row.icon }]
+        : [],
+    ) ?? []
+
+  // `localization.fallback` is off, so a row added in one locale comes back with its required
+  // localized field null in the other — the generated type says `string` because the field is
+  // required in the config, not because this locale has been filled in. Every row set is
+  // filtered before it is counted, so a section with rows but no translation is dropped whole
+  // rather than rendered as a heading over nothing.
   const quotes =
     testimonials?.quotes?.flatMap((row, index) =>
       row.quote
@@ -62,6 +81,9 @@ export function toHomeData(
           ]
         : [],
     ) ?? []
+
+  const cards = toIconCards(services?.cards)
+  const steps = toIconCards(home.process?.steps)
 
   return {
     hero: hero?.title
@@ -81,17 +103,7 @@ export function toHomeData(
 
     afterServices: toTextSection(afterServices),
 
-    services: services?.cards?.length
-      ? {
-          sectionTitle: services.sectionTitle ?? '',
-          cards: services.cards.map((card, index) => ({
-            id: card.id ?? String(index),
-            title: card.title,
-            text: card.text ?? '',
-            icon: card.icon,
-          })),
-        }
-      : undefined,
+    services: cards.length ? { sectionTitle: services?.sectionTitle ?? '', cards } : undefined,
 
     projects:
       projects.length && projectsBase
@@ -136,25 +148,6 @@ export function toHomeData(
           }
         : undefined,
 
-    process: process?.steps?.length
-      ? {
-          sectionTitle: process.sectionTitle ?? '',
-          // Same shape as `testimonials.quotes`: with `localization.fallback` off, a row
-          // added in one locale comes back with a null `title` in the other, whatever the
-          // generated type says about a required field.
-          steps: process.steps.flatMap((step, index) =>
-            step.title
-              ? [
-                  {
-                    id: step.id ?? String(index),
-                    title: step.title,
-                    text: step.text ?? '',
-                    icon: step.icon,
-                  },
-                ]
-              : [],
-          ),
-        }
-      : undefined,
+    process: steps.length ? { sectionTitle: home.process?.sectionTitle ?? '', steps } : undefined,
   }
 }

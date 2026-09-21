@@ -28,6 +28,20 @@ const textSectionFields = (): Field[] => [
   },
 ]
 
+// The services cards and the process steps are the same row. Not localized as a row: one set,
+// translated field by field, and one drawing standing for the entry in both languages.
+const iconCardFields = (iconDescription: string): Field[] => [
+  { name: 'title', type: 'text', localized: true, required: true },
+  { name: 'text', type: 'textarea', localized: true },
+  {
+    name: 'icon',
+    type: 'select',
+    required: true,
+    options: [...SERVICE_ICONS],
+    admin: { description: iconDescription },
+  },
+]
+
 const mediaFields = (): Field[] => [
   { name: 'image', type: 'upload', relationTo: 'media' },
   {
@@ -69,23 +83,10 @@ export const homeGroup: Field = {
       fields: [
         { name: 'sectionTitle', type: 'text', localized: true },
         {
-          // Not localized: one row set with shared photos, translated field by field.
           name: 'cards',
           type: 'array',
           admin: { initCollapsed: true },
-          fields: [
-            { name: 'title', type: 'text', localized: true, required: true },
-            { name: 'text', type: 'textarea', localized: true },
-            // The card draws an icon rather than a photo. Not localized: one drawing stands
-            // for the service in both languages.
-            {
-              name: 'icon',
-              type: 'select',
-              required: true,
-              options: [...SERVICE_ICONS],
-              admin: { description: 'The drawing above the title.' },
-            },
-          ],
+          fields: iconCardFields('The drawing above the title.'),
         },
       ],
     },
@@ -158,24 +159,10 @@ export const homeGroup: Field = {
       fields: [
         { name: 'sectionTitle', type: 'text', localized: true },
         {
-          // Ordered: the steps are a sequence, and the row order is the order the visitor
-          // is walked through them in.
           name: 'steps',
           type: 'array',
           admin: { initCollapsed: true },
-          fields: [
-            { name: 'title', type: 'text', localized: true, required: true },
-            { name: 'text', type: 'textarea', localized: true },
-            // The same closed set the services cards draw from, so one drawing vocabulary
-            // serves both sections.
-            {
-              name: 'icon',
-              type: 'select',
-              required: true,
-              options: [...SERVICE_ICONS],
-              admin: { description: 'The drawing beside the step.' },
-            },
-          ],
+          fields: iconCardFields('The drawing beside the step.'),
         },
       ],
     },

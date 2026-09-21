@@ -1,8 +1,9 @@
 /**
- * The closed set of drawings a services card can carry. Shared by the Payload select and the
- * component that resolves a key to a glyph, so the admin can never offer an option the code has
- * no icon for. Options name the drawing, not the service: an editor adding a thirteenth service
- * is choosing a picture, and "Trowel" says what they will get where "Plaster" does not.
+ * The closed set of drawings a services card or a process step can carry. Shared by the Payload
+ * selects and the component that resolves a key to a glyph, so the admin can never offer an
+ * option the code has no icon for. Options name the drawing, not the service: an editor adding a
+ * thirteenth service is choosing a picture, and "Trowel" says what they will get where "Plaster"
+ * does not.
  */
 export const SERVICE_ICONS = [
   { value: 'hammer', label: 'Hammer' },

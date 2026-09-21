@@ -14,7 +14,7 @@ import {
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 
-import { ServiceIcon } from '@/components/home/services/service-icon'
+import { ServiceIcon } from '@/components/ui/service-icon'
 import { CarouselNav } from '@/components/ui/carousel-nav'
 import { SectionTitle } from '@/components/ui/section-title'
 import { carouselDefaults, useCarousel } from '@/lib/carousel'
@@ -24,7 +24,6 @@ import type { ServiceIconKeyT } from '@/lib/service-icons'
 
 export type ProcessStepT = {
   id: string
-  /** The same closed set the services cards draw from, so one select field serves both. */
   icon: ServiceIconKeyT
   title: string
   text: string
