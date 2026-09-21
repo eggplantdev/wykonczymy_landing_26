@@ -23,6 +23,15 @@ export const serverSchema = z
     BLOB_READ_WRITE_TOKEN: optional(z.string().min(1)),
     VERCEL: optional(z.string().min(1)),
 
+    // Lead delivery. Required outright rather than Vercel-gated like the blob token above:
+    // a checkout that cannot forward a submission cannot run the form at all, and the form
+    // is the site's only conversion path — a missing secret has to fail loudly at boot, not
+    // silently degrade into a lead that goes nowhere.
+    // Same value as the leads app's own LANDING_WEBHOOK_SECRET; both directions are signed with it.
+    LANDING_WEBHOOK_SECRET: z.string().min(1),
+    WYKONCZYMY_WEBHOOK_URL: z.url(),
+    CRON_SECRET: z.string().min(1),
+
     // Optional by design: without SMTP_HOST the config omits the nodemailer adapter and
     // Payload logs mail to the console. Attaching it unconditionally makes the build fail
     // verifying a transport that isn't there.

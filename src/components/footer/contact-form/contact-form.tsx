@@ -24,7 +24,7 @@ const DRAFT_DEBOUNCE_MS = 500
 const DEFAULT_VALUES = emptyContactValues()
 
 type TextFieldT = {
-  name: 'name' | 'email' | 'phone' | 'area'
+  name: 'name' | 'email' | 'phone' | 'address' | 'area'
   type?: 'email' | 'tel'
   autoComplete?: string
   className?: string
@@ -39,6 +39,7 @@ const TEXT_FIELDS: readonly TextFieldT[] = [
   { name: 'name', autoComplete: 'name', className: 'pt-0 md:pt-0' },
   { name: 'email', type: 'email', autoComplete: 'email', className: 'md:pt-0' },
   { name: 'phone', type: 'tel', autoComplete: 'tel' },
+  { name: 'address', autoComplete: 'street-address' },
   { name: 'area' },
 ]
 

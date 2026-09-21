@@ -14,6 +14,7 @@
     "name": "Full name",
     "email": "Email address",
     "phone": "Phone",
+    "address": "Address of the works",
     "message": "Message",
     "sending": "Sending…",
     "success": "Thank you, we will be in touch shortly.",

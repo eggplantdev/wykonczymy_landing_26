@@ -38,6 +38,7 @@ export const contactSchema = object({
     .min(1, { error: messageKey('required') })
     .pipe(email({ error: messageKey('invalidEmail') })),
   phone: cappedText(SHORT_FIELD_MAX_LENGTH),
+  address: cappedText(SHORT_FIELD_MAX_LENGTH),
   scope: cappedText(LONG_FIELD_MAX_LENGTH),
   area: cappedText(SHORT_FIELD_MAX_LENGTH),
   message: cappedText(LONG_FIELD_MAX_LENGTH),
@@ -69,5 +70,14 @@ function isMessageKey(value: string): value is FormMessageKeyT {
 }
 
 export function emptyContactValues(): ContactFormValuesT {
-  return { name: '', email: '', phone: '', scope: '', area: '', message: '', acceptsTerms: false }
+  return {
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    scope: '',
+    area: '',
+    message: '',
+    acceptsTerms: false,
+  }
 }
