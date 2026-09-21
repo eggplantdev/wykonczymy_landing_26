@@ -69,13 +69,18 @@ the same database directly; the deployed site is only trustworthy on this after 
 
 Local, against `pnpm dev`:
 
-- [ ] View source on `/` and on `/en/home/`: each carries a `<meta name="description">` with its
+- [x] View source on `/` and on `/en/home/`: each carries a `<meta name="description">` with its
       own copy, the one drafted in `context/changes/2026-09-20-s7-seo/seo-copy.md`.
-- [ ] `/wykonczenia/boho/` and `/realizacje/kiwi-8/` carry a description derived from the style's
+      Verified 2026-09-21 by curl on :3000, across all ten authored addresses, not just the two.
+- [x] `/wykonczenia/boho/` and `/realizacje/kiwi-8/` carry a description derived from the style's
       `text` / the project's `summary`. **Read them as search snippets** — a blurb written for a
       card can read badly as a result. A bad one is an argument for editing the blurb in the
       admin, which fixes both surfaces, not for adding a second field.
-- [ ] The same two addresses under `/en/…` carry English descriptions, not Polish ones.
+      Present and derived correctly. Both read acceptably as snippets, but a human should still
+      judge the other sixteen children — only these two were read.
+- [x] The same two addresses under `/en/…` carry English descriptions, not Polish ones.
+      Confirmed at `/en/interior-styles/boho/` and `/en/completed-works/kiwi-8/` — English, and
+      derived from the EN `text` / `summary`, not the PL ones.
 - [ ] Setting `meta.description` by hand on a project in the admin overrides the derived one on
       the next load; clearing it brings the derived one back.
 - [ ] The tab icon is the Wykończymy house-and-tools mark, not the default globe. Hard-reload —
@@ -83,10 +88,13 @@ Local, against `pnpm dev`:
 - [ ] Paste `http://localhost:3000/wykonczenia/boho/` into a rich-preview surface (Slack DM to
       yourself, Discord, Signal). The card shows the brand image, the page title and the style's
       description. **Not** the eggplantdev agency mark, and not a bare link.
-- [ ] `/sitemap.xml` lists 46 URLs. Every one ends in a slash; none contains `null`. Page-level
+- [x] `/sitemap.xml` lists 46 URLs. Every one ends in a slash; none contains `null`. Page-level
       entries carry an `xhtml:link` pair, children carry none.
-- [ ] Every `<loc>` in it is one the site actually answers — spot-check three, including one
+      46 `<loc>`, 0 without a trailing slash, 0 containing `null`, 0 with a doubled slash, and
+      20 `xhtml:link` entries — page-level only.
+- [x] Every `<loc>` in it is one the site actually answers — spot-check three, including one
       `/en/` child.
+      Swept all 46 rather than three; every one returned 200.
 
 Against production, after deploy:
 
