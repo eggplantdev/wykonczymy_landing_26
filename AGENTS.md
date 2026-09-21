@@ -172,6 +172,17 @@ site.
   Production/Preview, so `POSTGRES_URL` still cannot be read back — compare hosts in Neon's console
   instead. `blob:upload` passes no token so the SDK can resolve either `BLOB_READ_WRITE_TOKEN` or the
   `VERCEL_OIDC_TOKEN` + `BLOB_STORE_ID` pair, whichever `.env.local` happens to hold.
+- **No lead email is sent from here — the leads app owns it.** `submitContactForm` enqueues a
+  `submissions` row and forwards a signed envelope to `WYKONCZYMY_WEBHOOK_URL`; Payload's `SMTP_*`
+  covers admin mail (password resets) alone, so **"No email adapter provided" is never why a lead
+  did not arrive.** That warning is a red herring and has already cost one debugging session.
+  **Nothing in the delivery path logs** — `forward()` returns its failure rather than throwing, and
+  `after()` runs it once the response is already sent, so the console shows only that unrelated
+  warning and a `POST / 200` while the real reason goes to the queue row's `lastError`. Read the
+  row, not the log: locally it said `Leads app answered 404` because `WYKONCZYMY_WEBHOOK_URL`
+  pointed at this app's own dev port instead of the leads app's — whichever of the two starts first
+  takes 3000, so check the ports before suspecting the code. `@src/lib/contact/forward.ts`
+
 - **Read env through a module that parses `env-schema.ts`, never raw `process.env`** — ESLint
   rejects it in `src/**`. `env.ts` is the **client** module and parses `clientSchema`, so it is
   the wrong home for a secret: putting one there inlines it into the browser bundle. A

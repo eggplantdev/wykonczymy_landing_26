@@ -107,19 +107,20 @@ export function HomePage({ data, ratings }: PropsT) {
             />
           </FadeUp>
         )}
-        {interiorStyles && (
-          <FadeUp>
-            <InteriorStylesCarousel
-              container="paddings pr-0 pt-20 md:pt-28"
-              data={interiorStyles}
-            />
-          </FadeUp>
-        )}
+
         {processSection && (
           <FadeUp>
             <ProcessSpotlight
               container="site-container paddings pt-20 md:pt-28"
               data={processSection}
+            />
+          </FadeUp>
+        )}
+        {interiorStyles && (
+          <FadeUp>
+            <InteriorStylesCarousel
+              container="paddings pr-0 pt-20 md:pt-28"
+              data={interiorStyles}
             />
           </FadeUp>
         )}

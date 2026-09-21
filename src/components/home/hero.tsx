@@ -114,7 +114,7 @@ export function Hero({ data }: PropsT) {
             role tokens the way the footer band does — that is where its focus ring comes from. */}
         {ctaLabel && ctaHref && (
           <motion.div style={{ visibility }} data-theme="dark" className="flex pt-6 md:pt-10">
-            <ButtonLink href={ctaHref} label={ctaLabel} variant="success" size="xl" icon="trailing">
+            <ButtonLink href={ctaHref} label={ctaLabel} variant="" size="xl" icon="trailing">
               <ButtonArrow variant="success" size="xl" />
             </ButtonLink>
           </motion.div>

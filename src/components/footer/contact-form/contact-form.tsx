@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 
 import { Button } from '@/components/ui/button'
@@ -10,6 +10,7 @@ import { upload } from '@vercel/blob/client'
 import { leadPrefix } from '@/lib/blob/prefix'
 import { isThrottled, UPLOAD_TOKEN_PATH } from '@/lib/blob/throttled'
 import { checkAttachments } from '@/lib/contact/attachments'
+import { processAttachments, type ProcessResultT } from '@/lib/contact/process-attachments'
 import { useContactFormStore } from '@/lib/contact/contact-form-store'
 import { contactSchema, emptyContactValues } from '@/lib/contact/contact-schema'
 import { firstIssueKey } from '@/lib/contact/form-message-key'
@@ -19,6 +20,7 @@ import { ConsentLabel } from './consent-label'
 import { ContactFormAttachments } from './contact-form-attachments'
 import { ContactFormCheckbox } from './contact-form-checkbox'
 import { ContactFormInput } from './contact-form-input'
+import { ContactFormOutcomeDialog, type ContactFormOutcomeT } from './contact-form-outcome-dialog'
 import { ContactFormTextarea } from './contact-form-textarea'
 import { ContactFormTrap } from './contact-form-trap'
 
@@ -63,12 +65,28 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
   const { t } = useTranslation('form')
   const setDraft = useContactFormStore((state) => state.setDraft)
   const clearDraft = useContactFormStore((state) => state.clearDraft)
-  const [serverError, setServerError] = useState<string>()
-  const [isSent, setIsSent] = useState(false)
+  // A rejected file is field-level and stays inline; the verdict on a send the visitor already
+  // pressed through is the dialog's.
+  const [attachmentError, setAttachmentError] = useState<string>()
+  const [outcome, setOutcome] = useState<ContactFormOutcomeT>()
   // Outside the form's values: files go straight to the blob store, the action is told their urls.
   const [files, setFiles] = useState<File[]>([])
+  const [isProcessing, setIsProcessing] = useState(false)
+  // Re-encoding takes long enough that two picks can finish out of order; without this the slower
+  // earlier batch wins and the visitor uploads files they already replaced.
+  const pickToken = useRef(0)
+  // Return target for the outcome dialog: the submit button is disabled before the dialog mounts,
+  // so Radix has only `<body>` to restore focus to.
+  const formRef = useRef<HTMLFormElement>(null)
   // Also outside them, so the trap never reaches the draft store, the schema or the envelope.
   const [trap, setTrap] = useState('')
+
+  // A pick can half-succeed: the files that compressed are kept and only the rest are named.
+  const errorForPick = (result: ProcessResultT) => {
+    if (!result.ok) return t(result.errorKey)
+    if (result.unreadable.length === 0) return undefined
+    return t('filesUnreadable', { files: result.unreadable.join(', ') })
+  }
 
   const form = useForm({
     defaultValues: DEFAULT_VALUES,
@@ -78,12 +96,12 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
       onChangeDebounceMs: DRAFT_DEBOUNCE_MS,
     },
     onSubmit: async ({ value, formApi }) => {
-      setServerError(undefined)
-      setIsSent(false)
+      setOutcome(undefined)
+      setAttachmentError(undefined)
 
       const checked = checkAttachments(files)
       if (!checked.ok) {
-        setServerError(t(checked.errorKey))
+        setAttachmentError(t(checked.errorKey))
         return
       }
 
@@ -110,7 +128,10 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
           }),
         )
       } catch {
-        setServerError(t((await isThrottled()) ? 'throttled' : 'uploadFailed'))
+        setOutcome({
+          variant: 'error',
+          message: t((await isThrottled()) ? 'throttled' : 'uploadFailed'),
+        })
         return
       }
 
@@ -121,12 +142,12 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
       try {
         result = await submitContactForm({ submissionId, values: value, assets, trap })
       } catch {
-        setServerError(t('error'))
+        setOutcome({ variant: 'error', message: t('error') })
         return
       }
 
       if (!result.ok) {
-        setServerError(t(result.errorKey))
+        setOutcome({ variant: 'error', message: t(result.errorKey) })
         return
       }
 
@@ -134,7 +155,8 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
       formApi.reset(DEFAULT_VALUES)
       setFiles([])
       setTrap('')
-      setIsSent(true)
+      setAttachmentError(undefined)
+      setOutcome({ variant: 'success' })
     },
   })
 
@@ -159,7 +181,9 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
 
   return (
     <form
-      className="grid gap-x-5 md:grid-cols-2"
+      ref={formRef}
+      tabIndex={-1}
+      className="grid gap-x-5 outline-hidden md:grid-cols-2"
       // The schema is the only validator: the browser's own bubble would fire first
       // and in the wrong language.
       noValidate
@@ -206,10 +230,22 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
 
       <ContactFormAttachments
         files={files}
-        onFilesChange={(picked) => {
-          const checked = checkAttachments(picked)
-          setServerError(checked.ok ? undefined : t(checked.errorKey))
-          setFiles(checked.ok ? checked.files : [])
+        isProcessing={isProcessing}
+        onFilesChange={async (picked) => {
+          const token = ++pickToken.current
+          setAttachmentError(undefined)
+          setIsProcessing(true)
+
+          try {
+            const result = await processAttachments(picked)
+            if (token !== pickToken.current) return
+
+            setFiles(result.ok ? result.files : [])
+            setAttachmentError(errorForPick(result))
+          } finally {
+            // Never left set: it disables Send, so a stuck flag blocks a text-only enquiry too.
+            if (token === pickToken.current) setIsProcessing(false)
+          }
         }}
         className="md:col-span-2"
       />
@@ -237,7 +273,7 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
               size="sm"
               icon="trailing"
               label={isSubmitting ? t('sending') : t('send')}
-              disabled={isSubmitting}
+              disabled={isSubmitting || isProcessing}
               isBusy={isSubmitting}
               className="md:ml-auto"
             >
@@ -247,12 +283,17 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
         </form.Subscribe>
       </div>
 
-      <p role="status" aria-live="polite" className="text-14 md:col-span-2">
-        {isSent && <span className="text-muted-foreground">{t('success')}</span>}
-      </p>
       <p role="alert" className="text-14 text-error md:col-span-2">
-        {serverError}
+        {attachmentError}
       </p>
+
+      {outcome && (
+        <ContactFormOutcomeDialog
+          outcome={outcome}
+          returnFocusTo={formRef}
+          onClose={() => setOutcome(undefined)}
+        />
+      )}
     </form>
   )
 }

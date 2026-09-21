@@ -194,3 +194,28 @@ Every finding box is checked. What remains is not a finding — it is the 8 unti
 of which block cutover: the `20260921_140715_submissions_queue` migration (human-runs `db:migrate:prod`,
 and it goes up *before* the code) and the Vercel Firewall rate-limit rules, which have no
 representation in this repo at all. Until those are signed off the slice is *in review*, not *done*.
+
+---
+
+# Review-gate ledger — lead-delivery, increment 2 · 2026-09-21
+
+The slice was already gated once (above). This is a second increment on the same change, so the
+ledger is appended to rather than replaced.
+
+Scope: the uncommitted working tree, **my files only** —
+`contact-form-outcome-dialog.tsx` (new), `contact-form.tsx`, `contact-form-attachments.tsx`,
+`compress-image.ts` (new), `process-attachments.ts` (new), `attachments.ts`, both locale files,
+`AGENTS.md`, `package.json`/lockfile.
+
+Excluded as another agent's in-flight work: `src/components/home/hero.tsx` (a `variant="success"` →
+`"dark"` edit) and `src/app/icon.png`. Both are fenced from the mutating pass as well — the
+never-mutate-a-parallel-tree rule, same hazard that clobbered a fix mid-gate last time.
+
+Step 0.5 skipped — still no `verify-manual-checks` skill in this repo.
+
+Fan-out: `/10x-impl-review`, `/code-review`, `tailwind-v4-audit`, `feature-first-structure`,
+`module-cohesion-audit`, `structure-scatter-audit`, `comment-noise-audit`.
+
+## Findings
+
+<!-- pending fan-out -->

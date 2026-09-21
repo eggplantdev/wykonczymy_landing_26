@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect, useId, useRef } from 'react'
 
 import { buttonClasses, buttonLabelClasses } from '@/components/ui/button'
-import { ACCEPTED_CONTENT_TYPES } from '@/lib/contact/attachments'
+import { FILE_PICKER_ACCEPT } from '@/lib/contact/attachments'
 import { Paperclip } from '@/components/ui/icons/paperclip'
 import { cn } from '@/lib/cn'
 import '@/lib/fontawesome'
@@ -14,10 +14,12 @@ import { useTranslation } from '@/lib/i18n/use-translation'
 type PropsT = {
   files: File[]
   onFilesChange: (files: File[]) => void
+  /** Re-encoding the picked photos, which runs before they are counted as attached. */
+  isProcessing?: boolean
   className?: string
 }
 
-export function ContactFormAttachments({ files, onFilesChange, className }: PropsT) {
+export function ContactFormAttachments({ files, onFilesChange, isProcessing, className }: PropsT) {
   const { t } = useTranslation('form')
   const id = useId()
   const inputRef = useRef<HTMLInputElement>(null)
@@ -65,18 +67,24 @@ export function ContactFormAttachments({ files, onFilesChange, className }: Prop
           name="attachments"
           type="file"
           multiple
-          accept={ACCEPTED_CONTENT_TYPES.join(',')}
+          accept={FILE_PICKER_ACCEPT.join(',')}
           onChange={(event) => onFilesChange(Array.from(event.target.files ?? []))}
           className="sr-only"
         />
       </label>
 
-      {files.length > 0 && (
-        <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-14 text-muted-foreground">
-          {files.map((file, index) => (
-            <li key={index}>{file.name}</li>
-          ))}
-        </ul>
+      {isProcessing ? (
+        <p aria-live="polite" className="mt-2 text-14 text-muted-foreground">
+          {t('processingFiles')}
+        </p>
+      ) : (
+        files.length > 0 && (
+          <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-14 text-muted-foreground">
+            {files.map((file, index) => (
+              <li key={index}>{file.name}</li>
+            ))}
+          </ul>
+        )
       )}
     </div>
   )

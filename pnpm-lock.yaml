@@ -59,6 +59,9 @@ importers:
       '@vercel/blob':
         specifier: ^2.8.0
         version: 2.8.0
+      compressorjs:
+        specifier: ^1.3.0
+        version: 1.3.0
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
@@ -68,6 +71,9 @@ importers:
       graphql:
         specifier: ^16.8.1
         version: 16.14.2
+      heic-to:
+        specifier: ^1.5.2
+        version: 1.5.2
       motion:
         specifier: ^13.1.1
         version: 13.2.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -2628,6 +2634,9 @@ packages:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
 
+  blueimp-canvas-to-blob@3.29.0:
+    resolution: {integrity: sha512-0pcSSGxC0QxT+yVkivxIqW0Y4VlO2XSDPofBAqoJ1qJxgH9eiUDLv50Rixij2cDuEfx4M6DpD9UGZpRhT5Q8qg==}
+
   body-scroll-lock@4.0.0-beta.0:
     resolution: {integrity: sha512-a7tP5+0Mw3YlUJcGAKUqIBkYYGlYxk2fnCasq/FUph1hadxlTRjF+gAcZksxANnaMnALjxEddmSi/H3OR8ugcQ==}
 
@@ -2747,6 +2756,9 @@ packages:
 
   commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
+
+  compressorjs@1.3.0:
+    resolution: {integrity: sha512-TsvzkRgDm/6mIRUdxJbrTH7kfSW3oJzOw8b1xU60fziQSosTML5TczpO6Z4H1LGF0yRmTotk6r5UNhuRxEwA1A==}
 
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
@@ -3477,6 +3489,9 @@ packages:
     resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
 
+  heic-to@1.5.2:
+    resolution: {integrity: sha512-8Fns+lZHAWmz5U5IUxDeXKwIf3foBoKNPLxxFY4B0MkLjNuomEIHCoDbDE+x/llFK3NCEO1cu4+n3iUKY+Svmw==}
+
   help-me@5.0.0:
     resolution: {integrity: sha512-7xgomUX6ADmcYzFik0HzAxh/73YlKR9bmFzf51CZwR+b6YtzU2m0u49hQCqV6SvlqIqsaxovfwdvbnsw3b/zpg==}
 
@@ -3583,6 +3598,10 @@ packages:
   is-binary-path@2.1.0:
     resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==}
     engines: {node: '>=8'}
+
+  is-blob@2.1.0:
+    resolution: {integrity: sha512-SZ/fTft5eUhQM6oF/ZaASFDEdbFVe89Imltn9uZr03wdKMcWNVYSMjQPFtg05QuNkt5l5c135ElvXEQG0rk4tw==}
+    engines: {node: '>=6'}
 
   is-boolean-object@1.2.2:
     resolution: {integrity: sha512-wa56o2/ElJMYqjCjGkXri7it5FbebW5usLw/nPmCMs5DeZ7eziSYZhSmPRn0txqeW4LnAmQQU7FgqLpsEFKM4A==}
@@ -7754,6 +7773,8 @@ snapshots:
 
   binary-extensions@2.3.0: {}
 
+  blueimp-canvas-to-blob@3.29.0: {}
+
   body-scroll-lock@4.0.0-beta.0: {}
 
   brace-expansion@1.1.18:
@@ -7882,6 +7903,11 @@ snapshots:
   colorette@2.0.20: {}
 
   commander@2.20.3: {}
+
+  compressorjs@1.3.0:
+    dependencies:
+      blueimp-canvas-to-blob: 3.29.0
+      is-blob: 2.1.0
 
   concat-map@0.0.1: {}
 
@@ -8766,6 +8792,8 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
+  heic-to@1.5.2: {}
+
   help-me@5.0.0: {}
 
   hermes-estree@0.25.1: {}
@@ -8867,6 +8895,8 @@ snapshots:
   is-binary-path@2.1.0:
     dependencies:
       binary-extensions: 2.3.0
+
+  is-blob@2.1.0: {}
 
   is-boolean-object@1.2.2:
     dependencies:
