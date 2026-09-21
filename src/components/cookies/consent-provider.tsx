@@ -21,9 +21,13 @@ type OptionsT = ConsentManagerOptions & {
 // which would leave the footer trigger talking to a different store than the dialog.
 //
 // The country is pinned rather than resolved: the audience is Polish, so everyone gets
-// the European opt-in pack. The expiry only shortens the cookie — c15t keeps a second
-// copy in localStorage, which never expires and is written back over the cookie, so this
-// is not a periodic re-ask.
+// the European opt-in pack.
+//
+// There is deliberately no `storageConfig.defaultExpiryDays`. It only shortens the cookie,
+// and c15t keeps a second copy in localStorage that never expires and is written back over
+// the cookie on load — so no value here can produce a periodic re-ask, and setting one just
+// implies an expiry the visitor never experiences. Consent is asked once; the footer's
+// cookie settings is how it gets changed.
 //
 // `colorScheme` and the iframe blocker are both pinned so c15t's defaults don't install
 // permanent MutationObservers on <html> and <body>. Pinning it light costs nothing visible:
@@ -35,7 +39,6 @@ const OPTIONS: OptionsT = {
   consentCategories: CONSENT_CATEGORIES.map(({ id }) => id),
   offlinePolicy: { policyPacks: [policyPackPresets.europeOptIn()] },
   overrides: { country: 'PL' },
-  storageConfig: { defaultExpiryDays: 180 },
   colorScheme: 'light',
   iframeBlockerConfig: { disableAutomaticBlocking: true },
 }
