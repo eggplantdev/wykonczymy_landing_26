@@ -621,14 +621,14 @@ Run **once**, after the final phase.
 
 #### Automated
 
-- [x] 1.1 Contact schema unit tests pass, including address accepted and capped
-- [x] 1.2 The form render test still passes
+- [x] 1.1 Contact schema unit tests pass, including address accepted and capped — 8c892e8
+- [x] 1.2 The form render test still passes — 8c892e8
 
 ### Phase 2: The submissions queue
 
 #### Automated
 
-- [ ] 2.1 Integration test creates, reads and deletes a queue row, and the unique index rejects a duplicate
+- [x] 2.1 Integration test creates, reads and deletes a queue row, and the unique index rejects a duplicate
 
 ### Phase 3: Envelope and signing
 

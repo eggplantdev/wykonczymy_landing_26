@@ -15,6 +15,7 @@ import { InteriorStyles } from './collections/InteriorStyles'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Projects } from './collections/Projects'
+import { Submissions } from './collections/Submissions'
 import { Footer } from './globals/Footer'
 import { i18n } from './lib/i18n/i18n'
 import { Users } from './collections/Users'
@@ -34,7 +35,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages, Projects, InteriorStyles],
+  collections: [Users, Media, Pages, Projects, InteriorStyles, Submissions],
   globals: [Footer],
   editor: lexicalEditor(),
   // Admin UI chrome only — the `Locale` picker below is content localization, a separate
