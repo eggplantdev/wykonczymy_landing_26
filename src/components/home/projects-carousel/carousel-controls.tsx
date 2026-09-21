@@ -30,8 +30,8 @@ export function CarouselControls({ title, total }: PropsT) {
       <h6 className="order-2 min-w-0 flex-1 truncate px-4 md:px-14.5">{title}</h6>
       <CarouselCounter current={swiper.realIndex + 1} total={total} className="order-1 shrink-0" />
       <div className="order-3 ml-auto flex gap-x-1.5">
-        <CarouselArrow direction="left" disabled={swiper.isBeginning} />
-        <CarouselArrow direction="right" disabled={swiper.isEnd} />
+        <CarouselArrow direction="left" />
+        <CarouselArrow direction="right" />
       </div>
     </div>
   )

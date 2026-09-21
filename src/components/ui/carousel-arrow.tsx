@@ -1,5 +1,6 @@
 'use client'
 
+import { useCallback, useSyncExternalStore } from 'react'
 import { useSwiper } from 'swiper/react'
 
 import { useTranslation } from '@/lib/i18n/use-translation'
@@ -21,6 +22,36 @@ export function CarouselArrow({
   const swiper = useSwiper()
   const { t } = useTranslation('common')
 
+  // The track's position is Swiper's state, not React's, so the arrow subscribes to it. A
+  // looping one still reports `isBeginning` on its first slide, so `!loop` guards a false dim.
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      swiper.on('slideChange', onChange)
+      // `updateProgress` emits these on every resize and breakpoint change, which is where
+      // the last slide can stop being the last one — `slideChange` alone would miss it.
+      swiper.on('toEdge', onChange)
+      swiper.on('fromEdge', onChange)
+      return () => {
+        if (swiper.destroyed) return
+        swiper.off('slideChange', onChange)
+        swiper.off('toEdge', onChange)
+        swiper.off('fromEdge', onChange)
+      }
+    },
+    [swiper],
+  )
+  const atEdge = useSyncExternalStore(
+    subscribe,
+    // `destroy()` deletes every own property before it sets the flag, so a destroyed
+    // instance has no `params` — and the dev double-mount reads one through stale context.
+    () =>
+      !swiper.destroyed &&
+      !swiper.params.loop &&
+      (direction === 'left' ? swiper.isBeginning : swiper.isEnd),
+    () => false,
+  )
+  const isDisabled = disabled ?? atEdge
+
   function handleClick() {
     if (direction === 'left') swiper.slidePrev()
     else swiper.slideNext()
@@ -30,13 +61,13 @@ export function CarouselArrow({
     <button
       type="button"
       aria-label={t(direction === 'left' ? 'previousSlide' : 'nextSlide')}
-      disabled={disabled}
+      disabled={isDisabled}
       onClick={handleClick}
       className={cn(
         'h-5.5 rounded-md px-4',
         variant === 'default' && 'bg-card hover:bg-muted',
         variant === 'transparent' && 'bg-glass/30 hover:bg-glass/50',
-        disabled && 'opacity-30',
+        isDisabled && 'opacity-30',
         className,
       )}
     >

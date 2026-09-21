@@ -7,6 +7,8 @@ import {
   type InteriorStylesSectionT,
 } from './interior-styles/interior-styles-carousel'
 import { NumbersSection, type NumbersSectionT } from './numbers/numbers-section'
+import { ProcessSpotlight } from './process/process-spotlight'
+import { processPlaceholder } from './process/steps'
 import { ProjectsCarousel, type ProjectsSectionT } from './projects-carousel/projects-carousel'
 import { ServicesCarousel, type ServicesSectionT } from './services/services-carousel'
 import {
@@ -104,6 +106,13 @@ export function HomePage({ data, ratings }: PropsT) {
             />
           </FadeUp>
         )}
+        {/* TEST: placeholder copy, judged in place — see `process/steps.ts`. */}
+        <FadeUp>
+          <ProcessSpotlight
+            container="site-container paddings pt-20 md:pt-28"
+            data={processPlaceholder}
+          />
+        </FadeUp>
       </PageWrapper>
     </>
   )
