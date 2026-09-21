@@ -1,14 +1,16 @@
 import Link from 'next/link'
 
 import { StyleCardBody } from '@/components/interior-styles/style-card-body'
+import { firstSlideLoading } from '@/lib/carousel'
 import type { InteriorStyleT } from '@/lib/content/interior-styles'
 
 type PropsT = {
   style: InteriorStyleT
   href: string
+  isFirst?: boolean
 }
 
-export function InteriorStyleSlide({ style, href }: PropsT) {
+export function InteriorStyleSlide({ style, href, isFirst }: PropsT) {
   return (
     <Link
       href={href}
@@ -27,6 +29,7 @@ export function InteriorStyleSlide({ style, href }: PropsT) {
           // from a source laid out height × its own aspect wide — and the widest of these
           // twelve is 2:1. Asking for the box width alone upscales those on a 1x screen.
           sizes="(max-width: 767px) 620px, 800px"
+          {...(isFirst && firstSlideLoading)}
         />
       </div>
     </Link>

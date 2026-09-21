@@ -5,14 +5,16 @@ import type { ObjectCarouselItemT } from '@/components/object-carousel/types'
 import { EntryTitle } from '@/components/ui/entry-title'
 import { SpecStrip } from '@/components/ui/spec-strip'
 import { cn } from '@/lib/cn'
+import { firstSlideLoading } from '@/lib/carousel'
 
 type PropsT = {
   item: ObjectCarouselItemT
   sectionTitle: string
+  isFirst?: boolean
 }
 
 // Image on the right from tablet up, heading and blurb on the left.
-export function ObjectSlideContent({ item, sectionTitle }: PropsT) {
+export function ObjectSlideContent({ item, sectionTitle, isFirst }: PropsT) {
   const { href, title, text, image, details } = item
 
   return (
@@ -31,7 +33,11 @@ export function ObjectSlideContent({ item, sectionTitle }: PropsT) {
       </p>
 
       <div className="relative col-span-full mb-6 aspect-312/209 overflow-hidden md:order-2 md:col-span-3 md:col-start-6 md:mb-0 md:aspect-auto lg:col-span-4 lg:col-start-7">
-        <Media image={image} sizes="(max-width: 767px) 100vw, (max-width: 2047px) 33vw, 676px" />
+        <Media
+          image={image}
+          sizes="(max-width: 767px) 100vw, (max-width: 2047px) 33vw, 676px"
+          {...(isFirst && firstSlideLoading)}
+        />
       </div>
 
       <div className="col-span-full flex flex-col md:col-span-4">

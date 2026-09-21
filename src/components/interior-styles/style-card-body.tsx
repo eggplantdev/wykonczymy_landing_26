@@ -13,9 +13,19 @@ type PropsT = {
   textClassName: string
   sizes: string
   preload?: boolean
+  loading?: 'eager' | 'lazy'
+  fetchPriority?: 'high' | 'low' | 'auto'
 }
 
-export function StyleCardBody({ style, imageClassName, textClassName, sizes, preload }: PropsT) {
+export function StyleCardBody({
+  style,
+  imageClassName,
+  textClassName,
+  sizes,
+  preload,
+  loading,
+  fetchPriority,
+}: PropsT) {
   const { title, text, image } = style
 
   return (
@@ -30,7 +40,14 @@ export function StyleCardBody({ style, imageClassName, textClassName, sizes, pre
       </header>
       <div className={cn('mb-5 text-14 md:mb-6', textClassName)}>{text}</div>
       <div className={cn('relative overflow-hidden', imageClassName)}>
-        <Media image={image} sizes={sizes} preload={preload} className="hover-photo" />
+        <Media
+          image={image}
+          sizes={sizes}
+          preload={preload}
+          loading={loading}
+          fetchPriority={fetchPriority}
+          className="hover-photo"
+        />
         <PhotoHover />
       </div>
     </>

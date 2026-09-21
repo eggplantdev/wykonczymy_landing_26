@@ -41,9 +41,13 @@ export function InteriorStylesCarousel({ container, data }: PropsT) {
         className="mb-8 xlg:mb-10"
         onSwiper={carousel.onSwiper}
       >
-        {styles.map((style) => (
+        {styles.map((style, index) => (
           <SwiperSlide key={style.id} className="w-auto!">
-            <InteriorStyleSlide style={style} href={childPath(basePath, style.slug)} />
+            <InteriorStyleSlide
+              style={style}
+              href={childPath(basePath, style.slug)}
+              isFirst={index === 0}
+            />
           </SwiperSlide>
         ))}
 

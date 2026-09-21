@@ -59,9 +59,9 @@ export function ProjectsCarousel({ container, data }: PropsT) {
         }}
         onSwiper={carousel.onSwiper}
       >
-        {slides.map((slide) => (
+        {slides.map((slide, index) => (
           <SwiperSlide key={slide.id}>
-            <ProjectSlide slide={slide} total={slides.length} />
+            <ProjectSlide slide={slide} total={slides.length} isFirst={index === 0} />
           </SwiperSlide>
         ))}
       </Swiper>

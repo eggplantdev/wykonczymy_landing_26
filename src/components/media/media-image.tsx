@@ -7,10 +7,12 @@ type PropsT = {
   image: MediaImageT
   sizes: string
   preload?: boolean
+  loading?: 'eager' | 'lazy'
+  fetchPriority?: 'high' | 'low' | 'auto'
   className?: string
 }
 
-export function MediaImage({ image, sizes, preload, className }: PropsT) {
+export function MediaImage({ image, sizes, preload, loading, fetchPriority, className }: PropsT) {
   return (
     <Image
       fill
@@ -18,6 +20,8 @@ export function MediaImage({ image, sizes, preload, className }: PropsT) {
       alt={image.alt}
       sizes={sizes}
       preload={preload}
+      loading={loading}
+      fetchPriority={fetchPriority}
       // Every source photo is already a lossy WebP, so Next's default 75 re-encodes a
       // re-encode and smears the smooth walls and soft daylight this material is mostly
       // made of. 90 lands back at roughly the original file's weight. Allowed values are

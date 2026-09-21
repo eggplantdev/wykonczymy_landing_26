@@ -5,12 +5,13 @@ import { ObjectSlideContent } from './object-slide-content'
 type PropsT = {
   item: ObjectCarouselItemT
   sectionTitle: string
+  isFirst?: boolean
 }
 
 // The arrows live inside the slide, as in tdg: on desktop they flank the content as the
 // outer two grid columns, on mobile they sit under it. Both need Swiper's context, which
 // only a descendant of the track has.
-export function ObjectCarouselSlide({ item, sectionTitle }: PropsT) {
+export function ObjectCarouselSlide({ item, sectionTitle, isFirst }: PropsT) {
   return (
     <>
       <div className="gridContainer paddings pb-8 md:py-6 lg:py-12">
@@ -18,7 +19,7 @@ export function ObjectCarouselSlide({ item, sectionTitle }: PropsT) {
           <CarouselArrow direction="left" />
         </aside>
 
-        <ObjectSlideContent item={item} sectionTitle={sectionTitle} />
+        <ObjectSlideContent item={item} sectionTitle={sectionTitle} isFirst={isFirst} />
 
         <aside className="col-span-1 hidden items-center justify-end lg:flex">
           <CarouselArrow direction="right" />

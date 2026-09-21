@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { Media } from '@/components/media/media'
+import { firstSlideLoading } from '@/lib/carousel'
 import type { MediaImageT, MediaVideoT } from '@/components/media/types'
 import { PhotoHover } from '@/components/ui/photo-hover'
 import { CarouselControls } from './carousel-controls'
@@ -18,9 +19,10 @@ export type ProjectSlideT = {
 type PropsT = {
   slide: ProjectSlideT
   total: number
+  isFirst?: boolean
 }
 
-export function ProjectSlide({ slide, total }: PropsT) {
+export function ProjectSlide({ slide, total, isFirst }: PropsT) {
   const { image, video, caption, href } = slide
 
   return (
@@ -34,6 +36,7 @@ export function ProjectSlide({ slide, total }: PropsT) {
         <Media
           image={image}
           video={video}
+          {...(isFirst && firstSlideLoading)}
           className="hover-photo"
           sizes="(max-width: 767px) 100vw, (max-width: 1023px) 87vw, 67vw"
         />

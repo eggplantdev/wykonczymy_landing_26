@@ -31,9 +31,9 @@ export function ObjectCarousel({ container, sectionTitle, items }: PropsT) {
         centeredSlides
         onSwiper={carousel.onSwiper}
       >
-        {items.map((item) => (
+        {items.map((item, index) => (
           <SwiperSlide key={item.key}>
-            <ObjectCarouselSlide item={item} sectionTitle={sectionTitle} />
+            <ObjectCarouselSlide item={item} sectionTitle={sectionTitle} isFirst={index === 0} />
           </SwiperSlide>
         ))}
       </Swiper>
