@@ -6,6 +6,8 @@ import { MobileMenu } from '@/components/layout/mobile-menu'
 import { PageTransition } from '@/components/layout/page-transition'
 import { SiteHeader } from '@/components/layout/site-header'
 import { SiteFooter } from '@/components/footer/site-footer'
+import { OrganizationJsonLd } from '@/components/seo/organization-json-ld'
+import { findContactDetails } from '@/lib/content/contact'
 import { findFooter } from '@/lib/content/footer'
 import { TranslationsProvider } from '@/lib/i18n/translations-provider'
 import { pathsByType, pathsForPage } from '@/lib/content/pages'
@@ -37,11 +39,12 @@ export default async function SegmentLayout({
 
   // Above the Suspense boundary `loading.tsx` puts around the page, which is the only place
   // left where a miss can still set the response status — see resolveRoute. The chrome's own
-  // two reads do not depend on it, so they still go out together with it rather than behind.
-  const [route, typePaths, footer] = await Promise.all([
+  // three reads do not depend on it, so they still go out together with it rather than behind.
+  const [route, typePaths, footer, contact] = await Promise.all([
     resolveRoute(segments),
     pathsByType(locale),
     findFooter(locale),
+    findContactDetails(locale),
   ])
   if (route.isMiss || !route.page) notFound()
 
@@ -51,6 +54,14 @@ export default async function SegmentLayout({
   return (
     <TranslationsProvider locale={locale}>
       <ConsentProvider privacyPolicyHref={typePaths[PRIVACY_POLICY_PAGE_TYPE]}>
+        {/* Once, in the shell — the business is the same entity on every address, so a
+            per-page block would only repeat itself. */}
+        <OrganizationJsonLd
+          telephone={footer.phone}
+          email={footer.mail}
+          address={contact.address}
+          vatID={contact.nip}
+        />
         <SiteHeader paths={paths} typePaths={typePaths} phone={footer.phone} locale={locale} />
         <MobileMenu paths={paths} typePaths={typePaths} phone={footer.phone} />
         <div className="bg-background flex min-h-lvh flex-col">

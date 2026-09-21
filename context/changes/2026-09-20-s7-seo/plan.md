@@ -321,7 +321,7 @@ The sitemap is inert until cutover: `robots.ts` disallows everything and the lay
 
 - [x] Phase 1 — `generateMetadata` reads `meta.*`, with the content-derived fallback — `73ec703`
 - [x] Phase 2 — `openGraph`, `twitter`, icon — `73ec703`
-- [x] Phase 3 — `sitemap.ts`
-- [ ] Phase 4 — `Organization` JSON-LD
+- [x] Phase 3 — `sitemap.ts` — `798b7cf`
+- [x] Phase 4 — `Organization` JSON-LD
 - [ ] Phase 5 — copy + populate script (owner's go-ahead)
 - [ ] `slice-review-gate`
