@@ -37,6 +37,7 @@
     "filesUnreadable": "Could not read: {{files}}. Save them as JPG and try again.",
     "processingUnavailable": "Could not prepare your files. Refresh the page and try again.",
     "processingFiles": "Preparing files…",
+    "filesAttached": "Attached: {{files}}",
     "uploadFailed": "The attachments could not be uploaded. Please try again.",
     "throttled": "Too many attempts. Wait a minute and try again.",
     "attachmentsCta": "Choose files"

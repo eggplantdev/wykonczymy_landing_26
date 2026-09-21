@@ -37,6 +37,7 @@
     "filesUnreadable": "Nie udało się odczytać: {{files}}. Zapisz je jako JPG i spróbuj ponownie.",
     "processingUnavailable": "Nie udało się przygotować plików. Odśwież stronę i spróbuj ponownie.",
     "processingFiles": "Przygotowywanie plików…",
+    "filesAttached": "Załączono: {{files}}",
     "uploadFailed": "Nie udało się wysłać załączników. Spróbuj ponownie.",
     "throttled": "Zbyt wiele prób. Odczekaj minutę i spróbuj ponownie.",
     "attachmentsCta": "Wybierz pliki"

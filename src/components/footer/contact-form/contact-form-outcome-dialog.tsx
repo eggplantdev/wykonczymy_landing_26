@@ -3,6 +3,7 @@
 import { faCheck, faTriangleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as RadixDialog from '@radix-ui/react-dialog'
+import type { RefObject } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/cn'
@@ -10,18 +11,18 @@ import { useTranslation } from '@/lib/i18n/use-translation'
 import { useOverlayLock } from '@/lib/overlay'
 import '@/lib/fontawesome'
 
-// The error carries its own sentence: the reason varies — a rejected upload, a throttled
-// visitor, a schema issue the server caught — while success has only ever one thing to say.
 export type ContactFormOutcomeT = { variant: 'success' } | { variant: 'error'; message: string }
 
 type PropsT = {
   outcome: ContactFormOutcomeT
   onClose: () => void
+  /** Radix would restore focus to `<body>`: the trigger was disabled before this mounted. */
+  returnFocusTo?: RefObject<HTMLElement | null>
 }
 
-// Mounted only while it is open, which is what lets it take the overlay lock: the page's
-// carousels bind arrow keys on `document`, so they would otherwise page along behind it.
-export function ContactFormOutcomeDialog({ outcome, onClose }: PropsT) {
+// Mounted only while open, which is what lets it take the overlay lock — the page's carousels
+// bind arrow keys on `document` and would otherwise page along behind it.
+export function ContactFormOutcomeDialog({ outcome, onClose, returnFocusTo }: PropsT) {
   const { t } = useTranslation('form')
   const { t: tCommon } = useTranslation('common')
   const isError = outcome.variant === 'error'
@@ -38,9 +39,15 @@ export function ContactFormOutcomeDialog({ outcome, onClose }: PropsT) {
       <RadixDialog.Portal>
         <RadixDialog.Overlay className="fixed inset-0 z-50 bg-scrim/50" />
 
-        {/* `inset-x-6` and `mx-auto` rather than a translated half-width: the gutter is then
-            the same measurement on a phone as the panel's own padding. */}
-        <RadixDialog.Content className="fixed inset-x-6 top-1/2 z-50 mx-auto max-w-md -translate-y-1/2 rounded-md bg-card p-6 text-foreground outline-hidden md:p-8">
+        {/* `inset-x-6` + `mx-auto`: the phone gutter then matches the panel's own padding. */}
+        <RadixDialog.Content
+          onCloseAutoFocus={(event) => {
+            if (!returnFocusTo?.current) return
+            event.preventDefault()
+            returnFocusTo.current.focus()
+          }}
+          className="fixed inset-x-6 top-1/2 z-50 mx-auto max-w-md -translate-y-1/2 rounded-md bg-card p-6 text-foreground outline-hidden md:p-8"
+        >
           <RadixDialog.Close
             aria-label={tCommon('close')}
             className="absolute top-4 right-4 flex size-8 items-center justify-center rounded-md hover:bg-muted md:top-6 md:right-6"

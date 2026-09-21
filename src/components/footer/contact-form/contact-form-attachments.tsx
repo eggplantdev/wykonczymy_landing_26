@@ -29,6 +29,13 @@ export function ContactFormAttachments({ files, onFilesChange, isProcessing, cla
     if (files.length === 0 && inputRef.current) inputRef.current.value = ''
   }, [files])
 
+  const processingLabel = t('processingFiles')
+  const spokenStatus = isProcessing
+    ? processingLabel
+    : files.length > 0
+      ? t('filesAttached', { files: files.map((file) => file.name).join(', ') })
+      : ''
+
   return (
     <div className={cn('pt-5 md:pt-8', className)}>
       {/* `items-start` and not `items-center`: the hint runs to two or three lines on a phone,
@@ -73,9 +80,15 @@ export function ContactFormAttachments({ files, onFilesChange, isProcessing, cla
         />
       </label>
 
+      {/* Permanently mounted: a live region created in the same commit as its text announces
+          nothing, and the <ul> below is not one — so this is the only spoken feedback. */}
+      <p aria-live="polite" className="sr-only">
+        {spokenStatus}
+      </p>
+
       {isProcessing ? (
-        <p aria-live="polite" className="mt-2 text-14 text-muted-foreground">
-          {t('processingFiles')}
+        <p aria-hidden className="mt-2 text-14 text-muted-foreground">
+          {processingLabel}
         </p>
       ) : (
         files.length > 0 && (
