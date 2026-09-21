@@ -323,5 +323,5 @@ The sitemap is inert until cutover: `robots.ts` disallows everything and the lay
 - [x] Phase 2 — `openGraph`, `twitter`, icon — `73ec703`
 - [x] Phase 3 — `sitemap.ts` — `798b7cf`
 - [x] Phase 4 — `Organization` JSON-LD — `4226528`
-- [ ] Phase 5 — copy + populate script — `seo-copy.md` and `scripts/populate-seo.ts` landed, dry run clean (10 writes, 0 skips); **the `--write` run is still owed and needs the owner's go-ahead**
-- [ ] `slice-review-gate`
+- [x] Phase 5 — copy + populate script — `58e4ed9`; `--write` run against production 2026-09-21, wrote 10, skipped 0. A re-run is a no-op (`would write 0, left 10 alone`). The run's `revalidatePath` calls all failed as `revalidate.ts:12` documents they do from the CLI, so the cache purge is owed to the next deploy.
+- [x] `slice-review-gate` — `87a235d`; 54 findings, 0 open. Deferred: EX-821, EX-822, EX-823.

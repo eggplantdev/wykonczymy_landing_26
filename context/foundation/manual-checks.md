@@ -58,15 +58,14 @@ bare checkbox with nothing to link to.
 
 ## S7 — SEO surface (2026-09-21)
 
-The populate script has **not** been run. Everything below about page descriptions assumes
-`pnpm seo:populate --write` has gone in first, after `pnpm db:dump`.
+The populate script ran against production on 2026-09-21: wrote 10, skipped 0 — all six page
+types in both locales now hold the copy from `seo-copy.md`. A re-run is a no-op, since the
+script only fills an empty `meta.description`.
 
-Two things to expect from that run. It prints the database host and waits for a typed `yes`
-before writing — read the host, it is production. And it **skips any page holding an unpublished
-draft**, printing `skip <locale> <pageType> — has an unpublished draft`: writing through such a
-page would publish that draft as a side effect (reproduced; see the change folder's
-`review-gate.md`). If a page you expected is skipped, publish or discard its draft in the admin
-and run the script again. `--yes` bypasses the prompt and nothing else.
+**The live site does not show them yet.** `revalidateAllPages` throws outside a request and
+`revalidate.ts:12` logs it rather than swallowing it, so a CLI write leaves production serving
+the cached copy until the next deploy. Check the addresses below against `pnpm dev`, which reads
+the same database directly; the deployed site is only trustworthy on this after a redeploy.
 
 Local, against `pnpm dev`:
 
