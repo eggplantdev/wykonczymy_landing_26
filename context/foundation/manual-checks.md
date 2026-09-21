@@ -45,34 +45,70 @@ not F2's.
 
 ## S2 — footer contact form (2026-09-17)
 
-Local, against `pnpm dev` on :3001 (:3000 is the leads app), footer of any page:
+Swept 2026-09-21 in a browser (Chromium) against `pnpm dev`. The two boxes left open each
+name a check this pass genuinely could not make, not one that failed.
 
-- [ ] Typing into the fields and reloading the tab restores every value except the consent
+- [x] Typing into the fields and reloading the tab restores every value except the consent
       tick, which comes back unticked.
-- [ ] Opening the site in a second tab shows an empty form — the draft is per-session, not
+      → all six text fields restored; `acceptsTerms` back to `false`. It is absent from the
+      persisted draft entirely — `toDraft`'s `Omit` is what enforces that, so a ticked box is
+      never written, not merely ignored on read.
+- [x] Opening the site in a second tab shows an empty form — the draft is per-session, not
       shared (`sessionStorage`, not `localStorage`).
-- [ ] Closing the tab and reopening the site shows an empty form.
-- [ ] "Zakres prac" renders as a multi-line textarea running the full width of the grid,
+      → second tab empty; `localStorage.contact-form-draft` is `null`.
+- [x] Closing the tab and reopening the site shows an empty form.
+      → empty, `sessionStorage` gone with the tab.
+- [x] "Zakres prac" renders as a multi-line textarea running the full width of the grid,
       not a single-line input — as does "Wiadomość" below it.
-- [ ] Both textareas grow line by line as you type and stop growing at roughly sixteen rems,
+      → both are `<textarea>` at 766px against 373px for the single-column inputs.
+- [x] Both textareas grow line by line as you type and stop growing at roughly sixteen rems,
       scrolling past that. Neither shows a drag handle in its corner.
+      → 56.5 → 72 → 88 → 134 → 256px across 1/2/3/6/20 lines; capped at `max-height: 256px`
+      (16rem) with `overflow-y: auto`. `resize: none`, so no handle.
 - [ ] Every placeholder in the form is the same grey as the "Dodaj załączniki" label next to
       them — check in Safari and Firefox too, since the bug was a browser default.
-- [ ] Sending with only an e-mail address and the consent box ticked succeeds; every other
+      → **two problems with this box, neither of them a bug in the form.** All six
+      placeholders are identically `rgb(163, 163, 163)` — explicitly set, which is the
+      substance of the check and is what rules out the browser default. But the element the
+      box names as the reference, the "Dodaj załączniki" paragraph, is `rgb(0, 0, 0)`; they
+      were never meant to match, so the wording needs an owner's correction. And this pass was
+      Chromium only — the cross-browser half is the reason the box is still open.
+- [x] Sending with only an e-mail address and the consent box ticked succeeds; every other
       field may be blank.
-- [ ] After a successful send the form is empty, and **sending a second enquiry in the same
+      → "Dziękujemy, odezwiemy się wkrótce."
+- [x] After a successful send the form is empty, and **sending a second enquiry in the same
       session does not refill the fields with the first one** — this is the bug the gate caught.
-- [ ] Submitting with an empty e-mail address and an unticked box shows an error under each,
+      → form cleared and the persisted draft emptied with it; a second enquiry typed into a
+      clean form, sent, and cleared again. No trace of the first.
+- [x] Submitting with an empty e-mail address and an unticked box shows an error under each,
       in Polish on `/` and in English on `/en/…`.
-- [ ] A malformed address (`jan@`) reports the malformed-address message, not the
+      → exactly two errors, on `email` and `acceptsTerms`, both `aria-invalid="true"`.
+      "To pole jest wymagane" on `/`, "This field is required" on `/en/home/`.
+- [x] A malformed address (`jan@`) reports the malformed-address message, not the
       missing-address one; a space-only address reports the missing one.
-- [ ] No native browser validation bubble appears — the page's own messages are the only ones.
-- [ ] The attachments input renders and accepts a file. It has nowhere to send it yet; that is
+      → `jan@` → "Podaj poprawny adres e-mail"; `"   "` → "To pole jest wymagane". The schema
+      trims before `min(1)`, which is what turns whitespace into missing rather than malformed.
+- [x] No native browser validation bubble appears — the page's own messages are the only ones.
+      → `form.noValidate` is `true` and every control reports an empty `validationMessage`.
+- [x] The attachments input renders and accepts a file. It has nowhere to send it yet; that is
       FR-031 and a later change.
-- [ ] Keyboard only: every field and the consent box are reachable and the box toggles with
+      → `accept="image/*,application/pdf"`, `multiple`; a PNG was accepted. Worth an owner's
+      look though the box does not ask for it: the label still reads "Wybierz pliki" after a
+      file is chosen, so nothing on screen confirms the pick.
+- [x] Keyboard only: every field and the consent box are reachable and the box toggles with
       Space; the consent box shows a visible focus ring.
+      → all six fields, the file input, the consent box, the privacy link and Send are in tab
+      order, none with a negative tabindex, DOM order matching visual order. Space toggles the
+      box. The ring resolves to `2px solid rgb(86, 86, 86)` via `peer-focus-visible`.
 - [ ] Screen reader: pressing Send with an invalid form announces the errors (they appear only
       on submit, so nothing else would announce them).
+      → the markup is right: every control is labelled, and each error node is `role="status"`
+      with `aria-live="polite"`, wired by `aria-describedby`. That is the correct mechanism,
+      but it is not the check — whether VoiceOver actually speaks them needs VoiceOver.
+
+Both the consent box and the file input are `sr-only`, driven by their visible labels. A test
+that clicks the input directly times out on an intercepted pointer event; drive the label, or
+focus the control and press Space.
 
 Recorded debt: FR-032 (privacy-policy page) ships unmet — the consent box is deliberately a
 bare checkbox with nothing to link to.
