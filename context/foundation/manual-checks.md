@@ -3,7 +3,9 @@
 Verification owed by a slice before it can move past `In Review`. Most boxes need a browser,
 the admin UI, or production, and only a human can close those. A box whose whole claim is
 observable over HTTP — a status code, a redirect target, a string in the response — is
-settled by fetching it, and the note under it records what came back.
+settled by fetching it, and the note under it records what came back. **A box whose subject
+renders on the client is not one of those** — `curl` sees the pre-hydration shell, which for a
+404 is Next's own English default. Open a browser before calling such a box failing.
 
 ## F2 — i18n spine (2026-09-03)
 
@@ -23,13 +25,16 @@ the addresses below are not the ones the slice was reviewed with.
 - [x] `/en` reaches `/en/home/`.
       → two hops, both 308: `/en` → `/en/` → `/en/home/`. The original box said "301s"; it is
       a 308 chain, which preserves the method and is what `trailingSlash: true` emits.
-- [ ] **FAILING** — a slug that exists in neither locale renders the 404 page, and the 404
-      under `/en/…` shows English copy while the 404 under `/…` shows Polish.
-      → status is 404 in both locales, but the body is Next's built-in English default;
-      `not-found.tsx` is never reached. Filed as EX-824 with the root cause.
-- [ ] The language switcher on `/realizacje/` links to `/en/completed-works/` and back.
-      → not observable over HTTP: no `/en/…` href appears in the server-rendered markup, so
-      the switcher is behind a client interaction. Needs a browser.
+- [x] A slug that exists in neither locale renders the 404 page, and the 404 under `/en/…`
+      shows English copy while the 404 under `/…` shows Polish.
+      → both 404. `/nie-ma-takiej-strony/` → "Ta strona nie istnieje lub została przeniesiona."
+      + "Wróć na stronę główną" → `/`; `/en/no-such-page/` → the English pair → `/en/home/`.
+      Titles localized too. `not-found.tsx` is a client component, so **curl sees only Next's
+      built-in default** and the page looks broken over HTTP — it is not. Check this one in a
+      browser; an HTTP fetch cannot settle it.
+- [x] The language switcher on `/realizacje/` links to `/en/completed-works/` and back.
+      → behind the "Ustawienia" button, so no `/en/…` href exists until it is opened. Once
+      open: `PL → /realizacje/`, `EN → /en/completed-works/`.
 - [ ] Creating a second Pages document with `pageType: home` is rejected in the admin.
 - [ ] Editing a published page's title in the admin updates **both** addresses without a
       redeploy (the revalidation hook), including the locale that was not edited.
