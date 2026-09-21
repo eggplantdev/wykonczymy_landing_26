@@ -19,9 +19,9 @@ export function InteriorStyleSlide({ style, href }: PropsT) {
           style={style}
           imageClassName="h-76 md:h-100"
           // `min-h` rather than `h`: an explicit height on a `-webkit-box` fights the clamp and
-          // lets a fourth line show through. Three lines at 135% is 48.6px, so 50px is the floor
-          // a one-line card has to reach for the photos to stay level.
-          textClassName="leading-135 line-clamp-3 min-h-12.5"
+          // lets a fourth line show through. `3lh` is the floor a one-line card has to reach
+          // for the photos to stay level, and it follows `leading-135` on its own.
+          textClassName="leading-135 line-clamp-3 min-h-[3lh]"
           // Wider than the square 304/400px box on purpose. `object-cover` scales a
           // landscape photo until it covers the box's *height*, so the visible strip is cut
           // from a source laid out height × its own aspect wide — and the widest of these

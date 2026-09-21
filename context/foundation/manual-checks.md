@@ -172,3 +172,38 @@ Recorded debt:
   `/en/price-list/` stay in `url-map.md` as indexed addresses owed a `301`; cutover picks the target.
 - **`<html lang="pl">` on `/en/*`** still contradicts the hreflang pairs this slice emits. Out of
   scope here; it needs the locale in a real route segment.
+
+## EX-817 — card heights reserved in `lh` (2026-09-21)
+
+Nine hand-derived pixel heights across three components became four `lh` values. `1lh` is the
+element's own `font-size` x `line-height`, so the reserved box now follows the type scale
+instead of being re-derived by hand whenever a title moves a step.
+
+**Every box below is a before/after comparison, so it has to be made at each breakpoint
+separately** — the old constants were per-breakpoint and each drifted by a different amount.
+The base tier of `style-card.tsx` is the one that cannot be predicted on paper: `*` carries
+`line-height: normal` (`styles.css`, the tdg reset), which resolves off the font's own metrics,
+so only a browser can say what five lines come to there.
+
+Against `pnpm dev`. Use the longest real `interior-styles.title` and `.text` in the database —
+a short one reserves the same box and proves nothing.
+
+- [ ] `/wykonczenia/` at **375px** (one column): every photo in the column starts level, and no
+      title or blurb is clipped mid-descender.
+- [ ] `/wykonczenia/` at **768px** (two columns, `md`): photos level across each pair. This tier
+      is the one that previously sat at exactly its box height with zero slack — it is where a
+      clipped descender would show first.
+- [ ] `/wykonczenia/` at **1024px** (three columns, `lg`): photos level across each row of three.
+- [ ] `/wykonczenia/` at **1280px** (`xlg`, blurb drops to four lines): photos level, and the
+      blurb clamps at four lines rather than five or three.
+- [ ] `/wykonczenia/` at **2048px+**: same, at the widest tier the grid reaches.
+- [ ] Home interior-styles slider at **375px** and at **1280px**: the photos across the visible
+      slides start at the same y, including where one card's title wraps to two lines and its
+      neighbour's does not.
+- [ ] A card whose title fits on **one** line sits level with its two-line neighbours — that is
+      the whole point of the reserved box, and a `min-h` that came out too small fails here
+      rather than by clipping.
+
+If a tier is off by a pixel or two, that is the expected direction of the change (the old
+constants rounded up off the fractional spacing scale) — the question is only whether it reads
+worse. It is a line count that is wrong, not a rounding.

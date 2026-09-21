@@ -20,8 +20,11 @@ export function StyleCardBody({ style, imageClassName, textClassName, sizes }: P
   return (
     <>
       {/* Both blocks keep a reserved height so every photo in a row starts at the same y,
-          whatever the copy runs to. */}
-      <header className="mb-3 line-clamp-2 h-11 text-18 leading-120 font-medium md:h-12.5 md:text-20 xlg:h-13.5 xlg:text-22">
+          whatever the copy runs to. Reserved in `lh` — one unit is this element's own
+          `font-size` x `line-height` — so the box tracks the type scale instead of being a
+          pixel constant re-derived by hand at every breakpoint. The last time the title moved
+          one step the md tier landed at exactly its box height, with no slack for a descender. */}
+      <header className="mb-3 line-clamp-2 min-h-[2lh] text-18 leading-120 font-medium md:text-20 xlg:text-22">
         {title}
       </header>
       <div className={cn('mb-5 text-12 md:mb-6', textClassName)}>{text}</div>

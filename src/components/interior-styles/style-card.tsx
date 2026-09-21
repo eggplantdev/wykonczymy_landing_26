@@ -32,8 +32,9 @@ export function StyleCard({ style, href, index }: PropsT) {
         style={style}
         imageClassName="h-50 md:h-51.5 lg:aspect-287/190 lg:h-auto"
         // Five lines, not the slide's three: these cells are a third of the page wide, and the
-        // reserved height is what keeps every photo in a row starting at the same y.
-        textClassName="md:leading-135 xlg:line-clamp-4 xlg:h-16 line-clamp-5 h-17.5 md:h-20"
+        // reserved height is what keeps every photo in a row starting at the same y. One line
+        // fewer at xlg, where the cell is wider and the same copy takes less of it.
+        textClassName="md:leading-135 xlg:line-clamp-4 xlg:min-h-[4lh] line-clamp-5 min-h-[5lh]"
         sizes="(max-width: 767px) 100vw, (max-width: 1023px) 45vw, (max-width: 1279px) 30vw, (max-width: 2047px) 25vw, 512px"
       />
     </Link>
