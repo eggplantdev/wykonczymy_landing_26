@@ -15,6 +15,7 @@ const values = {
   address: LANDING_SUBMISSION.address,
   scope: LANDING_SUBMISSION.scope,
   area: LANDING_SUBMISSION.area,
+  timing: LANDING_SUBMISSION.timing,
   message: LANDING_SUBMISSION.message,
   acceptsTerms: true,
 }
@@ -42,6 +43,7 @@ describe('buildEnvelope', () => {
       { name: 'address', values: [LANDING_SUBMISSION.address] },
       { name: 'scope', values: [LANDING_SUBMISSION.scope] },
       { name: 'area', values: [LANDING_SUBMISSION.area] },
+      { name: 'timing', values: [LANDING_SUBMISSION.timing] },
       { name: 'message', values: [LANDING_SUBMISSION.message] },
     ])
   })
@@ -72,6 +74,7 @@ describe('buildEnvelope', () => {
       { key: 'address', label: labels.address },
       { key: 'scope', label: labels.scope },
       { key: 'area', label: labels.area },
+      { key: 'timing', label: labels.timing },
       { key: 'message', label: labels.message },
     ])
   })
@@ -83,7 +86,7 @@ describe('buildEnvelope', () => {
       assets: [],
     })
 
-    expect(envelope.formQuestions).toHaveLength(7)
+    expect(envelope.formQuestions).toHaveLength(8)
     expect(envelope.rawData).toHaveLength(1)
   })
 })

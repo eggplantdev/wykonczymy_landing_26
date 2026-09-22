@@ -33,10 +33,11 @@ const DRAFT_DEBOUNCE_MS = 500
 const DEFAULT_VALUES = emptyContactValues()
 
 type TextFieldT = {
-  name: 'name' | 'email' | 'phone' | 'address' | 'area'
+  name: 'name' | 'email' | 'phone' | 'address' | 'area' | 'timing'
   type?: 'email' | 'tel'
   autoComplete?: string
   className?: string
+  controlClassName?: string
 }
 
 // Each name doubles as its own `form` translation key. A control carries its spacing as top
@@ -45,11 +46,12 @@ type TextFieldT = {
 // is responsive, so an override has to answer at both widths: `pt-0` alone leaves `md:pt-8`
 // untouched, because a class only displaces the one carrying the same modifier.
 const TEXT_FIELDS: readonly TextFieldT[] = [
-  { name: 'name', autoComplete: 'name', className: 'pt-0 md:pt-0' },
-  { name: 'email', type: 'email', autoComplete: 'email', className: 'md:pt-0' },
+  { name: 'name', autoComplete: 'name', controlClassName: 'pt-0 md:pt-0' },
+  { name: 'email', type: 'email', autoComplete: 'email', controlClassName: 'md:pt-0' },
   { name: 'phone', type: 'tel', autoComplete: 'tel' },
   { name: 'address', autoComplete: 'street-address' },
-  { name: 'area' },
+  { name: 'area', className: 'md:col-span-2' },
+  { name: 'timing', className: 'md:col-span-2' },
 ]
 
 // Both answer in sentences rather than a line, so both are textareas and both run the
@@ -201,6 +203,7 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
               type={field.type}
               autoComplete={field.autoComplete}
               className={field.className}
+              controlClassName={field.controlClassName}
               value={fieldApi.state.value}
               onChange={fieldApi.handleChange}
               onBlur={fieldApi.handleBlur}

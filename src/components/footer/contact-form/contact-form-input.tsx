@@ -15,6 +15,7 @@ type PropsT = {
   type?: 'text' | 'email' | 'tel'
   autoComplete?: string
   className?: string
+  controlClassName?: string
 }
 
 export function ContactFormInput({
@@ -27,13 +28,20 @@ export function ContactFormInput({
   type = 'text',
   autoComplete,
   className,
+  controlClassName,
 }: PropsT) {
   const { id, errorId } = useFieldIds()
 
   return (
-    <ContactFormField id={id} errorId={errorId} label={placeholder} error={error}>
+    <ContactFormField
+      id={id}
+      errorId={errorId}
+      label={placeholder}
+      error={error}
+      className={className}
+    >
       <input
-        className={cn(fieldControlClasses, className)}
+        className={cn(fieldControlClasses, controlClassName)}
         id={id}
         name={name}
         placeholder={placeholder}

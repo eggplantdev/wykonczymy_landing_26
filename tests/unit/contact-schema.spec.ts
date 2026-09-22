@@ -24,6 +24,7 @@ const CAPS = {
   address: SHORT_FIELD_MAX_LENGTH,
   scope: LONG_FIELD_MAX_LENGTH,
   area: SHORT_FIELD_MAX_LENGTH,
+  timing: SHORT_FIELD_MAX_LENGTH,
   message: LONG_FIELD_MAX_LENGTH,
 } as const
 

@@ -26,6 +26,7 @@
     "tooLong": "Message is too long",
     "scope": "Scope of work (renovation, finishing, other)",
     "area": "Work area, e.g. 30–60 m²",
+    "timing": "When the works should start, e.g. as soon as possible, in a month",
     "acceptTerms": "I accept the {link}",
     "acceptTermsLink": "privacy policy",
     "send": "Send",

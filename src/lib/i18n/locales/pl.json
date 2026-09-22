@@ -26,6 +26,7 @@
     "tooLong": "Wiadomość jest za długa",
     "scope": "Zakres prac (remont, wykończenie, inne)",
     "area": "Powierzchnia prac, np. 30–60 m²",
+    "timing": "Termin rozpoczęcia prac, np. jak najszybciej, za miesiąc",
     "acceptTerms": "Akceptuję {link}",
     "acceptTermsLink": "politykę prywatności",
     "send": "Wyślij",

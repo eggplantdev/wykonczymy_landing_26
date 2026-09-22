@@ -24,6 +24,7 @@ export type SubmissionEnvelopeT = {
   address?: string
   scope?: string
   area?: string
+  timing?: string
   message?: string
   /** The same answers again, in the shape `buildLeadAnswers` already renders. */
   rawData: { name: string; values: string[] }[]
@@ -40,6 +41,7 @@ const ANSWER_FIELDS = [
   'address',
   'scope',
   'area',
+  'timing',
   'message',
 ] as const satisfies readonly (keyof ContactFormValuesT)[]
 

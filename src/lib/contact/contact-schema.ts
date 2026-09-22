@@ -29,6 +29,7 @@ export const contactSchema = object({
   address: cappedText(SHORT_FIELD_MAX_LENGTH),
   scope: cappedText(LONG_FIELD_MAX_LENGTH),
   area: cappedText(SHORT_FIELD_MAX_LENGTH),
+  timing: cappedText(SHORT_FIELD_MAX_LENGTH),
   message: cappedText(LONG_FIELD_MAX_LENGTH),
   // `.refine` rather than `literal(true)` so the schema's input type stays `boolean`:
   // the form holds an unticked box as `false`, and a schema that only accepts `true`
@@ -46,6 +47,7 @@ export function emptyContactValues(): ContactFormValuesT {
     address: '',
     scope: '',
     area: '',
+    timing: '',
     message: '',
     acceptsTerms: false,
   }

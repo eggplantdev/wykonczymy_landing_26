@@ -48,7 +48,7 @@ without a coordinated deploy here, and an unknown field is ignored rather than r
 | `submittedAt`                         | no       | ISO 8601                                                                              |
 | `formId`, `formName`                  | no       | recorded as-is                                                                        |
 | `name`, `email`, `phone`              | no       | the standard three                                                                    |
-| `address`, `scope`, `area`, `message` | no       | the landing's typed answers; `area` is text, because the form invites a range         |
+| `address`, `scope`, `area`, `timing`, `message` | no | the landing's typed answers; `area` and `timing` are text, because the form invites a range ("30–60 m²", "jak najszybciej") |
 | `rawData`                             | no       | `{ name, values[] }[]` — when omitted, the typed answers above become the answer list |
 | `formQuestions`                       | no       | `{ key, label, type? }[]` — key→label for the answers modal                           |
 | `assets`                              | no       | `{ url, filename, contentType, size }[]`, at most **15**                              |
