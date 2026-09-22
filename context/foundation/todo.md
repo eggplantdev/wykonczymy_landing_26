@@ -37,12 +37,9 @@ verification that needs a human or a dashboard, four decisions, and housekeeping
 
 ## The other half of the wire
 
-- [ ] **`timing` reaches the leads app *in production*.** Landed here in `5d98061`, and the leads
-      app now knows the key too — `bee767ae` adds it to `landingSubmissionSchema` and to the answer
-      labels as „Termin rozpoczęcia prac". That commit is on `staging`, **not on `main`**, so
-      production still drops the field: the envelope schema is permissive on the tail, which means
-      it is ignored rather than rejected and simply never appears in the answers modal. Closing this
-      is a promotion in the leads app's own release flow, not work here.
+- [x] **`timing` reaches the leads app.** Landed here in `5d98061`; `bee767ae` adds the key to
+      `landingSubmissionSchema` in `wykonczymy` and labels it „Termin rozpoczęcia prac" in the
+      answer list. Confirmed done by the owner 2026-09-22.
       → `context/reference/landing-intake-contract.md`
 
 ## Decisions owed
