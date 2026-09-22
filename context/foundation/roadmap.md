@@ -282,18 +282,23 @@ drop"_ guardrail.
 
 ### S8 — Cutover
 
-**Status:** blocked · **Change ID:** `s8-cutover` · **Depends on:** S2, S7
+**Status:** ready · **Change ID:** `s8-cutover` · **Depends on:** S2, S7
 
-The FR-037 test asserting every address in `url-map.md` resolves; `301`s for Cennik's two retired
-addresses; the live-submission verification; DNS switch to the new site on the `www` canonical host.
+The FR-037 test asserting every address in `url-map.md` resolves; the live-submission verification;
+removing the pre-cutover noindex from `robots.ts` and the layout; DNS switch to the new site on the
+`www` canonical host. The redirects for the four retired addresses are **already shipped** — assert
+them rather than build them, and assert `308`, which is what `permanent: true` emits.
 
 **User-visible outcome:** wykonczymy.com.pl is the new site, and no address that existed before is
 dead.
 
-**Why it is blocked, and by what:** **Open Question 3 — where Cennik's two retired addresses lead.**
-`/cennik/` and `/en/price-list/` are the only `UNDECIDED` rows in `url-map.md`. Candidates are the
-services page, the contact page, or the home page. This determines whether high-intent pricing
-traffic is retained or discarded, and the map cannot be complete without it.
+**It is no longer blocked.** Open Question 3 — where the retired addresses lead — was answered in
+code on 2026-09-04 and has been live in production ever since: `next.config.mjs` sends `/oferta/` and
+`/cennik/` to `/`, and `/en/offer/` and `/en/price-list/` to `/en/home/`. `url-map.md` went on
+carrying `UNDECIDED` until 2026-09-22, which is the only reason this slice read as blocked. High-intent
+pricing traffic lands on the home page, whose tiles are where Oferta's content went. What remains is
+the owner **ratifying** that or naming a different target, which is one line in the redirects array —
+not a precondition to starting the slice.
 
 Also carries **Open Question 4** — whether Cennik's removal is final. Recorded as the owner's
 intention, expressed as probable rather than settled. If it stays, two success criteria and one

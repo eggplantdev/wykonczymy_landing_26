@@ -5,13 +5,17 @@ index, not a source: every line points at the document that holds the real detai
 stays the place a claim is settled. Tick a box here only when the box it points at is ticked too.
 
 Everything the roadmap calls a slice is built and in production. What remains is one slice (S8),
-verification that needs a human or a dashboard, four decisions, and housekeeping.
+verification that needs a human or a dashboard, some decisions, and housekeeping.
 
 ## Blocks cutover
 
-- [ ] **OQ 3 — where `/cennik/` and `/en/price-list/` lead.** The only `UNDECIDED` rows in
-      `url-map.md` and the single hard blocker on S8. Candidates: oferta, kontakt, home. Owner's
-      call; it decides whether high-intent pricing traffic is kept or discarded.
+- [x] **OQ 3 — where the four retired addresses lead.** *Not a blocker; it never was one after
+      2026-09-04.* `next.config.mjs` already sends `/oferta/` and `/cennik/` to `/`, and
+      `/en/offer/` and `/en/price-list/` to `/en/home/`, and all four are live in production —
+      probed 2026-09-22. `url-map.md` carried `UNDECIDED` for eighteen days after the code had
+      decided, which is the only reason S8 looked blocked. What is left is the owner **ratifying**
+      "everything lands on home" or naming a different target for the pricing pair, which is one
+      line in the redirects array. → `url-map.md`
 - [x] **Vercel Firewall rate limits exist on the project.** Server Action at 10/60s per IP with
       `path does not start with /admin`, `/api/blob/upload-token` at 60/60s. They live in the
       dashboard with **no representation in this repo** — rebuild the project and they are gone
@@ -87,4 +91,8 @@ admin "the alarm", and nobody is in front of it.
 
 ## Shortest path to cutover
 
-OQ 3, then the firewall rules and the crons, then S8. Everything else can follow the DNS switch.
+**S8, then DNS, then EX-853.** The firewall rules, the crons and all four retired-address redirects
+are already done and verified in production, and OQ 3 turned out to be a phantom blocker. What S8
+still owes is its own work: the FR-037 assertions over the twelve addresses (written against `308`,
+not `301`) and removing the pre-cutover noindex from `robots.ts` and the layout. Everything else can
+follow the DNS switch.

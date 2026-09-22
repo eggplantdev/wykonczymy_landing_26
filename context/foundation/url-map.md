@@ -1,6 +1,6 @@
 ---
 project: wykonczymy-www
-verified: 2026-09-03
+verified: 2026-09-22
 source: https://www.wykonczymy.com.pl/sitemap.xml (All in One SEO v4.9.5.1)
 ---
 
@@ -10,8 +10,15 @@ The verified replacement map the cutover guardrail requires. **Enumerated from t
 2026-09-02**, not transcribed from an earlier document. Re-verify before cutover — a page added
 after this date is not in this table.
 
-**Re-verified 2026-09-03.** All twelve return `200`, `/en/` still `301`s to `/en/home/`, and the
-sitemap's page set is unchanged (`lastmod` 2025-12-19) — nothing has been added, moved or retired.
+**Re-verified 2026-09-03** against the live WordPress site. All twelve return `200`, `/en/` still
+`301`s to `/en/home/`, and the sitemap's page set is unchanged (`lastmod` 2025-12-19) — nothing has
+been added, moved or retired.
+
+**Re-probed 2026-09-22 against the new site** on `wykonczymylanding26.vercel.app`: the six surviving
+addresses answer `200`, the four retired ones `308` to their targets, and `/en/` `308`s to
+`/en/home/`. All twelve already behave. The redirects are **`308`, not `301`** — `permanent: true`
+in `next.config.mjs` is what Next emits, and Google treats the two the same, so this is a note for
+whoever writes the FR-037 assertions, not a defect to fix.
 
 ## Facts that constrain the new site
 
@@ -31,11 +38,11 @@ sitemap's page set is unchanged (`lastmod` 2025-12-19) — nothing has been adde
 | #   | Polish          | English                | Page                                                                            | New address   |
 | --- | --------------- | ---------------------- | ------------------------------------------------------------------------------- | ------------- |
 | 1   | `/`             | `/en/home/`            | Start                                                                           | unchanged     |
-| 2   | `/oferta/`      | `/en/offer/`           | Oferta — **retired 2026-09-04**, its content became tiles on the home page      | **UNDECIDED** |
+| 2   | `/oferta/`      | `/en/offer/`           | Oferta — **retired 2026-09-04**, its content became tiles on the home page      | `308` → `/` and `/en/home/` |
 | 3   | `/realizacje/`  | `/en/completed-works/` | Realizacje                                                                      | unchanged     |
 | 4   | `/wykonczenia/` | `/en/interior-styles/` | Wykończenia                                                                     | unchanged     |
 | 5   | `/kontakt/`     | `/en/contact/`         | Kontakt                                                                         | unchanged     |
-| 6   | `/cennik/`      | `/en/price-list/`      | Cennik — **dropped 2026-09-21**; no page will be built                          | `301`, target owed |
+| 6   | `/cennik/`      | `/en/price-list/`      | Cennik — **dropped 2026-09-21**; no page will be built                          | `308` → `/` and `/en/home/` |
 
 Plus two redirects that already exist and must keep working: apex → `www`, and `/en/` → `/en/home/`.
 
@@ -43,19 +50,21 @@ Page set resolved 2026-09-02 (PRD Open Question 8): the surviving pages keep the
 so only Cennik's and Oferta's need replacements. Individual project pages are new addresses and
 appear in no row here — they cannot break anything that is indexed today.
 
-**Oferta was retired on 2026-09-04.** The "What we do" section on the home page became a carousel of
-tiles that link nowhere, and the page they used to point at was deleted from the CMS. Four indexed
-addresses now have no target — `/oferta/`, `/en/offer/`, `/cennik/`, `/en/price-list/` — and each
-needs a deliberate `301` before cutover.
+**Oferta was retired on 2026-09-04 and Cennik dropped on 2026-09-21**, both the owner's call. The
+"What we do" section on the home page became a carousel of tiles that link nowhere, and the page they
+used to point at was deleted from the CMS. Dropping a page decides what does *not* get built; it does
+not retire the address, which is indexed and must still answer deliberately.
 
-**Cennik was dropped on 2026-09-21** — the owner's call, matching Oferta's. Neither page is built, so
-four of the twelve addresses are now redirect-only and none of the four has a target yet. Dropping a
-page decides what does *not* get built; it does not retire the address, which is indexed and must
-still answer deliberately.
+**All four already answer — the targets shipped with the retirement.** `next.config.mjs` redirects
+`/oferta/` and `/cennik/` to `/`, and `/en/offer/` and `/en/price-list/` to `/en/home/`, which is one
+hop rather than chaining through the `/en/` locale-root redirect. This document called them
+`UNDECIDED` until 2026-09-22 while the code had decided on 2026-09-04; the gap made S8 look blocked
+on a question that was already answered in production. **What is owed is ratification, not a
+decision**: either the owner accepts "everything lands on home", or names a different target for the
+pricing pair — one line in the redirects array. Nothing is waiting on it.
 
-**Two rows are still open** — both waiting on a `301` target, not on a page. A row left empty at
-cutover is the defect the guardrail exists to prevent. If PRD Open Question 8 changes the page set, a
-row's target changes — the address still has to resolve or redirect deliberately.
+If PRD Open Question 8 changes the page set, a row's target changes — the address still has to
+resolve or redirect deliberately.
 
 ## Behaviour to reproduce — verified 2026-09-03
 
@@ -77,7 +86,7 @@ added to the Vercel account at all: `vercel domains ls --scope wykonczymys-proje
 the WordPress host, and the `301` in the table above is that host's, not ours.
 
 So there is nothing to verify before the domain moves; the redirect is a step **of** cutover, not a
-precondition to check beforehand. It belongs on Vercel rather than in `next.config.ts`: a Vercel
+precondition to check beforehand. It belongs on Vercel rather than in `next.config.mjs`: a Vercel
 domain redirect answers at the edge before any function runs, while a host redirect in the app
 costs an invocation per hit and can loop against the platform's own.
 
