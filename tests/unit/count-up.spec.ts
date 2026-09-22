@@ -12,19 +12,27 @@ describe('parseFigure', () => {
     ['100%', { prefix: '', target: 100, suffix: '%', width: 3 }],
     ['~50', { prefix: '~', target: 50, suffix: '', width: 2 }],
     ['ponad 30', { prefix: 'ponad ', target: 30, suffix: '', width: 2 }],
+    ['1 000+', { prefix: '', target: 1000, suffix: '+', width: 4, separator: ' ' }],
+    ['1\u00A0500', { prefix: '', target: 1500, suffix: '', width: 4, separator: '\u00A0' }],
   ])('splits %s into digits and decoration', (value, expected) => {
     expect(parseFigure(value)).toEqual(expected)
   })
 
-  // A single counter cannot drive two digit runs, and counting `1 000` to 1 over a second and a
-  // half reads as broken. Static text is the honest fallback — see the Polish-formatting caveat in
-  // the review-gate ledger: `1 000+` is a likely edit and deserves real support, not this list.
-  it.each(['1 000', '1 500', '4,5', '4.5', '2-3', '', 'wkrótce'])(
-    'declines to animate %s',
-    (value) => {
-      expect(parseFigure(value)).toBeNull()
-    },
-  )
+  // A single counter cannot drive two digit runs, so anything holding a second one is static text.
+  // Decimals are on that list by decision, not by limitation: this section carries whole counts.
+  it.each(['4,5', '4.5', '2-3', '1 0000', '', 'wkrótce'])('declines to animate %s', (value) => {
+    expect(parseFigure(value)).toBeNull()
+  })
+
+  // The separator is re-derived every frame rather than carried from the target, so the figure is
+  // grouped the whole way up instead of acquiring a space on its last frame.
+  it('groups the digits while they climb', () => {
+    const figure = parseFigure('1 000+')!
+
+    expect(formatFigure(figure, 50)).toBe('0 050+')
+    expect(formatFigure(figure, 999)).toBe('0 999+')
+    expect(formatFigure(figure, 1000)).toBe('1 000+')
+  })
 
   it('rests on the width the admin typed', () => {
     const figure = parseFigure('007')!
@@ -70,8 +78,8 @@ describe('CountUp server rendering', () => {
   })
 
   it('renders a figure it will not animate as plain text', () => {
-    const html = renderToStaticMarkup(createElement(CountUp, { value: '1 000' }))
+    const html = renderToStaticMarkup(createElement(CountUp, { value: '2-3' }))
 
-    expect(html).toBe('<span>1 000</span>')
+    expect(html).toBe('<span>2-3</span>')
   })
 })
