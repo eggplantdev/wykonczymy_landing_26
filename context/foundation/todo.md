@@ -6,7 +6,7 @@ document stays the place a claim is settled. **Finished items are deleted from h
 ticked** — the document they point at keeps the record and the reasoning.
 
 Everything the roadmap calls a slice is built and in production. What remains is one slice (S8),
-one check that needs a human at a browser, four decisions, and housekeeping.
+four decisions, and housekeeping.
 
 ## Blocks cutover
 
@@ -15,10 +15,6 @@ one check that needs a human at a browser, four decisions, and housekeeping.
       redirects for the four retired addresses are already shipped and live, so S8 **asserts** them
       rather than building them, and asserts `308` — which is what `permanent: true` emits, not
       `301`. → `roadmap.md` § S8
-- [ ] **Honeypot survives Chrome autofill.** The trap field is `website` because Chrome maps
-      `company` to `organization` regardless of `autoComplete`. A false trip discards a real enquiry
-      while showing the visitor a thank-you — silent on both sides, the worst failure this slice can
-      have. → `manual-checks.md` § EX-802
 
 ## After DNS
 

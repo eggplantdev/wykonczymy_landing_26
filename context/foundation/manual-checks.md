@@ -306,12 +306,21 @@ Then the round trip, which needs a browser and a real file:
       the fix at `10:46` — and they are the evidence that nothing had ever been cleaning up.
       `sweep-orphans` clears them once they pass `ORPHAN_AGE_MS`; **the age gate lives in
       `src/lib/blob/sweep.ts`, not in the schedule**, so running the cron early does nothing.
-- [ ] **Chrome with a saved address profile does not trip the honeypot.** Autofill the form from a
+- [x] **Chrome with a saved address profile does not trip the honeypot.** Autofill the form from a
       real profile, submit, and confirm the enquiry arrives. The trap field is named `website`
       precisely because Chrome maps `company` to `organization` and fills it regardless of
       `autoComplete` — a honeypot autofill can trip discards a real enquiry while showing the
       visitor a thank-you, which is the worst failure this slice can have because it is silent on
       both sides.
+      → **closed by analysis, not observation, 2026-09-22** — the owner's call, having no saved
+      address profile to autofill from. Chrome's address profile schema is name, organization,
+      street address, city, postcode, phone and email; it carries no website or URL field, so
+      there is nothing autofill can put in `website`. That is the whole reason the trap is named
+      `website` rather than `company` (`contact-form-trap.tsx:13`), so this box was always
+      confirming a decision the field name already encodes.
+      **What is accepted with it:** the failure this box guards is silent on both sides, so no
+      amount of spam arriving will ever reveal it — the symptom is an enquiry that does not
+      arrive. Re-open it if a visitor ever reports sending something that never landed.
 
 **The retry queue has been exercised for real (2026-09-22).** A submission from 2026-09-21 21:48
 sat at `attempts: 10` with `lastError: "Leads app answered 401"`, which put it past `MAX_ATTEMPTS`
