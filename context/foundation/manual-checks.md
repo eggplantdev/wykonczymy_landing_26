@@ -215,112 +215,22 @@ forwarded HMAC-signed to the leads app, which fetches the attachments and calls 
 staged blob prefix. Almost nothing below is observable from this repo: the rate limits, the cron
 schedule and both secrets live in Vercel, and half the contract lives in the other repo.
 
-**Two boxes block cutover and must be closed in order** — the migration goes up *before* the code
-that reads it, or `enqueue()` throws on every submission.
+**Every check here was closed by 2026-09-22** — the migration, the Vercel rate-limit rules, the
+three production secrets, both crons reporting `200` on their slashed paths, a live submission with
+attachments reaching the leads app, and the staged blob prefix disappearing after it. The ticked
+boxes were stripped when the change was archived; what follows is what outlived them.
 
-- [x] **`pnpm db:migrate:prod` applied for `20260921_140715_submissions_queue`.** Applied 2026-09-21 by the agent on the owner's
-      explicit instruction, no dump taken. It creates the `submissions` table; without it every submission fails
-      at the store step, which is *before* the visitor is answered, so the form errors outright.
-- [x] **The Vercel Firewall rate-limit rules exist on the project.** They are configured in the
-      dashboard and have **no representation in this repo**, so nothing in a diff will ever tell
-      you they are missing: rebuild the project and they are silently gone while every test still
-      passes. Confirm both — the form Server Action at 10 requests / 60s per IP, and
-      `/api/blob/upload-token` at 60 / 60s per IP. The upload-token limit is the load-bearing
-      one: each file is its own token request on a public route. The Server Action rule matches
-      the `next-action` header, which every Next Server Action carries — including Payload's
-      admin, whose form-state calls blew past 10/min and 403ed the editor out of its own site. It
-      now also requires `path does not start with /admin`; drop that condition and editing breaks
-      again.
-      → confirmed 2026-09-22 via `vercel firewall rules list --expand`: both `[Enabled]`, no
-      pending drafts. "Rate limit upload token" is `POST` + `path pre /api/blob/upload-token`,
-      60/60s keyed on ip, exceeding it denies for 1m. "Rate limit contact action" is `POST` +
-      `header[next-action] exists` + `path not pre /admin`, 10/60s, same key and same 1m deny.
-      Neither carries an `environment` condition, so both cover preview as well as production.
-      Counters are per region, so the real ceiling is roughly N x the quoted number — Vercel's
-      design rather than a misconfiguration, and it does not change what this box asserts.
+**`WYKONCZYMY_WEBHOOK_URL` must name the public alias** — `wykonczymy.vercel.app`. The
+project-scoped alias (`wykonczymy-wykonczymys-projects.vercel.app`) and every deployment URL sit
+behind Deployment Protection and answer `401` before any route runs; the public alias returns `403`
+to a deliberately invalid signature, which is the leads app's own rejection and therefore proof the
+request arrived.
 
-Then the wiring, which is all environment and all invisible to the test suite:
-
-- [x] **Production env holds `LANDING_WEBHOOK_SECRET`, `WYKONCZYMY_WEBHOOK_URL`, `CRON_SECRET`.**
-      The secret must be byte-identical to the leads app's copy — the signature is scoped, so a
-      mismatch fails closed and shows up only as a queue that grows.
-      → settled by the owner's 2026-09-22 confirmation that live submissions arrive, and by a
-      successful delivery being the *only* thing that proves the secret: until 2026-09-22 ~07:00
-      every forward was stopped by Vercel Deployment Protection before the leads app could check a
-      signature at all (see the stranded row below), so nothing before that date is evidence either
-      way. `CRON_SECRET` is covered separately by the cron box; it is confirmed by the routes
-      answering `401` rather than `500`, since `serverEnv` parses it with no default.
-
-      **`WYKONCZYMY_WEBHOOK_URL` must name the public alias** — `wykonczymy.vercel.app`. The
-      project-scoped alias (`wykonczymy-wykonczymys-projects.vercel.app`) and every deployment URL
-      sit behind Deployment Protection and answer `401` before any route runs. Probed 2026-09-22:
-      the public alias returns `403` to a deliberately invalid signature, which is the leads app's
-      own rejection and therefore proof the request arrived; both protected hosts return `401`.
-- [x] **The leads app has `LANDING_CLEANUP_URL` pointing back here**, and its
-      `POST /api/webhooks/landing` is deployed. Without the callback the delivery still succeeds
-      and the row is still deleted; what leaks is the blob prefix, which then waits for the daily
-      sweep instead of going immediately.
-      → wired 2026-09-22. The variable was absent from the leads app's production environment
-      entirely, and `serverEnv.LANDING_CLEANUP_URL` is `.optional()`, so `releaseLandingAssets`
-      returned on its first line and no delivery had ever called back. Set to
-      `https://wykonczymylanding26.vercel.app/api/webhooks/landing-delivered/` and the leads app
-      redeployed. The host is the **public alias** for the same reason `WYKONCZYMY_WEBHOOK_URL` is:
-      probed with a deliberately bad signature, the alias answers `403` — its own rejection, so the
-      route ran — while the project-scoped deployment URL answers `401` from Deployment Protection.
-      The trailing slash is deliberate; unslashed answers `308`, and although `fetch` follows it
-      with method and body intact, that round trip runs inside a 10 s timeout.
-      **The round trip is proven** — see the cleanup box below.
-- [x] **Both crons report `200` in the Vercel cron log, not `308`.** `trailingSlash: true` puts a
-      redirect ahead of every route including `/api/*`, and Vercel cron does not follow redirects
-      and does not log a redirected invocation — so a missing slash looks exactly like a cron that
-      never fired. `vercel.json` carries the slashes; this box is confirming the deploy agrees.
-      → confirmed 2026-09-22. `vercel crons list` registers both slashed paths, and production
-      answers `/api/cron/deliver-pending` with a `308` to the slashed form while the slashed form
-      itself returns `401` — the redirect is real, and `vercel.json` steps over it. In the logs
-      `deliver-pending/` returned **200** on its own `*/15` schedule (12:00 and 12:15) and again on
-      a manual `vercel crons run`; `sweep-orphans/` returned **200** at `04:00:45 UTC` on its own
-      `0 4 * * *` schedule. Zero `308`s on any cron path across 12h.
-      The `401`s in that window are this check's own unauthenticated probes, and they are also what
-      rules out a missing `CRON_SECRET`: `serverEnv` parses it with no default, so an unset var
-      would have produced a `500` rather than an authorization failure.
-
-Then the round trip, which needs a browser and a real file:
-
-- [x] **Submit the footer form with two attachments (one image, one PDF) and watch it land in the
-      leads app**, with both files openable from there. This is the only check that exercises the
-      whole chain at once.
-      → confirmed by the owner, 2026-09-22: a live submission carrying files reached the leads app
-      from production, and the notification mail with it. That is the north star (S2) met and
-      FR-031 proven end to end — staging the blobs, the signed forward, and the leads app's fetch
-      all held on a real enquiry. The cleanup that follows it is the box below, closed the same day.
-- [x] **The staged prefix under `leads/<submissionId>/` is gone afterwards**, and the
-      `submissions` row with it. A surviving row means the forward failed; a surviving prefix with
-      no row means the cleanup callback did not arrive.
-      → confirmed 2026-09-22, on the first submission sent after `LANDING_CLEANUP_URL` was wired.
-      Production logged `POST /api/blob/upload-token/` twice at `11:22:04 UTC`, the form at
-      `11:22:06`, and `POST /api/webhooks/landing-delivered/` **200** at `11:22:14` — eight seconds
-      end to end, and a `200` rather than the `403` a bad signature earns. A blob listing taken
-      immediately afterwards holds the same 53 files in the same 11 prefixes as the one taken
-      before: the new prefix was created and deleted inside that window.
-      The 11 survivors are the backlog this bug left — newest `05:17 UTC`, all of them older than
-      the fix at `10:46` — and they are the evidence that nothing had ever been cleaning up.
-      `sweep-orphans` clears them once they pass `ORPHAN_AGE_MS`; **the age gate lives in
-      `src/lib/blob/sweep.ts`, not in the schedule**, so running the cron early does nothing.
-- [x] **Chrome with a saved address profile does not trip the honeypot.** Autofill the form from a
-      real profile, submit, and confirm the enquiry arrives. The trap field is named `website`
-      precisely because Chrome maps `company` to `organization` and fills it regardless of
-      `autoComplete` — a honeypot autofill can trip discards a real enquiry while showing the
-      visitor a thank-you, which is the worst failure this slice can have because it is silent on
-      both sides.
-      → **closed by analysis, not observation, 2026-09-22** — the owner's call, having no saved
-      address profile to autofill from. Chrome's address profile schema is name, organization,
-      street address, city, postcode, phone and email; it carries no website or URL field, so
-      there is nothing autofill can put in `website`. That is the whole reason the trap is named
-      `website` rather than `company` (`contact-form-trap.tsx:13`), so this box was always
-      confirming a decision the field name already encodes.
-      **What is accepted with it:** the failure this box guards is silent on both sides, so no
-      amount of spam arriving will ever reveal it — the symptom is an enquiry that does not
-      arrive. Re-open it if a visitor ever reports sending something that never landed.
+**The cleanup round trip runs in seconds, not on the sweep.** The first submission after
+`LANDING_CLEANUP_URL` was wired logged `upload-token` at `11:22:04 UTC`, the form at `11:22:06` and
+the `landing-delivered` callback `200` at `11:22:14`; a blob listing taken straight after held no
+new prefix. The daily `sweep-orphans` is the backstop, and its 24-hour gate lives in
+`src/lib/blob/sweep.ts`, not in the cron schedule — running the cron early does nothing.
 
 **The retry queue has been exercised for real (2026-09-22).** A submission from 2026-09-21 21:48
 sat at `attempts: 10` with `lastError: "Leads app answered 401"`, which put it past `MAX_ATTEMPTS`
@@ -332,6 +242,14 @@ resetting `attempts` to 0 and running the cron delivered it and deleted the row.
 That is the "no lead is lost" machinery working, but it only worked because someone looked. Nothing
 watches for a row past the ceiling — the design note in `submissions.ts` calls the admin "the alarm",
 and no one is in front of it.
+
+**The honeypot autofill check was closed by analysis, not observation (2026-09-22)** — the owner's
+call, having no saved Chrome address profile. Chrome's address profile schema is name, organization,
+street address, city, postcode, phone and email; it carries no website field, which is exactly why
+the trap is named `website` rather than `company` (`contact-form-trap.tsx:13`). **What is accepted
+with it:** the failure it guards is silent on both sides, so no amount of spam arriving will ever
+reveal it — the symptom is an enquiry that does not arrive. Re-open it if a visitor ever reports
+sending something that never landed.
 
 One known gap, deliberately left:
 

@@ -1,10 +1,10 @@
 ---
 change_id: lead-delivery
 title: Deliver form submissions into the leads app, attachments included
-status: implemented
+status: archived
 created: 2026-09-18
-updated: 2026-09-21
-archived_at: null
+updated: 2026-09-22
+archived_at: 2026-09-22T11:45:47Z
 branch: lead-delivery
 worktree: null
 ---

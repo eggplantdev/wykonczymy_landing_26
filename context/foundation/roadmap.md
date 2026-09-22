@@ -75,11 +75,11 @@ flag, a second leads-app deployment, or any other isolation machinery for this.
 | F1  | Scaffold, local DB, first deploy                     | **done** | —          | —             |
 | F2  | Localization spine + localized `slug`                | done     | F1         | —             |
 | S1  | One page live at its indexed address, PL + EN        | proposed | F2         | —             |
-| S2  | **Contact form reaches the leads app** (north star)  | in review | S1        | S3, S4, S5    |
+| S2  | **Contact form reaches the leads app** (north star)  | done      | S1        | S3, S4, S5    |
 | S3  | Remaining carried pages                              | proposed | S1         | S2, S4, S5    |
 | S4  | Completed projects — listing + project pages         | proposed | S1         | S2, S3, S5    |
 | S5  | Testimonials and the shared content lists            | proposed | S1         | S2, S3, S4    |
-| S6  | Photo attachments on the form                        | in review | S2        | —             |
+| S6  | Photo attachments on the form                        | done      | S2        | —             |
 | S7  | SEO surface — sitemap, hreflang, canonical, metadata | in review | S3, S4    | S6            |
 | S8  | Cutover — url-map test green, redirects, DNS         | blocked  | S2, S7     | —             |
 
@@ -168,7 +168,7 @@ this is where it surfaces — cheaply.
 
 ### S2 — Contact form reaches the leads app (north star)
 
-**Status:** in review · **Change ID:** `2026-09-18-lead-delivery` (EX-802) · **Depends on:** S1 ·
+**Status:** done · **Change ID:** `2026-09-18-lead-delivery` (EX-802) · **Depends on:** S1 ·
 **Parallel with:** S3, S4, S5
 
 **Merged with S6 and delivered together.** The two stopped being separable once the wire contract
@@ -244,7 +244,7 @@ modelling detail resolved during the work, not a gate on it.
 
 ### S6 — Photo attachments on the form
 
-**Status:** in review · **Change ID:** `2026-09-18-lead-delivery` (EX-802) · **Depends on:** S2
+**Status:** done · **Change ID:** `2026-09-18-lead-delivery` (EX-802) · **Depends on:** S2
 
 **Merged into S2 and delivered with it** — and the block below is resolved, not still standing. The
 leads app *was* the obstacle, and the mandate to edit it was granted 2026-09-21; the wire now carries
@@ -333,3 +333,5 @@ pages) and OQ 9 (no editor/admin split — one account, slug guardrail moved to 
 ## Done
 
 - **F2: Localization spine + localized `slug`** — Archived 2026-09-03 → `context/archive/2026-09-03-f2-i18n-spine/`. Lesson: —.
+- **S2: Contact form reaches the leads app (north star)** — Archived 2026-09-22 → `context/archive/2026-09-18-lead-delivery/`. Lesson: —.
+- **S6: Photo attachments on the form** — Archived 2026-09-22 → `context/archive/2026-09-18-lead-delivery/`. Merged into S2 and delivered with it. Lesson: —.

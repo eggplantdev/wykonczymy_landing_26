@@ -128,6 +128,20 @@ pass that did run may have dropped a file. Counting also makes a lost `200` chea
 whose first pass was complete still adds up, so it re-sends the callback rather than leaving an
 orphaned prefix behind.
 
+## This table is the authority, not anyone's description of it
+
+The two halves of this contract were not built at the same time: the receiving side shipped first
+and sat frozen while the landing was written against it. That inverts the usual two-repo risk. The
+normal worry is that both halves drift while both are moving; here the danger is the opposite — the
+landing gets built against a *description* of the webhook (a `change.md` note, a plan, a summary in
+a conversation) rather than against what the route actually does. When those disagree, the `##
+Answers` table below and `src/app/api/webhooks/landing/route.ts` in the leads app win, every time.
+
+That is not hypothetical bookkeeping: the retry rule falls straight out of the table, and getting
+it from a description instead cost a `🔴 CRITICAL` in this change's review — delivery was gated on
+`>= 500`, so every `4xx` counted as delivered and the queue deleted the row. A rotated secret or a
+typo'd URL would have silently destroyed every lead the queue exists to hold.
+
 ## Two rules that live on the landing side
 
 1. **The upload token is minted only after the form validates server-side.** Otherwise the store is
