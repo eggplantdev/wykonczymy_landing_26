@@ -51,14 +51,14 @@ no `plan.md`. Step 0.5 skipped — no `verify-manual-checks` skill in this proje
 
 ## Findings
 
-**Trimmed at archive (2026-09-22).** The pre-trim tally was **21 fixed, 11 dismissed, 2 dropped, 4 skipped, 1 filed, 1 superseded, 2 flagged-for-owner, 2 owner-confirm · 4 open** across 44 findings. Every `fixed` finding was removed: its durable record is the
+**Trimmed at archive (2026-09-22).** The pre-trim tally was **21 fixed, 11 dismissed, 2 dropped, 4 skipped, 1 filed, 1 superseded, 2 flagged-for-owner, 2 owner-confirm · 4 open (2 closed at archive)** across 44 findings. Every `fixed` finding was removed: its durable record is the
 commit that fixed it, and the fix is now just the code. What survives below is the negative
 space git cannot hold — what was looked at and deliberately *not* changed, and why.
 
 ### Gate run 2
 
-- [ ] 🔵 OBSERVATION · flagged-for-owner · `code-review` · `src/components/home/hero.tsx:43` ·
-      carried forward from run 1, still yours to call — see the run-1 entry below.
+- [x] 🔵 OBSERVATION · resolved · `code-review` · `src/components/home/hero.tsx:43` ·
+      carried forward from run 1 — see the run-1 entry below, closed at archive.
 - [ ] incident · owner-confirm · `src/lib/motion.ts` · carried forward from run 1. Re-verified this
       run: `COUNT_UP_*` is gone from `lib/motion.ts` for good — a parallel session moved the value
       into `ui/count-up.tsx` as its own `DURATION = 1.6` with its own rationale comment, and
@@ -94,11 +94,13 @@ space git cannot hold — what was looked at and deliberately *not* changed, and
 
 ### Gate run 1
 
-- [ ] 🔵 OBSERVATION · flagged-for-owner · `code-review` · `src/components/home/hero.tsx:43` ·
-      dropped rationale comment + now-vestigial `pb-12` — **this file's content is not my work.** It
-      is my reconstruction of the uncommitted change I destroyed earlier with `git checkout --`, so
-      I can't tell whether that layout is mid-iteration by you or another session. Not fixed; your
-      call. Box stays open until you say drop or fix.
+- [x] 🔵 OBSERVATION · resolved · `code-review` · `src/components/home/hero.tsx:43` ·
+      dropped rationale comment + now-vestigial `pb-12` — the file's content was not my work but my
+      reconstruction of the uncommitted change I had destroyed with `git checkout --`, so whether
+      that layout was mid-iteration was not mine to judge. Closed at archive (2026-09-22): the file
+      has been rewritten several times since (`b861961` last), `pb-12` is gone — the block reads
+      `pb-20 md:pb-16` — and the `useScroll` offset carries its rationale again. Nothing left of
+      either half.
 - [ ] incident · owner-confirm · `src/lib/motion.ts` · **I overwrote this file with a heredoc and
       destroyed `COUNT_UP_DURATION` / `COUNT_UP_STAGGER`**, which a parallel session had added for
       `ui/count-up.tsx` + `numbers/number-card.tsx`. The file is untracked, so git had nothing to
