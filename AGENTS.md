@@ -179,7 +179,11 @@ site.
   than throwing and `after()` runs it after the response, so the console shows only that unrelated
   warning and a `POST / 200` while the real reason goes to the queue row's `lastError`. Read the
   row, not the log. Both apps default to port 3000, so a `WYKONCZYMY_WEBHOOK_URL` left pointing at
-  this app answers 404 and reads like a leads-app fault. `@src/lib/contact/forward.ts`
+  this app answers 404 and reads like a leads-app fault. **A `401` in `lastError` is never the
+  secret** — the leads app rejects a bad signature with `403`, so `401` means Deployment Protection
+  answered before its code ran and the URL names a guarded host. It must be the public alias
+  (`wykonczymy.vercel.app`); the project-scoped one and every deployment URL fail closed.
+  `@src/lib/contact/forward.ts`
 - **Read env through a module that parses `env-schema.ts`, never raw `process.env`** — ESLint
   rejects it in `src/**`. `env.ts` is the **client** module and parses `clientSchema`, so it is
   the wrong home for a secret: putting one there inlines it into the browser bundle. A

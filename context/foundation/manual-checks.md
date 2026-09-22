@@ -221,7 +221,7 @@ that reads it, or `enqueue()` throws on every submission.
 - [x] **`pnpm db:migrate:prod` applied for `20260921_140715_submissions_queue`.** Applied 2026-09-21 by the agent on the owner's
       explicit instruction, no dump taken. It creates the `submissions` table; without it every submission fails
       at the store step, which is *before* the visitor is answered, so the form errors outright.
-- [ ] **The Vercel Firewall rate-limit rules exist on the project.** They are configured in the
+- [x] **The Vercel Firewall rate-limit rules exist on the project.** They are configured in the
       dashboard and have **no representation in this repo**, so nothing in a diff will ever tell
       you they are missing: rebuild the project and they are silently gone while every test still
       passes. Confirm both — the form Server Action at 10 requests / 60s per IP, and
@@ -231,23 +231,48 @@ that reads it, or `enqueue()` throws on every submission.
       admin, whose form-state calls blew past 10/min and 403ed the editor out of its own site. It
       now also requires `path does not start with /admin`; drop that condition and editing breaks
       again.
+      → confirmed 2026-09-22 via `vercel firewall rules list --expand`: both `[Enabled]`, no
+      pending drafts. "Rate limit upload token" is `POST` + `path pre /api/blob/upload-token`,
+      60/60s keyed on ip, exceeding it denies for 1m. "Rate limit contact action" is `POST` +
+      `header[next-action] exists` + `path not pre /admin`, 10/60s, same key and same 1m deny.
+      Neither carries an `environment` condition, so both cover preview as well as production.
+      Counters are per region, so the real ceiling is roughly N x the quoted number — Vercel's
+      design rather than a misconfiguration, and it does not change what this box asserts.
 
 Then the wiring, which is all environment and all invisible to the test suite:
 
 - [x] **Production env holds `LANDING_WEBHOOK_SECRET`, `WYKONCZYMY_WEBHOOK_URL`, `CRON_SECRET`.**
       The secret must be byte-identical to the leads app's copy — the signature is scoped, so a
       mismatch fails closed and shows up only as a queue that grows.
-      → settled by the owner's 2026-09-22 confirmation that live submissions arrive: a forward
-      that lands proves the URL and a byte-identical secret. `CRON_SECRET` is not covered by it —
-      the crons are the box below.
+      → settled by the owner's 2026-09-22 confirmation that live submissions arrive, and by a
+      successful delivery being the *only* thing that proves the secret: until 2026-09-22 ~07:00
+      every forward was stopped by Vercel Deployment Protection before the leads app could check a
+      signature at all (see the stranded row below), so nothing before that date is evidence either
+      way. `CRON_SECRET` is covered separately by the cron box; it is confirmed by the routes
+      answering `401` rather than `500`, since `serverEnv` parses it with no default.
+
+      **`WYKONCZYMY_WEBHOOK_URL` must name the public alias** — `wykonczymy.vercel.app`. The
+      project-scoped alias (`wykonczymy-wykonczymys-projects.vercel.app`) and every deployment URL
+      sit behind Deployment Protection and answer `401` before any route runs. Probed 2026-09-22:
+      the public alias returns `403` to a deliberately invalid signature, which is the leads app's
+      own rejection and therefore proof the request arrived; both protected hosts return `401`.
 - [ ] **The leads app has `LANDING_CLEANUP_URL` pointing back here**, and its
       `POST /api/webhooks/landing` is deployed. Without the callback the delivery still succeeds
       and the row is still deleted; what leaks is the blob prefix, which then waits for the daily
       sweep instead of going immediately.
-- [ ] **Both crons report `200` in the Vercel cron log, not `308`.** `trailingSlash: true` puts a
+- [x] **Both crons report `200` in the Vercel cron log, not `308`.** `trailingSlash: true` puts a
       redirect ahead of every route including `/api/*`, and Vercel cron does not follow redirects
       and does not log a redirected invocation — so a missing slash looks exactly like a cron that
       never fired. `vercel.json` carries the slashes; this box is confirming the deploy agrees.
+      → confirmed 2026-09-22. `vercel crons list` registers both slashed paths, and production
+      answers `/api/cron/deliver-pending` with a `308` to the slashed form while the slashed form
+      itself returns `401` — the redirect is real, and `vercel.json` steps over it. In the logs
+      `deliver-pending/` returned **200** on its own `*/15` schedule (12:00 and 12:15) and again on
+      a manual `vercel crons run`; `sweep-orphans/` returned **200** at `04:00:45 UTC` on its own
+      `0 4 * * *` schedule. Zero `308`s on any cron path across 12h.
+      The `401`s in that window are this check's own unauthenticated probes, and they are also what
+      rules out a missing `CRON_SECRET`: `serverEnv` parses it with no default, so an unset var
+      would have produced a `500` rather than an authorization failure.
 
 Then the round trip, which needs a browser and a real file:
 
@@ -269,9 +294,27 @@ Then the round trip, which needs a browser and a real file:
       visitor a thank-you, which is the worst failure this slice can have because it is silent on
       both sides.
 
+**The retry queue has been exercised for real (2026-09-22).** A submission from 2026-09-21 21:48
+sat at `attempts: 10` with `lastError: "Leads app answered 401"`, which put it past `MAX_ATTEMPTS`
+and therefore outside what `listPending` will ever pick up again. Cause was not the secret: the
+leads app answers a bad signature with `403`, so a `401` means the request never reached its code —
+`WYKONCZYMY_WEBHOOK_URL` was pointing at a Deployment-Protection-guarded host. With the URL fixed,
+resetting `attempts` to 0 and running the cron delivered it and deleted the row. The queue is empty.
+
+That is the "no lead is lost" machinery working, but it only worked because someone looked. Nothing
+watches for a row past the ceiling — the design note in `submissions.ts` calls the admin "the alarm",
+and no one is in front of it.
+
 One known gap, deliberately left:
 
-- **A forward from a *preview* deployment will not reach the leads app** while that app has
-  Deployment Protection on — the request needs an `x-vercel-protection-bypass` header that
-  `forward.ts` does not send. Production is unaffected. Decide it when a preview actually needs to
+- **A forward will not reach the leads app from any Deployment-Protection-guarded host** — the
+  request needs an `x-vercel-protection-bypass` header that `forward.ts` does not send. This is
+  wider than preview: probed 2026-09-22, `wykonczymy.vercel.app` answers `403` to an invalid
+  signature (its own rejection, so the request landed) while both
+  `wykonczymy-wykonczymys-projects.vercel.app` and the raw deployment URL answer `401`. So
+  `WYKONCZYMY_WEBHOOK_URL` must name the **public alias**; the project-scoped one differs by a
+  single path segment and fails closed. Decide the bypass header when a preview actually needs to
   deliver; until then, test the round trip against production.
+- **A `401`/`403` burns all ten attempts.** `forward()` cannot distinguish "wrong address" from "the
+  network blinked", so a misconfigured URL costs the full retry budget over roughly two hours and
+  then parks the lead permanently. Worth splitting retryable from terminal failures if this recurs.
