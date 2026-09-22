@@ -6,7 +6,7 @@ document stays the place a claim is settled. **Finished items are deleted from h
 ticked** — the document they point at keeps the record and the reasoning.
 
 Everything the roadmap calls a slice is built and in production. What remains is one slice (S8),
-verification that needs a human at a browser, four decisions, and housekeeping.
+one check that needs a human at a browser, four decisions, and housekeeping.
 
 ## Blocks cutover
 
@@ -15,11 +15,6 @@ verification that needs a human at a browser, four decisions, and housekeeping.
       redirects for the four retired addresses are already shipped and live, so S8 **asserts** them
       rather than building them, and asserts `308` — which is what `permanent: true` emits, not
       `301`. → `roadmap.md` § S8
-- [ ] **The staged `leads/<submissionId>/` prefix disappears after a delivery.** The callback is
-      wired: `LANDING_CLEANUP_URL` is set on the leads app and it was redeployed, and the landing's
-      `/api/webhooks/landing-delivered/` answers `403` to a bad signature on the public alias, which
-      proves it is reachable. Unproven is the round trip — it needs one real submission carrying a
-      photo. → `manual-checks.md` § EX-802
 - [ ] **Honeypot survives Chrome autofill.** The trap field is `website` because Chrome maps
       `company` to `organization` regardless of `autoComplete`. A false trip discards a real enquiry
       while showing the visitor a thank-you — silent on both sides, the worst failure this slice can

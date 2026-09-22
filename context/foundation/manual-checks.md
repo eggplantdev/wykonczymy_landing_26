@@ -269,8 +269,7 @@ Then the wiring, which is all environment and all invisible to the test suite:
       route ran — while the project-scoped deployment URL answers `401` from Deployment Protection.
       The trailing slash is deliberate; unslashed answers `308`, and although `fetch` follows it
       with method and body intact, that round trip runs inside a 10 s timeout.
-      **Still unproven: the round trip.** Reachability is not delivery — the box below is what
-      closes it, and it needs one real submission carrying a photo.
+      **The round trip is proven** — see the cleanup box below.
 - [x] **Both crons report `200` in the Vercel cron log, not `308`.** `trailingSlash: true` puts a
       redirect ahead of every route including `/api/*`, and Vercel cron does not follow redirects
       and does not log a redirected invocation — so a missing slash looks exactly like a cron that
@@ -293,11 +292,20 @@ Then the round trip, which needs a browser and a real file:
       → confirmed by the owner, 2026-09-22: a live submission carrying files reached the leads app
       from production, and the notification mail with it. That is the north star (S2) met and
       FR-031 proven end to end — staging the blobs, the signed forward, and the leads app's fetch
-      all held on a real enquiry. What it does **not** cover is the cleanup that follows it: the
-      box below is still open.
-- [ ] **The staged prefix under `leads/<submissionId>/` is gone afterwards**, and the
+      all held on a real enquiry. The cleanup that follows it is the box below, closed the same day.
+- [x] **The staged prefix under `leads/<submissionId>/` is gone afterwards**, and the
       `submissions` row with it. A surviving row means the forward failed; a surviving prefix with
       no row means the cleanup callback did not arrive.
+      → confirmed 2026-09-22, on the first submission sent after `LANDING_CLEANUP_URL` was wired.
+      Production logged `POST /api/blob/upload-token/` twice at `11:22:04 UTC`, the form at
+      `11:22:06`, and `POST /api/webhooks/landing-delivered/` **200** at `11:22:14` — eight seconds
+      end to end, and a `200` rather than the `403` a bad signature earns. A blob listing taken
+      immediately afterwards holds the same 53 files in the same 11 prefixes as the one taken
+      before: the new prefix was created and deleted inside that window.
+      The 11 survivors are the backlog this bug left — newest `05:17 UTC`, all of them older than
+      the fix at `10:46` — and they are the evidence that nothing had ever been cleaning up.
+      `sweep-orphans` clears them once they pass `ORPHAN_AGE_MS`; **the age gate lives in
+      `src/lib/blob/sweep.ts`, not in the schedule**, so running the cron early does nothing.
 - [ ] **Chrome with a saved address profile does not trip the honeypot.** Autofill the form from a
       real profile, submit, and confirm the enquiry arrives. The trap field is named `website`
       precisely because Chrome maps `company` to `organization` and fills it regardless of
