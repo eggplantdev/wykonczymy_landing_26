@@ -30,6 +30,8 @@ export function SettingsMenu({ paths }: PropsT) {
       <AnimatePresence>
         {isOpen && (
           <Popover.Content
+            // No `Popover.Portal` around this: Radix's Dialog sets `pointer-events: none` on
+            // everything outside itself, and a body-level popover is outside the mobile sheet.
             forceMount
             // The panel is wider than the gear, so it cannot hang off the trigger's own edge:
             // pinned to the right, it opens inward.

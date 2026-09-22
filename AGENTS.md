@@ -99,6 +99,16 @@ anything bilingual.
   directory. That is why `lib/seo/` sits next to `lib/content/seo.ts` and `lib/contact/` next to
   `lib/content/contact.ts` — the pairs are the same topic split by whether the code touches
   Payload, not a duplicate. Put a CMS read in `lib/<x>/` and the boundary stops meaning anything.
+  One live exception, known and left: `lib/content/media.ts` imports its output type from
+  `components/media/types.ts`, so the data tier depends on the UI tier. It has 19 importers and
+  moving it is a type-only refactor of its own — not a sign the rule lapsed.
+
+- **A class string pulled out into a constant stays wrapped in `cn()`.** It reads like pure
+  concatenation and a simplify pass will keep proposing a plain template literal, but
+  `eslint-plugin-better-tailwindcss` only lints class attributes and its configured callees —
+  `cn` is one, a bare constant is not. Unwrap it and the string silently leaves the only check
+  that catches an invented utility; `mb-` and `text-hero-lg` both shipped compiling to nothing
+  before the plugin was installed. Instance: `@src/components/footer/contact-form/field-control-classes.ts`.
 
 ## Stack, deploy, local DB
 
