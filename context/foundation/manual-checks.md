@@ -234,9 +234,12 @@ that reads it, or `enqueue()` throws on every submission.
 
 Then the wiring, which is all environment and all invisible to the test suite:
 
-- [ ] **Production env holds `LANDING_WEBHOOK_SECRET`, `WYKONCZYMY_WEBHOOK_URL`, `CRON_SECRET`.**
+- [x] **Production env holds `LANDING_WEBHOOK_SECRET`, `WYKONCZYMY_WEBHOOK_URL`, `CRON_SECRET`.**
       The secret must be byte-identical to the leads app's copy — the signature is scoped, so a
       mismatch fails closed and shows up only as a queue that grows.
+      → settled by the owner's 2026-09-22 confirmation that live submissions arrive: a forward
+      that lands proves the URL and a byte-identical secret. `CRON_SECRET` is not covered by it —
+      the crons are the box below.
 - [ ] **The leads app has `LANDING_CLEANUP_URL` pointing back here**, and its
       `POST /api/webhooks/landing` is deployed. Without the callback the delivery still succeeds
       and the row is still deleted; what leaks is the blob prefix, which then waits for the daily
@@ -248,9 +251,14 @@ Then the wiring, which is all environment and all invisible to the test suite:
 
 Then the round trip, which needs a browser and a real file:
 
-- [ ] **Submit the footer form with two attachments (one image, one PDF) and watch it land in the
+- [x] **Submit the footer form with two attachments (one image, one PDF) and watch it land in the
       leads app**, with both files openable from there. This is the only check that exercises the
       whole chain at once.
+      → confirmed by the owner, 2026-09-22: a live submission carrying files reached the leads app
+      from production, and the notification mail with it. That is the north star (S2) met and
+      FR-031 proven end to end — staging the blobs, the signed forward, and the leads app's fetch
+      all held on a real enquiry. What it does **not** cover is the cleanup that follows it: the
+      box below is still open.
 - [ ] **The staged prefix under `leads/<submissionId>/` is gone afterwards**, and the
       `submissions` row with it. A surviving row means the forward failed; a surviving prefix with
       no row means the cleanup callback did not arrive.
