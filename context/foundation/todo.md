@@ -57,9 +57,11 @@ four decisions, and housekeeping.
       describes a site with zero content. `AGENTS.md` names it as the first file to read, so every
       session starts from it. S8's status in `roadmap.md` was corrected 2026-09-22; the other slices
       still lag the code.
-- [ ] **Three change folders unarchived** — `2026-09-18-lead-delivery` and `2026-09-20-s7-seo` are
-      `implemented` and owe `/10x-archive`; `2026-09-04-tdg-port` has no `change.md` at all, so its
-      review gate was never armed.
+- [ ] **`2026-09-04-tdg-port` cannot be archived** — it has no `change.md`, so the review gate was
+      never armed and `/10x-archive` refuses it. It also still holds live work: the **"O nas"**
+      decision above, plus cookie consent and analytics, which belong to no roadmap slice. Either
+      run `/10x-new tdg-port` to arm it, or move the three open items into `roadmap.md` and delete
+      the folder. The other two archived 2026-09-22.
 
 ## Shortest path to cutover
 

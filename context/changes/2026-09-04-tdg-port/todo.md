@@ -64,13 +64,14 @@ see **Not this slice** at the bottom for where each one lives.
 Parked here only so cutting them from the list above does not lose them. Each belongs to a
 roadmap slice, or to none yet — do not work them from this file.
 
-- **Contact form has no sink.** `submitContactForm` validates and returns `{ ok: true }`
-  without delivering anywhere. → roadmap **S2**.
+- ~~**Contact form has no sink.**~~ Shipped — S2 archived 2026-09-22. `submitContactForm`
+  enqueues a `submissions` row and forwards a signed envelope to the leads app.
+  → `context/archive/2026-09-18-lead-delivery/`.
 - **`price-list` is a dead page type under a live 301.** `'price-list'` is still in
   `pageTypes` while `/cennik/` redirects home, so a document created under it would be
   unreachable. → roadmap **S8**, open questions 3 and 4.
-- **SEO plumbing** — `sitemap.ts`, `robots.ts`, OG images, favicon set, `LocalBusiness`
-  JSON-LD. → roadmap **S7**.
+- ~~**SEO plumbing**~~ — shipped as `Organization` JSON-LD rather than `LocalBusiness`;
+  S7 archived 2026-09-22. → `context/archive/2026-09-20-s7-seo/`.
 - **Cookie consent + a Privacy / Cookies page.** Not in the roadmap at all. Has to exist
   before the first third-party script, not after.
 - **Analytics** (Vercel Analytics vs GA4). Not in the roadmap either, and gated on consent.
