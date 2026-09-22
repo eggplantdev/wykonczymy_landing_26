@@ -17,12 +17,12 @@ tailwind-v4. `/10x-impl-review` dropped — no `plan.md` for this slice.
 
 ## Findings
 
-**Trimmed at archive (2026-09-22).** The pre-trim tally was **13 fixed, 6 dismissed, 3 dropped, 4 skipped · 2 open** across 26 findings. Every `fixed` finding was removed: its durable record is the
+**Trimmed at archive (2026-09-22).** The pre-trim tally was **13 fixed, 6 dismissed, 3 dropped, 4 skipped · 2 open (1 closed at archive)** across 26 findings. Every `fixed` finding was removed: its durable record is the
 commit that fixed it, and the fix is now just the code. What survives below is the negative
 space git cannot hold — what was looked at and deliberately *not* changed, and why.
 
 - [ ] skipped · simplify · `src/app/(frontend)/(lab)/process-lab/*` · delete the whole lab, −378 lines — the spotlight is chosen and shipped, nothing links to `/process-lab/`. NOT applied: the directory is **untracked**, so deleting it is unrecoverable, and per AGENTS.md keep/remove calls are the owner's. Needs your yes/no.
-- [ ] skipped · structure · `src/components/home/home-page.tsx:109` · the placeholder mounts on the real home page — six steps of hardcoded Polish copy (incl. "Gwarancja 24 miesiące"), rendered untranslated on `/en/`. Superseded: you ordered the Payload wiring for after this gate, which removes the constant outright.
+- [x] superseded · structure · `src/components/home/home-page.tsx:109` · the placeholder mounted on the real home page — six steps of hardcoded Polish copy (incl. "Gwarancja 24 miesiące"), rendered untranslated on `/en/`. Closed at archive (2026-09-22): the Payload wiring you ordered for after this gate landed, `home-page.tsx` now renders `processSection` from the CMS and the constant is gone — `grep "Gwarancja 24" src/` is empty.
 - [x] dismissed · simplify · `src/components/ui/carousel-arrow.tsx:29` · proposal to drop `toEdge`/`fromEdge` and keep only `slideChange`. The correctness pass traced Swiper's `updateProgress` — both fire on resize and breakpoint change, where the last slide can stop being the last. Kept all three; the reviewers disagreed and the source settled it.
 - [x] skipped · simplify · `process-spotlight.tsx:53-95,143-164` · replace the measured strip (`marks`, `axis`, `measure()`, `ResizeObserver`, four spans) with per-step CSS segments sized `calc(100% + gap)`, ≈ −75 lines. Real and probably right, but it is the only visual behaviour in the file and changes geometry on mobile — behaviour-changing, wants eyes at both breakpoints and a resize across them. Its own review, not a gate fix.
 - [x] dismissed · simplify · `process-spotlight.tsx:46,203` · proposal to delete `wantsRun` as unreachable. The correctness pass agrees on the ordering but did not verify it at runtime, and the handshake is 5 lines guarding a section that silently never rotates if the bet is wrong. Kept.
@@ -43,7 +43,7 @@ mutating pass over a file three reviewers had just read would have been re-revie
 simplification.
 
 Net: ~−120 lines applied. The two large deletions still on the table (the lab, −378;
-the CSS-segment rewrite, −75) are the two open boxes and one skipped box above.
+the CSS-segment rewrite, −75) are the one open box and one skipped box above.
 
 ## Tests & suite
 
