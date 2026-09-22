@@ -224,9 +224,13 @@ that reads it, or `enqueue()` throws on every submission.
 - [ ] **The Vercel Firewall rate-limit rules exist on the project.** They are configured in the
       dashboard and have **no representation in this repo**, so nothing in a diff will ever tell
       you they are missing: rebuild the project and they are silently gone while every test still
-      passes. Confirm both — the form Server Action at 60 requests / 60s per IP, and
-      `/api/blob/upload-token/` at 10 / 60s per IP. The upload-token limit is the load-bearing
-      one: each file is its own token request on a public route.
+      passes. Confirm both — the form Server Action at 10 requests / 60s per IP, and
+      `/api/blob/upload-token` at 60 / 60s per IP. The upload-token limit is the load-bearing
+      one: each file is its own token request on a public route. The Server Action rule matches
+      the `next-action` header, which every Next Server Action carries — including Payload's
+      admin, whose form-state calls blew past 10/min and 403ed the editor out of its own site. It
+      now also requires `path does not start with /admin`; drop that condition and editing breaks
+      again.
 
 Then the wiring, which is all environment and all invisible to the test suite:
 
