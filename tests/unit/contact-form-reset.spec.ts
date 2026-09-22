@@ -14,8 +14,8 @@ function mountedForm() {
 }
 
 // Mirrors the restore effect in `contact-form.tsx`.
-function restoreDraft(form: ReturnType<typeof mountedForm>) {
-  form.reset({ ...draft, acceptsTerms: false }, { keepDefaultValues: true })
+function restoreDraft(form: ReturnType<typeof mountedForm>, values: object = draft) {
+  form.reset({ ...DEFAULT_VALUES, ...values, acceptsTerms: false }, { keepDefaultValues: true })
 }
 
 describe('restoring a draft into the form', () => {
@@ -39,6 +39,18 @@ describe('restoring a draft into the form', () => {
     form.reset()
 
     expect(form.state.values).toEqual(DEFAULT_VALUES)
+  })
+
+  // sessionStorage outlives a deploy, so a draft saved by the previous bundle is missing
+  // every field added since. Restored as-is it leaves that input uncontrolled and fails the
+  // schema the upload token is minted against.
+  it('fills a field the saved draft predates', () => {
+    const form = mountedForm()
+    const { timing: _timing, ...staleDraft } = draft
+
+    restoreDraft(form, staleDraft)
+
+    expect(form.state.values.timing).toBe('')
   })
 
   it('clears every field after a send, including the consent box', () => {

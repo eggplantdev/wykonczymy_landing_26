@@ -168,8 +168,11 @@ export function ContactForm({ privacyPolicyHref }: PropsT) {
   // send refills every field with the enquiry that was just sent.
   useEffect(() => {
     if (form.state.isDirty) return
+    // The defaults first: a draft saved before a field existed has no key for it, and the
+    // field would restore as `undefined` — uncontrolled, and rejected by the schema the
+    // upload token is minted against.
     form.reset(
-      { ...useContactFormStore.getState().draft, acceptsTerms: false },
+      { ...DEFAULT_VALUES, ...useContactFormStore.getState().draft, acceptsTerms: false },
       {
         keepDefaultValues: true,
       },
