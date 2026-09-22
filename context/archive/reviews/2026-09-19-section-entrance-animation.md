@@ -51,7 +51,7 @@ no `plan.md`. Step 0.5 skipped — no `verify-manual-checks` skill in this proje
 
 ## Findings
 
-**Trimmed at archive (2026-09-22).** The pre-trim tally was **21 fixed, 11 dismissed, 2 dropped, 4 skipped, 1 filed, 1 superseded, 2 flagged-for-owner, 2 owner-confirm · 4 open (2 closed at archive)** across 44 findings. Every `fixed` finding was removed: its durable record is the
+**Trimmed at archive (2026-09-22).** The pre-trim tally was **21 fixed, 11 dismissed, 2 dropped, 4 skipped, 1 filed, 1 superseded, 2 flagged-for-owner, 2 owner-confirm · 4 open (all closed at archive)** across 44 findings. Every `fixed` finding was removed: its durable record is the
 commit that fixed it, and the fix is now just the code. What survives below is the negative
 space git cannot hold — what was looked at and deliberately *not* changed, and why.
 
@@ -59,11 +59,8 @@ space git cannot hold — what was looked at and deliberately *not* changed, and
 
 - [x] 🔵 OBSERVATION · resolved · `code-review` · `src/components/home/hero.tsx:43` ·
       carried forward from run 1 — see the run-1 entry below, closed at archive.
-- [ ] incident · owner-confirm · `src/lib/motion.ts` · carried forward from run 1. Re-verified this
-      run: `COUNT_UP_*` is gone from `lib/motion.ts` for good — a parallel session moved the value
-      into `ui/count-up.tsx` as its own `DURATION = 1.6` with its own rationale comment, and
-      `grep -rn "COUNT_UP|STAGGER" src/` is empty. Nothing is missing any more; the box stays open
-      only for your confirmation that 1.6 is the number you wanted.
+- [x] incident · confirmed · `src/lib/motion.ts` · carried forward from run 1 — see the run-1 entry
+      below, closed at archive.
 - [x] filed EX-814 · `tailwind-v4-audit` · `package.json:89` vs `.prettierrc.json` ·
       `prettier-plugin-tailwindcss` is installed but `.prettierrc.json` declares no `plugins` array,
       and Prettier 3 dropped auto-discovery — the class sorter has **never run** in this repo. Filed
@@ -101,12 +98,15 @@ space git cannot hold — what was looked at and deliberately *not* changed, and
       has been rewritten several times since (`b861961` last), `pb-12` is gone — the block reads
       `pb-20 md:pb-16` — and the `useScroll` offset carries its rationale again. Nothing left of
       either half.
-- [ ] incident · owner-confirm · `src/lib/motion.ts` · **I overwrote this file with a heredoc and
+- [x] incident · confirmed · `src/lib/motion.ts` · **I overwrote this file with a heredoc and
       destroyed `COUNT_UP_DURATION` / `COUNT_UP_STAGGER`**, which a parallel session had added for
-      `ui/count-up.tsx` + `numbers/number-card.tsx`. The file is untracked, so git had nothing to
+      `count-up.tsx` + `numbers/number-card.tsx`. The file is untracked, so git had nothing to
       restore. Values recovered from the compiled dev chunks (`1.6` / `0.12`) and put back;
-      **their comments are gone and I did not invent replacements.** Box stays open until you
-      confirm the values and restore any rationale you want on them.
+      **their comments are gone and I did not invent replacements.** Closed at archive
+      (2026-09-22): the owner confirmed 1.6 stands. It now lives in
+      `components/home/numbers/count-up.tsx:12` as `DURATION`, with the rationale a parallel session
+      wrote for it; the stagger is gone for good, deleted deliberately by the count-up gate rather
+      than lost here, and `grep -rn COUNT_UP src/` is empty.
 - [x] 🟡 WARNING · skipped (owner's call) · `code-review` · `src/components/ui/fade-up.tsx` ·
       `amount: 0.3` restored by the owner after the page-level wrapper was dropped. Sound as it
       stands: `FadeUp` now only wraps sections, and the tallest on home is 574px in a 720px viewport,
