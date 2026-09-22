@@ -172,6 +172,31 @@ Consequences for the content model: no `blocks` field for page composition, no v
 and every content field carries a concrete type rather than an open-ended array of variants. A page
 that needs a new section gets a new field and a deploy — that is the intended cost.
 
+## `plugin-seo` models the fields; reading them is yours
+
+The plugin adds `meta.title` / `meta.description` / `meta.image` to pages, projects and interior
+styles, localized. That is all it does. Its `generateDescription` option is an **admin
+"Auto-generate" button** — nothing fills an empty field on save and nothing runs at render, so an
+unauthored page emits no description until something reads the field and falls back. Installing the
+plugin and then finding the site still scores 61 on Lighthouse SEO is the shape that mistake takes.
+(`MetaDescriptionComponent.js:21` is the evidence: it fetches `/api/plugin-seo/generate-description`
+on click and nowhere else. `SEOPluginConfig.globals` does exist, though, if a genuine site-wide
+setting ever turns up.)
+
+The fallback chain lives in `src/lib/content/seo.ts`: the six page types carry authored copy, while
+projects and interior styles **derive** theirs from `summary` / `text` — both already required,
+localized, one-sentence blurbs. Nobody maintains a second description per item, and the plugin's
+field on those two collections is an override nobody is expected to use. A `SiteSettings` global
+for a site-wide fallback was considered and dropped: with pages authored and children derived, it
+would never have rendered. `SITE_NAME` stays a code constant for the same reason: the title
+template that uses it is a static `metadata` export in the root layout, so feeding it from the CMS
+means converting that to an async `generateMetadata` for one string.
+
+**`fallback: false` is the trap here.** `summary` and `text` are both required and localized, so a
+child always has a description in both locales — but a page's `meta.description` is not required,
+and a page authored in Polish only ships no English description at all. Testing in Polish never
+shows it.
+
 ## Not installed
 
 **`@payloadcms/plugin-redirects`.** Considered and rejected. The only redirects this site needs are

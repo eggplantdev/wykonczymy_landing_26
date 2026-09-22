@@ -14,6 +14,12 @@ verdicts were settled empirically rather than by review.
 
 ## Findings
 
+**Trimmed at archive (2026-09-22).** The pre-trim tally was **30 fixed, 10 dropped, 8 skipped,
+3 dismissed, 3 filed · 0 open**, including three `🔴 CRITICAL`. Every `fixed` finding was removed:
+its durable record is the commit that fixed it, and the fix is now just the code. What survives
+below is the negative space git cannot hold — what was looked at and deliberately *not* changed,
+and why.
+
 <!-- Sources returning clean: tailwind-v4-audit (0 — the slice adds no `className` anywhere),
      feature-first-structure (0 — all 9 added files correctly placed). -->
 
@@ -35,67 +41,15 @@ restored from the same dump afterwards and the probe script deleted.
   back during the Polish write, because the merge base is the latest *version*, not the published
   row.
 
-- [x] 🔴 CRITICAL · fixed · code-review + impl-review · `scripts/populate-seo.ts:73` · `payload.update`
-      builds its merge base from `getLatestCollectionVersion` with no `published` flag, so it
-      resolves a pending draft and writes it back as published. Reproduced. Both reviewers found
-      this independently.
-      test: test-driven-debugging · integration — the reproduction above is the red case; it wants
-      a `tests/int` guard that drafts a page, runs the write, and asserts the published row is
-      unchanged. Discharged: `tests/int/populate-seo-guard.int.spec.ts` pins both halves of the
-      Payload behaviour the guard keys on — a pending draft reads back unpublished from a
-      `draft: true` query while the published list still shows the old title, and a page with no
-      draft reads back published so it is still written. The script itself is one-shot and
-      self-executing, so the test pins the mechanism rather than importing the loop.
-- [x] 🔴 CRITICAL · fixed · code-review · `scripts/populate-seo.ts:35` · `--write` is the entire
-      safety model on a script whose default connection is production, with no host echoed and no
-      confirmation. One shell-history recall away from the live database.
-      test: no automated test — an interactive guard is not worth a harness; the draft guard above
-      carries the regression coverage.
 - [x] 🔴 CRITICAL · dismissed · code-review · `scripts/populate-seo.ts:73` · "the partial `meta`
       update blanks every other localized field in the locale it touches" — disproven by
       reproduction, see above. The trace was sound at both ends but missed an upstream refill.
-- [x] 🟡 WARNING · fixed · code-review + impl-review · `src/lib/content/seo.ts:31-33` · `??` only
-      guards null/undefined, so a cleared SEO field (Payload stores `''`) suppresses the derived
-      description instead of falling back to it. `populate-seo.ts:64` already uses the truthy
-      convention, so the repo contradicts itself.
-      test: TDD · unit — `toSeoMeta({ description: '' }, 'A summary')` must return the summary.
-- [x] 🟡 WARNING · fixed · impl-review · `src/lib/content/addresses.ts:38` · the home page is
-      exempt from the `!doc.slug` guard, but `pathForPage` only special-cases home in the *default*
-      locale — an untranslated English home would emit `/en/null/`, the exact address the guard's
-      comment says it exists to prevent.
-      test: TDD · unit — a published home with an empty EN slug must not appear in `listAddresses`.
-      Discharged by `tests/unit/addresses.spec.ts` + the `hasAddress` cases in
-      `tests/unit/routing.spec.ts`; both go red on the pre-fix predicate, printing `/en//`.
-      `/simplify` then found the same predicate written two more ways — see below.
-- [x] 🟡 WARNING · fixed · code-review · `src/app/robots.ts` · the file carries a "delete at
-      cutover" instruction and is also the only place a `Sitemap:` directive can live — and it has
-      none. Following the comment literally at cutover ships no `robots.txt` and leaves the new
-      sitemap undiscoverable.
-      test: no automated test · — a cutover-time content decision, covered by manual-checks.
-- [x] 🟡 WARNING · fixed · impl-review · `src/components/seo/organization-json-ld.tsx:16` · no
-      `logo`, which Google's Rich Results test requires for an Organization.
-      test: no automated test · — structural markup, verified by the Rich Results check already in
-      manual-checks.
-- [x] 🟡 WARNING · fixed · impl-review · `src/lib/routing.ts:70` · `segmentsForPage` has no caller
-      in `src/` since the extraction of `segmentsForPath`; it survives only because its own unit
-      test imports it. Dead export propped up by its test.
 - [x] 🟡 WARNING · skipped · code-review · `src/app/sitemap.ts:12` · prerendered once at build with
       no `revalidate`, so a newly published project is absent until the next deploy. Contested —
       impl-review checked the build output and found the route carries the `_N_T_/layout` tag that
       `revalidatePath('/', 'layout')` already invalidates. Inert until cutover either way; it
       belongs to the cutover checklist, not to this slice.
       test: no automated test · — needs a deployed revalidation path to assert against.
-- [x] 🔵 OBSERVATION · fixed · code-review + impl-review · `src/lib/seo/og-image.ts:16` · the
-      description derives from existing content but the image does not, so ~40 child addresses all
-      share the brand card while `project.image` / `style.image` sit already mapped and unused.
-      The asymmetry contradicts the slice's own "nobody will fill this in per item" premise.
-- [x] 🔵 OBSERVATION · fixed · code-review · `src/lib/content/seo.ts:17-24` · `trimToLimit` returns
-      156 characters (the `…` is appended after slicing to 155) and slices by UTF-16 code unit, so
-      a cut inside a surrogate pair emits a lone surrogate.
-      test: TDD · unit — folded into the `toSeoMeta` spec above.
-- [x] 🔵 OBSERVATION · fixed · code-review · `src/components/seo/organization-json-ld.tsx:14` · the
-      same Organization is emitted on every address with no `@id`, so nothing ties the PL and EN
-      blocks to one entity.
 - [x] 🔵 OBSERVATION · skipped · code-review · `src/app/(frontend)/[[...segments]]/page.tsx:79` ·
       no `x-default` hreflang. Real, but it belongs in `pathsForPage` so both call sites get it at
       once — a routing change, not an SEO-surface one, and the twelve-address map is the spec it
@@ -123,31 +77,6 @@ restored from the same dump afterwards and the probe script deleted.
       breaks the directory's `find*` prefix. It does not find a document; the name is right.
 - [x] 🔵 OBSERVATION · dropped · impl-review · `src/app/icon.png` · the `icon.svg` → `icon.png`
       switch is unrecorded. Recorded here; not worth a doc edit of its own.
-- [x] fixed · structure-scatter · `AGENTS.md` · the `lib/content/<x>.ts` (reads Payload) vs
-      `lib/<x>/` (no Payload dependency) split is a real convention — `lib/contact/` vs
-      `lib/content/contact.ts` predates this slice — but it is written down nowhere, so
-      `lib/seo/` next to `lib/content/seo.ts` reads as an accident. One line under
-      `## Conventions`.
-- [x] fixed · comment-noise · `src/app/(frontend)/[[...segments]]/layout.tsx:42` · drop the word
-      `three` from "The chrome's own three reads" — a hand-maintained count this very diff had to
-      bump from `two`. Highest-value comment finding: a live maintenance hazard, not a style nit.
-- [x] fixed · comment-noise · `src/app/(frontend)/[[...segments]]/layout.tsx:57` · delete the
-      `{/* Once, in the shell — … */}` block — placing a site-wide Organization block in the shell
-      is the canonical pattern; the comment restates the placement.
-- [x] fixed · comment-noise · `src/lib/content/children.ts:7` · delete
-      `/** What the route needs off a child … */` — one-to-one restatement of the three fields.
-- [x] fixed · comment-noise · `scripts/populate-seo.ts:62-63` · delete "An authored value is never
-      overwritten…" — restates the `if` and its own log line, and duplicates the file header.
-- [x] fixed · comment-noise · `src/lib/seo/og-image.ts:14-15` · trim from `, so a page whose` —
-      the trailing clause restates the ternary.
-- [x] fixed · comment-noise · `src/app/sitemap.ts:11` · trim
-      `It ships now so cutover is a deletion rather than a build.` — the preceding sentence
-      already carries the why.
-- [x] fixed · comment-noise · `src/lib/content/seo.ts:5` · trim
-      `The shape \`generateMetadata\` consumes.` — the sentence that follows is the load-bearing one.
-- [x] fixed · comment-noise · `src/lib/seo/constants.ts:3-4` · trim up to `drift.` — the
-      "three copies would drift" clause only restates that it is a shared constant; the
-      "cannot await a query" sentence is the real reason.
 - [x] dropped · comment-noise · `src/lib/content/contact.ts:9` · `rather than a query of its own`
       — the auditor's own verdict is "arguably not worth the churn". Agreed; not worth the diff.
 - [x] skipped · module-cohesion · `src/lib/routing.ts:1-98` · 15 exports mixing page-type
@@ -172,50 +101,6 @@ Four cleanup agents (reuse / simplification / efficiency / altitude), read-only,
 pass. Four findings surfaced from two angles independently, which is what promoted them over the
 single-source ones.
 
-- [x] fixed · simplify · `src/lib/routing.ts:44` · the "does this document have an address in this
-      locale" test was written at three call sites in three spellings, and `pages.ts:88` was
-      missing the locale half — so `pathsByType.home` built `/en//` for an untranslated English
-      home and handed it to `SiteHeader`, `MobileMenu`, `SiteFooter` and the home CTA resolver.
-      The `addresses.ts` fix earlier in this gate corrected one copy only. Now one exported
-      `hasAddress(page, locale)` beside `pathForPage`, called from all three.
-      test: TDD · unit — three cases on the predicate plus three on `listAddresses`; verified red
-      against the pre-fix form, where the failure prints the literal `/en//`.
-- [x] fixed · simplify · `src/lib/content/organization.ts` · the route shell assembled the business
-      identity out of two CMS documents (phone/mail on the footer global, address/NIP on the
-      contact page) and threaded four scalars into the JSON-LD block. `findOrganization(locale)`
-      owns that in the CMS tier — where the convention added to `AGENTS.md` this same run says it
-      belongs — and the component takes one shape. Both finders were already request-cached, so
-      no extra query.
-- [x] fixed · simplify · `src/lib/seo/constants.ts` · cutover was two switches in two files
-      (`robots.ts` `disallow` and the root layout's `robots` metadata) coupled only by comments
-      pointing at each other. A half-flip is silent and both directions are bad: flip robots only
-      and the sitemap advertises twelve `noindex` URLs; flip the layout only and every page
-      invites a crawl robots.txt forbids. One `SEARCH_INDEXING_ENABLED` now drives both.
-- [x] fixed · simplify · `src/lib/seo/absolute-url.ts` · `new URL(x, SERVER_URL).href` was written
-      five times across three new files — the same argument the slice itself made for hoisting
-      `SITE_NAME`. One `absoluteUrl`; it also gets `SERVER_URL` back out of a component file.
-- [x] fixed · simplify · `scripts/populate-seo.ts:70` · a third copy of the published-pages query,
-      already drifted on `limit` (100 vs 1000), against a contract `pages.ts:64-65` explicitly
-      says is single-source. Calls `findPublishedPages`. Verified safe from a `tsx` script: React
-      `cache()` degrades to a pass-through outside a request scope.
-- [x] fixed · simplify · `src/app/(frontend)/[[...segments]]/page.tsx:163` · the contact branch
-      still mapped `address`/`nip` inline, duplicating the `findContactDetails` the slice had just
-      added for the JSON-LD block. Now reads the shared finder; `ContactPageDataT` becomes
-      `ContactDetailsT & { phone; mail }` instead of restating its two fields.
-- [x] fixed · simplify · `src/lib/content/addresses.ts:9` · `AddressT.locale` was written on every
-      entry and destructured by neither consumer, while being derivable from `path`. A documented
-      field nothing depends on reads as a contract. Dropped.
-- [x] fixed · simplify · `src/app/sitemap.ts:14` · a conditional spread wrapped around an `await`
-      four levels deep, whose `{}` branch read as "no-op" rather than "this is a child". Early
-      return in the map body.
-- [x] fixed · simplify · `src/lib/routing.ts:93` · `localeFromPath` hand-split the path nine lines
-      below the helper extracted to stop exactly that, whose own comment therefore contradicted
-      itself the day it landed.
-- [x] fixed · simplify · `src/lib/content/seo.ts:15` · `DESCRIPTION_LIMIT` was module-private and
-      `tests/unit/seo.spec.ts` kept its own copy of `155`, so the cap test measured its own
-      constant. Exported and imported.
-- [x] fixed · simplify · `src/lib/content/projects.ts:49` · `image ?? null` at an argument position
-      whose signature already accepts `undefined` — it made the parameter look stricter than it is.
 - [x] filed · simplify · `src/lib/content/seo.ts:20` · `toSeoMeta` has `derivedDescription` and
       `derivedImage` but no `derivedTitle`, and pages pass no derived image at all — so all six
       page addresses share the one brand OG card, while the title chain

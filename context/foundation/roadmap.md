@@ -80,7 +80,7 @@ flag, a second leads-app deployment, or any other isolation machinery for this.
 | S4  | Completed projects — listing + project pages         | proposed | S1         | S2, S3, S5    |
 | S5  | Testimonials and the shared content lists            | proposed | S1         | S2, S3, S4    |
 | S6  | Photo attachments on the form                        | done      | S2        | —             |
-| S7  | SEO surface — sitemap, hreflang, canonical, metadata | in review | S3, S4    | S6            |
+| S7  | SEO surface — sitemap, hreflang, canonical, metadata | done      | S3, S4    | S6            |
 | S8  | Cutover — url-map test green, redirects, DNS         | blocked  | S2, S7     | —             |
 
 **Parallel band:** once S1 lands, S2 / S3 / S4 / S5 touch different collections and different routes.
@@ -268,7 +268,7 @@ which is why it sits after the north star rather than inside it.
 
 ### S7 — SEO surface
 
-**Status:** in review · **Change ID:** `s7-seo` · **Depends on:** S3, S4
+**Status:** done · **Change ID:** `s7-seo` · **Depends on:** S3, S4
 
 Sitemap covering both languages (FR-013), per-page title, description, canonical, and correct
 `hreflang` pairing between the Polish and English addresses (FR-014).
@@ -335,3 +335,4 @@ pages) and OQ 9 (no editor/admin split — one account, slug guardrail moved to 
 - **F2: Localization spine + localized `slug`** — Archived 2026-09-03 → `context/archive/2026-09-03-f2-i18n-spine/`. Lesson: —.
 - **S2: Contact form reaches the leads app (north star)** — Archived 2026-09-22 → `context/archive/2026-09-18-lead-delivery/`. Lesson: —.
 - **S6: Photo attachments on the form** — Archived 2026-09-22 → `context/archive/2026-09-18-lead-delivery/`. Merged into S2 and delivered with it. Lesson: —.
+- **S7: SEO surface — sitemap, hreflang, canonical, metadata** — Archived 2026-09-22 → `context/archive/2026-09-20-s7-seo/`. Lesson: a content script run from the CLI cannot purge the page cache — `revalidatePath` throws outside a request, so production keeps serving the old copy until the next deploy. Verify a CLI write against `pnpm dev`, which reads the database directly.

@@ -1,10 +1,10 @@
 ---
 change_id: s7-seo
 title: SEO surface — read the seoPlugin fields, add openGraph, sitemap and JSON-LD
-status: implemented
+status: archived
 created: 2026-09-20
-updated: 2026-09-21
-archived_at: null
+updated: 2026-09-22
+archived_at: 2026-09-22T11:53:20Z
 branch: s7-seo
 worktree: null
 ---

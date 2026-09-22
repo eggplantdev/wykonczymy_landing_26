@@ -11,10 +11,12 @@ worktree: null
 
 ## Notes
 
-**This change has two homes.** The work does not fit in one repo, so the same `change.md` lives at
-`context/changes/2026-09-18-lead-delivery/` in **both** `landing_26` and `wykonczymy`. It is one
-change with one set of decisions; the copies are kept in step by hand, and a decision recorded on
-one side is not agreed until it reads the same on the other.
+**This change has two homes.** The work does not fit in one repo, so the same `change.md` lives in
+**both** `landing_26` and `wykonczymy`. It is one change with one set of decisions; the copies were
+kept in step by hand, and a decision recorded on one side was not agreed until it read the same on
+the other. The two halves no longer sit at the same path: this one was archived on 2026-09-22 to
+`context/archive/2026-09-18-lead-delivery/`, while `wykonczymy`'s is still open at
+`context/changes/2026-09-18-lead-delivery/` — its manual checks are unsigned, so EX-802 stays open.
 
 `2026-09-17-s2-contact-form` in `landing_26` built the form and deliberately stopped short of a sink —
 `submitContactForm` validates and returns `{ ok: true }` with the comment "No sink yet — where a

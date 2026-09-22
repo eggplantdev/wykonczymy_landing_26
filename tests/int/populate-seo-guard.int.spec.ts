@@ -9,7 +9,7 @@ const created: (string | number)[] = []
 // `scripts/populate-seo.ts` writes a description onto every published page. `payload.update`
 // merges onto the *latest* version rather than the published one, so a page holding unpublished
 // editorial work would have that draft published as a side effect — reproduced during the S7
-// review gate, see `context/changes/2026-09-20-s7-seo/review-gate.md`.
+// review gate, see `context/archive/2026-09-20-s7-seo/review-gate.md`.
 //
 // The script guards against it by asking a `draft: true` query which pages have a pending draft
 // and skipping those. That guard is only as good as the Payload behaviour it keys on, and that
