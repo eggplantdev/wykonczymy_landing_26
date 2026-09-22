@@ -14,3 +14,10 @@ export const revalidatePageDelete: CollectionAfterDeleteHook = ({ doc }) => {
   revalidateAllPages()
   return doc
 }
+
+// Media carries no draft status to gate on — every saved row is live — and its alt text and
+// file URL are rendered into pages that no other hook invalidates.
+export const revalidateMedia: CollectionAfterChangeHook = ({ doc }) => {
+  revalidateAllPages()
+  return doc
+}
