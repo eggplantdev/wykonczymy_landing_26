@@ -30,10 +30,10 @@
     "process:populate": "set -a && source .env && { [ -f .env.local ] && source .env.local; true; } && set +a && cross-env NODE_OPTIONS=--no-deprecation tsx scripts/populate-process.ts",
     "seo:populate": "set -a && source .env && { [ -f .env.local ] && source .env.local; true; } && set +a && cross-env NODE_OPTIONS=--no-deprecation tsx scripts/populate-seo.ts",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
-    "test": "pnpm run test:int && pnpm run test:e2e",
+    "test": "bash scripts/with-test-lock.sh bash -c 'pnpm run test:int && pnpm run test:e2e'",
     "test:db:refresh": "pnpm db:dump && pnpm db:import",
-    "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
-    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
+    "test:e2e": "bash scripts/with-test-lock.sh cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
+    "test:int": "bash scripts/with-test-lock.sh cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

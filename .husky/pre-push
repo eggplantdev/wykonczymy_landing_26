@@ -39,7 +39,9 @@ fi
 # ─── end payload prod-migrate gate ───────────────────────────────────────────
 
 pnpm run typecheck
-pnpm exec vitest run
+# Wrapped by hand: this calls vitest directly rather than a package.json script, so it would
+# otherwise be the one heavy run that escapes the machine-wide test lock (see AGENTS.md).
+bash scripts/with-test-lock.sh pnpm exec vitest run
 
 # Background watcher: prints Vercel deployment state transitions to this terminal.
 # Detached subshell so `git push` returns immediately when the hook exits.

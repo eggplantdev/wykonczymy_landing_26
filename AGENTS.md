@@ -188,6 +188,18 @@ site.
   from having to edit the lint config, and reaching for `clientSchema` instead.
   `payload.config.ts` is the one exception, and parses `serverSchema` itself.
 
+## Test runs are serialized machine-wide
+
+`test`, `test:int`, `test:e2e` and the pre-push vitest leg run under `scripts/with-test-lock.sh`,
+which delegates to the global `with-test-lock` tool (`~/.local/bin`). The mutex is a `mkdir` on the
+fixed path `/tmp/dev-test-suite.lock`, shared with **the other repos on this laptop** — this one and
+`wykonczymy` fight for the same 8 cores constantly, and two suites at once take several times longer
+than one run after the other, fail specs on the clock alone, and make the machine unusable. A second
+run waits and names whose hold it waits on and in which repo; a dead holder's lock is taken over
+automatically. `NO_TEST_LOCK=1` skips it, and a nested call inherits the parent's hold, so `test`
+does not queue behind its own two legs. A single spec (`pnpm exec vitest run <file>`) is deliberately
+NOT locked — seconds of one core should not queue behind somebody's full suite.
+
 ## Claude Code workflow
 
 > The user's global rules in `~/.claude/rules/*` are the **single source** for response style, git,
