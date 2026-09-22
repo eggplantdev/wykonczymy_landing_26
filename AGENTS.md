@@ -184,6 +184,12 @@ site.
   answered before its code ran and the URL names a guarded host. It must be the public alias
   (`wykonczymy.vercel.app`); the project-scoped one and every deployment URL fail closed.
   `@src/lib/contact/forward.ts`
+- **`/api/cron/deliver-pending/` answers `500` while any row is past `MAX_ATTEMPTS`**, and its body
+  names those rows with their `lastError` — the diagnosis is in the cron log, not only the admin.
+  A `failed` count alone stays `200`: those rows are still being retried. **Vercel does not notify
+  on this** — a failed cron is red in the log and nothing else, and error-anomaly alerts need a
+  traffic volume a four-times-an-hour route never reaches. The push half is EX-840 (Sentry cron
+  monitors); until it lands, the red status is something a human has to look at. (EX-852)
 - **Read env through a module that parses `env-schema.ts`, never raw `process.env`** — ESLint
   rejects it in `src/**`. `env.ts` is the **client** module and parses `clientSchema`, so it is
   the wrong home for a secret: putting one there inlines it into the browser bundle. A

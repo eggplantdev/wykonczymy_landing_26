@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { forward } from '@/lib/contact/forward'
 import type { SubmissionEnvelopeT } from '@/lib/contact/envelope'
-import { deleteRow, listPending, recordFailure } from '@/lib/content/submissions'
+import { deleteRow, listPending, listStuck, recordFailure } from '@/lib/content/submissions'
 import { isAuthorizedCron } from '@/lib/cron/authorize'
 
 // Bounded so one slow row cannot starve the queue.
@@ -40,5 +40,24 @@ export async function GET(request: Request): Promise<NextResponse> {
     }
   }
 
-  return NextResponse.json({ attempted: rows.length, delivered, failed })
+  // Read after the loop, so a row this run pushed past the ceiling is reported by the run that
+  // did it rather than fifteen minutes later.
+  const stuck = await listStuck(BATCH_SIZE)
+
+  return NextResponse.json(
+    {
+      attempted: rows.length,
+      delivered,
+      failed,
+      stuck: stuck.map((row) => ({
+        submissionId: row.submissionId,
+        attempts: row.attempts ?? 0,
+        lastError: row.lastError ?? null,
+      })),
+    },
+    // Answering 200 to a run that delivered nothing is how a submission sat undelivered for twelve
+    // hours. `failed` is deliberately not part of this condition — those rows are still being
+    // retried, and colouring a transient refusal red teaches the reader to ignore the colour.
+    { status: stuck.length > 0 ? 500 : 200 },
+  )
 }

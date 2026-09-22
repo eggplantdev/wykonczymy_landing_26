@@ -8,6 +8,7 @@ vi.mock('@vercel/blob', () => ({ list: async () => ({ blobs: [] }), del: async (
 vi.mock('@/lib/content/submissions', () => ({
   claimedSubmissionIds: async () => new Set(),
   listPending: async () => [],
+  listStuck: async () => [],
   deleteRow: async () => undefined,
   recordFailure: async () => undefined,
 }))

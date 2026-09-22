@@ -24,7 +24,7 @@ export async function enqueue(envelope: QueuedEnvelopeT): Promise<Submission> {
 
 // A row the leads app keeps refusing must stop consuming the batch, or the oldest-first sort hands
 // every run the same poisoned head and no newer lead is ever attempted again. Past the ceiling the
-// row stays visible in the admin — that is the alarm — but the cron leaves it alone.
+// cron leaves the row alone and `listStuck` reports it, which is what fails the invocation.
 export const MAX_ATTEMPTS = 10
 const RETRY_BACKOFF_MS = 10 * 60 * 1000
 
@@ -49,6 +49,25 @@ export async function listPending(limit: number): Promise<Submission[]> {
         },
       ],
     },
+    overrideAccess: true,
+  })
+
+  return docs
+}
+
+/**
+ * `listPending`'s complement — the rows past the ceiling, which nothing retries again. Their
+ * existence is the one queue state that is both silent and permanent, which is what makes it
+ * the alarm condition rather than a failure count from a single run.
+ */
+export async function listStuck(limit: number): Promise<Submission[]> {
+  const payload = await getClient()
+
+  const { docs } = await payload.find({
+    collection: 'submissions',
+    limit,
+    sort: 'createdAt',
+    where: { attempts: { greater_than_equal: MAX_ATTEMPTS } },
     overrideAccess: true,
   })
 

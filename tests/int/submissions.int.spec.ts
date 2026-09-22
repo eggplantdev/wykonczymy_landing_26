@@ -7,6 +7,7 @@ import {
   deleteRow,
   enqueue,
   listPending,
+  listStuck,
   MAX_ATTEMPTS,
   recordFailure,
 } from '@/lib/content/submissions'
@@ -73,8 +74,10 @@ describe('the submissions queue', () => {
     expect((await listPending(10)).map((pending) => pending.id)).not.toContain(row.id)
   })
 
-  // Past the ceiling the row stops being retried but stays in the admin — that list IS the alarm.
-  it('stops offering a row that has exhausted its attempts, without deleting it', async () => {
+  // Past the ceiling the row stops being retried but stays in the queue, and `listStuck` is what
+  // turns that into the cron's status code — the two queries have to partition the table exactly,
+  // or a row falls into the gap and goes back to being invisible.
+  it('moves a row that has exhausted its attempts from pending to stuck', async () => {
     const row = await enqueue(envelope)
     await payload.update({
       collection: 'submissions',
@@ -84,7 +87,15 @@ describe('the submissions queue', () => {
     })
 
     expect((await listPending(10)).map((pending) => pending.id)).not.toContain(row.id)
+    expect((await listStuck(10)).map((stuck) => stuck.id)).toContain(row.id)
     expect(await claimedSubmissionIds([submissionId])).toContain(submissionId)
+  })
+
+  it('leaves a row still within its attempt budget out of the stuck list', async () => {
+    const row = await enqueue(envelope)
+    await recordFailure(row.id, 'Leads app answered 503')
+
+    expect((await listStuck(10)).map((stuck) => stuck.id)).not.toContain(row.id)
   })
 
   // The sweep asks about every stale prefix at once, and the ids it asks about are mostly rows

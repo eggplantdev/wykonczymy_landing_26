@@ -4,6 +4,9 @@ const SECRET = 'cron-secret'
 
 const queue = vi.hoisted(() => ({
   listPending: vi.fn(async () => [] as { id: number; submissionId: string; envelope: unknown }[]),
+  listStuck: vi.fn(
+    async () => [] as { submissionId: string; attempts: number; lastError: string | null }[],
+  ),
   deleteRow: vi.fn(async () => undefined),
   recordFailure: vi.fn(async () => undefined),
 }))
@@ -32,13 +35,14 @@ beforeEach(() => {
   vi.clearAllMocks()
   forward.mockResolvedValue({ delivered: true })
   queue.listPending.mockResolvedValue([])
+  queue.listStuck.mockResolvedValue([])
 })
 
 describe('GET /api/cron/deliver-pending', () => {
   it('deletes each row it delivers', async () => {
     queue.listPending.mockResolvedValue([row(1), row(2)])
 
-    expect(await (await run()).json()).toEqual({ attempted: 2, delivered: 2, failed: 0 })
+    expect(await (await run()).json()).toEqual({ attempted: 2, delivered: 2, failed: 0, stuck: [] })
     expect(queue.deleteRow).toHaveBeenCalledWith('submission-1')
     expect(queue.recordFailure).not.toHaveBeenCalled()
   })
@@ -47,7 +51,7 @@ describe('GET /api/cron/deliver-pending', () => {
     queue.listPending.mockResolvedValue([row(1)])
     forward.mockResolvedValue({ delivered: false, error: 'Leads app answered 403' })
 
-    expect(await (await run()).json()).toEqual({ attempted: 1, delivered: 0, failed: 1 })
+    expect(await (await run()).json()).toEqual({ attempted: 1, delivered: 0, failed: 1, stuck: [] })
     expect(queue.recordFailure).toHaveBeenCalledWith(1, 'Leads app answered 403')
     expect(queue.deleteRow).not.toHaveBeenCalled()
   })
@@ -58,8 +62,36 @@ describe('GET /api/cron/deliver-pending', () => {
     queue.listPending.mockResolvedValue([row(1), row(2), row(3)])
     forward.mockRejectedValueOnce(new Error('row 1 exploded'))
 
-    expect(await (await run()).json()).toEqual({ attempted: 3, delivered: 2, failed: 1 })
+    expect(await (await run()).json()).toEqual({ attempted: 3, delivered: 2, failed: 1, stuck: [] })
     expect(queue.deleteRow).toHaveBeenCalledTimes(2)
+  })
+
+  // Regression: a submission sat undelivered for twelve hours because this route answered 200 to
+  // a run that delivered nothing. A row past MAX_ATTEMPTS is never retried again, so its existence
+  // is the one queue state that is both silent and permanent.
+  it('fails the invocation while a row has stopped being retried', async () => {
+    queue.listStuck.mockResolvedValue([
+      { submissionId: 'submission-9', attempts: 10, lastError: 'Leads app answered 401' },
+    ])
+
+    const response = await run()
+
+    expect(response.status).toBe(500)
+    expect(await response.json()).toEqual({
+      attempted: 0,
+      delivered: 0,
+      failed: 0,
+      stuck: [{ submissionId: 'submission-9', attempts: 10, lastError: 'Leads app answered 401' }],
+    })
+  })
+
+  // A failure the cron will retry is not the alarm — flagging it would turn every transient
+  // refusal red and train the reader to ignore the colour.
+  it('stays green while a failure is still being retried', async () => {
+    queue.listPending.mockResolvedValue([row(1)])
+    forward.mockResolvedValue({ delivered: false, error: 'Leads app answered 503' })
+
+    expect((await run()).status).toBe(200)
   })
 
   it('refuses a request without the cron secret', async () => {
