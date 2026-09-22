@@ -16,9 +16,11 @@ verification that needs a human or a dashboard, four decisions, and housekeeping
       `path does not start with /admin`, `/api/blob/upload-token` at 60/60s. They live in the
       dashboard with **no representation in this repo** — rebuild the project and they are gone
       while every test still passes. → `manual-checks.md` § EX-802
-- [ ] **`LANDING_CLEANUP_URL` in the leads app**, and the staged `leads/<submissionId>/` prefix
-      disappears after a delivery. A successful lead proves nothing here: without the callback the
-      blob just waits for the daily sweep. → `manual-checks.md` § EX-802
+- [ ] **The staged `leads/<submissionId>/` prefix disappears after a delivery.**
+      `LANDING_CLEANUP_URL` was set on the leads app and it was redeployed on 2026-09-22, so the
+      callback is wired; the landing's `/api/webhooks/landing-delivered/` answers `403` to a bad
+      signature on the public alias, which is the proof it is reachable. What is still unproven is
+      the round trip — it needs one real submission carrying a photo. → `manual-checks.md` § EX-802
 - [x] **Both crons report `200`, not `308`.** `trailingSlash: true` puts a redirect ahead of
       `/api/*`; Vercel cron does not follow one and does not log it, so a missing slash is
       indistinguishable from a cron that never fired. → `manual-checks.md` § EX-802
@@ -29,6 +31,9 @@ verification that needs a human or a dashboard, four decisions, and housekeeping
 - [ ] **S8 itself** — the FR-037 test over all twelve addresses in `url-map.md`, the two `301`s,
       removing the pre-cutover noindex from `robots.ts` and the layout, DNS onto the `www`
       canonical host. → `roadmap.md` § S8
+- [ ] **Every env var still names a `*.vercel.app` host.** Five variables across the two projects,
+      two of which fail silently; `NEXT_PUBLIC_SERVER_URL` is build-time, so it needs a redeploy and
+      not just an edit. Ordered runbook and the done-when probes → **EX-853**.
 
 ## The other half of the wire
 

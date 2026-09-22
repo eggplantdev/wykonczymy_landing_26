@@ -256,10 +256,21 @@ Then the wiring, which is all environment and all invisible to the test suite:
       sit behind Deployment Protection and answer `401` before any route runs. Probed 2026-09-22:
       the public alias returns `403` to a deliberately invalid signature, which is the leads app's
       own rejection and therefore proof the request arrived; both protected hosts return `401`.
-- [ ] **The leads app has `LANDING_CLEANUP_URL` pointing back here**, and its
+- [x] **The leads app has `LANDING_CLEANUP_URL` pointing back here**, and its
       `POST /api/webhooks/landing` is deployed. Without the callback the delivery still succeeds
       and the row is still deleted; what leaks is the blob prefix, which then waits for the daily
       sweep instead of going immediately.
+      → wired 2026-09-22. The variable was absent from the leads app's production environment
+      entirely, and `serverEnv.LANDING_CLEANUP_URL` is `.optional()`, so `releaseLandingAssets`
+      returned on its first line and no delivery had ever called back. Set to
+      `https://wykonczymylanding26.vercel.app/api/webhooks/landing-delivered/` and the leads app
+      redeployed. The host is the **public alias** for the same reason `WYKONCZYMY_WEBHOOK_URL` is:
+      probed with a deliberately bad signature, the alias answers `403` — its own rejection, so the
+      route ran — while the project-scoped deployment URL answers `401` from Deployment Protection.
+      The trailing slash is deliberate; unslashed answers `308`, and although `fetch` follows it
+      with method and body intact, that round trip runs inside a 10 s timeout.
+      **Still unproven: the round trip.** Reachability is not delivery — the box below is what
+      closes it, and it needs one real submission carrying a photo.
 - [x] **Both crons report `200` in the Vercel cron log, not `308`.** `trailingSlash: true` puts a
       redirect ahead of every route including `/api/*`, and Vercel cron does not follow redirects
       and does not log a redirected invocation — so a missing slash looks exactly like a cron that
