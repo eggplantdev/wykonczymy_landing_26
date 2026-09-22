@@ -60,7 +60,7 @@ export function SiteFooter({ data, locale, typePaths }: PropsT) {
         </FadeUp>
       </div>
 
-      <div className="paddings py-4 text-foreground md:bg-background md:theme-dark">
+      <div className="paddings py-4 text-foreground md:bg-background md:theme-invert">
         <div className="flex w-full flex-col items-center gap-y-2 md:grid md:grid-cols-3 md:justify-items-start md:gap-x-5">
           <PhoneCta
             phone={data.phone}

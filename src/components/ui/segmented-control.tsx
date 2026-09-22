@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn'
 // same way in the settings panel as it does in the bar above it.
 export function segmentClasses(isActive: boolean) {
   return cn(
-    'text-14 inline-flex min-h-6 flex-1 items-center justify-center rounded-full px-2 duration-200',
+    'text-14 inline-flex min-h-8 flex-1 items-center justify-center rounded-full px-2.5 duration-200',
     isActive ? 'bg-surface text-surface-foreground' : 'text-muted-foreground hover:text-foreground',
   )
 }

@@ -40,7 +40,7 @@ export function SettingsPanel({ paths, onNavigate, className }: PropsT) {
   const { t } = useTranslation('common')
 
   return (
-    <div className={cn('flex w-48 flex-col gap-3', className)}>
+    <div className={cn('flex w-64 max-w-full flex-col gap-3', className)}>
       <SettingsSection label={t('language')}>
         {(labelledBy) => (
           <LanguageControl paths={paths} labelledBy={labelledBy} onSelect={onNavigate} />

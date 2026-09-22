@@ -35,7 +35,7 @@ export function StyleCard({ style, href, index }: PropsT) {
         // reserved height is what keeps every photo in a row starting at the same y. One line
         // fewer at xlg, where the cell is wider and the same copy takes less of it.
         textClassName="md:leading-135 xlg:line-clamp-4 xlg:min-h-[4lh] line-clamp-5 min-h-[5lh]"
-        sizes="(max-width: 767px) 100vw, (max-width: 1023px) 45vw, (max-width: 1279px) 30vw, (max-width: 2047px) 25vw, 512px"
+        sizes="(max-width: 767px) 100vw, (max-width: 1023px) 45vw, (max-width: 2047px) 30vw, 25vw"
         preload={index === 0}
       />
     </Link>

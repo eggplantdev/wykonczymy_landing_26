@@ -179,7 +179,36 @@
   --wk-red-lifted: #ff5a52;
 
   /* Roles. A pair named `x` / `x-foreground` is a contract: put the second on
-     anything sitting on the first, and the pair inverts together per theme. */
+     anything sitting on the first, and the pair inverts together per theme. The
+     theme-following half lives in `theme-light` below, so the two themes stay one key set
+     written twice rather than one block and one override list. */
+  @apply theme-light;
+
+  /* The three roles that must NOT follow the theme. All describe something laid over a
+     photograph, and a photograph is the same picture in every theme: a scrim darkens it,
+     type on it stays light, and tinted glass takes its contrast from the shot behind it
+     rather than from either floor. Flipping any of them with the theme is how a dark mode
+     ends up with black text on a dark image. */
+  --wk-scrim: var(--wk-ink);
+  --wk-on-media: var(--wk-canvas);
+  --wk-glass: var(--wk-grey-200);
+
+  --wk-brand: var(--wk-petrol);
+  --wk-rating: var(--wk-amber);
+  --wk-success: var(--wk-green);
+  --wk-success-hover: var(--wk-green-lifted);
+  /* Constant, not theme-following: the green underneath it is the same colour in both
+     themes. Canvas on it is 2.6:1 — under AA, so this pill carries no small prose. */
+  --wk-success-foreground: var(--wk-canvas);
+}
+
+/* Only the role assignments are restated — the palette above is shared, so a
+   theme is a re-pointing, not a second set of values.
+
+   Utilities rather than declarations on the attribute alone, because `data-theme` is an
+   attribute and an attribute cannot carry a breakpoint: the footer bar inverts only from
+   `md` up, and a utility is the only way to say that without a second copy of the block. */
+@utility theme-light {
   --wk-background: var(--wk-canvas);
   --wk-foreground: var(--wk-ink);
 
@@ -208,37 +237,13 @@
   --wk-border: var(--wk-grey-300);
   --wk-border-muted: var(--wk-grey-700);
   --wk-ring: var(--wk-grey-100);
-
-  /* The three roles that must NOT follow the theme. All describe something laid over a
-     photograph, and a photograph is the same picture in every theme: a scrim darkens it,
-     type on it stays light, and tinted glass takes its contrast from the shot behind it
-     rather than from either floor. Flipping any of them with the theme is how a dark mode
-     ends up with black text on a dark image. */
-  --wk-scrim: var(--wk-ink);
-  --wk-on-media: var(--wk-canvas);
-  --wk-glass: var(--wk-grey-200);
-
-  --wk-brand: var(--wk-petrol);
-  --wk-rating: var(--wk-amber);
   --wk-error: var(--wk-red);
-  --wk-success: var(--wk-green);
-  --wk-success-hover: var(--wk-green-lifted);
-  /* Constant, not theme-following: the green underneath it is the same colour in both
-     themes. Canvas on it is 2.6:1 — under AA, so this pill carries no small prose. */
-  --wk-success-foreground: var(--wk-canvas);
 
   /* A drop shadow is a darkening, so on a near-black page it has nothing left to darken —
      the dark theme lifts the edge with light instead of sinking it with black. */
   --wk-shadow: rgba(0, 0, 0, 0.1);
 }
 
-/* Only the role assignments are restated — the palette above is shared, so a
-   theme is a re-pointing, not a second set of values.
-
-   A utility rather than declarations on the attribute alone, because `data-theme` is an
-   attribute and an attribute cannot carry a breakpoint: the footer bar is dark only from
-   `md` up, and `md:theme-dark` is the only way to say that without a second copy of the
-   block. */
 @utility theme-dark {
   --wk-background: var(--wk-ink);
   --wk-foreground: var(--wk-canvas);
@@ -264,6 +269,16 @@
      keyboard users who are the only ones who ever see it. */
   --wk-ring: var(--wk-grey-300);
   --wk-shadow: rgba(255, 255, 255, 0.08);
+}
+
+/* Always the opposite of the page, whichever theme is on. `theme-dark` alone meant the
+   footer bar dissolved into the very theme it exists to stand apart from. */
+@utility theme-invert {
+  @apply theme-dark;
+
+  :where([data-theme='dark']) & {
+    @apply theme-light;
+  }
 }
 
 [data-theme='dark'] {
