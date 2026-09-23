@@ -69,9 +69,10 @@ roadmap slice, or to none yet — do not work them from this file.
   → `context/archive/2026-09-18-lead-delivery/`.
 - **`price-list` is a dead page type under a live 301.** `'price-list'` is still in
   `pageTypes` while `/cennik/` redirects home, so a document created under it would be
-  unreachable. → roadmap **S8**, open questions 3 and 4.
+  unreachable. Open questions 3 and 4 have both closed, so this is now a plain either/or:
+  drop the type, or keep it deliberately. → roadmap **S8**.
 - ~~**SEO plumbing**~~ — shipped as `Organization` JSON-LD rather than `LocalBusiness`;
   S7 archived 2026-09-22. → `context/archive/2026-09-20-s7-seo/`.
-- **Cookie consent + a Privacy / Cookies page.** Not in the roadmap at all. Has to exist
-  before the first third-party script, not after.
-- **Analytics** (Vercel Analytics vs GA4). Not in the roadmap either, and gated on consent.
+- ~~**Cookie consent + a Privacy / Cookies page.**~~ Shipped — `@c15t/nextjs`,
+  `src/components/cookies/`, and the legal pages under the `privacy-policy` page type.
+- ~~**Analytics.**~~ Shipped — `@vercel/analytics`, gated on that consent.
