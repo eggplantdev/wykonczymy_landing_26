@@ -17,7 +17,7 @@ been added, moved or retired.
 **Re-probed 2026-09-22 against the new site** on `wykonczymylanding26.vercel.app`: the six surviving
 addresses answer `200`, the four retired ones `308` to their targets, and `/en/` `308`s to
 `/en/home/`. All twelve already behave. The redirects are **`308`, not `301`** — `permanent: true`
-in `next.config.mjs` is what Next emits, and Google treats the two the same, so this is a note for
+in `next.config.ts` is what Next emits, and Google treats the two the same, so this is a note for
 whoever writes the FR-037 assertions, not a defect to fix.
 
 ## Facts that constrain the new site
@@ -55,7 +55,7 @@ appear in no row here — they cannot break anything that is indexed today.
 used to point at was deleted from the CMS. Dropping a page decides what does *not* get built; it does
 not retire the address, which is indexed and must still answer deliberately.
 
-**All four already answer — the targets shipped with the retirement.** `next.config.mjs` redirects
+**All four already answer — the targets shipped with the retirement.** `next.config.ts` redirects
 `/oferta/` and `/cennik/` to `/`, and `/en/offer/` and `/en/price-list/` to `/en/home/`, which is one
 hop rather than chaining through the `/en/` locale-root redirect. This document called them
 `UNDECIDED` until 2026-09-22 while the code had decided on 2026-09-04; the gap made S8 look blocked
@@ -86,7 +86,7 @@ added to the Vercel account at all: `vercel domains ls --scope wykonczymys-proje
 the WordPress host, and the `301` in the table above is that host's, not ours.
 
 So there is nothing to verify before the domain moves; the redirect is a step **of** cutover, not a
-precondition to check beforehand. It belongs on Vercel rather than in `next.config.mjs`: a Vercel
+precondition to check beforehand. It belongs on Vercel rather than in `next.config.ts`: a Vercel
 domain redirect answers at the edge before any function runs, while a host redirect in the app
 costs an invocation per hit and can loop against the platform's own.
 

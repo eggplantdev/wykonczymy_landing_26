@@ -1,10 +1,11 @@
 ---
 project: wykonczymy-www
 generated: 2026-09-02
+updated: 2026-09-23
 source_prd: context/foundation/prd.md
 main_goal: low-complexity
-north_star: S2 — a real contact form submission reaches the leads app
-top_blocker: decisions
+north_star: S2 — a real contact form submission reaches the leads app (reached 2026-09-22)
+top_blocker: none — S8 is the only unstarted slice and nothing gates it
 ---
 
 # Roadmap — wykonczymy.com.pl replatform
@@ -32,9 +33,9 @@ live form is proven to reach the leads app before cutover — a human fills in t
 new site, sends it, and the complete request is confirmed present in the leads app. Not a mock, not
 a unit test, not a staging stub."_ Nothing else in the PRD competes for this slot.
 
-**Top blocker — `decisions`.** Nine unresolved Open Questions, over the ≥3 threshold. They cluster
-on **content** (form fields, file limits, retention, where Cennik's traffic goes) rather than on
-engineering, which is why almost nothing here is hard-blocked — see `## Open question routing`.
+~~**Top blocker — `decisions`.**~~ Was nine unresolved Open Questions, clustered on content rather
+than engineering. Four remain and none blocks anything — both cutover blockers (OQ 3, OQ 5) closed
+in September. See `## Open question routing`.
 
 ## Baseline
 
@@ -42,15 +43,15 @@ First measured 2026-09-02, when `find` returned zero `.ts` / `.tsx` / `package.j
 landed**, so the "at F1 start" column is history — the live picture is `project-state.md`
 `## Current state`.
 
-| Layer          | At F1 start | Now (2026-09-03)                                                     |
-| -------------- | ----------- | -------------------------------------------------------------------- |
-| Frontend       | absent      | Next App Router, React 19, Tailwind 4 wired; no page components yet  |
-| Backend / API  | absent      | Payload 3 at `src/app/(payload)`, Users + Media                      |
-| Data           | absent      | `postgres:18-alpine` on 5436 locally, Neon in production             |
-| Auth           | absent      | Payload admin auth, one account. No public auth, ever (PRD non-goal) |
-| Deploy / infra | absent      | Vercel, deployed from GitHub `main`, same account as the leads app   |
-| Observability  | absent      | **still absent and declared nowhere** — deliberate at this goal      |
-| Environments   | absent      | Vercel preview deploys are the staging tier; see below               |
+| Layer          | At F1 start | Now (2026-09-23)                                                                                     |
+| -------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| Frontend       | absent      | Next App Router, React 19, Tailwind 4. Every page renders from the CMS through one catch-all route   |
+| Backend / API  | absent      | Payload 3 at `src/app/(payload)`; Pages, Projects, InteriorStyles, Submissions, Media, Users + Footer global |
+| Data           | absent      | Neon everywhere including dev; `postgres:18-alpine` on 5436 is the **test** database                 |
+| Auth           | absent      | Payload admin auth, one account. No public auth, ever (PRD non-goal)                                 |
+| Deploy / infra | absent      | Vercel, deployed from GitHub `main`, same account as the leads app                                   |
+| Observability  | absent      | **still absent** — deliberate at this goal. EX-852 is the one filed gap (a failing cron is silent)   |
+| Environments   | absent      | Vercel preview deploys are the staging tier; see below                                               |
 
 The one existing integration point is external: the **leads app** (`/workspace/yolo/wykonczymy`), a
 separate product this project does not own.
@@ -74,18 +75,19 @@ flag, a second leads-app deployment, or any other isolation machinery for this.
 | --- | ---------------------------------------------------- | -------- | ---------- | ------------- |
 | F1  | Scaffold, local DB, first deploy                     | **done** | —          | —             |
 | F2  | Localization spine + localized `slug`                | done     | F1         | —             |
-| S1  | One page live at its indexed address, PL + EN        | proposed | F2         | —             |
+| S1  | One page live at its indexed address, PL + EN        | done     | F2         | —             |
 | S2  | **Contact form reaches the leads app** (north star)  | done      | S1        | S3, S4, S5    |
-| S3  | Remaining carried pages                              | proposed | S1         | S2, S4, S5    |
-| S4  | Completed projects — listing + project pages         | proposed | S1         | S2, S3, S5    |
-| S5  | Testimonials and the shared content lists            | proposed | S1         | S2, S3, S4    |
+| S3  | Remaining carried pages                              | done     | S1         | S2, S4, S5    |
+| S4  | Completed projects — listing + project pages         | done     | S1         | S2, S3, S5    |
+| S5  | Testimonials and the shared content lists            | done     | S1         | S2, S3, S4    |
 | S6  | Photo attachments on the form                        | done      | S2        | —             |
 | S7  | SEO surface — sitemap, hreflang, canonical, metadata | done      | S3, S4    | S6            |
-| S8  | Cutover — url-map test green, redirects, DNS         | blocked  | S2, S7     | —             |
+| S8  | Cutover — url-map test green, redirects, DNS         | ready    | S2, S7     | —             |
 
-**Parallel band:** once S1 lands, S2 / S3 / S4 / S5 touch different collections and different routes.
-Four separate agent runs can take them concurrently. S7 needs the route tree complete, so it closes
-the band rather than joining it.
+**The parallel band is history.** It planned for S2 / S3 / S4 / S5 running as four concurrent agent
+runs on different collections and routes. In the event S3 / S4 / S5 were carried across together in
+`2026-09-04-tdg-port` and only S2 ran separately. Recorded because the table above still reads as a
+plan; only S8 is unstarted.
 
 ## Foundations
 
@@ -126,21 +128,23 @@ after three pages exist means rewriting three pages.
 - Where the `pl`/`en` UI-chrome dictionary lives. A small typed object in code — `tech-stack.md`
   problem 3. Not architectural.
 
-**Deferred out of the F2 review gate** (see `context/changes/2026-09-03-f2-i18n-spine/review-gate.md`;
-tracked here because the Linear MCP was unreachable in that session — move them onto the board when it is):
+**Deferred out of the F2 review gate** (see `context/archive/2026-09-03-f2-i18n-spine/review-gate.md`;
+tracked here because the Linear MCP was unreachable in that session). Two of the four have since
+closed — left in place with their outcome so the gate's ledger stays readable:
 
-- **DB backing for the slug guard.** `slug` is indexed but not unique per locale, so the
-  app-level validator is the only thing stopping a duplicate address. Needs its own migration,
-  applied to prod by a human. Test disposition: TDD · integration, travels with the fix.
-  (The `is_home` partial index this originally also asked for is moot — `2c87523` dropped the
-  column in favour of `pageType === 'home'`.)
+- ~~**DB backing for the slug guard.**~~ Shipped 2026-09-04 in migration
+  `20260904_171708_seo_meta_and_slug_unique`: `pages_slug_idx`, `projects_slug_idx` and
+  `interior_styles_slug_idx` are now `UNIQUE` on `(slug, _locale)`, so the app-level validator is
+  no longer the only guard. (The `is_home` partial index this originally also asked for is moot —
+  `2c87523` dropped the column in favour of `pageType === 'home'`.)
+- ~~**`alternates.canonical` + hreflang, and seoPlugin fields in `generateMetadata`.**~~ Shipped
+  with S7 — `context/archive/2026-09-20-s7-seo/`.
 - **Locale-aware 404 and root `<html lang>`.** `not-found.tsx` sniffs the locale from
-  `usePathname`, so the prerendered shell is Polish on `/en/` and hydration swaps it; the root
-  layout hardcodes `lang="en"`. One routing decision — a catch-all layout cannot see the locale.
+  `usePathname`, so the prerendered shell is Polish on `/en/` and hydration swaps it;
+  `src/app/(frontend)/layout.tsx:32` hardcodes `lang="pl"`, which contradicts the `hrefLang="en"`
+  S7 emits for the same document. `translations-provider.tsx` corrects the live DOM, so only a
+  crawler sees it. One routing decision — a catch-all layout cannot see the locale.
   Test disposition: TDD · e2e, travels with the fix.
-- **`alternates.canonical` + hreflang, and seoPlugin fields in `generateMetadata`.** Belongs with
-  S7. The plugin's `meta.title` / `meta.description` / `meta.image` are already in production on
-  pages, projects and interior styles — what is missing is a route that reads them.
 - **`/en/home/` is hardcoded in `next.config.ts`'s redirect** while the EN home slug is a
   CMS-editable field; renaming it silently breaks an indexed redirect.
 
@@ -151,11 +155,16 @@ in a slash and Next strips it by default. Omit it and all twelve break at once.
 
 ### S1 — One page live at its indexed address, PL + EN
 
-**Status:** proposed · **Change ID:** `s1-first-page` · **Depends on:** F2
+**Status:** done · **Change ID:** `2026-09-04-tdg-port` · **Depends on:** F2
 
 The home page, its copy in the CMS, rendering at `/` and `/en/home/` — the real indexed pair, not a
 placeholder route. Markup lifted from tdg (Tailwind 3→4 class migration, `WpImageT` → Payload media
 retyping).
+
+**Delivered inside `2026-09-04-tdg-port`, not as its own change folder** — S1, S3, S4 and S5 were
+all carried across in one port of tdg's markup, so none of them has a `change.md` and none went
+through the gate individually. The port's ledger is
+`context/changes/2026-09-04-tdg-port/review-gate.md`, which reviewed all of `src/` as one slice.
 
 **User-visible outcome:** a visitor loads the real home page in either language and the language
 switcher moves between the translated addresses.
@@ -194,7 +203,7 @@ current field set; adding questions later is a field addition, not a rework.
 
 ### S3 — Remaining carried pages
 
-**Status:** proposed · **Change ID:** `s3-carried-pages` · **Depends on:** S1 · **Parallel with:** S2, S4, S5
+**Status:** done · **Change ID:** `2026-09-04-tdg-port` · **Depends on:** S1 · **Parallel with:** S2, S4, S5
 
 Oferta, Wykończenia, Kontakt — copy in the CMS, both languages, each at its existing indexed pair.
 Markup lifted from tdg. Contact page carries the tel: link (FR-010).
@@ -202,12 +211,22 @@ Markup lifted from tdg. Contact page carries the tel: link (FR-010).
 **User-visible outcome:** four of the five carried pages exist at their real addresses in both
 languages. Only Realizacje (S4) is missing.
 
-**Unknowns:** none blocking. `live-site-snapshot/scraped-content.md` is 2026-03-04, so **spot-check
-copy against the live site** — the PRD flags prices in particular as possibly moved.
+**Delivered:** Kontakt (`components/contact/contact-page.tsx`, postal block; phone and mail read
+from the `footer` global) and Wykończenia. **Oferta was retired rather than built** — 2026-09-04,
+its content became the home page's tiles — and Cennik was dropped 2026-09-21, so the "four of the
+five carried pages" outcome above reads against a page set that no longer exists. Three carried
+pages exist, plus the privacy policy and cookies pages, which no slice here predicted.
+
+**Still open from the port:** **"O nas"** — its own page or a section on home — is undecided, and
+nothing is ported until it is. → `context/changes/2026-09-04-tdg-port/todo.md`
+
+**Outstanding content check:** `live-site-snapshot/scraped-content.md` is 2026-03-04, so **spot-check
+copy against the live site** — the PRD flags prices in particular as possibly moved. This is the
+owner's, not a build step.
 
 ### S4 — Completed projects: listing + individual project pages
 
-**Status:** proposed · **Change ID:** `s4-projects` · **Depends on:** S1 · **Parallel with:** S2, S3, S5
+**Status:** done · **Change ID:** `2026-09-04-tdg-port` · **Depends on:** S1 · **Parallel with:** S2, S3, S5
 
 The one structural change to the old site: `/realizacje/` keeps its address but becomes a listing of
 individually addressable projects (FR-007) instead of a flat gallery. A `Projects` collection with
@@ -221,13 +240,16 @@ local searches which today have nowhere to land.
 
 **Unknowns:**
 
-- **OQ 11 — do the 16 existing gallery photos get retrofitted with project pages?** FR-009 currently
-  says no: pages exist for new projects only, old photos stay a gallery. Reversing it is content
-  labour, not engineering, so it does not block the build. Build for FR-009 as written.
+**Delivered:** `Projects` collection with a localized slug, `components/projects/projects-page.tsx`
+for the listing and `project-page.tsx` for a job, both wired into the catch-all.
+
+- **OQ 11 — do the 16 existing gallery photos get retrofitted with project pages?** Still open, and
+  still not a build question. FR-009 was built as written: pages exist for new projects only.
+  Reversing it is content labour. Owner's call.
 
 ### S5 — Testimonials and the shared content lists
 
-**Status:** proposed · **Change ID:** `s5-content-lists` · **Depends on:** S1 · **Parallel with:** S2, S3, S4
+**Status:** done · **Change ID:** `2026-09-04-tdg-port` · **Depends on:** S1 · **Parallel with:** S2, S3, S4
 
 The content that is reused across pages rather than owned by one: 6 testimonials (FR-005, FR-018),
 12 service cards, the 12 interior styles, and the 70+ item "Wykonujemy także" list. All in the CMS,
@@ -239,8 +261,12 @@ changes everywhere it appears.
 **Why it is separate from S3:** these are shared collections, not page copy. Modelled once, consumed
 by several pages. Merging it into S3 would put collection design inside a page-building slice.
 
-**Unknowns:** the collection-versus-global split per list, and which fields localize (OQ 10). A
-modelling detail resolved during the work, not a gate on it.
+**Delivered, and the split did not land where this slice guessed.** Testimonials became a `testimonials`
+group on the home page's field group rather than a collection (decided 2026-09-17, migration
+`20260917_160110_testimonials`) — one page owns them, so a collection bought nothing. The interior
+styles are their own collection (`InteriorStyles.ts`, with child pages under `/wykonczenia/<slug>/`);
+the service cards live on the home group; the footer's contact block and ratings are a `Footer`
+global. **OQ 10 is closed by this** — the split is in the schema.
 
 ### S6 — Photo attachments on the form
 
@@ -285,50 +311,66 @@ drop"_ guardrail.
 **Status:** ready · **Change ID:** `s8-cutover` · **Depends on:** S2, S7
 
 The FR-037 test asserting every address in `url-map.md` resolves; the live-submission verification;
-removing the pre-cutover noindex from `robots.ts` and the layout; DNS switch to the new site on the
-`www` canonical host. The redirects for the four retired addresses are **already shipped** — assert
-them rather than build them, and assert `308`, which is what `permanent: true` emits.
+flipping search indexing on; DNS switch to the new site on the `www` canonical host. The redirects
+for the four retired addresses are **already shipped** — assert them rather than build them, and
+assert `308`, which is what `permanent: true` emits.
+
+**The noindex is one flag, not two edits.** `SEARCH_INDEXING_ENABLED` in `src/lib/seo/constants.ts`
+is `false`, and `robots.ts` and `(frontend)/layout.tsx`'s `robots` metadata both read it — so
+cutover flips one constant. They must flip together and a half-flip is silent, which is why they
+were wired to one flag rather than two comments pointing at each other.
+
+**FR-037 is not written yet.** `tests/e2e/frontend.e2e.spec.ts` covers the trailing-slash
+normalisation, the four retired-address redirects, `/en` → `/en/home/`, and two 404 shapes — but it
+does not enumerate the twelve. That enumeration is this slice's first task.
 
 **User-visible outcome:** wykonczymy.com.pl is the new site, and no address that existed before is
 dead.
 
 **It is no longer blocked.** Open Question 3 — where the retired addresses lead — was answered in
-code on 2026-09-04 and has been live in production ever since: `next.config.mjs` sends `/oferta/` and
+code on 2026-09-04 and has been live in production ever since: `next.config.ts` sends `/oferta/` and
 `/cennik/` to `/`, and `/en/offer/` and `/en/price-list/` to `/en/home/`. `url-map.md` went on
 carrying `UNDECIDED` until 2026-09-22, which is the only reason this slice read as blocked. High-intent
 pricing traffic lands on the home page, whose tiles are where Oferta's content went. What remains is
 the owner **ratifying** that or naming a different target, which is one line in the redirects array —
 not a precondition to starting the slice.
 
-Also carries **Open Question 4** — whether Cennik's removal is final. Recorded as the owner's
-intention, expressed as probable rather than settled. If it stays, two success criteria and one
-guardrail change, and this slice grows a page.
+**Open Question 4 — whether Cennik's removal is final — is closed.** The owner dropped it
+2026-09-21 and `url-map.md` records it: no page will be built. The address still answers, because a
+dropped page and a retired address are different things.
 
-**Unblocking action:** pick the two redirect targets. Owner: user.
+**One loose end the port flagged:** `'price-list'` is still in `pageTypes` (`src/lib/routing.ts`)
+while `/cennik/` redirects home, so a document created under that type would be unreachable from
+the front end. Either drop the type or leave it deliberately — a decision for this slice.
 
-**FR-037 is not deferrable to this slice.** Write the url-map test as soon as S1 lands, with the
-twelve addresses hardcoded from `url-map.md` — it is the guardrail that replaced the dropped role
-split, and it should fail loudly on every slice that touches routing, not only at the end.
+**Unblocking action:** ratify where the four retired addresses land, or name different targets.
+Owner: user. Nothing waits on it — they already answer.
 
 ## Open question routing
 
-Nine open, routed to where they are resolvable. Only one blocks cutover.
+Four still open. **None blocks cutover** — the two that did have both closed.
 
-| #   | Question                                        | Blocks             | Resolve during                                    |
-| --- | ----------------------------------------------- | ------------------ | ------------------------------------------------- |
-| 1   | Exact form question list                        | no                 | S2 — build against today's fields, add later      |
-| 2   | File limits (types, size, count)                | no                 | S6 — with the leads-app contract                  |
-| 3   | Where Cennik's two addresses lead               | **before cutover** | S8 — owner decision, needed for `url-map.md`      |
-| 4   | Is Cennik's removal final?                      | no                 | S8                                                |
-| 5   | Where submissions land today                    | **before cutover** | S2 — owner confirmation, gates "done" not "start" |
-| 6   | How attachments reach and persist               | no                 | S6 — leads-app work                               |
-| 7   | Retention period for photos and contact details | no                 | S6 — a policy decision, not a build one           |
-| 10  | Collection versus global, which fields localize | no                 | F2 / S5 — modelling detail                        |
-| 11  | Retrofit old gallery photos with project pages? | no                 | S4 — content labour, build FR-009 as written      |
+| #   | Question                                        | Blocks | Resolve during                                |
+| --- | ----------------------------------------------- | ------ | --------------------------------------------- |
+| 1   | Exact form question list                        | no     | shipped against today's fields; adding a question is a field addition |
+| 2   | File limits (types, size, count)                | no     | owner policy — the build does not wait        |
+| 7   | Retention period for photos and contact details | no     | owner policy                                  |
+| 11  | Retrofit old gallery photos with project pages? | no     | content labour; FR-009 built as written       |
 
-**Resolved, recorded for provenance:** OQ 8 (page set — five carried, Cennik retired, plus project
-pages) and OQ 9 (no editor/admin split — one account, slug guardrail moved to FR-037). Both
-2026-09-02.
+**Closed, recorded for provenance:**
+
+- **OQ 3 — where Cennik's two addresses lead.** Answered in code 2026-09-04 and live since: both go
+  to the home page. What is left is the owner ratifying it, which nothing waits on.
+- **OQ 4 — is Cennik's removal final?** Yes, 2026-09-21. No page will be built; the address still
+  redirects.
+- **OQ 5 — where submissions land today.** Closed 2026-09-21 by the owner: there is no delivery
+  channel outside the leads app's `notification-recipients` global, and nothing is configured in
+  WordPress. The old form dies with the old site. **This was the one cutover blocker.**
+- **OQ 6 — how attachments reach and persist.** Settled by `lead-delivery`: the wire carries blob
+  URLs and the leads app owns the stored files.
+- **OQ 8** (page set) and **OQ 9** (no editor/admin split — one account, slug guardrail moved to
+  FR-037), both 2026-09-02.
+- **OQ 10 — collection versus global, which fields localize.** Closed by the schema; see S5.
 
 ## Done
 
@@ -336,3 +378,12 @@ pages) and OQ 9 (no editor/admin split — one account, slug guardrail moved to 
 - **S2: Contact form reaches the leads app (north star)** — Archived 2026-09-22 → `context/archive/2026-09-18-lead-delivery/`. Lesson: —.
 - **S6: Photo attachments on the form** — Archived 2026-09-22 → `context/archive/2026-09-18-lead-delivery/`. Merged into S2 and delivered with it. Lesson: —.
 - **S7: SEO surface — sitemap, hreflang, canonical, metadata** — Archived 2026-09-22 → `context/archive/2026-09-20-s7-seo/`. Lesson: a content script run from the CLI cannot purge the page cache — `revalidatePath` throws outside a request, so production keeps serving the old copy until the next deploy. Verify a CLI write against `pnpm dev`, which reads the database directly.
+- **S1, S3, S4, S5** — in production, **not archived**. All four landed inside
+  `context/changes/2026-09-04-tdg-port/`, which has no `change.md`, so `/10x-archive` refuses it and
+  the gate was never armed per slice. Arming it (`/10x-new tdg-port`) or folding its two remaining
+  items into this file is the housekeeping → `todo.md` § Debt.
+
+**Not in this roadmap but shipped:** cookie consent (`@c15t/nextjs`, `src/components/cookies/`), the
+privacy-policy and cookies pages, and Vercel Analytics gated on consent. They belong to no slice
+here — they surfaced in the tdg port and were built because a third-party script needs consent to
+exist before it does, not after.

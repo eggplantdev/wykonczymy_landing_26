@@ -1,7 +1,7 @@
 ---
 project: wykonczymy-www
-updated: 2026-09-02
-phase: foundations
+updated: 2026-09-23
+phase: built — one slice (S8, cutover) unstarted
 ---
 
 # Project state — read this first
@@ -61,9 +61,13 @@ Rejected: rebuilding inside `tdg`. Reasons, in weight order:
 Settles the adapters (`db-vercel-postgres` + `storage-vercel-blob`) and removes any cross-org access
 problem between the site and the leads app.
 
-### Local Postgres in Docker for dev, Neon for prod
+### ~~Local Postgres in Docker for dev, Neon for prod~~ — reversed
 
-Mirrors Chaos Kitchen. Port 5436 — see `tech-stack.md`.
+Originally mirrored Chaos Kitchen. It no longer holds: **Neon is the database in every environment,
+including your laptop**, and the Docker Postgres on 5436 is the **test** database plus the only
+`psql`/`pg_dump` client on this machine that Neon 18.6 will talk to. Keeping a second copy in sync
+cost more than it returned while there was no published site to protect. See `AGENTS.md`
+§ "Stack, deploy, local DB" — `push: false` is what makes pointing dev at production survivable.
 
 ### All project docs live under `context/`
 
@@ -77,59 +81,80 @@ No root `docs/`. The live-site scrape sits at `context/foundation/live-site-snap
 enumerated in `url-map.md`. Because slugs now live in the CMS, they are editable — the guardrail
 depends on `url-map.md` being tested against, not trusted.
 
-**2. Photo attachments cannot use the existing lead intake.** The leads app's current intake accepts
-a flat set of text answers and has nowhere to put a file. This is a fact about the existing
-contract, not a preference — delivering the file-upload requirement (FR-031) requires work _in the
-leads app_. It is sequenced against this project but not owned by it.
+**2. ~~Photo attachments cannot use the existing lead intake.~~** Resolved. The obstacle was real —
+the leads app's intake took a flat set of text answers with nowhere to put a file — and it was
+removed by editing that repo, under a carve-out the owner granted 2026-09-21. The wire now carries
+blob URLs rather than multipart, so the 4.5 MB function-body cap never applies, and the leads app
+owns the stored files. What survives as a standing rule: **the leads app is still a separate
+product**, and the carve-out was scoped to the `lead-delivery` change alone.
 
 ## Current state
 
-**F1 (scaffold) is done and production is live** at `wykonczymylanding26.vercel.app` — `/` returns
-200, `/admin` 308s to `/admin/`. Deploys run from GitHub `main`; Neon holds the schema, Vercel Blob
-the media. Zero content: the site is Payload's stock starter page and **the first admin user has not
-been created** (Payload has no CLI path for it — open `/admin` and register).
+**The site is built and in production** at `wykonczymylanding26.vercel.app`, behind a deliberate
+noindex — wykonczymy.com.pl is still WordPress and this host must not compete with it in the index.
+Home, Realizacje (listing + per-project pages), Wykończenia (listing + per-style pages), Kontakt and
+the legal pages all render from the CMS. The footer carries a contact form under every page; a
+submission is queued and forwarded to the leads app, with photo attachments.
+
+**Every roadmap slice but one is done.** F1, F2, S1–S7 are in production. **S8 — cutover — is the
+only unstarted slice, and nothing blocks it.** Both open questions that gated cutover closed in
+September: where the retired pricing addresses lead (answered in code 2026-09-04), and where
+submissions land today (owner, 2026-09-21 — the leads app and nowhere else).
 
 ```
 src/
-  payload.config.ts       Users + Media, localization pl/en, seo plugin, blob storage
-  collections/            Users.ts, Media.ts
-  lib/                    env-schema.ts + env.ts + env.server.ts — the only readers of process.env
-  migrations/             20260902_120907_initial
-  app/(frontend)/         stock starter page
-  app/(payload)/          admin + api, generated
-tests/                    int + e2e specs as create-payload-app ships them
-scripts/watch-deploy.sh   tails the Vercel build a push triggers
-.husky/                   pre-commit (lint-staged), pre-push (migration gate → typecheck → vitest → watcher)
-context/foundation/       + stack-template.md, the reusable setup runbook
-context/changes/          empty — no change started
+  payload.config.ts       localization pl/en, seo plugin, blob storage, push: false
+  collections/            Pages, Projects, InteriorStyles, Submissions, Media, Users
+  globals/                Footer.ts — contact block, ratings, socials
+  app/(frontend)/
+    [[...segments]]/      one catch-all route resolving every public address
+    (lab)/                dev-only surfaces, 404'd in production by the group layout
+  app/api/cron/           deliver-pending — retries the submission queue
+  lib/content/            the CMS tier; every other lib/ module is Payload-free
+  lib/contact/            envelope signing + forward() to the leads app
+  migrations/             24 migrations, initial → 20260921_170759_process_steps
+tests/                    unit + int (vitest) + e2e (playwright), serialized by a machine-wide lock
 ```
 
-**Two planes, deliberately separated.** Vercel deploys code; `payload migrate` owns schema. `build`
-does **not** migrate — on Vercel `POSTGRES_URL` points at production for every deployment, previews
-included, so a build that migrates would let a throwaway branch rewrite prod. Schema goes up first,
-by hand: `pnpm db:migrate:prod`, run by a human, never an agent.
+**Not in the roadmap but shipped:** cookie consent (`@c15t/nextjs`), the privacy-policy and cookies
+pages, and Vercel Analytics gated on that consent. They surfaced during the tdg port — a third-party
+script needs consent to exist before it runs, not after.
 
-**`PROD_POSTGRES_URL` is empty**, so `db:dump` — and therefore `db:migrate:prod`, which dumps before
-it migrates — currently fails. Prod is empty so the first migration was harmless; fill the var
-before any migration that touches real data.
+**One database, pointed at from every environment including your laptop.** `POSTGRES_URL` names
+production; `push: false` is what makes that survivable, since schema only moves by a migration a
+human applies. **The database is the only copy of the content** — seeding was removed 2026-09-19.
+Take a dump before anything destructive. The Docker Postgres on 5436 is now the *test* database and
+the only `psql` client on this machine.
+
+**Two planes, deliberately separated.** Vercel deploys code; `payload migrate` owns schema. `build`
+does **not** migrate — a build that migrated would let a preview branch rewrite production. Schema
+goes up first, by hand: `pnpm db:migrate:prod`, run by a human, never an agent.
 
 Also at the root: `AGENTS.md` (canonical agent onboarding) and `CLAUDE.md` (a thin importer of it).
 
-**Documentation is complete as of 2026-09-02.** Every foundation document exists, the three gating
-decisions (i18n routing, the editor/admin split, no i18n library) are made, and `roadmap.md`
-sequences the work.
-
 ## Next steps
 
-1. Create the first admin user at `/admin` on the deployed site.
-2. Set `PROD_POSTGRES_URL` in `.env` from Neon, so the backup-first migrate path works.
-3. `/10x-plan f2-i18n-spine`, then `s1-first-page`. After S1, four slices open in parallel — see
-   `roadmap.md` `## At a glance`.
-4. `AGENTS.md` gains its conventions section (structure, testing, commands) once there is real
-   application code to describe.
+1. **S8 — cutover.** Write the FR-037 assertions over all twelve addresses in `url-map.md`
+   (`tests/e2e/frontend.e2e.spec.ts` covers the redirects and the trailing slash today, but does not
+   enumerate the twelve), verify a live submission, flip `SEARCH_INDEXING_ENABLED` in
+   `src/lib/seo/constants.ts`, then DNS onto the `www` canonical host.
+2. **After DNS: EX-853** — five env vars across the two projects still name `*.vercel.app` hosts,
+   two of them failing silently. `NEXT_PUBLIC_SERVER_URL` is build-time, so it needs a redeploy.
+3. **Decisions owed, none blocking** — "O nas" (its own page or a home section; nothing is ported
+   until it is settled), file limits and retention (OQ 2 / OQ 7), and ratifying where the four
+   retired addresses land.
+4. **Housekeeping** — `2026-09-04-tdg-port` has no `change.md`, so its gate was never armed and
+   `/10x-archive` refuses it. Everything else is in `context/foundation/todo.md`, which is the
+   working index; this file is the orientation.
 
 ## Open questions
 
-Eleven, recorded in `prd.md` under `## Open Questions`. Only one blocks cutover: **where contact
-form submissions actually land today** must be confirmed, since preserving lead delivery is a
-guardrail and the current behaviour is the thing being preserved. None block building.
+Four of the original eleven are still open, recorded in `prd.md` under `## Open Questions`:
+the exact form question list (1), file limits (2), photo and contact-detail retention (7), and
+whether the 16 old gallery photos get retrofitted with project pages (11). **None blocks cutover
+and none blocks building** — all four are content or policy calls.
+
+The one that did block cutover — **where contact form submissions actually land today** (OQ 5) —
+closed 2026-09-21: the leads app's `notification-recipients` global and nothing else, with nothing
+configured in WordPress. The old form dies with the old site, so no submission path survives cutover
+to be preserved.
