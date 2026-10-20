@@ -3,7 +3,8 @@ import { serverEnv } from '@/lib/env.server'
 import type { SubmissionEnvelopeT } from './envelope'
 import { sign } from './sign'
 
-export type ForwardResultT = { delivered: true } | { delivered: false; error: string }
+export type ForwardResultT =
+  { delivered: true } | { delivered: false; error: string; retryable: boolean }
 
 // One hung connection would otherwise hold the `after()` callback, or a cron batch, until the
 // platform kills the invocation mid-row — leaving a row with neither a delete nor a recorded failure.
@@ -31,11 +32,21 @@ export async function forward(envelope: SubmissionEnvelopeT): Promise<ForwardRes
       signal: AbortSignal.timeout(FORWARD_TIMEOUT_MS),
     })
   } catch (error) {
-    return { delivered: false, error: `Transport failure: ${(error as Error).message}` }
+    return {
+      delivered: false,
+      error: `Transport failure: ${(error as Error).message}`,
+      // A timed-out send may still be running on the leads app; a quick resend races it and
+      // duplicates the e-mails and attachments.
+      retryable: (error as Error).name !== 'TimeoutError',
+    }
   }
 
   if (!response.ok) {
-    return { delivered: false, error: `Leads app answered ${response.status}` }
+    return {
+      delivered: false,
+      error: `Leads app answered ${response.status}`,
+      retryable: response.status >= 500,
+    }
   }
 
   return { delivered: true }

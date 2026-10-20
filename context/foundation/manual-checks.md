@@ -238,6 +238,17 @@ One known gap, deliberately left:
   `WYKONCZYMY_WEBHOOK_URL` must name the **public alias**; the project-scoped one differs by a
   single path segment and fails closed. Decide the bypass header when a preview actually needs to
   deliver; until then, test the round trip against production.
-- **A `401`/`403` burns all ten attempts.** `forward()` cannot distinguish "wrong address" from "the
-  network blinked", so a misconfigured URL costs the full retry budget over roughly two hours and
-  then parks the lead permanently. Worth splitting retryable from terminal failures if this recurs.
+- **A `401`/`403` still burns the attempt budget.** A 4xx skips the in-request retries, but the cron
+  still sweeps it until `MAX_ATTEMPTS` (3, about a day at two sweeps a day) and then parks the lead.
+
+## 2026-10-20 — lead delivery: in-request retries, cron twice a day
+
+The `deliver-pending` cron ran every 15 minutes and kept the production database awake around the
+clock. It now runs at 06:00 and 18:00 UTC; a failed send is retried in the request after 30 s and
+2 min instead.
+
+- [ ] Vercel → landing project → Settings → Cron Jobs: `deliver-pending` shows `0 6,18 * * *`.
+- [ ] Production: send the contact form with an attachment: the lead lands in the leads app within
+      seconds, attachment included, and the `submissions` queue in the admin is empty afterwards.
+- [ ] Neon → the landing project's compute: a day after the deploy, it sits suspended outside
+      visits and the two cron runs instead of active around the clock.

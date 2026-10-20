@@ -22,7 +22,7 @@ export async function GET(request: Request): Promise<NextResponse> {
   let failed = 0
 
   for (const row of rows) {
-    // Per row: an unhandled throw here would abandon every row after it for another 15 minutes,
+    // Per row: an unhandled throw here would abandon every row after it until the next run,
     // and the next run reads the same oldest-first head, so the same row would abandon them again.
     try {
       const result = await forward(row.envelope as SubmissionEnvelopeT)
@@ -41,7 +41,7 @@ export async function GET(request: Request): Promise<NextResponse> {
   }
 
   // Read after the loop, so a row this run pushed past the ceiling is reported by the run that
-  // did it rather than fifteen minutes later.
+  // did it rather than half a day later.
   const stuck = await listStuck(BATCH_SIZE)
 
   return NextResponse.json(

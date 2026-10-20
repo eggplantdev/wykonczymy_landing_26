@@ -24,8 +24,9 @@ export async function enqueue(envelope: QueuedEnvelopeT): Promise<Submission> {
 
 // A row the leads app keeps refusing must stop consuming the batch, or the oldest-first sort hands
 // every run the same poisoned head and no newer lead is ever attempted again. Past the ceiling the
-// cron leaves the row alone and `listStuck` reports it, which is what fails the invocation.
-export const MAX_ATTEMPTS = 10
+// cron leaves the row alone and `listStuck` reports it, which is what fails the invocation. Low
+// because the cron runs twice a day: the `after()` attempt and two sweeps reach it within a day.
+export const MAX_ATTEMPTS = 3
 const RETRY_BACKOFF_MS = 10 * 60 * 1000
 
 /** Oldest first: a submission that has been waiting longest is the one closest to being lost. */

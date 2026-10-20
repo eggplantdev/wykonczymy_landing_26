@@ -66,7 +66,7 @@ describe('the submissions queue', () => {
   })
 
   // The row the leads app just refused must not come straight back on the next run: without a
-  // backoff the cron re-forwards it every fifteen minutes and burns the batch on the same head.
+  // backoff the cron re-forwards it on every run and burns the batch on the same head.
   it('holds a just-attempted row back until its backoff elapses', async () => {
     const row = await enqueue(envelope)
     await recordFailure(row.id, 'Leads app answered 500')

@@ -90,14 +90,29 @@ function ownsAssets(submissionId: string, assets: { url: string }[]): boolean {
   return paths.size === assets.length
 }
 
+// Without these, a leads-app blip leaves the lead waiting up to 12 h for the next cron sweep.
+const RETRY_DELAYS_MS = [30_000, 120_000]
+
 async function deliver(envelope: SubmissionEnvelopeT, rowId: number): Promise<void> {
-  const result = await forward(envelope)
+  let result = await forward(envelope)
 
   if (result.delivered) {
     await deleteRow(envelope.submissionId)
     return
   }
 
-  // The row stays, carrying why — the cron retries it and `attempts` makes a stuck one visible.
+  // Recorded before retrying: the stamp puts the row under the cron's backoff, so a sweep cannot
+  // forward it while a retry here is in flight. The row stays and `attempts` counts toward stuck.
   await recordFailure(rowId, result.error)
+
+  for (const delay of RETRY_DELAYS_MS) {
+    if (!result.retryable) return
+    await new Promise((resolve) => setTimeout(resolve, delay))
+    result = await forward(envelope)
+
+    if (result.delivered) {
+      await deleteRow(envelope.submissionId)
+      return
+    }
+  }
 }

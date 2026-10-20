@@ -57,7 +57,7 @@ describe('GET /api/cron/deliver-pending', () => {
   })
 
   // Regression: the loop had no try/catch, so the first throwing row abandoned every row behind it
-  // for another fifteen minutes — and the next run reads the same oldest-first head.
+  // until the next run — and the next run reads the same oldest-first head.
   it('finishes the batch when one row throws', async () => {
     queue.listPending.mockResolvedValue([row(1), row(2), row(3)])
     forward.mockRejectedValueOnce(new Error('row 1 exploded'))

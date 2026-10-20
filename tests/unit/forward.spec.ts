@@ -62,13 +62,14 @@ describe('forward', () => {
     await expect(forward(envelope)).resolves.toEqual({
       delivered: false,
       error: `Leads app answered ${status}`,
+      retryable: false,
     })
   })
 
   it('leaves a 500 for the cron to retry', async () => {
     answering(500)
 
-    await expect(forward(envelope)).resolves.toMatchObject({ delivered: false })
+    await expect(forward(envelope)).resolves.toMatchObject({ delivered: false, retryable: true })
   })
 
   it('gives up on a hung connection rather than holding the batch', async () => {
@@ -82,7 +83,8 @@ describe('forward', () => {
       }),
     )
 
-    await expect(forward(envelope)).resolves.toMatchObject({ delivered: false })
+    // Not retryable: the leads app may still be working on the send that timed out.
+    await expect(forward(envelope)).resolves.toMatchObject({ delivered: false, retryable: false })
   })
 
   it('leaves a transport failure for the cron to retry', async () => {
@@ -96,6 +98,7 @@ describe('forward', () => {
     await expect(forward(envelope)).resolves.toEqual({
       delivered: false,
       error: 'Transport failure: ECONNREFUSED',
+      retryable: true,
     })
   })
 })

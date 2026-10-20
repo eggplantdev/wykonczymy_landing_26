@@ -1,6 +1,7 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { emptyContactValues } from '@/lib/contact/contact-schema'
+import type { ForwardResultT } from '@/lib/contact/forward'
 import { LANDING_SUBMISSION } from '../fixtures/landing-submission'
 
 // Everything downstream of the action is mocked: the queue needs Payload and a database, the
@@ -12,9 +13,7 @@ const queue = vi.hoisted(() => ({
   recordFailure: vi.fn(async () => undefined),
 }))
 const forward = vi.hoisted(() =>
-  vi.fn<() => Promise<{ delivered: true } | { delivered: false; error: string }>>(async () => ({
-    delivered: true,
-  })),
+  vi.fn<() => Promise<ForwardResultT>>(async () => ({ delivered: true })),
 )
 // `after` defers to when the response is already sent; running it inline is what lets the test
 // observe the delivery at all.
@@ -59,15 +58,69 @@ describe('submitContactForm', () => {
     expect(queue.recordFailure).not.toHaveBeenCalled()
   })
 
-  // The visitor was already answered, so a failed forward is the cron's problem — and the row is
-  // what carries it there.
-  it('records the failure and keeps the row when the forward is retryable', async () => {
-    forward.mockResolvedValue({ delivered: false, error: 'Leads app answered 500' })
+  // The visitor was already answered, so a failed forward is retried here, then left to the cron —
+  // and the row is what carries it there.
+  describe('when the forward fails', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
 
-    await expect(submitContactForm(input)).resolves.toEqual({ ok: true })
+    afterEach(() => {
+      vi.useRealTimers()
+    })
 
-    expect(queue.recordFailure).toHaveBeenCalledWith(7, 'Leads app answered 500')
-    expect(queue.deleteRow).not.toHaveBeenCalled()
+    it('retries after 30 s and 2 min, then keeps the row', async () => {
+      forward.mockResolvedValue({
+        delivered: false,
+        error: 'Leads app answered 500',
+        retryable: true,
+      })
+
+      await expect(submitContactForm(input)).resolves.toEqual({ ok: true })
+      await vi.advanceTimersByTimeAsync(29_999)
+      expect(forward).toHaveBeenCalledTimes(1)
+      // Stamped before the first retry: the cron's backoff is what keeps a sweep off this row.
+      expect(queue.recordFailure).toHaveBeenCalledOnce()
+      await vi.advanceTimersByTimeAsync(1)
+      expect(forward).toHaveBeenCalledTimes(2)
+      await vi.advanceTimersByTimeAsync(120_000)
+      expect(forward).toHaveBeenCalledTimes(3)
+
+      expect(queue.recordFailure).toHaveBeenCalledOnce()
+      expect(queue.recordFailure).toHaveBeenCalledWith(7, 'Leads app answered 500')
+      expect(queue.deleteRow).not.toHaveBeenCalled()
+    })
+
+    it('deletes the row when a retry gets through', async () => {
+      forward.mockResolvedValueOnce({
+        delivered: false,
+        error: 'Transport failure: ECONNREFUSED',
+        retryable: true,
+      })
+
+      await submitContactForm(input)
+      await vi.runAllTimersAsync()
+
+      expect(forward).toHaveBeenCalledTimes(2)
+      expect(queue.deleteRow).toHaveBeenCalledWith(input.submissionId)
+    })
+
+    // A resend while the leads app still processes the timed-out one duplicates the lead's
+    // e-mails and overwrites its attachments.
+    it('leaves a timed-out send to the cron instead of resending it', async () => {
+      forward.mockResolvedValue({
+        delivered: false,
+        error: 'Transport failure: The operation was aborted due to timeout',
+        retryable: false,
+      })
+
+      await submitContactForm(input)
+      await vi.runAllTimersAsync()
+
+      expect(forward).toHaveBeenCalledOnce()
+      expect(queue.recordFailure).toHaveBeenCalledOnce()
+      expect(queue.deleteRow).not.toHaveBeenCalled()
+    })
   })
 
   // The only failure the visitor is told about: nothing was stored, so nothing will be retried.
